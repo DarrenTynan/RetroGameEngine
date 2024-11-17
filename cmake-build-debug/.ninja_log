@@ -1,3 +1,8 @@
 # ninja log v5
-0	5168	1731877581530580223	CMakeFiles/RetroGameEngine.dir/main.cpp.o	94e43c03e917b4a0
-5170	5584	1731877581951240191	RetroGameEngine	7975240de6c6a1bf
+0	816	1731881611509804725	CMakeFiles/RetroGameEngine.dir/main.cpp.o	94e43c03e917b4a0
+818	888	1731881611585565246	RetroGameEngine	7975240de6c6a1bf
+0	615	1731881247543508036	CMakeFiles/RetroGameEngine.dir/Game/src/main.cpp.o	4b5c1200ed40d7bb
+3	943	1731881009276841426	CMakeFiles/RetroGameEngine.dir/RGE/src/main.cpp.o	f391a4d80990be4f
+2	968	1731882951232133057	CMakeFiles/RetroGameEngine.dir/main.cpp.o	94e43c03e917b4a0
+2	969	1731882951232161663	CMakeFiles/RetroGameEngine.dir/Game/src/Game.cpp.o	7777f87658803b54
+969	1042	1731882951309957945	RetroGameEngine	9dcbaa379bd94e2c
