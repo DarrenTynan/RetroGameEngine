@@ -1,11 +1,14 @@
 #include <iostream>
-#include "Game/src/Game.h"
+#include "Game/include/Game.h"
+#include "RGE/src/RGE.cpp"
 
 int main()
 {
     // Initialise a new Game object
     Game game;
 
-    std::cout << "Hello, World!" << std::endl;
+    RGE::sayHello();
+
+    std::cout << "main.cpp exit" << std::endl;
     return 0;
 }

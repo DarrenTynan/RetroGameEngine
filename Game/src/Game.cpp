@@ -3,9 +3,10 @@
 //
 
 #include <iostream>
-#include "Game.h"
+#include "../include/Game.h"
 
 Game::Game()
 {
     std::cout << "Game constructor" << std::endl;
 }
+

@@ -210,6 +210,18 @@ CMAKE_STRIP:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/strip
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//The directory containing a CMake configuration file for RGE.
+RGE_DIR:PATH=RGE_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for RGE_.
+RGE__DIR:PATH=RGE__DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for RGE_l.
+RGE_l_DIR:PATH=RGE_l_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for RGE_lib.
+RGE_lib_DIR:PATH=RGE_lib_DIR-NOTFOUND
+
 //Value Computed by CMake
 RetroGameEngine_BINARY_DIR:STATIC=/Users/darren/Development/C++_Projects/RetroGameEngine/cmake-build-debug
 
@@ -218,6 +230,15 @@ RetroGameEngine_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 RetroGameEngine_SOURCE_DIR:STATIC=/Users/darren/Development/C++_Projects/RetroGameEngine
+
+//The directory containing a CMake configuration file for SDL2.
+SDL2_DIR:PATH=/usr/local/lib/cmake/SDL2
+
+//The directory containing a CMake configuration file for SDL2_TTF.
+SDL2_TTF_DIR:PATH=/usr/local/lib/cmake/SDL2_ttf
+
+//The directory containing a CMake configuration file for SDL2_image.
+SDL2_image_DIR:PATH=/usr/local/lib/cmake/SDL2_image
 
 
 ########################
