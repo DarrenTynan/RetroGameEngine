@@ -3,13 +3,16 @@ project(RetroGameEngine)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_library(test_library STATIC RGE/src/RGE.cpp)
+#add_library(test_library STATIC RGE/src/RGE.cpp)
+add_library(RGE STATIC RGE/src/RGE.cpp)
+#add_library(_RGE STATIC RGE/src/RGE.cpp)
 
 add_executable(${PROJECT_NAME}
         main.cpp
         Game/src/Game.cpp
         )
 
+#target_link_libraries(${PROJECT_NAME} RGE)
 
 #find_package(RGE REQUIRED)
 find_package(SDL2 REQUIRED)
