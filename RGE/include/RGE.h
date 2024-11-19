@@ -9,6 +9,8 @@ class RGE
 {
     public:
         static void sayHello();
+
+    private:
 };
 
 #endif //RETROGAMEENGINE_RGE_H

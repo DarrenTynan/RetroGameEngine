@@ -7,7 +7,13 @@ int main()
     // Initialise a new Game object
     Game game;
 
-    RGE::sayHello();
+    // Game method calls
+    game.Initialize();
+//    game.Run();
+    game.Destroy();
+
+
+//    RGE::sayHello();
 
     std::cout << "main.cpp exit" << std::endl;
     return 0;
