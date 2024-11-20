@@ -6,10 +6,10 @@ set(CMAKE_CXX_STANDARD 23)
 include_directories(libs)
 
 # Make my library fie.
-add_library(RGE STATIC RGE/src/RGE.cpp)
+#add_library(RGE STATIC RGE/src/RGE.cpp)
 
 # Add main.cpp file of the project root directory as a source file
-set(SOURCE_FILES main.cpp Game/src/Game.cpp)
+set(SOURCE_FILES main.cpp Game/src/Game.cpp RGE/src/Logger/Logger.cpp)
 
 # Add executable target with source files listed in SOURCE_FILES variable
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

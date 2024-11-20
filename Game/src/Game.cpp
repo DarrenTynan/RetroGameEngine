@@ -6,8 +6,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+#include "../../RGE/src/Logger/Logger.h"
 
 #include "../include/Game.h"
+
+#if !SDL_VERSION_ATLEAST(2,0,17)
+#error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
+#endif
 
 int Game::windowWidth;
 int Game::windowHeight;
@@ -16,15 +21,11 @@ int Game::mapHeight;
 
 //ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-#if !SDL_VERSION_ATLEAST(2,0,17)
-#error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
-#endif
-
 Game::Game()
 {
     isRunning = false;
     isDebug = false;
-//    Logger::Log("Game constructor called");
+    Logger::Log("Game constructor called");
 }
 
 Game::~Game()
@@ -214,4 +215,3 @@ void Game::Render()
 //
 //    SDL_RenderPresent(renderer);
 }
-

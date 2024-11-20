@@ -1,0 +1,15 @@
+//
+// Created by Darren Tynan on 27/12/2022.
+//
+
+#include "Logger.h"
+
+void Logger::Log(const std::string &message)
+{
+    std::cout << "\x1B[32m" << message << "\033[0m" << std::endl;
+}
+
+void Logger::Error(const std::string &message)
+{
+    std::cout << "\x1B[91m" << message << "\033[0m" << std::endl;
+}
