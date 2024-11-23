@@ -11,7 +11,7 @@ int main()
 
     // Game method calls
     game.Initialize();
-//    game.Run();
+    game.Update();
     game.Destroy();
 
 

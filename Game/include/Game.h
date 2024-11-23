@@ -5,36 +5,52 @@
 #ifndef RETROGAMEENGINE_GAME_H
 #define RETROGAMEENGINE_GAME_H
 
+#include <iostream>
+#include <stdio.h>
+
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+
+#include <imgui.h>
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_sdlrenderer2.h>
+
+#include "../../RGE/src/Logger/Logger.h"
 
 class Game
 {
     private:
-        SDL_Window* window;
-        SDL_Renderer* renderer;
+        SDL_Window* window = nullptr;
+        SDL_Renderer* renderer = nullptr;
+        SDL_Surface* windowSurface = nullptr;
         SDL_Rect camera;
+
         bool isRunning = false;
         bool isDebug = false;
         bool isImGui = false;
+        bool isFullScreen = false;
         int millisecsPreviouseFrame = 0;
+        int windowWidth = 640;
+        int windowHeight = 480;
+        int mapWidth;
+        int mapHeight;
+        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     public:
         Game();
         virtual ~Game();
 
         int Initialize();
-        void Run();
+
+        void Update();
 //        int GetTMX();
 //        void SetUpGameObjects();
 //        void ProcessInput();
 //        void UpdateSystems();
         void Render();
+        void RenderImGui();
         void Destroy();
-
-        static int windowWidth;
-        static int windowHeight;
-        static int mapWidth;
-        static int mapHeight;
 };
 
 #endif //RETROGAMEENGINE_GAME_H

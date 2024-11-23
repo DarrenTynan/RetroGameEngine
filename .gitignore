@@ -2,12 +2,8 @@
 /build/**
 /cmake-build-debug/**
 /assets/**
-/libs/glm/**
-/libs/imgui/**
-/libs/lua/**
-/libs/sol/**
-/libs/box2d/**
-
+/RGE/libs/**
+/Game/libs/**
 
 # Project specific
 .DS_Store
