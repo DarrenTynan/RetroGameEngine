@@ -9,6 +9,7 @@
 #include <stdio.h>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
@@ -17,6 +18,10 @@
 #include <imgui_impl_sdlrenderer2.h>
 
 #include "../../RGE/src/Logger/Logger.h"
+
+// Global vars
+const int FPS = 60;
+const int MILLISECS_PER_FRAME = 1000 / FPS;
 
 class Game
 {
@@ -43,14 +48,15 @@ class Game
 
         int Initialize();
 
-        void Update();
+        void Run();
 //        int GetTMX();
-//        void SetUpGameObjects();
+        void SetUpGameObjects();
 //        void ProcessInput();
-//        void UpdateSystems();
+        void UpdateSystems();
         void Render();
         void RenderImGui();
         void Destroy();
+        void RenderTree();
 };
 
 #endif //RETROGAMEENGINE_GAME_H

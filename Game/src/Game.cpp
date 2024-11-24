@@ -9,18 +9,49 @@
 #endif
 
 
-Game::Game()
+Game::Game() { Logger::Log("Game constructor called"); }
+
+Game::~Game() { Logger::Log("Game deconstruct called"); }
+
+void Game::RenderTree()
 {
-//    isRunning = false;
-//    isDebug = false;
-    Logger::Log("Game constructor called");
+//    SDL_SetRenderDrawColor(renderer, 21,21,21,255);
+    SDL_Surface* surface = IMG_Load("../Game/assets/images/tree.png");
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+
+    SDL_Rect source;
+    source.x = 0;
+    source.y = 0;
+    source.w = 16;
+    source.h = 32;
+
+    SDL_Rect destination;
+    destination.x = 100;
+    destination.y = 100;
+    destination.w = 16*2;
+    destination.h = 32*2;
+
+    SDL_RenderCopy(renderer, texture, &source, &destination);
+    SDL_RenderPresent(renderer);
+    SDL_DestroyTexture(texture);
+
 }
 
-Game::~Game()
+/**
+ * Initialise game objects
+ */
+void Game::SetUpGameObjects()
 {
-    Logger::Log("Game deconstruct called");
 }
 
+
+/**
+ * Initialize SDL, DisplayMode, Window, Camera, ImGui
+ *
+ * @return -1 for errors
+ */
 int Game::Initialize()
 {
     // Setup SDL
@@ -42,7 +73,6 @@ int Game::Initialize()
     #ifdef SDL_HINT_IME_SHOW_UI
         SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
     #endif
-
 
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
@@ -69,20 +99,20 @@ int Game::Initialize()
     }
 
     Game::renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
     if (!renderer)
     {
         Logger::Error("Window renderer init failed");
         return -1;
     }
 
+    Logger::Log("SDL is ready to go!");
+
     // Initialize the camera view with the entire screen area
     camera.x = 0;
     camera.y = 0;
     camera.w = windowWidth;
     camera.h = windowHeight;
-
-    Logger::Log("SDL is ready to go!");
-    isRunning = true;
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -113,24 +143,62 @@ int Game::Initialize()
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != nullptr);
 
+    // Set game running on
+    isRunning = true;
+
     return 0;
 }
 
 
-void Game::Update()
+void Game::Run()
 {
-//    Render();
-//    RenderImGui();
-//    SetUpGameObjects();
+    SetUpGameObjects();
 
     while (isRunning)
     {
 //        ProcessInput();
-//        UpdateSystems();
-//        Render();
+        UpdateSystems();
+        Render();
         RenderImGui();
     }
 }
+
+
+/**
+ * UpdateSystems
+ */
+void Game::UpdateSystems()
+{
+    int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks64() - millisecsPreviouseFrame);
+    if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME) {
+        SDL_Delay(timeToWait);
+    }
+
+    // The difference in ticks since the last frame, converted to seconds
+    double deltaTime = (SDL_GetTicks() - millisecsPreviouseFrame) / 1000.0;
+
+    millisecsPreviouseFrame = SDL_GetTicks();
+
+    // Reset all event handlers for the current frame
+//    eventBus->Reset();
+
+    // Perform the subscription of the events for all systems
+//    registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
+//    registry->GetSystem<PlayerControlSystem>().SubscribeToEvents(eventBus);
+//    registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
+
+    // UpdateSystems the registry to process the entities that are waiting to be created/deleted
+//    registry->Update();
+
+//    registry->GetSystem<MovementSystem>().Update(deltaTime);
+//    registry->GetSystem<AnimationSystem>().Update();
+//    registry->GetSystem<CollisionSystem>().Update(eventBus);
+//    registry->GetSystem<CameraMovementSystem>().Update(camera);
+//    registry->GetSystem<ProjectileEmitSystem>().Update(registry);
+//    registry->GetSystem<ProjectileLifecycleSystem>().Update();
+
+    RenderTree();
+};
 
 
 void Game::Destroy()
@@ -245,6 +313,24 @@ void Game::Render()
 
     // Display HUD
 //    SDL_Texture* hud = assetStore->GetTexture("hud");
+//    SDL_Rect source;
+//    source.x = 0;
+//    source.y = 0;
+//    source.w = 640;
+//    source.h = 64;
+//
+//    SDL_Rect destination;
+//    destination.x = 0;
+//    destination.y = 480-64;
+//    destination.w = 640;
+//    destination.h = 64;
+//
+//    SDL_RenderCopy(renderer, hud, &source, &destination);
+//
+//    SDL_RenderPresent(renderer);
+
+    // Display HUD
+//    SDL_Texture* tree =  assetStore->GetTexture("hud");
 //    SDL_Rect source;
 //    source.x = 0;
 //    source.y = 0;
