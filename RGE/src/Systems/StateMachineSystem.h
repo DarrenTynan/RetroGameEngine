@@ -1,0 +1,36 @@
+//
+// Created by Darren Tynan on 05/02/2023.
+//
+
+#ifndef RETRO_ENGINE_STATEMACHINESYSTEM_H
+#define RETRO_ENGINE_STATEMACHINESYSTEM_H
+
+#include "../ECS/ECS.h"
+#include "../Components/SpriteComponent.h"
+#include "../Components/StateMachineComponent.h"
+#include "../Logger/Logger.h"
+
+class StateMachineSystem: public System {
+    public:
+        StateMachineSystem() {
+            RequireComponent<SpriteComponent>();
+            RequireComponent<StateMachineComponent>();
+        }
+
+        void ChangeState(std::string newState)
+        {
+
+        }
+
+        void Update() {
+            for (auto entity: GetSystemEntities()) {
+//                auto& sprite = entity.GetComponent<SpriteComponent>();
+//                sprite.flipH = true;
+                auto &state = entity.GetComponent<StateMachineComponent>();
+                Logger::Log("Current State: " + state.currentState, 0);
+
+            }
+        }
+
+};
+#endif //RETRO_ENGINE_STATEMACHINESYSTEM_H

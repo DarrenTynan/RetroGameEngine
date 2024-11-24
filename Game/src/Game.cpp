@@ -8,14 +8,12 @@
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 
-
 Game::Game() { Logger::Log("Game constructor called"); }
 
 Game::~Game() { Logger::Log("Game deconstruct called"); }
 
 void Game::RenderTree()
 {
-//    SDL_SetRenderDrawColor(renderer, 21,21,21,255);
     SDL_Surface* surface = IMG_Load("../Game/assets/images/tree.png");
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -38,6 +36,7 @@ void Game::RenderTree()
     SDL_DestroyTexture(texture);
 
 }
+
 
 /**
  * Initialise game objects
@@ -149,7 +148,9 @@ int Game::Initialize()
     return 0;
 }
 
-
+/**
+ * Main loop
+ */
 void Game::Run()
 {
     SetUpGameObjects();
