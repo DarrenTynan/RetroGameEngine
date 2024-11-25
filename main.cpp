@@ -1,8 +1,5 @@
 #include <iostream>
 #include "Game/include/Game.h"
-//#include "RGE/src/RGE.cpp"
-
-#include "RGE/include/RGE.h"
 
 int main()
 {

@@ -5,9 +5,10 @@
 #ifndef RETRO_ENGINE_RENDERIMGUISYSTEM_H
 #define RETRO_ENGINE_RENDERIMGUISYSTEM_H
 
-#include "../libs/imgui/imgui.h"
-#include "../libs/imgui/imgui_impl_sdl.h"
-#include "../libs/imgui/imgui_impl_sdlrenderer.h"
+#include <imgui.h>
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_sdlrenderer2.h>
+
 #include "../ECS/ECS.h"
 
 class RenderImGuiSystem: public System {
@@ -20,7 +21,7 @@ class RenderImGuiSystem: public System {
 
     void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera) {
         // Start the Dear ImGui frame
-        ImGui_ImplSDLRenderer_NewFrame();
+        ImGui_ImplSDLRenderer2_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
@@ -31,7 +32,7 @@ class RenderImGuiSystem: public System {
 
         // Rendering
         ImGui::Render();
-        ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+//        ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
 
     }
 

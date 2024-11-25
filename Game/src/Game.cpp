@@ -8,7 +8,17 @@
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 
-Game::Game() { Logger::Log("Game constructor called"); }
+const auto MAP_PATH = "../Game/assets/tilemaps/Level_01.tmx";
+std::string mapImagePath;
+tmx::Map map;
+
+Game::Game()
+{
+    registry = std::make_unique<Registry>();
+    assetStore = std::make_unique<AssetStore>();
+    eventBus = std::make_unique<EventBus>();
+    Logger::Log("Game constructor called");
+}
 
 Game::~Game() { Logger::Log("Game deconstruct called"); }
 
@@ -43,6 +53,58 @@ void Game::RenderTree()
  */
 void Game::SetUpGameObjects()
 {
+    registry->AddSystem<MovementSystem>();
+    registry->AddSystem<RenderSystem>();
+    registry->AddSystem<RenderTextSystem>();
+    registry->AddSystem<RenderColliderSystem>();
+    registry->AddSystem<CameraMovementSystem>();
+    registry->AddSystem<AnimationSystem>();
+    registry->AddSystem<PlayerControlSystem>();
+    registry->AddSystem<CollisionSystem>();
+//    registry->AddSystem<RenderImGuiSystem>();
+//    registry->AddSystem<StateMachineSystem>();
+    registry->AddSystem<ProjectileEmitSystem>();
+    registry->AddSystem<ProjectileLifecycleSystem>();
+    registry->AddSystem<DamageSystem>();
+    registry->AddSystem<RenderRaycastSystem>();
+
+    // Load the tilemap
+    GetTMX();
+
+    // Adding assets to the asset store
+    assetStore->AddTexture(renderer, "hud", "../assets/images/hud2.png");
+    assetStore->AddFont("charriot-font", "../assets/fonts/charriot.ttf", 24);
+    assetStore->AddTexture(renderer, "tilemap-image", mapImagePath);
+    assetStore->AddTexture(renderer, "tank-image", "../assets/images/tank-panther-right.png");
+    assetStore->AddTexture(renderer, "truck-image", "../assets/images/truck-ford-right.png");
+    assetStore->AddTexture(renderer, "chopper-image", "../assets/images/chopper.png");
+    assetStore->AddTexture(renderer, "player-idle-image", "../assets/sprites/CharacterIdle.png");
+    assetStore->AddTexture(renderer, "bullet-image", "../assets/images/bullet.png");
+
+    Entity player = registry->CreateEntity();
+    player.Tag("player");
+    player.AddComponent<TransformComponent>(glm::vec2(256, 256), glm::vec2(2.0, 2.0), 0.0);
+    player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
+    player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
+    player.AddComponent<AnimationComponent>(6, 8, true);
+//    player.AddComponent<CameraFollowComponent>();
+    player.AddComponent<BoxColliderComponent>(32, 32);
+    player.AddComponent<PlayerControllerComponent>(glm::vec2(0, -80.0), glm::vec2(80.0, 0), glm::vec2(0, 80.0), glm::vec2(-80.0, 0));
+    player.AddComponent<HealthComponent>(100);
+    player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
+//    player.AddComponent<StateMachineComponent>("idle");
+//    player.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
+
+//    Entity tank = registry->CreateEntity();
+//    tank.AddComponent<TransformComponent>(glm::vec2(0.0, 100.0), glm::vec2(2.0, 2.0), 0.0);
+//    tank.AddComponent<RigidBodyComponent>(glm::vec2(20.0, 0.0));
+//    tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1, false, 0, 0);
+//    tank.AddComponent<BoxColliderComponent>(32-10, 32-10, glm::vec2(10,10));
+//    tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
+
+//    Entity label = registry->CreateEntity();
+//    SDL_Color red = {255,0,0};
+//    label.AddComponent<TextLabelComponent>(glm::vec2(200, 200), "This is a label", "charriot-font", red, true);
 }
 
 
@@ -148,6 +210,7 @@ int Game::Initialize()
     return 0;
 }
 
+
 /**
  * Main loop
  */
@@ -181,22 +244,22 @@ void Game::UpdateSystems()
     millisecsPreviouseFrame = SDL_GetTicks();
 
     // Reset all event handlers for the current frame
-//    eventBus->Reset();
+    eventBus->Reset();
 
     // Perform the subscription of the events for all systems
-//    registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
-//    registry->GetSystem<PlayerControlSystem>().SubscribeToEvents(eventBus);
-//    registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
+    registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
+    registry->GetSystem<PlayerControlSystem>().SubscribeToEvents(eventBus);
+    registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
 
     // UpdateSystems the registry to process the entities that are waiting to be created/deleted
-//    registry->Update();
+    registry->Update();
 
-//    registry->GetSystem<MovementSystem>().Update(deltaTime);
-//    registry->GetSystem<AnimationSystem>().Update();
-//    registry->GetSystem<CollisionSystem>().Update(eventBus);
-//    registry->GetSystem<CameraMovementSystem>().Update(camera);
-//    registry->GetSystem<ProjectileEmitSystem>().Update(registry);
-//    registry->GetSystem<ProjectileLifecycleSystem>().Update();
+    registry->GetSystem<MovementSystem>().Update(deltaTime);
+    registry->GetSystem<AnimationSystem>().Update();
+    registry->GetSystem<CollisionSystem>().Update(eventBus);
+    registry->GetSystem<CameraMovementSystem>().Update(camera);
+    registry->GetSystem<ProjectileEmitSystem>().Update(registry);
+    registry->GetSystem<ProjectileLifecycleSystem>().Update();
 
     RenderTree();
 };
@@ -349,3 +412,83 @@ void Game::Render()
 //    SDL_RenderPresent(renderer);
 }
 
+/**
+ * Load the tmx map files and iterate over.
+ *
+ * @return
+ */
+int Game::GetTMX()
+{
+    map.load(MAP_PATH);
+
+    if(map.load(MAP_PATH))
+    {
+        const auto& layers = map.getLayers();
+        for(const auto& layer : layers)
+        {
+            if(layer->getType() == tmx::Layer::Type::Object)
+            {
+                const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
+                const auto& objects = objectLayer.getObjects();
+                for(const auto& object : objects)
+                {
+                    //do stuff with object properties
+                    Entity tile = registry->CreateEntity();
+                    tile.AddComponent<BoxColliderComponent>(object.getAABB().width, object.getAABB().height);
+                    tile.AddComponent<TransformComponent>(glm::vec2(object.getAABB().left,  object.getAABB().top));
+
+                }
+            }
+            else if(layer->getType() == tmx::Layer::Type::Tile)
+            {
+                const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+                //read out tile layer properties etc...
+
+                const auto& tiles = layer->getLayerAs<tmx::TileLayer>().getTiles();
+
+                const auto& imagePath = map.getTilesets();
+                mapImagePath = imagePath[0].getImagePath();
+
+                // Tile width in pixels (32)
+                unsigned int tileWidth = map.getTileSize().x;
+                // Tile height in pixels (32)
+                unsigned int tileHeight = map.getTileSize().x;
+                // Image width
+                unsigned int imageWidth = map.getTilesets().size();
+
+                // How many tiles per row (25)
+                unsigned int tileCountX = map.getTileCount().x;
+                mapWidth = map.getTileCount().x * tileWidth;
+                // How many tiles per column (20)
+                unsigned int tileCountY = map.getTileCount().y;
+                mapHeight = map.getTileCount().y * tileHeight;
+
+                int index = 0;
+                for (int y = 0; y < tileCountY; y++) {
+                    for (int x = 0; x < tileCountX; x++) {
+                        // Get the source rect pixel x,y position.
+                        int tilesPerRow = imagePath[0].getImageSize().x / tileWidth;
+                        int firstgid = 1;
+                        int srcRectX = ( (tiles[index].ID - firstgid) % tilesPerRow )  * tileWidth;
+                        int srcRectY = ( (tiles[index].ID - firstgid) / tilesPerRow ) * tileHeight;
+
+                        Entity tile = registry->CreateEntity();
+
+                        tile.AddComponent<TransformComponent>(glm::vec2(x * tileWidth, y * tileHeight), glm::vec2(1, 1), 0.0);
+                        tile.AddComponent<SpriteComponent>("tilemap-image", tileWidth, tileHeight, 0, true, false, srcRectX, srcRectY);
+//                        tile.AddComponent<BoxColliderComponent>(32,32);
+                        index++;
+                    }
+                }
+            }
+        }
+
+        const auto& tilesets = map.getTilesets();
+        for(const auto& tileset : tilesets)
+        {
+            //read out tile set properties, load textures etc...
+        }
+    }
+
+    return 0;
+}

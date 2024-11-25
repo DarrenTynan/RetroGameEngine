@@ -4,7 +4,6 @@
 
 #include "ECS.h"
 #include <string>
-#include "../Logger/Logger.h"
 #include <algorithm>
 
 int IComponent::nextId = 0;
