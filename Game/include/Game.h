@@ -32,7 +32,7 @@
 #include "../../RGE/src/Components/AnimationComponent.h"
 #include "../../RGE/src/Components/BoxColliderComponent.h"
 #include "../../RGE/src/Components/PlayerControllerComponent.h"
-//#include "../Components/StateMachineComponent.h"
+//#include "../../RGE/src/Components/StateMachineComponent.h"
 #include "../../RGE/src/Components/ProjectileComponent.h"
 #include "../../RGE/src/Components/ProjectileEmitterComponent.h"
 #include "../../RGE/src/Components/HealthComponent.h"
@@ -47,7 +47,7 @@
 #include "../../RGE/src/Systems/CollisionSystem.h"
 #include "../../RGE/src/Systems/PlayerControlSystem.h"
 #include "../../RGE/src/Systems/RenderImGuiSystem.h"
-//#include "../Systems//StateMachineSystem.h"
+//#include "../../RGE/src/Systems/StateMachineSystem.h"
 #include "../../RGE/src/Systems/ProjectileEmitSystem.h"
 #include "../../RGE/src/Systems/ProjectileLifecycleSystem.h"
 #include "../../RGE/src/Systems/DamageSystem.h"
@@ -59,11 +59,6 @@
 #include <tmxlite/Tileset.hpp>
 #include <tmxlite/ObjectGroup.hpp>
 
-//int windowWidth;
-//int windowHeight;
-//int mapWidth;
-//int mapHeight;
-
 // Global vars
 const int FPS = 60;
 const int MILLISECS_PER_FRAME = 1000 / FPS;
@@ -74,7 +69,7 @@ class Game
         SDL_Window* window = nullptr;
         SDL_Renderer* renderer = nullptr;
         SDL_Surface* windowSurface = nullptr;
-        SDL_Rect camera;
+        SDL_Rect camera{};
 
         bool isRunning = false;
         bool isDebug = false;
@@ -84,8 +79,8 @@ class Game
         int millisecsPreviouseFrame = 0;
         int windowWidth = 640;
         int windowHeight = 480;
-        int mapWidth;
-        int mapHeight;
+        int mapWidth{};
+        int mapHeight{};
 
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 

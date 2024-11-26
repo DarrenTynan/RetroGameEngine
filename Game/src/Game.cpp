@@ -53,33 +53,34 @@ void Game::RenderTree()
  */
 void Game::SetUpGameObjects()
 {
+    // Add the systems that need to be processed in our game
     registry->AddSystem<MovementSystem>();
     registry->AddSystem<RenderSystem>();
-    registry->AddSystem<RenderTextSystem>();
-    registry->AddSystem<RenderColliderSystem>();
-    registry->AddSystem<CameraMovementSystem>();
     registry->AddSystem<AnimationSystem>();
-    registry->AddSystem<PlayerControlSystem>();
     registry->AddSystem<CollisionSystem>();
-//    registry->AddSystem<RenderImGuiSystem>();
-//    registry->AddSystem<StateMachineSystem>();
+    registry->AddSystem<RenderColliderSystem>();
+    registry->AddSystem<DamageSystem>();
+//    registry->AddSystem<KeyboardControlSystem>();
+    registry->AddSystem<CameraMovementSystem>();
     registry->AddSystem<ProjectileEmitSystem>();
     registry->AddSystem<ProjectileLifecycleSystem>();
-    registry->AddSystem<DamageSystem>();
+    registry->AddSystem<RenderTextSystem>();
+
+    registry->AddSystem<RenderColliderSystem>();
+    registry->AddSystem<PlayerControlSystem>();
+    registry->AddSystem<RenderImGuiSystem>();
+//    registry->AddSystem<StateMachineSystem>();
     registry->AddSystem<RenderRaycastSystem>();
 
-    // Load the tilemap
-    GetTMX();
-
     // Adding assets to the asset store
-    assetStore->AddTexture(renderer, "hud", "../assets/images/hud2.png");
-    assetStore->AddFont("charriot-font", "../assets/fonts/charriot.ttf", 24);
+    assetStore->AddTexture(renderer, "hud", "../Game/assets/images/hud2.png");
+    assetStore->AddFont("charriot-font", "../Game/assets/fonts/charriot.ttf", 24);
     assetStore->AddTexture(renderer, "tilemap-image", mapImagePath);
-    assetStore->AddTexture(renderer, "tank-image", "../assets/images/tank-panther-right.png");
-    assetStore->AddTexture(renderer, "truck-image", "../assets/images/truck-ford-right.png");
-    assetStore->AddTexture(renderer, "chopper-image", "../assets/images/chopper.png");
-    assetStore->AddTexture(renderer, "player-idle-image", "../assets/sprites/CharacterIdle.png");
-    assetStore->AddTexture(renderer, "bullet-image", "../assets/images/bullet.png");
+    assetStore->AddTexture(renderer, "tank-image", "../Game/assets/images/tank-panther-right.png");
+    assetStore->AddTexture(renderer, "truck-image", "../Game/assets/images/truck-ford-right.png");
+    assetStore->AddTexture(renderer, "chopper-image", "../Game/assets/images/chopper.png");
+    assetStore->AddTexture(renderer, "player-idle-image", "../Game/assets/sprites/CharacterIdle.png");
+    assetStore->AddTexture(renderer, "bullet-image", "../Game/assets/images/bullet.png");
 
     Entity player = registry->CreateEntity();
     player.Tag("player");
@@ -105,6 +106,7 @@ void Game::SetUpGameObjects()
 //    Entity label = registry->CreateEntity();
 //    SDL_Color red = {255,0,0};
 //    label.AddComponent<TextLabelComponent>(glm::vec2(200, 200), "This is a label", "charriot-font", red, true);
+
 }
 
 
@@ -143,7 +145,7 @@ int Game::Initialize()
 //    windowHeight = displayMode.h;
 
     // Create window with SDL_Renderer graphics context
-    SDL_WindowFlags windowFlags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
+    auto windowFlags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
     Game::window = SDL_CreateWindow(
             "Game",
             SDL_WINDOWPOS_CENTERED,
@@ -159,7 +161,8 @@ int Game::Initialize()
         return -1;
     }
 
-    Game::renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    Game::renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+//    Game::renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     if (!renderer)
     {
@@ -188,22 +191,6 @@ int Game::Initialize()
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer2_Init(renderer);
 
-    // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-    // - Read 'docs/FONTS.md' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != nullptr);
-
     // Set game running on
     isRunning = true;
 
@@ -212,15 +199,60 @@ int Game::Initialize()
 
 
 /**
+ * Poll events:
+ *
+ * window quit
+ * keyboard
+ */
+void Game::ProcessInput()
+{
+    SDL_Event sdlEvent;
+    while (SDL_PollEvent(&sdlEvent))
+    {
+        // ImGui
+        ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
+        ImGuiIO io = ImGui::GetIO();
+        int mouseX;
+        int mouseY;
+        const int buttons = SDL_GetMouseState(&mouseX, &mouseY);
+        io.MousePos = ImVec2(mouseX, mouseY);
+        io.MouseDown[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
+        io.MouseDown[1] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
+
+        if (sdlEvent.type == SDL_KEYUP)
+        {
+            eventBus->EmitEvent<KeyReleasedEvent>(sdlEvent.key.keysym.sym);
+        }
+
+        // Core sdl events.
+        switch (sdlEvent.type)
+        {
+            case SDL_QUIT:
+                isRunning = false;
+                break;
+
+            case SDL_KEYDOWN:
+                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isRunning = false; }
+                if (sdlEvent.key.keysym.sym == SDLK_d) { isDebug = !isDebug; }
+                if (sdlEvent.key.keysym.sym == SDLK_g) { isImGui = !isImGui; }
+                eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
+                break;
+        }
+    };
+};
+
+
+/**
  * Main loop
  */
 void Game::Run()
 {
     SetUpGameObjects();
+    GetTMX();
 
     while (isRunning)
     {
-//        ProcessInput();
+        ProcessInput();
         UpdateSystems();
         Render();
         RenderImGui();
@@ -261,7 +293,7 @@ void Game::UpdateSystems()
     registry->GetSystem<ProjectileEmitSystem>().Update(registry);
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
 
-    RenderTree();
+//    RenderTree();
 };
 
 
@@ -285,10 +317,10 @@ void Game::RenderImGui()
     bool show_another_window = false;
 
     // Poll and handle events (inputs, window resize, etc.)
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui_basic wants to use your inputs.
     // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
     // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-    // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+    // Generally you may always pass all inputs to dear imgui_basic, and hide them from your application based on those two flags.
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
@@ -346,6 +378,7 @@ void Game::RenderImGui()
 
     // Rendering
     ImGui::Render();
+
 //        SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
     SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
     SDL_RenderClear(renderer);
@@ -357,13 +390,12 @@ void Game::RenderImGui()
 
 void Game::Render()
 {
-    SDL_SetRenderDrawColor(renderer, 255,255,255,255);
-//    SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+    SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
     SDL_RenderClear(renderer);
 
     // Invoke all the systems that need to render
-//    registry->GetSystem<RenderSystem>().Update(renderer, assetStore, camera);
-//    registry->GetSystem<RenderTextSystem>().Update(renderer, assetStore, camera);
+    registry->GetSystem<RenderSystem>().Update(renderer, assetStore, camera);
+    registry->GetSystem<RenderTextSystem>().Update(renderer, assetStore, camera);
 
 //    if (isDebug) {
 //        registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
@@ -382,34 +414,18 @@ void Game::Render()
 //    source.y = 0;
 //    source.w = 640;
 //    source.h = 64;
-//
-//    SDL_Rect destination;
-//    destination.x = 0;
-//    destination.y = 480-64;
-//    destination.w = 640;
-//    destination.h = 64;
-//
-//    SDL_RenderCopy(renderer, hud, &source, &destination);
-//
-//    SDL_RenderPresent(renderer);
 
-    // Display HUD
-//    SDL_Texture* tree =  assetStore->GetTexture("hud");
-//    SDL_Rect source;
-//    source.x = 0;
-//    source.y = 0;
-//    source.w = 640;
-//    source.h = 64;
-//
 //    SDL_Rect destination;
 //    destination.x = 0;
 //    destination.y = 480-64;
 //    destination.w = 640;
 //    destination.h = 64;
-//
+
 //    SDL_RenderCopy(renderer, hud, &source, &destination);
-//
-//    SDL_RenderPresent(renderer);
+
+    // Causes flicker but if removed then no map displayed.
+    SDL_RenderPresent(renderer);
+
 }
 
 /**

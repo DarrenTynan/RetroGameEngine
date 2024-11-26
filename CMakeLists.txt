@@ -11,14 +11,14 @@ set(SOURCE_FILES main.cpp
                     Game/src/Game.cpp
                     RGE/src/Logger/Logger.cpp
 
-                    RGE/libs/imgui/backends/imgui_impl_sdl2.cpp
-                    RGE/libs/imgui/backends/imgui_impl_sdlrenderer2.cpp
+        RGE/libs/imgui_basic/backends/imgui_impl_sdl2.cpp
+        RGE/libs/imgui_basic/backends/imgui_impl_sdlrenderer2.cpp
 
-                    RGE/libs/imgui/imgui.cpp
-                    RGE/libs/imgui/imgui_demo.cpp
-                    RGE/libs/imgui/imgui_draw.cpp
-                    RGE/libs/imgui/imgui_tables.cpp
-                    RGE/libs/imgui/imgui_widgets.cpp
+        RGE/libs/imgui_basic/imgui.cpp
+        RGE/libs/imgui_basic/imgui_demo.cpp
+        RGE/libs/imgui_basic/imgui_draw.cpp
+        RGE/libs/imgui_basic/imgui_tables.cpp
+        RGE/libs/imgui_basic/imgui_widgets.cpp
 
                     RGE/src/AssetStore/AssetStore.cpp
                     RGE/src/ECS/ECS.cpp
@@ -28,7 +28,7 @@ set(SOURCE_FILES main.cpp
 # Add executable target with source files listed in SOURCE_FILES variable
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-include_directories(RGE/libs/imgui/ RGE/libs/imgui/backends/ Game/assets)
+include_directories(RGE/libs/imgui_basic/ RGE/libs/imgui_basic/backends/ Game/assets)
 
 # Line compiles but missing error.
 #target_link_libraries(${PROJECT_NAME} /RGE/libs/libRGE.a)

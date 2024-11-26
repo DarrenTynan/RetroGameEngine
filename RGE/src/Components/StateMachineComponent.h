@@ -5,6 +5,7 @@
 #ifndef RETRO_ENGINE_STATEMACHINECOMPONENT_H
 #define RETRO_ENGINE_STATEMACHINECOMPONENT_H
 #include <string>
+
 struct Entity {
     float x;
     float y;
