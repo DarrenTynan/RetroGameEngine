@@ -66,9 +66,10 @@ const int MILLISECS_PER_FRAME = 1000 / FPS;
 class Game
 {
     private:
-        SDL_Window* window = nullptr;
-        SDL_Renderer* renderer = nullptr;
-        SDL_Surface* windowSurface = nullptr;
+        SDL_Window* window{};
+        SDL_Renderer* renderer{};
+        SDL_Texture* texture{};
+        SDL_Surface* windowSurface{};
         SDL_Rect camera{};
 
         bool isRunning = false;
@@ -77,8 +78,8 @@ class Game
         bool isFullScreen = false;
 
         int millisecsPreviouseFrame = 0;
-        int windowWidth = 640;
-        int windowHeight = 480;
+        int windowWidth{};
+        int windowHeight{};
         int mapWidth{};
         int mapHeight{};
 

@@ -8,21 +8,20 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Add main.cpp file of the project root directory as a source file
 set(SOURCE_FILES main.cpp
-                    Game/src/Game.cpp
-                    RGE/src/Logger/Logger.cpp
-
-        RGE/libs/imgui_basic/backends/imgui_impl_sdl2.cpp
-        RGE/libs/imgui_basic/backends/imgui_impl_sdlrenderer2.cpp
-
+        Game/src/Game.cpp
+        RGE/src/Logger/Logger.cpp
+        
         RGE/libs/imgui_basic/imgui.cpp
         RGE/libs/imgui_basic/imgui_demo.cpp
         RGE/libs/imgui_basic/imgui_draw.cpp
         RGE/libs/imgui_basic/imgui_tables.cpp
         RGE/libs/imgui_basic/imgui_widgets.cpp
+        RGE/libs/imgui_basic/backends/imgui_impl_sdl2.cpp
+        RGE/libs/imgui_basic/backends/imgui_impl_sdlrenderer2.cpp
 
-                    RGE/src/AssetStore/AssetStore.cpp
-                    RGE/src/ECS/ECS.cpp
-                    RGE/src/Logger/Logger.cpp
+        RGE/src/AssetStore/AssetStore.cpp
+        RGE/src/ECS/ECS.cpp
+        RGE/src/Logger/Logger.cpp
 )
 
 # Add executable target with source files listed in SOURCE_FILES variable

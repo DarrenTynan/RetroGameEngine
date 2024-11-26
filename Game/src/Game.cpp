@@ -42,8 +42,8 @@ void Game::RenderTree()
     destination.h = 32*2;
 
     SDL_RenderCopy(renderer, texture, &source, &destination);
-    SDL_RenderPresent(renderer);
     SDL_DestroyTexture(texture);
+    SDL_RenderPresent(renderer);
 
 }
 
@@ -68,7 +68,7 @@ void Game::SetUpGameObjects()
 
     registry->AddSystem<RenderColliderSystem>();
     registry->AddSystem<PlayerControlSystem>();
-    registry->AddSystem<RenderImGuiSystem>();
+//    registry->AddSystem<RenderImGuiSystem>();
 //    registry->AddSystem<StateMachineSystem>();
     registry->AddSystem<RenderRaycastSystem>();
 
@@ -118,7 +118,8 @@ void Game::SetUpGameObjects()
 int Game::Initialize()
 {
     // Setup SDL
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+//    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
     {
         std::cout << "SDL could not be initialised\n" << SDL_GetError();
         Logger::Error2Arg("SDL could not be initialised ", SDL_GetError());
@@ -161,7 +162,7 @@ int Game::Initialize()
         return -1;
     }
 
-    Game::renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    Game::renderer = SDL_CreateRenderer(window, -1, 0);
 //    Game::renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     if (!renderer)
@@ -173,10 +174,11 @@ int Game::Initialize()
     Logger::Log("SDL is ready to go!");
 
     // Initialize the camera view with the entire screen area
-    camera.x = 0;
-    camera.y = 0;
-    camera.w = windowWidth;
-    camera.h = windowHeight;
+//    camera.x = 0;
+//    camera.y = 0;
+//    camera.w = windowWidth;
+//    camera.h = windowHeight;
+    camera = {0, 0, windowWidth, windowHeight};
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -255,7 +257,8 @@ void Game::Run()
         ProcessInput();
         UpdateSystems();
         Render();
-        RenderImGui();
+        RenderTree();
+//        RenderImGui();
     }
 }
 
@@ -312,7 +315,6 @@ void Game::Destroy()
 void Game::RenderImGui()
 {
     // Our state
-    bool done = false;
     bool show_demo_window = true;
     bool show_another_window = false;
 
@@ -380,8 +382,8 @@ void Game::RenderImGui()
     ImGui::Render();
 
 //        SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
-    SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
-    SDL_RenderClear(renderer);
+//    SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+//    SDL_RenderClear(renderer);
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
     SDL_RenderPresent(renderer);
 
@@ -508,3 +510,5 @@ int Game::GetTMX()
 
     return 0;
 }
+
+
