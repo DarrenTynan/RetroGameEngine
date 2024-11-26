@@ -65,11 +65,12 @@ const int MILLISECS_PER_FRAME = 1000 / FPS;
 
 class Game
 {
-    private:
+    public:
         SDL_Window* window{};
         SDL_Renderer* renderer{};
         SDL_Texture* texture{};
         SDL_Surface* windowSurface{};
+        SDL_Surface* surface{};
         SDL_Rect camera{};
 
         bool isRunning = false;
@@ -89,21 +90,29 @@ class Game
         std::unique_ptr<AssetStore> assetStore;
         std::unique_ptr<EventBus> eventBus;
 
-public:
+        const static int SCREEN_WIDTH = 800;
+        const static int SCREEN_HEIGHT = 600;
+        Uint32* buffer;
+
         Game();
         virtual ~Game();
-
-        int Initialize();
-
+        int SetupSDL();
         void Run();
         int GetTMX();
-        void SetUpGameObjects();
+        void SetUpRegistry();
+        void SetupAssets();
+        void SetupObjects();
+        void SetupImGui();
         void ProcessInput();
         void UpdateSystems();
         void Render();
         void RenderImGui();
         void Destroy();
         void RenderTree();
+        void setup_imgui_context(SDL_Window* sdl_window, SDL_Renderer* sdl_renderer);
+        void setPixel(int x, int y, Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha);
+        void rect(int pos_x, int pos_y, int scale_x, int scale_y, Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha);
+
 };
 
 #endif //RETROGAMEENGINE_GAME_H

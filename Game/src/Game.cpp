@@ -24,9 +24,9 @@ Game::~Game() { Logger::Log("Game deconstruct called"); }
 
 void Game::RenderTree()
 {
-    SDL_Surface* surface = IMG_Load("../Game/assets/images/tree.png");
+    surface = IMG_Load("../Game/assets/images/tree.png");
 
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
 
     SDL_Rect source;
@@ -42,16 +42,16 @@ void Game::RenderTree()
     destination.h = 32*2;
 
     SDL_RenderCopy(renderer, texture, &source, &destination);
-    SDL_DestroyTexture(texture);
     SDL_RenderPresent(renderer);
+    SDL_DestroyTexture(texture);
 
 }
 
 
 /**
- * Initialise game objects
+ * Initialise the registry with systems.
  */
-void Game::SetUpGameObjects()
+void Game::SetUpRegistry()
 {
     // Add the systems that need to be processed in our game
     registry->AddSystem<MovementSystem>();
@@ -71,7 +71,14 @@ void Game::SetUpGameObjects()
 //    registry->AddSystem<RenderImGuiSystem>();
 //    registry->AddSystem<StateMachineSystem>();
     registry->AddSystem<RenderRaycastSystem>();
+}
 
+/**
+  * Initialise the assetStore with pointers to png.
+  *
+ */
+void Game::SetupAssets()
+{
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "hud", "../Game/assets/images/hud2.png");
     assetStore->AddFont("charriot-font", "../Game/assets/fonts/charriot.ttf", 24);
@@ -81,7 +88,13 @@ void Game::SetUpGameObjects()
     assetStore->AddTexture(renderer, "chopper-image", "../Game/assets/images/chopper.png");
     assetStore->AddTexture(renderer, "player-idle-image", "../Game/assets/sprites/CharacterIdle.png");
     assetStore->AddTexture(renderer, "bullet-image", "../Game/assets/images/bullet.png");
+}
 
+/**
+* Initialise the player object with components.
+ */
+void Game::SetupObjects()
+{
     Entity player = registry->CreateEntity();
     player.Tag("player");
     player.AddComponent<TransformComponent>(glm::vec2(256, 256), glm::vec2(2.0, 2.0), 0.0);
@@ -111,26 +124,25 @@ void Game::SetUpGameObjects()
 
 
 /**
- * Initialize SDL, DisplayMode, Window, Camera, ImGui
+ * SetupSDL SDL, DisplayMode, Window, Camera, ImGui
  *
  * @return -1 for errors
  */
-int Game::Initialize()
+int Game::SetupSDL()
 {
     // Setup SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-//    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
     {
         std::cout << "SDL could not be initialised\n" << SDL_GetError();
         Logger::Error2Arg("SDL could not be initialised ", SDL_GetError());
-        return -1;
+        return false;
     }
 
     // Setup true type fonts
     if (TTF_Init() != 0)
     {
         Logger::Error("Error initializing SDL TTF");
-        return -1;
+        return false;
     }
 
     // From 2.0.18: Enable native IME.
@@ -146,48 +158,70 @@ int Game::Initialize()
 //    windowHeight = displayMode.h;
 
     // Create window with SDL_Renderer graphics context
-    auto windowFlags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
+    auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
     Game::window = SDL_CreateWindow(
             "Game",
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
             windowWidth,
             windowHeight,
-            windowFlags
+            SDL_WINDOW_SHOWN
+//            windowFlags
     );
 
     if (!window)
     {
         Logger::Error("Window init failed");
-        return -1;
+        SDL_Quit();
+        return false;
     }
 
-    Game::renderer = SDL_CreateRenderer(window, -1, 0);
+    renderer = SDL_CreateRenderer(window, -1, 0);
 //    Game::renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     if (!renderer)
     {
         Logger::Error("Window renderer init failed");
-        return -1;
+        SDL_DestroyRenderer(renderer);
+        SDL_Quit();
+        return false;
     }
+
+    texture = SDL_CreateTexture(
+            renderer,
+            SDL_PIXELFORMAT_RGBA8888,
+            SDL_TEXTUREACCESS_STATIC,
+            SCREEN_WIDTH,
+            SCREEN_HEIGHT);
+
+    if (!texture) {
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyTexture(texture);
+        SDL_Quit();
+        return false;
+    }
+
 
     Logger::Log("SDL is ready to go!");
 
-    // Initialize the camera view with the entire screen area
-//    camera.x = 0;
-//    camera.y = 0;
-//    camera.w = windowWidth;
-//    camera.h = windowHeight;
+    // SetupSDL the camera view with the entire screen area
     camera = {0, 0, windowWidth, windowHeight};
 
+    return 0;
+}
+
+void Game::SetupImGui()
+{
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
     // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-//    ImGui::StyleColorsLight();
+//    ImGui::StyleColorsDark();
+    ImGui::StyleColorsLight();
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
@@ -196,7 +230,6 @@ int Game::Initialize()
     // Set game running on
     isRunning = true;
 
-    return 0;
 }
 
 
@@ -245,37 +278,14 @@ void Game::ProcessInput()
 
 
 /**
- * Main loop
- */
-void Game::Run()
-{
-    SetUpGameObjects();
-    GetTMX();
-
-    while (isRunning)
-    {
-        ProcessInput();
-        UpdateSystems();
-        Render();
-        RenderTree();
-//        RenderImGui();
-    }
-}
-
-
-/**
  * UpdateSystems
  */
 void Game::UpdateSystems()
 {
-    int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks64() - millisecsPreviouseFrame);
-    if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME) {
-        SDL_Delay(timeToWait);
-    }
-
     // The difference in ticks since the last frame, converted to seconds
     double deltaTime = (SDL_GetTicks() - millisecsPreviouseFrame) / 1000.0;
 
+    // Store the "previous" frame time
     millisecsPreviouseFrame = SDL_GetTicks();
 
     // Reset all event handlers for the current frame
@@ -296,7 +306,6 @@ void Game::UpdateSystems()
     registry->GetSystem<ProjectileEmitSystem>().Update(registry);
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
 
-//    RenderTree();
 };
 
 
@@ -512,3 +521,97 @@ int Game::GetTMX()
 }
 
 
+const static int SCREEN_WIDTH = 800;
+const static int SCREEN_HEIGHT = 600;
+Uint32* buffer;
+
+void Game::setup_imgui_context(SDL_Window* sdl_window, SDL_Renderer* sdl_renderer)
+{
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+//    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+//    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+
+    // Setup Dear ImGui style
+    //ImGui::StyleColorsDark();
+    ImGui::StyleColorsLight();
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplSDL2_InitForSDLRenderer(sdl_window, sdl_renderer);
+    ImGui_ImplSDLRenderer2_Init(sdl_renderer);
+
+    // Start the Dear ImGui frame
+    ImGui_ImplSDLRenderer2_NewFrame();
+    ImGui_ImplSDL2_NewFrame();
+
+}
+
+void Game::setPixel(int x, int y, Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha) {
+
+    if ((x >= SCREEN_WIDTH) or (y >= SCREEN_HEIGHT)) {
+        // if the pixel position is out of box don't do anything
+    }
+    else if ((x < 0) or (y < 0))
+    {
+        // if the pixel position is negative then don't do anything
+    }
+    else {
+
+        Uint32 color = 0;
+
+        color += static_cast<Uint32>(red)   << 24 |
+                 static_cast<Uint32>(green) << 16 |
+                 static_cast<Uint32>(blue)  << 8  |
+                 static_cast<Uint32>(alpha);
+
+        buffer[(y * SCREEN_WIDTH) + x] = color;
+    }
+
+}
+
+void Game::rect(int pos_x, int pos_y, int scale_x, int scale_y, Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha)
+{
+    for (int y = 0; y < SCREEN_HEIGHT; y++)
+    {
+        for (int x = 0; x < SCREEN_WIDTH; x++)
+        {
+            if (((x > pos_x) && (x < pos_x + scale_x)) && ((y > pos_y) && (y < pos_y + scale_y)))
+            {
+                setPixel(x, y, red, green, blue, alpha);
+            }
+
+        }
+    }
+
+}
+
+
+/**
+ * Main loop
+ */
+void Game::Run()
+{
+    SetupSDL();
+
+    SetUpRegistry();
+    SetupAssets();
+    SetupImGui();
+    SetupObjects();
+
+    GetTMX();
+
+    while (isRunning)
+    {
+        ProcessInput();
+        UpdateSystems();    // contains the delta time loop
+        Render();
+
+//        RenderTree();
+//        RenderImGui();
+    }
+}

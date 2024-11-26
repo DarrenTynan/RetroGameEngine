@@ -10,14 +10,14 @@ set(CMAKE_CXX_STANDARD 20)
 set(SOURCE_FILES main.cpp
         Game/src/Game.cpp
         RGE/src/Logger/Logger.cpp
-        
-        RGE/libs/imgui_basic/imgui.cpp
-        RGE/libs/imgui_basic/imgui_demo.cpp
-        RGE/libs/imgui_basic/imgui_draw.cpp
-        RGE/libs/imgui_basic/imgui_tables.cpp
-        RGE/libs/imgui_basic/imgui_widgets.cpp
-        RGE/libs/imgui_basic/backends/imgui_impl_sdl2.cpp
-        RGE/libs/imgui_basic/backends/imgui_impl_sdlrenderer2.cpp
+
+        RGE/libs/imgui_docking/imgui.cpp
+        RGE/libs/imgui_docking/imgui_demo.cpp
+        RGE/libs/imgui_docking/imgui_draw.cpp
+        RGE/libs/imgui_docking/imgui_tables.cpp
+        RGE/libs/imgui_docking/imgui_widgets.cpp
+        RGE/libs/imgui_docking/backends/imgui_impl_sdl2.cpp
+        RGE/libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
 
         RGE/src/AssetStore/AssetStore.cpp
         RGE/src/ECS/ECS.cpp
@@ -27,7 +27,7 @@ set(SOURCE_FILES main.cpp
 # Add executable target with source files listed in SOURCE_FILES variable
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-include_directories(RGE/libs/imgui_basic/ RGE/libs/imgui_basic/backends/ Game/assets)
+include_directories(RGE/libs/imgui_docking/ RGE/libs/imgui_docking/backends/ Game/assets)
 
 # Line compiles but missing error.
 #target_link_libraries(${PROJECT_NAME} /RGE/libs/libRGE.a)
