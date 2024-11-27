@@ -32,6 +32,7 @@ class RenderImGuiSystem: public System {
 
         // Rendering
         ImGui::Render();
+
 //        ImGui_ImplSDL2_NewFrameSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
 
     }

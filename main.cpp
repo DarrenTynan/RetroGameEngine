@@ -11,7 +11,6 @@ int main()
     game.Run();
     game.Destroy();
 
-
 //    RGE::sayHello();
 
     std::cout << "main.cpp exit" << std::endl;

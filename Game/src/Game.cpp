@@ -250,6 +250,7 @@ void Game::ProcessInput()
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isRunning = false; }
                 if (sdlEvent.key.keysym.sym == SDLK_d) { isDebug = !isDebug; }
                 if (sdlEvent.key.keysym.sym == SDLK_g) { isImGui = !isImGui; }
+                if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
                 break;
         }
@@ -386,13 +387,19 @@ void Game::Render()
     registry->GetSystem<RenderSystem>().Update(renderer, assetStore, camera);
     registry->GetSystem<RenderTextSystem>().Update(renderer, assetStore, camera);
 
-    if (isDebug) {
+    if (isDebug)
+    {
         registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
+    }
+
+    if (isRayCast)
+    {
         auto player = registry->GetEntityByTag("player");
         registry->GetSystem<RenderRaycastSystem>().Update(renderer, player);
     }
 
-    if (isImGui) {
+    if (isImGui)
+    {
         registry->GetSystem<RenderImGuiSystem>().Update(registry, camera);
     }
 

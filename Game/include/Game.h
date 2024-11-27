@@ -76,6 +76,7 @@ class Game
         bool isRunning = false;
         bool isDebug = true;
         bool isImGui = true;
+        bool isRayCast = false;
         bool isFullScreen = false;
 
         int millisecsPreviouseFrame = 0;
