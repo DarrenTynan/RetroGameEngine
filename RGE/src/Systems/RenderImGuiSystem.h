@@ -16,7 +16,7 @@ class RenderImGuiSystem: public System {
         RenderImGuiSystem() = default;
         bool show_world_overlay = true;
         bool show_game_debug = true;
-        bool show_demo_window = false;
+        bool show_demo_window = true;
         bool show_spawn_entity = false;
 
     void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera) {
@@ -32,7 +32,7 @@ class RenderImGuiSystem: public System {
 
         // Rendering
         ImGui::Render();
-//        ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
+//        ImGui_ImplSDL2_NewFrameSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
 
     }
 

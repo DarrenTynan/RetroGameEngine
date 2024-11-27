@@ -68,7 +68,7 @@ void Game::SetUpRegistry() const
 
     registry->AddSystem<RenderColliderSystem>();
     registry->AddSystem<PlayerControlSystem>();
-//    registry->AddSystem<RenderImGuiSystem>();
+    registry->AddSystem<RenderImGuiSystem>();
 //    registry->AddSystem<StateMachineSystem>();
     registry->AddSystem<RenderRaycastSystem>();
 }
@@ -323,6 +323,7 @@ void Game::RenderImGui()
 
     if (SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED) { SDL_Delay(10); }
 
+
     // Start the Dear ImGui frame
     ImGui_ImplSDLRenderer2_NewFrame();
     ImGui_ImplSDL2_NewFrame();
@@ -370,8 +371,8 @@ void Game::RenderImGui()
 //        SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
 //    SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
 //    SDL_RenderClear(renderer);
-    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
-    SDL_RenderPresent(renderer);
+//    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
+//    SDL_RenderPresent(renderer);
 
 }
 
@@ -392,10 +393,8 @@ void Game::Render()
     }
 
     if (isImGui) {
-        RenderImGui();
-//        registry->GetSystem<RenderImGuiSystem>().Update(registry, camera);
+        registry->GetSystem<RenderImGuiSystem>().Update(registry, camera);
     }
-
 
     // Display HUD
     SDL_Texture* hud = assetStore->GetTexture("hud");
@@ -500,11 +499,7 @@ int Game::GetTMX()
 }
 
 
-
-/**
- * Main loop
- */
-void Game::Run()
+void Game::Setup()
 {
     SetupSDL();
     SetUpRegistry();
@@ -512,7 +507,13 @@ void Game::Run()
     SetupImGui();
     SetupObjects();
     GetTMX();
+}
 
+/**
+ * Main loop
+ */
+void Game::Run()
+{
     // Set game running on
     isRunning = true;
 

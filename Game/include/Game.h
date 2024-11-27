@@ -95,9 +95,10 @@ class Game
 
         Game();
         virtual ~Game();
-        int SetupSDL();
+        void Setup();
         void Run();
         int GetTMX();
+        int SetupSDL();
         void SetUpRegistry() const;
         void SetupAssets() const;
         void SetupObjects() const;
