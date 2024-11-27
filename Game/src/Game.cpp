@@ -51,7 +51,7 @@ void Game::RenderTree()
 /**
  * Initialise the registry with systems.
  */
-void Game::SetUpRegistry() const
+void Game::SetUpRegistry()
 {
     // Add the systems that need to be processed in our game
     registry->AddSystem<MovementSystem>();
@@ -68,17 +68,16 @@ void Game::SetUpRegistry() const
 
     registry->AddSystem<RenderColliderSystem>();
     registry->AddSystem<PlayerControlSystem>();
-    registry->AddSystem<RenderImGuiSystem>();
+//    registry->AddSystem<RenderImGuiSystem>();
 //    registry->AddSystem<StateMachineSystem>();
     registry->AddSystem<RenderRaycastSystem>();
 }
-
 
 /**
   * Initialise the assetStore with pointers to png.
   *
  */
-void Game::SetupAssets() const
+void Game::SetupAssets()
 {
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "hud", "../Game/assets/images/hud2.png");
@@ -94,7 +93,7 @@ void Game::SetupAssets() const
 /**
 * Initialise the player object with components.
  */
-void Game::SetupObjects() const
+void Game::SetupObjects()
 {
     Entity player = registry->CreateEntity();
     player.Tag("player");
@@ -110,12 +109,16 @@ void Game::SetupObjects() const
 //    player.AddComponent<StateMachineComponent>("idle");
 //    player.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
 
-    Entity tank = registry->CreateEntity();
-    tank.AddComponent<TransformComponent>(glm::vec2(0.0, 100.0), glm::vec2(2.0, 2.0), 0.0);
-    tank.AddComponent<RigidBodyComponent>(glm::vec2(20.0, 0.0));
-    tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1, false, 0, 0);
-    tank.AddComponent<BoxColliderComponent>(32-10, 32-10, glm::vec2(10,10));
-    tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
+//    Entity tank = registry->CreateEntity();
+//    tank.AddComponent<TransformComponent>(glm::vec2(0.0, 100.0), glm::vec2(2.0, 2.0), 0.0);
+//    tank.AddComponent<RigidBodyComponent>(glm::vec2(20.0, 0.0));
+//    tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1, false, 0, 0);
+//    tank.AddComponent<BoxColliderComponent>(32-10, 32-10, glm::vec2(10,10));
+//    tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
+
+//    Entity label = registry->CreateEntity();
+//    SDL_Color red = {255,0,0};
+//    label.AddComponent<TextLabelComponent>(glm::vec2(200, 200), "This is a label", "charriot-font", red, true);
 
 }
 
@@ -130,6 +133,7 @@ int Game::SetupSDL()
     // Setup SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
+        std::cout << "SDL could not be initialised\n" << SDL_GetError();
         Logger::Error2Arg("SDL could not be initialised ", SDL_GetError());
         return false;
     }
@@ -148,21 +152,21 @@ int Game::SetupSDL()
 
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
-    windowWidth = 640;
-    windowHeight = 480;
+    windowWidth = 1280;
+    windowHeight = 720;
 //    windowWidth = displayMode.w;
 //    windowHeight = displayMode.h;
 
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
-    window = SDL_CreateWindow(
+    Game::window = SDL_CreateWindow(
             "Game",
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
             windowWidth,
             windowHeight,
-//            SDL_WINDOW_SHOWN
-            windowFlags
+            SDL_WINDOW_SHOWN
+//            windowFlags
     );
 
     if (!window)
@@ -172,7 +176,8 @@ int Game::SetupSDL()
         return false;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    renderer = SDL_CreateRenderer(window, -1, 0);
+//    Game::renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     if (!renderer)
     {
@@ -186,23 +191,23 @@ int Game::SetupSDL()
             renderer,
             SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_STATIC,
-            1280,
-            720);
+            SCREEN_WIDTH,
+            SCREEN_HEIGHT);
 
-    if (!texture)
-    {
+    if (!texture) {
         SDL_DestroyRenderer(renderer);
         SDL_DestroyTexture(texture);
         SDL_Quit();
         return false;
     }
 
+
     Logger::Log("SDL is ready to go!");
 
     // SetupSDL the camera view with the entire screen area
     camera = {0, 0, windowWidth, windowHeight};
 
-    return true;
+    return 0;
 }
 
 void Game::SetupImGui()
@@ -215,8 +220,8 @@ void Game::SetupImGui()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
     // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-//    ImGui::StyleColorsLight();
+//    ImGui::StyleColorsDark();
+    ImGui::StyleColorsLight();
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
@@ -304,7 +309,7 @@ void Game::UpdateSystems()
 };
 
 
-void Game::Destroy() const
+void Game::Destroy()
 {
     ImGui_ImplSDLRenderer2_Shutdown();
     ImGui_ImplSDL2_Shutdown();
@@ -386,8 +391,8 @@ void Game::RenderImGui()
     ImGui::Render();
 
 //        SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
-    SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
-    SDL_RenderClear(renderer);
+//    SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+//    SDL_RenderClear(renderer);
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
     SDL_RenderPresent(renderer);
 
@@ -410,27 +415,28 @@ void Game::Render()
 //    }
 
 //    if (isImGui) {
-        registry->GetSystem<RenderImGuiSystem>().Update(registry, camera);
+//        registry->GetSystem<RenderImGuiSystem>().Update(registry, camera);
 //    }
 
     // Display HUD
-    SDL_Texture* hud = assetStore->GetTexture("hud");
-    SDL_Rect source;
-    source.x = 0;
-    source.y = 0;
-    source.w = 640;
-    source.h = 64;
-//
-    SDL_Rect destination;
-    destination.x = 0;
-    destination.y = 480-64;
-    destination.w = 640;
-    destination.h = 64;
-//
-    SDL_RenderCopy(renderer, hud, &source, &destination);
+//    SDL_Texture* hud = assetStore->GetTexture("hud");
+//    SDL_Rect source;
+//    source.x = 0;
+//    source.y = 0;
+//    source.w = 640;
+//    source.h = 64;
+
+//    SDL_Rect destination;
+//    destination.x = 0;
+//    destination.y = 480-64;
+//    destination.w = 640;
+//    destination.h = 64;
+
+//    SDL_RenderCopy(renderer, hud, &source, &destination);
+
+    // Causes flicker but if removed then no map displayed.
     SDL_RenderPresent(renderer);
-//    SDL_DestroyTexture(hud);
-    
+
 }
 
 /**
@@ -438,7 +444,7 @@ void Game::Render()
  *
  * @return
  */
-int Game::SetupTMX()
+int Game::GetTMX()
 {
     map.load(MAP_PATH);
 
@@ -515,11 +521,90 @@ int Game::SetupTMX()
 }
 
 
+const static int SCREEN_WIDTH = 800;
+const static int SCREEN_HEIGHT = 600;
+Uint32* buffer;
+
+void Game::setup_imgui_context(SDL_Window* sdl_window, SDL_Renderer* sdl_renderer)
+{
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+//    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+//    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+
+    // Setup Dear ImGui style
+    //ImGui::StyleColorsDark();
+    ImGui::StyleColorsLight();
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplSDL2_InitForSDLRenderer(sdl_window, sdl_renderer);
+    ImGui_ImplSDLRenderer2_Init(sdl_renderer);
+
+    // Start the Dear ImGui frame
+    ImGui_ImplSDLRenderer2_NewFrame();
+    ImGui_ImplSDL2_NewFrame();
+
+}
+
+void Game::setPixel(int x, int y, Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha) {
+
+    if ((x >= SCREEN_WIDTH) or (y >= SCREEN_HEIGHT)) {
+        // if the pixel position is out of box don't do anything
+    }
+    else if ((x < 0) or (y < 0))
+    {
+        // if the pixel position is negative then don't do anything
+    }
+    else {
+
+        Uint32 color = 0;
+
+        color += static_cast<Uint32>(red)   << 24 |
+                 static_cast<Uint32>(green) << 16 |
+                 static_cast<Uint32>(blue)  << 8  |
+                 static_cast<Uint32>(alpha);
+
+        buffer[(y * SCREEN_WIDTH) + x] = color;
+    }
+
+}
+
+void Game::rect(int pos_x, int pos_y, int scale_x, int scale_y, Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha)
+{
+    for (int y = 0; y < SCREEN_HEIGHT; y++)
+    {
+        for (int x = 0; x < SCREEN_WIDTH; x++)
+        {
+            if (((x > pos_x) && (x < pos_x + scale_x)) && ((y > pos_y) && (y < pos_y + scale_y)))
+            {
+                setPixel(x, y, red, green, blue, alpha);
+            }
+
+        }
+    }
+
+}
+
+
 /**
  * Main loop
  */
 void Game::Run()
 {
+    SetupSDL();
+
+    SetUpRegistry();
+    SetupAssets();
+    SetupImGui();
+    SetupObjects();
+
+    GetTMX();
+
     while (isRunning)
     {
         ProcessInput();
@@ -529,14 +614,4 @@ void Game::Run()
 //        RenderTree();
 //        RenderImGui();
     }
-}
-
-void Game::Initialize()
-{
-    SetupSDL();
-    SetupAssets();
-    SetUpRegistry();
-    SetupObjects();
-    SetupTMX();
-    SetupImGui();
 }

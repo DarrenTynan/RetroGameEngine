@@ -90,22 +90,28 @@ class Game
         std::unique_ptr<AssetStore> assetStore;
         std::unique_ptr<EventBus> eventBus;
 
+        const static int SCREEN_WIDTH = 800;
+        const static int SCREEN_HEIGHT = 600;
+        Uint32* buffer;
+
         Game();
         virtual ~Game();
-        void Initialize();
         int SetupSDL();
         void Run();
-        int SetupTMX();
-        void SetUpRegistry() const;
-        void SetupAssets() const;
-        void SetupObjects() const;
+        int GetTMX();
+        void SetUpRegistry();
+        void SetupAssets();
+        void SetupObjects();
         void SetupImGui();
         void ProcessInput();
         void UpdateSystems();
         void Render();
         void RenderImGui();
-        void Destroy() const;
+        void Destroy();
         void RenderTree();
+        void setup_imgui_context(SDL_Window* sdl_window, SDL_Renderer* sdl_renderer);
+        void setPixel(int x, int y, Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha);
+        void rect(int pos_x, int pos_y, int scale_x, int scale_y, Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha);
 
 };
 

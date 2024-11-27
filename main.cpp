@@ -7,7 +7,7 @@ int main()
     Game game;
 
     // Game method calls
-    game.Initialize();
+    game.SetupSDL();
     game.Run();
     game.Destroy();
 
