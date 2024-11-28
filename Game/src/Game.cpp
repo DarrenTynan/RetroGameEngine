@@ -22,10 +22,14 @@ Game::Game()
 
 Game::~Game() { Logger::Log("Game deconstruct called"); }
 
+
+/**
+ * Test tree render
+ */
 void Game::RenderTree()
 {
     temporarySurface = IMG_Load("../Game/assets/images/tree.png");
-    temporaryTexture = SDL_CreateTextureFromSurface(gameRenderer, temporarySurface);
+    temporaryTexture = SDL_CreateTextureFromSurface(rgeRenderer, temporarySurface);
     SDL_FreeSurface(temporarySurface);
 
     SDL_Rect source;
@@ -40,8 +44,8 @@ void Game::RenderTree()
     destination.w = 16*2;
     destination.h = 32*2;
 
-    SDL_RenderCopy(gameRenderer, temporaryTexture, &source, &destination);
-    SDL_RenderPresent(gameRenderer);
+    SDL_RenderCopy(rgeRenderer, temporaryTexture, &source, &destination);
+    SDL_RenderPresent(rgeRenderer);
     SDL_DestroyTexture(temporaryTexture);
 
 }
@@ -122,6 +126,10 @@ void Game::SetupObjects() const
 }
 
 
+/**
+ * Initial setup of the SDL and true type fonts
+ * @return
+ */
 int Game::SetupSDL()
 {
     // Setup SDL
@@ -150,6 +158,11 @@ int Game::SetupSDL()
 }
 
 
+/**
+ * Setup game SDL window, renderer and camera
+ *
+ * @return -1 for errors
+ */
 int Game::SetupRgeSDL()
 {
     SDL_DisplayMode displayMode;
@@ -158,7 +171,7 @@ int Game::SetupRgeSDL()
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
     Game::rgeWindow = SDL_CreateWindow(
-            "RGE",
+            "Retro Game Engine v1",
             displayMode.w / 2,
             0,
             displayMode.w / 2,
@@ -201,7 +214,7 @@ int Game::SetupRgeSDL()
 
 
 /**
- * SetupSDL SDL, DisplayMode, Window, Camera, ImGui
+ * Setup game SDL window, renderer and camera
  *
  * @return -1 for errors
  */
@@ -247,13 +260,16 @@ int Game::SetupGameSDL()
         return false;
     }
 
-
     // SetupSDL the camera view with the entire screen area
     gameCamera = {0, 0, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT};
 
     return true;
 }
 
+
+/**
+ * Initial setup of ImGui
+ */
 void Game::SetupImGui() const
 {
     // Setup Dear ImGui context
@@ -268,8 +284,8 @@ void Game::SetupImGui() const
 //    ImGui::StyleColorsLight();
 
     // Setup Platform/Renderer backends
-    ImGui_ImplSDL2_InitForSDLRenderer(gameWindow, gameRenderer);
-    ImGui_ImplSDLRenderer2_Init(gameRenderer);
+    ImGui_ImplSDL2_InitForSDLRenderer(rgeWindow, rgeRenderer);
+    ImGui_ImplSDLRenderer2_Init(rgeRenderer);
 
 }
 
@@ -351,87 +367,13 @@ void Game::UpdateSystems()
 }
 
 
-void Game::RenderImGui()
-{
-    // Our state
-    bool show_demo_window = true;
-    bool show_another_window = false;
-
-    // Poll and handle events (inputs, window resize, etc.)
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui_basic wants to use your inputs.
-    // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-    // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-    // Generally you may always pass all inputs to dear imgui_basic, and hide them from your application based on those two flags.
-    SDL_Event event;
-    while (SDL_PollEvent(&event))
-    {
-        ImGui_ImplSDL2_ProcessEvent(&event);
-        if (event.type == SDL_QUIT) isRunning = false;
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(gameWindow))
-            isRunning = false;
-    }
-
-    if (SDL_GetWindowFlags(gameWindow) & SDL_WINDOW_MINIMIZED) { SDL_Delay(10); }
-
-
-    // Start the Dear ImGui frame
-    ImGui_ImplSDLRenderer2_NewFrame();
-    ImGui_ImplSDL2_NewFrame();
-    ImGui::NewFrame();
-
-    // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
-
-    // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
-    {
-        static float f = 0.0f;
-        static int counter = 0;
-
-        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-        ImGui::Checkbox("Another Window", &show_another_window);
-
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
-//        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-        ImGui::End();
-    }
-
-    // 3. Show another simple window.
-    if (show_another_window)
-    {
-        ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-        ImGui::Text("Hello from another window!");
-        if (ImGui::Button("Close Me"))
-            show_another_window = false;
-        ImGui::End();
-    }
-
-    // Rendering
-    ImGui::Render();
-
-//        SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
-//    SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
-//    SDL_RenderClear(renderer);
-//    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
-//    SDL_RenderPresent(renderer);
-
-}
-
-
+/**
+ * Call render on all objects
+ */
 void Game::Render()
 {
     SDL_SetRenderDrawColor(rgeRenderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
     SDL_RenderClear(rgeRenderer);
-    SDL_RenderPresent(rgeRenderer);
 
     SDL_SetRenderDrawColor(gameRenderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
     SDL_RenderClear(gameRenderer);
@@ -453,7 +395,8 @@ void Game::Render()
 
     if (isImGui)
     {
-        registry->GetSystem<RenderImGuiSystem>().Update(registry, gameCamera);
+        RenderImGui();
+        registry->GetSystem<RenderImGuiSystem>().Update(registry, rgeCamera);
     }
 
     // Display HUD
@@ -471,8 +414,10 @@ void Game::Render()
     destination.h = 64;
 
     SDL_RenderCopy(gameRenderer, hud, &source, &destination);
-
     SDL_RenderPresent(gameRenderer);
+
+    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), rgeRenderer);
+    SDL_RenderPresent(rgeRenderer);
 
 }
 
@@ -559,18 +504,21 @@ int Game::GetTMX()
 }
 
 
+/**
+ * Setup the game data
+ */
 void Game::Setup()
 {
     SetupSDL();
     SetupRgeSDL();
     SetupGameSDL();
-
     SetUpRegistry();
     SetupAssets();
     SetupImGui();
     SetupObjects();
     GetTMX();
 }
+
 
 /**
  * Main loop
@@ -583,14 +531,15 @@ void Game::Run()
     while (isRunning)
     {
         ProcessInput();
-        UpdateSystems();    // contains the delta time loop
+        UpdateSystems();
         Render();
-
-//        RenderTree();
-//        RenderImGui();
     }
 }
 
+
+/**
+ * Destroy
+ */
 void Game::Destroy() const
 {
     ImGui_ImplSDLRenderer2_Shutdown();

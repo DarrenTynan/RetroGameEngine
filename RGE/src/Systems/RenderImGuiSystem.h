@@ -8,7 +8,7 @@
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
-
+//#include <stdio.h>
 #include "../ECS/ECS.h"
 
 class RenderImGuiSystem: public System {
@@ -25,15 +25,31 @@ class RenderImGuiSystem: public System {
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        if (show_world_overlay) ShowWorldOverlay(&show_world_overlay, camera);
-        if (show_game_debug) ShowGameDebug(registry, camera);
-        if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
-        if (show_spawn_entity) ShowSpawnEntity(registry);
+//        if (show_world_overlay) ShowWorldOverlay(&show_world_overlay, camera);
+//        if (show_game_debug) ShowGameDebug(registry, camera);
+//        if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
+//        if (show_spawn_entity) ShowSpawnEntity(registry);
+// -----
+        ImGui::ShowDemoWindow(&show_demo_window);
+// -----
 
         // Rendering
         ImGui::Render();
 
 //        ImGui_ImplSDL2_NewFrameSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
+// -----
+        // Setup Dear ImGui context
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+//        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+//        SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
+//        SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+//        SDL_RenderClear(renderer);
+//        ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
+//        SDL_RenderPresent(renderer);
+// -----
 
     }
 
