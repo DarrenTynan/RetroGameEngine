@@ -118,7 +118,6 @@ public:
     void ProcessInput();
     void UpdateSystems();
     void Render();
-    void RenderImGui();
     void Destroy() const;
     void RenderTree();
 

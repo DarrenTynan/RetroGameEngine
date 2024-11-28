@@ -395,7 +395,6 @@ void Game::Render()
 
     if (isImGui)
     {
-        RenderImGui();
         registry->GetSystem<RenderImGuiSystem>().Update(registry, rgeCamera);
     }
 

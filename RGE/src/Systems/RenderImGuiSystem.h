@@ -8,54 +8,44 @@
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
-//#include <stdio.h>
 #include "../ECS/ECS.h"
 
-class RenderImGuiSystem: public System {
+class RenderImGuiSystem: public System
+{
     public:
         RenderImGuiSystem() = default;
         bool show_world_overlay = true;
         bool show_game_debug = true;
         bool show_demo_window = true;
-        bool show_spawn_entity = false;
+        bool show_spawn_entity = true;
 
-    void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera) {
+    void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera)
+    {
         // Start the Dear ImGui frame
         ImGui_ImplSDLRenderer2_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-//        if (show_world_overlay) ShowWorldOverlay(&show_world_overlay, camera);
-//        if (show_game_debug) ShowGameDebug(registry, camera);
-//        if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
-//        if (show_spawn_entity) ShowSpawnEntity(registry);
-// -----
-        ImGui::ShowDemoWindow(&show_demo_window);
-// -----
+        if (show_world_overlay) ShowWorldOverlay(&show_world_overlay, camera);
+        if (show_game_debug) ShowGameDebug(registry, camera);
+        if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
+        if (show_spawn_entity) ShowSpawnEntity(registry);
 
         // Rendering
         ImGui::Render();
 
-//        ImGui_ImplSDL2_NewFrameSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
-// -----
         // Setup Dear ImGui context
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-//        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-//        SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
-//        SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
-//        SDL_RenderClear(renderer);
-//        ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
-//        SDL_RenderPresent(renderer);
-// -----
-
     }
 
-    static void ShowGameDebug(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera) {
+    static void ShowGameDebug(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
+    {
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
-        if (ImGui::Begin("Game Debug")) {
+        if (ImGui::Begin("Game Debug"))
+        {
             Entity player = registry->GetEntityByTag("player");
             if (ImGui::CollapsingHeader("Player Entity"))
             {
@@ -97,9 +87,11 @@ class RenderImGuiSystem: public System {
 
     }
 
+
     static void ShowSpawnEntity(const std::unique_ptr<Registry>& registry)
     {
-        if (ImGui::Begin("Spawn Entity")) {
+        if (ImGui::Begin("Spawn Entity"))
+        {
             static int entityXpos = 0;
             static int entityYpos = 0;
             static int scaleX = 1;
@@ -129,6 +121,7 @@ class RenderImGuiSystem: public System {
 
     }
 
+
     // Demonstrate creating a simple static window with no decoration
     // + a context-menu to choose which corner of the screen to use.
     static void ShowWorldOverlay(bool* p_open, const SDL_Rect& camera)
@@ -157,6 +150,7 @@ class RenderImGuiSystem: public System {
             window_flags |= ImGuiWindowFlags_NoMove;
         }
         ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+
         if (ImGui::Begin("World Info", p_open, window_flags))
         {
 //            IMGUI_DEMO_MARKER("Examples/Simple Overlay");
@@ -172,12 +166,12 @@ class RenderImGuiSystem: public System {
 
             if (ImGui::BeginPopupContextWindow())
             {
-                if (ImGui::MenuItem("Custom",       NULL, location == -1)) location = -1;
-                if (ImGui::MenuItem("Center",       NULL, location == -2)) location = -2;
-                if (ImGui::MenuItem("Top-left",     NULL, location == 0)) location = 0;
-                if (ImGui::MenuItem("Top-right",    NULL, location == 1)) location = 1;
-                if (ImGui::MenuItem("Bottom-left",  NULL, location == 2)) location = 2;
-                if (ImGui::MenuItem("Bottom-right", NULL, location == 3)) location = 3;
+                if (ImGui::MenuItem("Custom",       nullptr, location == -1)) location = -1;
+                if (ImGui::MenuItem("Center",       nullptr, location == -2)) location = -2;
+                if (ImGui::MenuItem("Top-left",     nullptr, location == 0)) location = 0;
+                if (ImGui::MenuItem("Top-right",    nullptr, location == 1)) location = 1;
+                if (ImGui::MenuItem("Bottom-left",  nullptr, location == 2)) location = 2;
+                if (ImGui::MenuItem("Bottom-right", nullptr, location == 3)) location = 3;
                 if (p_open && ImGui::MenuItem("Close")) *p_open = false;
                 ImGui::EndPopup();
             }
