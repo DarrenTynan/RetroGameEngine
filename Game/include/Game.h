@@ -65,51 +65,62 @@ const int MILLISECS_PER_FRAME = 1000 / FPS;
 
 class Game
 {
-    public:
-        SDL_Window* window{};
-        SDL_Renderer* renderer{};
-        SDL_Texture* texture{};
-        SDL_Surface* windowSurface{};
-        SDL_Surface* surface{};
-        SDL_Rect camera{};
+public:
+    SDL_Window* rgeWindow{};
+    SDL_Renderer* rgeRenderer{};
+    SDL_Surface* rgeSurface{};
 
-        bool isRunning = false;
-        bool isDebug = true;
-        bool isImGui = true;
-        bool isRayCast = false;
-        bool isFullScreen = false;
+    SDL_Window* gameWindow{};
+    SDL_Renderer* gameRenderer{};
+    SDL_Surface* gameSurface{};
 
-        int millisecsPreviouseFrame = 0;
-        int windowWidth{};
-        int windowHeight{};
-        int mapWidth{};
-        int mapHeight{};
+    SDL_Surface* temporarySurface{};
+    SDL_Texture* temporaryTexture{};
 
-        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    SDL_Rect rgeCamera{};
+    SDL_Rect gameCamera{};
 
-        std::unique_ptr<Registry> registry;
-        std::unique_ptr<AssetStore> assetStore;
-        std::unique_ptr<EventBus> eventBus;
+    bool isRunning = false;
+    bool isDebug = true;
+    bool isImGui = true;
+    bool isRayCast = false;
+    bool isFullScreen = false;
 
-        const static int SCREEN_WIDTH = 640;
-        const static int SCREEN_HEIGHT = 480;
+    int millisecsPreviouseFrame = 0;
+    int windowWidth{};
+    int windowHeight{};
+    int mapWidth{};
+    int mapHeight{};
 
-        Game();
-        virtual ~Game();
-        void Setup();
-        void Run();
-        int GetTMX();
-        int SetupSDL();
-        void SetUpRegistry() const;
-        void SetupAssets() const;
-        void SetupObjects() const;
-        void SetupImGui() const;
-        void ProcessInput();
-        void UpdateSystems();
-        void Render();
-        void RenderImGui();
-        void Destroy() const;
-        void RenderTree();
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    std::unique_ptr<Registry> registry;
+    std::unique_ptr<AssetStore> assetStore;
+    std::unique_ptr<EventBus> eventBus;
+
+    const static int GAME_WINDOW_WIDTH = 640;
+    const static int GAME_WINDOW_HEIGHT = 480;
+
+    Game();
+    virtual ~Game();
+    void Setup();
+    void Run();
+    int GetTMX();
+
+    int SetupSDL();
+    int SetupRgeSDL();
+    int SetupGameSDL();
+
+    void SetUpRegistry() const;
+    void SetupAssets() const;
+    void SetupObjects() const;
+    void SetupImGui() const;
+    void ProcessInput();
+    void UpdateSystems();
+    void Render();
+    void RenderImGui();
+    void Destroy() const;
+    void RenderTree();
 
 };
 

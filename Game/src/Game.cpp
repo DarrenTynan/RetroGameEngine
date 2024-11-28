@@ -24,10 +24,9 @@ Game::~Game() { Logger::Log("Game deconstruct called"); }
 
 void Game::RenderTree()
 {
-    surface = IMG_Load("../Game/assets/images/tree.png");
-
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
+    temporarySurface = IMG_Load("../Game/assets/images/tree.png");
+    temporaryTexture = SDL_CreateTextureFromSurface(gameRenderer, temporarySurface);
+    SDL_FreeSurface(temporarySurface);
 
     SDL_Rect source;
     source.x = 0;
@@ -41,9 +40,9 @@ void Game::RenderTree()
     destination.w = 16*2;
     destination.h = 32*2;
 
-    SDL_RenderCopy(renderer, texture, &source, &destination);
-    SDL_RenderPresent(renderer);
-    SDL_DestroyTexture(texture);
+    SDL_RenderCopy(gameRenderer, temporaryTexture, &source, &destination);
+    SDL_RenderPresent(gameRenderer);
+    SDL_DestroyTexture(temporaryTexture);
 
 }
 
@@ -80,14 +79,14 @@ void Game::SetUpRegistry() const
 void Game::SetupAssets() const
 {
     // Adding assets to the asset store
-    assetStore->AddTexture(renderer, "hud", "../Game/assets/images/hud2.png");
+    assetStore->AddTexture(gameRenderer, "hud", "../Game/assets/images/hud2.png");
     assetStore->AddFont("charriot-font", "../Game/assets/fonts/charriot.ttf", 24);
-    assetStore->AddTexture(renderer, "tilemap-image", mapImagePath);
-    assetStore->AddTexture(renderer, "tank-image", "../Game/assets/images/tank-panther-right.png");
-    assetStore->AddTexture(renderer, "truck-image", "../Game/assets/images/truck-ford-right.png");
-    assetStore->AddTexture(renderer, "chopper-image", "../Game/assets/images/chopper.png");
-    assetStore->AddTexture(renderer, "player-idle-image", "../Game/assets/sprites/CharacterIdle.png");
-    assetStore->AddTexture(renderer, "bullet-image", "../Game/assets/images/bullet.png");
+    assetStore->AddTexture(gameRenderer, "tilemap-image", mapImagePath);
+    assetStore->AddTexture(gameRenderer, "tank-image", "../Game/assets/images/tank-panther-right.png");
+    assetStore->AddTexture(gameRenderer, "truck-image", "../Game/assets/images/truck-ford-right.png");
+    assetStore->AddTexture(gameRenderer, "chopper-image", "../Game/assets/images/chopper.png");
+    assetStore->AddTexture(gameRenderer, "player-idle-image", "../Game/assets/sprites/CharacterIdle.png");
+    assetStore->AddTexture(gameRenderer, "bullet-image", "../Game/assets/images/bullet.png");
 }
 
 /**
@@ -123,11 +122,6 @@ void Game::SetupObjects() const
 }
 
 
-/**
- * SetupSDL SDL, DisplayMode, Window, Camera, ImGui
- *
- * @return -1 for errors
- */
 int Game::SetupSDL()
 {
     // Setup SDL
@@ -150,45 +144,112 @@ int Game::SetupSDL()
         SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
     #endif
 
+    Logger::Log("SDL is ready to go!");
+
+    return true;
+}
+
+
+int Game::SetupRgeSDL()
+{
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
-    windowWidth = SCREEN_WIDTH;
-    windowHeight = SCREEN_HEIGHT;
-//    windowWidth = displayMode.w;
-//    windowHeight = displayMode.h;
 
     // Create window with SDL_Renderer graphics context
-    auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
-    Game::window = SDL_CreateWindow(
-            "Game",
-            SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED,
-            windowWidth,
-            windowHeight,
+    auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
+    Game::rgeWindow = SDL_CreateWindow(
+            "RGE",
+            displayMode.w / 2,
+            0,
+            displayMode.w / 2,
+            displayMode.h,
             windowFlags
     );
 
-    if (!window)
+    if (!rgeWindow)
     {
         Logger::Error("Window init failed");
         SDL_Quit();
         return false;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+//    rgeSurface = SDL_GetWindowSurface(rgeWindow);
+//
+//    if(!rgeSurface)
+//    {
+//        std::cout << "Failed to get the surface from the window\n";
+//        return -1;
+//    }
+//
+//    SDL_UpdateWindowSurface(rgeWindow);
 
-    if (!renderer)
+    rgeRenderer = SDL_CreateRenderer(rgeWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    if (!rgeRenderer)
     {
         Logger::Error("Window renderer init failed");
-        SDL_DestroyRenderer(renderer);
+        SDL_DestroyRenderer(rgeRenderer);
         SDL_Quit();
         return false;
     }
 
-    Logger::Log("SDL is ready to go!");
+    // SetupSDL the camera view with the entire screen area
+    rgeCamera = {0, 0, displayMode.w, displayMode.h};
+
+    return true;
+}
+
+
+/**
+ * SetupSDL SDL, DisplayMode, Window, Camera, ImGui
+ *
+ * @return -1 for errors
+ */
+int Game::SetupGameSDL()
+{
+    // Create window with SDL_Renderer graphics context
+    auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
+    Game::gameWindow = SDL_CreateWindow(
+            "Game",
+            0,
+            0,
+//            SDL_WINDOWPOS_CENTERED,
+//            SDL_WINDOWPOS_CENTERED,
+            GAME_WINDOW_WIDTH,
+            GAME_WINDOW_HEIGHT,
+            windowFlags
+    );
+
+    if (!gameWindow)
+    {
+        Logger::Error("Window init failed");
+        SDL_Quit();
+        return false;
+    }
+
+//    gameSurface = SDL_GetWindowSurface(gameWindow);
+//
+//    if(!gameSurface)
+//    {
+//        std::cout << "Failed to get the surface from the window\n";
+//        return -1;
+//    }
+//
+//    SDL_UpdateWindowSurface(gameWindow);
+
+    gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    if (!gameRenderer)
+    {
+        Logger::Error("Window renderer init failed");
+        SDL_DestroyRenderer(gameRenderer);
+        SDL_Quit();
+        return false;
+    }
+
 
     // SetupSDL the camera view with the entire screen area
-    camera = {0, 0, windowWidth, windowHeight};
+    gameCamera = {0, 0, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT};
 
     return true;
 }
@@ -207,8 +268,8 @@ void Game::SetupImGui() const
 //    ImGui::StyleColorsLight();
 
     // Setup Platform/Renderer backends
-    ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
-    ImGui_ImplSDLRenderer2_Init(renderer);
+    ImGui_ImplSDL2_InitForSDLRenderer(gameWindow, gameRenderer);
+    ImGui_ImplSDLRenderer2_Init(gameRenderer);
 
 }
 
@@ -283,22 +344,10 @@ void Game::UpdateSystems()
     registry->GetSystem<MovementSystem>().Update(deltaTime);
     registry->GetSystem<AnimationSystem>().Update();
     registry->GetSystem<CollisionSystem>().Update(eventBus);
-    registry->GetSystem<CameraMovementSystem>().Update(camera);
+    registry->GetSystem<CameraMovementSystem>().Update(gameCamera);
     registry->GetSystem<ProjectileEmitSystem>().Update(registry);
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
 
-};
-
-
-void Game::Destroy() const
-{
-    ImGui_ImplSDLRenderer2_Shutdown();
-    ImGui_ImplSDL2_Shutdown();
-    ImGui::DestroyContext();
-
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
 }
 
 
@@ -318,11 +367,11 @@ void Game::RenderImGui()
     {
         ImGui_ImplSDL2_ProcessEvent(&event);
         if (event.type == SDL_QUIT) isRunning = false;
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
+        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(gameWindow))
             isRunning = false;
     }
 
-    if (SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED) { SDL_Delay(10); }
+    if (SDL_GetWindowFlags(gameWindow) & SDL_WINDOW_MINIMIZED) { SDL_Delay(10); }
 
 
     // Start the Dear ImGui frame
@@ -380,27 +429,31 @@ void Game::RenderImGui()
 
 void Game::Render()
 {
-    SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
-    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(rgeRenderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+    SDL_RenderClear(rgeRenderer);
+    SDL_RenderPresent(rgeRenderer);
+
+    SDL_SetRenderDrawColor(gameRenderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+    SDL_RenderClear(gameRenderer);
 
     // Invoke all the systems that need to render
-    registry->GetSystem<RenderSystem>().Update(renderer, assetStore, camera);
-    registry->GetSystem<RenderTextSystem>().Update(renderer, assetStore, camera);
+    registry->GetSystem<RenderSystem>().Update(gameRenderer, assetStore, gameCamera);
+    registry->GetSystem<RenderTextSystem>().Update(gameRenderer, assetStore, gameCamera);
 
     if (isDebug)
     {
-        registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
+        registry->GetSystem<RenderColliderSystem>().Update(gameRenderer, gameCamera);
     }
 
     if (isRayCast)
     {
         auto player = registry->GetEntityByTag("player");
-        registry->GetSystem<RenderRaycastSystem>().Update(renderer, player);
+        registry->GetSystem<RenderRaycastSystem>().Update(gameRenderer, player);
     }
 
     if (isImGui)
     {
-        registry->GetSystem<RenderImGuiSystem>().Update(registry, camera);
+        registry->GetSystem<RenderImGuiSystem>().Update(registry, gameCamera);
     }
 
     // Display HUD
@@ -417,12 +470,12 @@ void Game::Render()
     destination.w = 640;
     destination.h = 64;
 
-    SDL_RenderCopy(renderer, hud, &source, &destination);
+    SDL_RenderCopy(gameRenderer, hud, &source, &destination);
 
-    // Causes flicker but if removed then no map displayed.
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(gameRenderer);
 
 }
+
 
 /**
  * Load the tmx map files and iterate over.
@@ -509,6 +562,9 @@ int Game::GetTMX()
 void Game::Setup()
 {
     SetupSDL();
+    SetupRgeSDL();
+    SetupGameSDL();
+
     SetUpRegistry();
     SetupAssets();
     SetupImGui();
@@ -534,3 +590,19 @@ void Game::Run()
 //        RenderImGui();
     }
 }
+
+void Game::Destroy() const
+{
+    ImGui_ImplSDLRenderer2_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+
+    SDL_DestroyWindow(rgeWindow);
+    SDL_DestroyRenderer(rgeRenderer);
+
+    SDL_DestroyRenderer(rgeRenderer);
+    SDL_DestroyWindow(gameWindow);
+
+    SDL_Quit();
+}
+
