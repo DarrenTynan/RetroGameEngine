@@ -28,15 +28,19 @@ Game::~Game() { Logger::Log("Game deconstruct called"); }
  */
 void Game::RenderTree()
 {
-    temporarySurface = IMG_Load("../Game/assets/images/tree.png");
-    temporaryTexture = SDL_CreateTextureFromSurface(rgeRenderer, temporarySurface);
+//    temporarySurface = IMG_Load("../Game/assets/images/tree.png");
+//    temporaryTexture = SDL_CreateTextureFromSurface(rgeRenderer, temporarySurface);
+//    SDL_FreeSurface(temporarySurface);
+
+    temporarySurface = IMG_Load("../Game/assets/tilemaps/DungeonTileset.png");
+    temporaryTexture = SDL_CreateTextureFromSurface(gameRenderer, temporarySurface);
     SDL_FreeSurface(temporarySurface);
 
     SDL_Rect source;
     source.x = 0;
     source.y = 0;
-    source.w = 16;
-    source.h = 32;
+    source.w = 16*4;
+    source.h = 32*4;
 
     SDL_Rect destination;
     destination.x = 100;
@@ -44,8 +48,8 @@ void Game::RenderTree()
     destination.w = 16*2;
     destination.h = 32*2;
 
-    SDL_RenderCopy(rgeRenderer, temporaryTexture, &source, &destination);
-    SDL_RenderPresent(rgeRenderer);
+    SDL_RenderCopy(gameRenderer, temporaryTexture, &source, &destination);
+    SDL_RenderPresent(gameRenderer);
     SDL_DestroyTexture(temporaryTexture);
 
 }
@@ -84,7 +88,7 @@ void Game::SetupAssets() const
 {
     // Adding assets to the asset store
     assetStore->AddTexture(gameRenderer, "hud", "../Game/assets/images/hud2.png");
-    assetStore->AddFont("charriot-font", "../Game/assets/fonts/charriot.ttf", 24);
+    assetStore->AddFont("charriot-font", "../Game/assets/fonts/zx-spectrum.ttf", 24);
     assetStore->AddTexture(gameRenderer, "tilemap-image", mapImagePath);
     assetStore->AddTexture(gameRenderer, "tank-image", "../Game/assets/images/tank-panther-right.png");
     assetStore->AddTexture(gameRenderer, "truck-image", "../Game/assets/images/truck-ford-right.png");
@@ -372,10 +376,10 @@ void Game::UpdateSystems()
  */
 void Game::Render()
 {
-    SDL_SetRenderDrawColor(rgeRenderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+    SDL_SetRenderDrawColor(rgeRenderer, (Uint8)(rge_clear_color.x * 255), (Uint8)(rge_clear_color.y * 255), (Uint8)(rge_clear_color.z * 255), (Uint8)(rge_clear_color.w * 255));
     SDL_RenderClear(rgeRenderer);
 
-    SDL_SetRenderDrawColor(gameRenderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+    SDL_SetRenderDrawColor(gameRenderer, (Uint8)(game_clear_color.x * 255), (Uint8)(game_clear_color.y * 255), (Uint8)(game_clear_color.z * 255), (Uint8)(game_clear_color.w * 255));
     SDL_RenderClear(gameRenderer);
 
     // Invoke all the systems that need to render
@@ -414,6 +418,8 @@ void Game::Render()
 
     SDL_RenderCopy(gameRenderer, hud, &source, &destination);
     SDL_RenderPresent(gameRenderer);
+
+    RenderTree();
 
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), rgeRenderer);
     SDL_RenderPresent(rgeRenderer);
@@ -482,10 +488,10 @@ int Game::GetTMX()
                         int srcRectY = ( (tiles[index].ID - firstgid) / tilesPerRow ) * tileHeight;
 
                         Entity tile = registry->CreateEntity();
+                        tile.Tag("tile");
 
                         tile.AddComponent<TransformComponent>(glm::vec2(x * tileWidth, y * tileHeight), glm::vec2(1, 1), 0.0);
                         tile.AddComponent<SpriteComponent>("tilemap-image", tileWidth, tileHeight, 0, true, false, srcRectX, srcRectY);
-//                        tile.AddComponent<BoxColliderComponent>(32,32);
                         index++;
                     }
                 }
@@ -495,6 +501,7 @@ int Game::GetTMX()
         const auto& tilesets = map.getTilesets();
         for(const auto& tileset : tilesets)
         {
+            Logger::Log(tileset.getImagePath());
             //read out tile set properties, load textures etc...
         }
     }

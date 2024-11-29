@@ -24,7 +24,7 @@ class RenderColliderSystem: public System {
                     static_cast<int>(collider.width * transform.scale.x),
                     static_cast<int>(collider.height * transform.scale.y)
                 };
-                SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+                SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
                 SDL_RenderDrawRect(renderer, &colliderRect);
             }
 

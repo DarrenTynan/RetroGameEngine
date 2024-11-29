@@ -18,6 +18,7 @@ class RenderImGuiSystem: public System
         bool show_game_debug = true;
         bool show_demo_window = true;
         bool show_spawn_entity = true;
+        bool show_tmx_window = true;
 
     void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera)
     {
@@ -30,6 +31,7 @@ class RenderImGuiSystem: public System
         if (show_game_debug) ShowGameDebug(registry, camera);
         if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
         if (show_spawn_entity) ShowSpawnEntity(registry);
+        if (show_tmx_window) ShowTmxWindow(registry, camera);
 
         // Rendering
         ImGui::Render();
@@ -41,12 +43,33 @@ class RenderImGuiSystem: public System
 
     }
 
+    static void ShowTmxWindow(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
+    {
+        if (ImGui::Begin("TMX Map"))
+        {
+            Entity tile = registry->GetEntityByTag("tile");
+            ImGui::Text("Tile ID: %i",  tile.GetId());
+            TransformComponent trans = tile.GetComponent<TransformComponent>();
+            SpriteComponent sprite = tile.GetComponent<SpriteComponent>();
+
+            ImGui::Text("ID: %s", sprite.assetId.c_str());
+            ImGui::Text("Position X: %i",  (int) trans.position.x);
+            ImGui::Text("Position Y: %i",  (int) trans.position.y);
+
+            ImGui::Text("Width: %i",  sprite.width);
+            ImGui::Text("Height: %i", sprite.height);
+        }
+        ImGui::End();
+
+    }
+
     static void ShowGameDebug(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
     {
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
         if (ImGui::Begin("Game Debug"))
         {
             Entity player = registry->GetEntityByTag("player");
+
             if (ImGui::CollapsingHeader("Player Entity"))
             {
                 ImGui::Text("Player ID: %i",  player.GetId());

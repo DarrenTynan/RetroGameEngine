@@ -24,7 +24,7 @@ class RenderRaycastSystem: public System {
             for (auto entity: GetSystemEntities()) {
                 auto &trans = entity.GetComponent<TransformComponent>();
                 auto& ray = entity.GetComponent<RaycastComponent>();
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
                 float length = 25.0f;
                 // Up
                 SDL_RenderDrawLineF(renderer, (trans.position.x + 64/2), trans.position.y, (trans.position.x + 64/2), (trans.position.y - length));

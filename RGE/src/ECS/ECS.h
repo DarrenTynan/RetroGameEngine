@@ -222,7 +222,6 @@ class Registry {
 };
 
 
-//**********************************************************************************************************************
 template <typename TComponent>
 void System::RequireComponent() {
     const auto componentId = Component<TComponent>::GetId();
@@ -230,7 +229,6 @@ void System::RequireComponent() {
 }
 
 
-//**********************************************************************************************************************
 template <typename TSystem, typename ...TArgs>
 void Registry::AddSystem(TArgs&& ...args) {
     std::shared_ptr<TSystem> newSystem = std::make_shared<TSystem>(std::forward<TArgs>(args)...);
