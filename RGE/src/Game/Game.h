@@ -33,7 +33,7 @@ class Game {
 
         void Initialize();
         void Run();
-        int GetTMX();
+        int SetupTMX();
         void SetUpGameObjects();
         void ProcessInput();
         void UpdateSystems();

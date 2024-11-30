@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <string>
 
 #include <glm/glm.hpp>
 
@@ -58,6 +59,7 @@
 #include <tmxlite/TileLayer.hpp>
 #include <tmxlite/Tileset.hpp>
 #include <tmxlite/ObjectGroup.hpp>
+#include <tmxlite/Property.hpp>
 
 // Global vars
 const int FPS = 60;
@@ -81,8 +83,7 @@ public:
     SDL_Rect gameCamera{};
 
     bool isRunning = false;
-    bool isDebug = true;
-    bool isImGui = true;
+    bool isCollider = false;
     bool isRayCast = false;
     bool isFullScreen = false;
 
@@ -106,7 +107,7 @@ public:
     virtual ~Game();
     void Setup();
     void Run();
-    int GetTMX();
+    int SetupTMX();
 
     int SetupSDL();
     int SetupRgeSDL();

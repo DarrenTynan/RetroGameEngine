@@ -8,7 +8,8 @@
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 
-const auto MAP_PATH = "../Game/assets/tilemaps/Level_01.tmx";
+const auto MAP_PATH = "../Game/assets/tilemaps/TestLevel/TestLevel.tmx";
+//const auto MAP_PATH = "../Game/assets/tilemaps/Level_01.tmx";
 std::string mapImagePath;
 tmx::Map map;
 
@@ -28,11 +29,7 @@ Game::~Game() { Logger::Log("Game deconstruct called"); }
  */
 void Game::RenderTree()
 {
-//    temporarySurface = IMG_Load("../Game/assets/images/tree.png");
-//    temporaryTexture = SDL_CreateTextureFromSurface(rgeRenderer, temporarySurface);
-//    SDL_FreeSurface(temporarySurface);
-
-    temporarySurface = IMG_Load("../Game/assets/tilemaps/DungeonTileset.png");
+    temporarySurface = IMG_Load("../Game/assets/images/tree.png");
     temporaryTexture = SDL_CreateTextureFromSurface(gameRenderer, temporarySurface);
     SDL_FreeSurface(temporarySurface);
 
@@ -329,10 +326,22 @@ void Game::ProcessInput()
 
             case SDL_KEYDOWN:
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isRunning = false; }
-                if (sdlEvent.key.keysym.sym == SDLK_d) { isDebug = !isDebug; }
-                if (sdlEvent.key.keysym.sym == SDLK_g) { isImGui = !isImGui; }
+                if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
                 if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
+                break;
+
+            case SDL_WINDOWEVENT:
+
+                switch (sdlEvent.window.event) {
+
+                    case SDL_WINDOWEVENT_CLOSE:   // exit game
+                        isRunning = false;
+                        break;
+
+                    default:
+                        break;
+                }
                 break;
         }
     };
@@ -385,8 +394,9 @@ void Game::Render()
     // Invoke all the systems that need to render
     registry->GetSystem<RenderSystem>().Update(gameRenderer, assetStore, gameCamera);
     registry->GetSystem<RenderTextSystem>().Update(gameRenderer, assetStore, gameCamera);
+    registry->GetSystem<RenderImGuiSystem>().Update(registry, rgeCamera);
 
-    if (isDebug)
+    if (isCollider)
     {
         registry->GetSystem<RenderColliderSystem>().Update(gameRenderer, gameCamera);
     }
@@ -395,11 +405,6 @@ void Game::Render()
     {
         auto player = registry->GetEntityByTag("player");
         registry->GetSystem<RenderRaycastSystem>().Update(gameRenderer, player);
-    }
-
-    if (isImGui)
-    {
-        registry->GetSystem<RenderImGuiSystem>().Update(registry, rgeCamera);
     }
 
     // Display HUD
@@ -417,9 +422,11 @@ void Game::Render()
     destination.h = 64;
 
     SDL_RenderCopy(gameRenderer, hud, &source, &destination);
+    // Debug Line: Player is show if called.
     SDL_RenderPresent(gameRenderer);
 
-    RenderTree();
+//    RenderTree();
+
 
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), rgeRenderer);
     SDL_RenderPresent(rgeRenderer);
@@ -432,7 +439,7 @@ void Game::Render()
  *
  * @return
  */
-int Game::GetTMX()
+int Game::SetupTMX()
 {
     map.load(MAP_PATH);
 
@@ -441,6 +448,7 @@ int Game::GetTMX()
         const auto& layers = map.getLayers();
         for(const auto& layer : layers)
         {
+            // Get Object layer
             if(layer->getType() == tmx::Layer::Type::Object)
             {
                 const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
@@ -454,6 +462,7 @@ int Game::GetTMX()
 
                 }
             }
+            // Get Tile layer
             else if(layer->getType() == tmx::Layer::Type::Tile)
             {
                 const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
@@ -522,7 +531,7 @@ void Game::Setup()
     SetupAssets();
     SetupImGui();
     SetupObjects();
-    GetTMX();
+    SetupTMX();
 }
 
 

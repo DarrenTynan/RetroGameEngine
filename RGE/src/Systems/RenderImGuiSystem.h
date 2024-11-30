@@ -58,6 +58,10 @@ class RenderImGuiSystem: public System
 
             ImGui::Text("Width: %i",  sprite.width);
             ImGui::Text("Height: %i", sprite.height);
+            ImGui::Text("FlipH: %i", sprite.flipH);
+            ImGui::Text("isFixed: %i", sprite.isFixed);
+            ImGui::Text("zIndex: %i", sprite.zIndex);
+            ImGui::Text("srcRect x, y: %d, %d", sprite.srcRect.x, sprite.srcRect.y );
         }
         ImGui::End();
 
