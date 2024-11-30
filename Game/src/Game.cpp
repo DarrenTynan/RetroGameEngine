@@ -159,6 +159,63 @@ int Game::SetupSDL()
 }
 
 
+// https://dev.to/noah11012/using-sdl2-opening-a-window-79c
+int Game::SetupTestSDL()
+{
+    testWindow = SDL_CreateWindow("Tiled TXM Window",
+                                          SDL_WINDOWPOS_CENTERED,
+                                          SDL_WINDOWPOS_CENTERED,
+                                          680, 480,
+                                          SDL_WINDOW_ALWAYS_ON_TOP);
+
+    if(!testWindow)
+    {
+        std::cout << "Failed to create window\n";
+        return -1;
+    }
+
+    testSurface = SDL_GetWindowSurface(testWindow);
+
+    if(!testSurface)
+    {
+        std::cout << "Failed to get the surface from the window\n";
+        return -1;
+    }
+
+    SDL_Surface *image = SDL_LoadBMP("../Game/assets/images/sdl.bmp");
+    SDL_BlitSurface(image, NULL, testSurface, NULL);
+    SDL_UpdateWindowSurface(testWindow);
+
+    
+//    temporarySurface = IMG_Load("../Game/assets/images/tree.png");
+//    temporaryTexture = SDL_CreateTextureFromSurface(testRenderer, temporarySurface);
+//    SDL_RenderPresent(testRenderer);
+
+//    SDL_UpdateWindowSurface(testWindow);
+
+    // Display HUD
+//    SDL_Texture* hud = assetStore->GetTexture("hud");
+//    SDL_Rect source;
+//    source.x = 0;
+//    source.y = 0;
+//    source.w = 640;
+//    source.h = 64;
+//
+//    SDL_Rect destination;
+//    destination.x = 0;
+//    destination.y = 480-64;
+//    destination.w = 640;
+//    destination.h = 64;
+//
+//    SDL_RenderCopy(testRenderer, hud, &source, &destination);
+//    SDL_RenderPresent(testRenderer);
+
+
+//    SDL_UpdateWindowSurface(testWindow);
+    return true;
+}
+
+
 /**
  * Setup game SDL window, renderer and camera
  *
@@ -333,13 +390,11 @@ void Game::ProcessInput()
 
             case SDL_WINDOWEVENT:
 
-                switch (sdlEvent.window.event) {
+                switch (sdlEvent.window.event)
+                {
 
-                    case SDL_WINDOWEVENT_CLOSE:   // exit game
+                    case SDL_WINDOWEVENT_CLOSE:
                         isRunning = false;
-                        break;
-
-                    default:
                         break;
                 }
                 break;
@@ -422,7 +477,6 @@ void Game::Render()
     destination.h = 64;
 
     SDL_RenderCopy(gameRenderer, hud, &source, &destination);
-    // Debug Line: Player is show if called.
     SDL_RenderPresent(gameRenderer);
 
 //    RenderTree();
@@ -527,6 +581,7 @@ void Game::Setup()
     SetupSDL();
     SetupRgeSDL();
     SetupGameSDL();
+    SetupTestSDL();
     SetUpRegistry();
     SetupAssets();
     SetupImGui();
