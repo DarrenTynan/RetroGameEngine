@@ -165,7 +165,7 @@ int Game::SetupTestSDL()
     testWindow = SDL_CreateWindow("Tiled TXM Window",
                                           SDL_WINDOWPOS_CENTERED,
                                           SDL_WINDOWPOS_CENTERED,
-                                          680, 480,
+                                          640, 480,
                                           SDL_WINDOW_ALWAYS_ON_TOP);
 
     if(!testWindow)
@@ -199,48 +199,45 @@ void Game::UpdateTestWindow()
 {
     SDL_Rect source;
     SDL_Rect destination;
-
     SDL_SetRenderDrawColor(testRenderer, 255,0,0,255);
     SDL_RenderClear(testRenderer);
 
+//--------
     // Logo
 //    SDL_Surface *image = SDL_LoadBMP("../Game/assets/images/sdl.bmp");
 //    SDL_BlitSurface(image, NULL, testSurface, NULL);
 //    SDL_UpdateWindowSurface(testWindow);
+//--------
 
     // Tree
     temporarySurface = IMG_Load("../Game/assets/images/tree.png");
     temporaryTexture = SDL_CreateTextureFromSurface(testRenderer, temporarySurface);
     source = {0,0,16, 32};
-    destination = {200,350,16*2,32*2};
+    destination = {200,200,16*2,32*2};
 
     SDL_RenderCopy(testRenderer, temporaryTexture, &source, &destination);
 //    SDL_RenderPresent(testRenderer);
 
+//--------
+// Landing base
     temporarySurface = IMG_Load("../Game/assets/images/landing-base.png");
     temporaryTexture = SDL_CreateTextureFromSurface(testRenderer, temporarySurface);
     source = {0,0,32, 32};
-    destination = {400,350,32*2,32*2};
-
+    destination = {400,200,32*2,32*2};
     SDL_RenderCopy(testRenderer, temporaryTexture, &source, &destination);
+//    SDL_RenderPresent(testRenderer);
 
+//--------
     // Display HUD
-    SDL_Texture* hud = assetStore->GetTexture("hud");
-    SDL_Rect src;
-    src.x = 0;
-    src.y = 0;
-    src.w = 640;
-    src.h = 64;
+    temporarySurface = IMG_Load("../Game/assets/images/hud2.png");
+    temporaryTexture = SDL_CreateTextureFromSurface(testRenderer, temporarySurface);
+    source = {0,0,640, 64};
+    destination = {0,480-64,640,64};
+    SDL_RenderCopy(testRenderer, temporaryTexture, &source, &destination);
+//--------
 
-    SDL_Rect dst;
-    dst.x = 0;
-    dst.y = 480-64;
-    dst.w = 640;
-    dst.h = 64;
 
-    SDL_RenderCopy(testRenderer, hud, &src, &dst);
     SDL_RenderPresent(testRenderer);
-//    SDL_UpdateWindowSurface(testWindow);
 
 }
 
