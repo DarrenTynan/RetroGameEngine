@@ -84,9 +84,11 @@ void Game::SetUpRegistry() const
 void Game::SetupAssets() const
 {
     // Adding assets to the asset store
-    assetStore->AddTexture(gameRenderer, "hud", "../Game/assets/images/hud2.png");
+    assetStore->AddTexture(gameRenderer, "hud2", "../Game/assets/images/hud3.png");
     assetStore->AddFont("charriot-font", "../Game/assets/fonts/zx-spectrum.ttf", 24);
     assetStore->AddTexture(gameRenderer, "tilemap-image", "../Game/assets/tilemaps/TestLevel/TestLevel.png");
+
+    // mapImagePath not correct
 //    assetStore->AddTexture(gameRenderer, "tilemap-image", mapImagePath);
     assetStore->AddTexture(gameRenderer, "tank-image", "../Game/assets/images/tank-panther-right.png");
     assetStore->AddTexture(gameRenderer, "truck-image", "../Game/assets/images/truck-ford-right.png");
@@ -257,9 +259,9 @@ int Game::SetupRgeSDL()
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
     Game::rgeWindow = SDL_CreateWindow(
             "Retro Game Engine v1",
-            displayMode.w / 2,
+            GAME_WINDOW_WIDTH,
             0,
-            displayMode.w / 2,
+            (displayMode.w - GAME_WINDOW_WIDTH),
             displayMode.h,
             windowFlags
     );
@@ -270,16 +272,6 @@ int Game::SetupRgeSDL()
         SDL_Quit();
         return false;
     }
-
-//    rgeSurface = SDL_GetWindowSurface(rgeWindow);
-//
-//    if(!rgeSurface)
-//    {
-//        std::cout << "Failed to get the surface from the window\n";
-//        return -1;
-//    }
-//
-//    SDL_UpdateWindowSurface(rgeWindow);
 
     rgeRenderer = SDL_CreateRenderer(rgeWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
@@ -324,16 +316,6 @@ int Game::SetupGameSDL()
         SDL_Quit();
         return false;
     }
-
-//    gameSurface = SDL_GetWindowSurface(gameWindow);
-//
-//    if(!gameSurface)
-//    {
-//        std::cout << "Failed to get the surface from the window\n";
-//        return -1;
-//    }
-//
-//    SDL_UpdateWindowSurface(gameWindow);
 
     gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
@@ -490,9 +472,9 @@ void Game::Render()
     }
 
     // Display HUD
-    SDL_Texture* hud = assetStore->GetTexture("hud");
-    SDL_Rect source = {0,0,640, 64};
-    SDL_Rect destination = {0,480-64,640,64};
+    SDL_Texture* hud = assetStore->GetTexture("hud2");
+    SDL_Rect source = {0,0,800, 56};
+    SDL_Rect destination = {0,600-56,800,56};
 
     SDL_RenderCopy(gameRenderer, hud, &source, &destination);
     SDL_RenderPresent(gameRenderer);
@@ -596,7 +578,7 @@ void Game::Setup()
     SetupSDL();
     SetupRgeSDL();
     SetupGameSDL();
-    SetupTestSDL();
+//    SetupTestSDL();
     SetUpRegistry();
     SetupAssets();
     SetupImGui();
@@ -618,7 +600,7 @@ void Game::Run()
         ProcessInput();
         UpdateSystems();
         Render();
-        UpdateTestWindow();
+//        UpdateTestWindow();
     }
 }
 
