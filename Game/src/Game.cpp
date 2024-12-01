@@ -171,48 +171,77 @@ int Game::SetupTestSDL()
     if(!testWindow)
     {
         std::cout << "Failed to create window\n";
-        return -1;
+        return false;
     }
 
-    testSurface = SDL_GetWindowSurface(testWindow);
+//    testSurface = SDL_GetWindowSurface(testWindow);
+//
+//    if(!testSurface)
+//    {
+//        std::cout << "Failed to get the surface from the window\n";
+//        return false;
+//    }
 
-    if(!testSurface)
+    testRenderer = SDL_CreateRenderer(testWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    if (!testRenderer)
     {
-        std::cout << "Failed to get the surface from the window\n";
-        return -1;
+        Logger::Error("Test Window renderer init failed");
+        SDL_DestroyRenderer(testRenderer);
+        SDL_Quit();
+        return false;
     }
 
-    SDL_Surface *image = SDL_LoadBMP("../Game/assets/images/sdl.bmp");
-    SDL_BlitSurface(image, NULL, testSurface, NULL);
-    SDL_UpdateWindowSurface(testWindow);
+    return true;
+}
 
-    
-//    temporarySurface = IMG_Load("../Game/assets/images/tree.png");
-//    temporaryTexture = SDL_CreateTextureFromSurface(testRenderer, temporarySurface);
+void Game::UpdateTestWindow()
+{
+    SDL_Rect source;
+    SDL_Rect destination;
+
+    SDL_SetRenderDrawColor(testRenderer, 255,0,0,255);
+    SDL_RenderClear(testRenderer);
+
+    // Logo
+//    SDL_Surface *image = SDL_LoadBMP("../Game/assets/images/sdl.bmp");
+//    SDL_BlitSurface(image, NULL, testSurface, NULL);
+//    SDL_UpdateWindowSurface(testWindow);
+
+    // Tree
+    temporarySurface = IMG_Load("../Game/assets/images/tree.png");
+    temporaryTexture = SDL_CreateTextureFromSurface(testRenderer, temporarySurface);
+    source = {0,0,16, 32};
+    destination = {200,350,16*2,32*2};
+
+    SDL_RenderCopy(testRenderer, temporaryTexture, &source, &destination);
 //    SDL_RenderPresent(testRenderer);
 
-//    SDL_UpdateWindowSurface(testWindow);
+    temporarySurface = IMG_Load("../Game/assets/images/landing-base.png");
+    temporaryTexture = SDL_CreateTextureFromSurface(testRenderer, temporarySurface);
+    source = {0,0,32, 32};
+    destination = {400,350,32*2,32*2};
+
+    SDL_RenderCopy(testRenderer, temporaryTexture, &source, &destination);
 
     // Display HUD
-//    SDL_Texture* hud = assetStore->GetTexture("hud");
-//    SDL_Rect source;
-//    source.x = 0;
-//    source.y = 0;
-//    source.w = 640;
-//    source.h = 64;
-//
-//    SDL_Rect destination;
-//    destination.x = 0;
-//    destination.y = 480-64;
-//    destination.w = 640;
-//    destination.h = 64;
-//
-//    SDL_RenderCopy(testRenderer, hud, &source, &destination);
-//    SDL_RenderPresent(testRenderer);
+    SDL_Texture* hud = assetStore->GetTexture("hud");
+    SDL_Rect src;
+    src.x = 0;
+    src.y = 0;
+    src.w = 640;
+    src.h = 64;
 
+    SDL_Rect dst;
+    dst.x = 0;
+    dst.y = 480-64;
+    dst.w = 640;
+    dst.h = 64;
 
+    SDL_RenderCopy(testRenderer, hud, &src, &dst);
+    SDL_RenderPresent(testRenderer);
 //    SDL_UpdateWindowSurface(testWindow);
-    return true;
+
 }
 
 
@@ -440,6 +469,7 @@ void Game::UpdateSystems()
  */
 void Game::Render()
 {
+
     SDL_SetRenderDrawColor(rgeRenderer, (Uint8)(rge_clear_color.x * 255), (Uint8)(rge_clear_color.y * 255), (Uint8)(rge_clear_color.z * 255), (Uint8)(rge_clear_color.w * 255));
     SDL_RenderClear(rgeRenderer);
 
@@ -603,6 +633,7 @@ void Game::Run()
         ProcessInput();
         UpdateSystems();
         Render();
+        UpdateTestWindow();
     }
 }
 

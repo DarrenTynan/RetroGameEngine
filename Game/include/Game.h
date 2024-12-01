@@ -97,8 +97,7 @@ public:
     int mapWidth{};
     int mapHeight{};
 
-    ImVec4 game_clear_color = ImVec4(0,0,0,255);
-//    ImVec4 game_clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+    ImVec4 game_clear_color = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
     ImVec4 rge_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     std::unique_ptr<Registry> registry;
@@ -125,6 +124,7 @@ public:
     void SetupImGui() const;
     void ProcessInput();
     void UpdateSystems();
+    void UpdateTestWindow();
     void Render();
     void Destroy() const;
     void RenderTree();
