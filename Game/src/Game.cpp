@@ -86,7 +86,8 @@ void Game::SetupAssets() const
     // Adding assets to the asset store
     assetStore->AddTexture(gameRenderer, "hud", "../Game/assets/images/hud2.png");
     assetStore->AddFont("charriot-font", "../Game/assets/fonts/zx-spectrum.ttf", 24);
-    assetStore->AddTexture(gameRenderer, "tilemap-image", mapImagePath);
+    assetStore->AddTexture(gameRenderer, "tilemap-image", "../Game/assets/tilemaps/TestLevel/TestLevel.png");
+//    assetStore->AddTexture(gameRenderer, "tilemap-image", mapImagePath);
     assetStore->AddTexture(gameRenderer, "tank-image", "../Game/assets/images/tank-panther-right.png");
     assetStore->AddTexture(gameRenderer, "truck-image", "../Game/assets/images/truck-ford-right.png");
     assetStore->AddTexture(gameRenderer, "chopper-image", "../Game/assets/images/chopper.png");
@@ -466,7 +467,6 @@ void Game::UpdateSystems()
  */
 void Game::Render()
 {
-
     SDL_SetRenderDrawColor(rgeRenderer, (Uint8)(rge_clear_color.x * 255), (Uint8)(rge_clear_color.y * 255), (Uint8)(rge_clear_color.z * 255), (Uint8)(rge_clear_color.w * 255));
     SDL_RenderClear(rgeRenderer);
 
@@ -491,23 +491,11 @@ void Game::Render()
 
     // Display HUD
     SDL_Texture* hud = assetStore->GetTexture("hud");
-    SDL_Rect source;
-    source.x = 0;
-    source.y = 0;
-    source.w = 640;
-    source.h = 64;
-
-    SDL_Rect destination;
-    destination.x = 0;
-    destination.y = 480-64;
-    destination.w = 640;
-    destination.h = 64;
+    SDL_Rect source = {0,0,640, 64};
+    SDL_Rect destination = {0,480-64,640,64};
 
     SDL_RenderCopy(gameRenderer, hud, &source, &destination);
     SDL_RenderPresent(gameRenderer);
-
-//    RenderTree();
-
 
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), rgeRenderer);
     SDL_RenderPresent(rgeRenderer);

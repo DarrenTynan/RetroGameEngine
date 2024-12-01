@@ -20,6 +20,7 @@ class RenderSystem: public System {
                 TransformComponent transformComponent;
                 SpriteComponent spriteComponent;
             };
+
             std::vector<RenderableEntity> renderableEntities;
             for (auto entity: GetSystemEntities()) {
                 RenderableEntity renderableEntity;
