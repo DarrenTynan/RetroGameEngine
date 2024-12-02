@@ -3,7 +3,12 @@
 //
 
 #include <iostream>
+#include <utility>
 #include "../include/RGE.h"
+
+#if !SDL_VERSION_ATLEAST(2,0,17)
+#error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
+#endif
 
 void RGE::sayHello()
 {
@@ -201,7 +206,7 @@ int RGE::setupGameSDL()
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
     gameWindow = SDL_CreateWindow(
-            "Game",
+            "Game Window",
             0,
             0,
 //            SDL_WINDOWPOS_CENTERED,
@@ -377,7 +382,7 @@ int RGE::setupTMX()
  * window quit
  * keyboard
  */
-void RGE::processInput()
+bool RGE::processInput()
 {
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
@@ -405,7 +410,7 @@ void RGE::processInput()
                 break;
 
             case SDL_KEYDOWN:
-                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isRunning = false; }
+                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isRunning = false; testBool = false; }
                 if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
                 if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
@@ -423,6 +428,7 @@ void RGE::processInput()
                 break;
         }
     };
+    return testBool;
 };
 
 /**
@@ -462,3 +468,6 @@ void RGE::setupVars()
     assetStore = std::make_unique<AssetStore>();
     eventBus = std::make_unique<EventBus>();
 }
+
+
+

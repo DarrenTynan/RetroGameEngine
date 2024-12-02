@@ -76,6 +76,8 @@ static bool isCollider = false;
 static bool isRayCast = false;
 static bool isFullScreen = false;
 
+static bool testBool = true;
+
 static SDL_Rect rgeCamera;
 static SDL_Rect gameCamera;
 static SDL_Window* rgeWindow;
@@ -97,6 +99,7 @@ static int windowHeight{};
 static int mapWidth{};
 static int mapHeight{};
 
+
 class RGE
 {
 public:
@@ -111,21 +114,11 @@ public:
     static void setupAssets();
     static void setupObjects();
     static int setupTMX();
-    static void processInput();
+    static bool processInput();
     static void updateSystems();
     static void destroy();
+
 private:
-//    static SDL_Window* rgeWindow;
-//    static SDL_Renderer* rgeRenderer;
-//
-//    static SDL_Window* gameWindow;
-//    static SDL_Renderer* gameRenderer;
-
-//    static SDL_Rect rgeCamera;
-//    static SDL_Rect gameCamera;
-
-//    const static int GAME_WINDOW_WIDTH = 800;
-//    const static int GAME_WINDOW_HEIGHT = 600;
 
 };
 
