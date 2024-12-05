@@ -25,9 +25,9 @@ void Game::Setup()
     RGE::setupGameSDL();
     RGE::setupRegistry();
     RGE::setupAssets();
-    RGE::setupImGui();
     RGE::setupObjects();
     RGE::setupTMX();
+    RGE::setupImGui();
 
     // Set game running on
     isRunning = true;
@@ -43,10 +43,6 @@ void Game::Run()
     while (isGameRunning)
     {
         isGameRunning = RGE::processInput();
-        if(isGameRunning) Logger::Log("RUNNING");
-        if(!isGameRunning) Logger::Log("NOT RUNNING");
-
-//        RGE::processInput();
         RGE::updateSystems();
         RGE::render();
     }

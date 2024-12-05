@@ -16,7 +16,7 @@ void Entity::Kill() {
     registry->KillEntity(*this);
 }
 
-void Entity::Tag(const std::string &tag) {
+void Entity::AddTag(const std::string &tag) {
     registry->TagEntity(*this, tag);
 }
 
@@ -98,6 +98,7 @@ std::vector<Entity> Registry::GetEntitiesByGroup(const std::string& group) const
 
 Entity Registry::CreateEntity() {
     int entityId;
+
 
     if (freeIds.empty()) {
         // If there are no free id's

@@ -13,7 +13,7 @@ public:
     virtual ~Game();
     static void Setup();
     static void Run();
-    void Destroy();
+    static void Destroy();
 };
 
 #endif //RETROGAMEENGINE_GAME_H

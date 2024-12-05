@@ -265,7 +265,9 @@ void RGE::setupAssets()
 void RGE::setupObjects()
 {
     Entity player = registry->CreateEntity();
-    player.Tag("player");
+    player.AddTag("player");
+//    player.AddName("NEW PLAYER");
+
     player.AddComponent<TransformComponent>(glm::vec2(256, 256), glm::vec2(2.0, 2.0), 0.0);
     player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
@@ -316,7 +318,7 @@ int RGE::setupTMX()
                     Entity tile = registry->CreateEntity();
                     tile.AddComponent<BoxColliderComponent>(object.getAABB().width, object.getAABB().height);
                     tile.AddComponent<TransformComponent>(glm::vec2(object.getAABB().left,  object.getAABB().top));
-                    tile.Tag("ground");
+                    tile.AddTag("ground");
 
                 }
             }
@@ -355,7 +357,7 @@ int RGE::setupTMX()
                         int srcRectY = ( (tiles[index].ID - firstgid) / tilesPerRow ) * tileHeight;
 
                         Entity tile = registry->CreateEntity();
-                        tile.Tag("tile");
+                        tile.AddTag("tile");
 
                         tile.AddComponent<TransformComponent>(glm::vec2(x * tileWidth, y * tileHeight), glm::vec2(1, 1), 0.0);
                         tile.AddComponent<SpriteComponent>("tilemap-image", tileWidth, tileHeight, 0, true, false, srcRectX, srcRectY);
