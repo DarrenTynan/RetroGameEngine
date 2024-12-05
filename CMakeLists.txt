@@ -8,7 +8,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Add main.cpp file of the project root directory as a source file
 set(SOURCE_FILES main.cpp
+#        Game/include/Game.h
         Game/src/Game.cpp
+#        RGE/include/RGE.h
         RGE/src/RGE.cpp
 
         RGE/src/Logger/Logger.cpp
@@ -20,7 +22,7 @@ set(SOURCE_FILES main.cpp
         RGE/libs/imgui_docking/imgui_widgets.cpp
         RGE/libs/imgui_docking/backends/imgui_impl_sdl2.cpp
         RGE/libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
-        RGE/libs/imgui_docking/misc/cpp/imgui_stdlib.cpp
+
         RGE/src/AssetStore/AssetStore.cpp
         RGE/src/ECS/ECS.cpp
         RGE/src/Logger/Logger.cpp

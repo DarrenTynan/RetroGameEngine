@@ -5,7 +5,6 @@
 #ifndef RETRO_ENGINE_ECS_H
 #define RETRO_ENGINE_ECS_H
 
-#include <string>
 #include <bitset>
 #include <vector>
 #include <unordered_map>
@@ -49,42 +48,36 @@ class Component: public IComponent {
  * A small class to hold data for entity.
  */
 class Entity {
-private:
-    int id;
-    std::string entityTageName = "default";
+    private:
+        int id;
 
-public:
-    std::string debugTag = "default debug";
+    public:
+        explicit Entity(int id): id(id) {};
+        Entity(const Entity &entity) = default;
+        [[nodiscard]] int GetId() const;
+        void Kill();
 
-    [[nodiscard]] const std::string &getEntityTageName() const;
-    void setEntityTageName(const std::string &entityTageName);
+        // Manage entity tags and groups
+        void Tag(const std::string &tag);
+        [[nodiscard]] bool HasTag(const std::string &tag) const;
+        void Group(const std::string &group);
+        [[nodiscard]] bool BelongsToGroup(const std::string &group) const;
 
-    explicit Entity(int id): id(id) {};
-    Entity(const Entity &entity) = default;
-    [[nodiscard]] int GetId() const;
-    void Kill();
+        // Operator overloading for entity objects
+        Entity& operator =(const Entity& other) = default;
+        bool operator ==(const Entity& other) const { return id == other.id; }
+        bool operator !=(const Entity& other) const { return id != other.id; }
+        bool operator >(const Entity& other) const { return id > other.id; }
+        bool operator <(const Entity& other) const { return id < other.id; }
 
-    // Manage entity tags and groups
-    void SetTag(const std::string &tag);
-    [[nodiscard]] bool HasTag(const std::string &tag) const;
-    void SetGroup(const std::string &group);
-    [[nodiscard]] bool BelongsToGroup(const std::string &group) const;
+        // Manage entity components
+        template <typename TComponent, typename ...TArgs> void AddComponent(TArgs&& ...args);
+        template <typename TComponent> void RemoveComponent();
+        template <typename TComponent> [[nodiscard]] bool HasComponent() const;
+        template <typename TComponent> TComponent& GetComponent() const;
 
-    // Operator overloading for entity objects
-    Entity& operator = (const Entity& other) = default;
-    bool operator == (const Entity& other) const { return id == other.id; }
-    bool operator != (const Entity& other) const { return id != other.id; }
-    bool operator > (const Entity& other) const { return id > other.id; }
-    bool operator < (const Entity& other) const { return id < other.id; }
-
-    // Manage entity components
-    template <typename TComponent, typename ...TArgs> void AddComponent(TArgs&& ...args);
-    template <typename TComponent> void RemoveComponent();
-    template <typename TComponent> [[nodiscard]] bool HasComponent() const;
-    template <typename TComponent> TComponent& GetComponent() const;
-
-    // Hold a pointer to the entity's owner registry
-    class Registry* registry{};
+        // Hold a pointer to the entity's owner registry
+        class Registry* registry;
 
 };
 
@@ -198,13 +191,13 @@ class Registry {
         Entity CreateEntity();
         void KillEntity(Entity entity);
 
-        // SetTag management
+        // Tag management
         void TagEntity(Entity entity, const std::string &tag);
         [[nodiscard]] bool EntityHasTag(Entity entity, const std::string &tag) const;
         [[nodiscard]] Entity GetEntityByTag(const std::string &tag) const;
         void RemoveEntityTag(Entity entity);
 
-        // SetGroup management
+        // Group management
         void GroupEntity(Entity entity, const std::string &group);
         [[nodiscard]] bool EntityBelongsToGroup(Entity entity, const std::string &group) const;
         [[nodiscard]] std::vector<Entity> GetEntitiesByGroup(const std::string &group) const;

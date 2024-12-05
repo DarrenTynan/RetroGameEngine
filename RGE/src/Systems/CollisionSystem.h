@@ -55,11 +55,10 @@ class CollisionSystem: public System {
                     SDL_bool collision = SDL_HasIntersection(&aa, &bb);
 
                     if (collision) {
-                        Logger::Log("Entity " + std::to_string(a.GetId()) + " collided wih entity " + std::to_string(b.GetId()));
-
-                        Logger::Error(a.getEntityTageName());
-                        Logger::Error(b.getEntityTageName());
-
+                        Logger::Log("Entity " + std::to_string(a.GetId()) + " collided wih entity " +
+                                    std::to_string(b.GetId()));
+//                        a.Kill();
+//                        b.Kill();
                         eventBus->EmitEvent<CollisionEvent>(a, b);
                     }
                 }

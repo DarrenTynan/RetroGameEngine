@@ -8,7 +8,6 @@
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
-#include "../../RGE/libs/imgui_docking/misc/cpp/imgui_stdlib.h"
 #include "../ECS/ECS.h"
 
 class RenderImGuiSystem: public System
@@ -39,8 +38,8 @@ class RenderImGuiSystem: public System
 
         // Setup Dear ImGui context
         ImGuiIO& io = ImGui::GetIO(); (void)io;
-//        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-//        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
     }
 
@@ -77,16 +76,7 @@ class RenderImGuiSystem: public System
 
             if (ImGui::CollapsingHeader("Player Entity"))
             {
-//                player.setEntityTageName("NEW DEBUG");
-                std::string str = player.getEntityTageName();
-                const char *cstr = str.c_str();
-
-                std::string& str2 = player.debugTag;
-                const char *cstr2 = str2.c_str();
-
                 ImGui::Text("Player ID: %i",  player.GetId());
-                ImGui::Text("Player TAG: %s", cstr);
-                ImGui::Text("Debug TAG: %s", cstr2);
 
                 if (ImGui::CollapsingHeader("Transform"))
                 {
