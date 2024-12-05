@@ -8,36 +8,62 @@
 
 int IComponent::nextId = 0;
 
+/**
+ * @brief Brief description of this function
+ *
+ * @return int ID
+ */
 int Entity::GetId() const {
     return id;
 }
 
+/**
+ * @brief Kill the entity.
+ */
 void Entity::Kill() {
     registry->KillEntity(*this);
 }
 
-void Entity::Tag(const std::string &tag) {
+/**
+ * @brief Adds a tag name to the entity.
+ *
+ * @param tag: the tag name to use.
+ */
+void Entity::SetTag(const std::string &tag)
+{
     registry->TagEntity(*this, tag);
 }
 
-bool Entity::HasTag(const std::string &tag) const {
-    return registry->EntityHasTag(*this, tag);
-}
-
-void Entity::Group(const std::string &group) {
-    registry->GroupEntity(*this, group);
-}
-
-bool Entity::BelongsToGroup(const std::string &group) const {
-    return registry->EntityBelongsToGroup(*this, group);
-}
-
-void Registry::TagEntity(Entity entity, const std::string &tag) {
+/**
+ * @brief SetTag overload
+ *
+ * @param entity
+ * @param tag
+ */
+void Registry::TagEntity(Entity entity, const std::string &tag)
+{
     entityPerTag.emplace(tag, entity);
     tagPerEntity.emplace(entity.GetId(), tag);
 }
 
-void Registry::RemoveEntityTag(Entity entity) {
+/**
+ * @brief Returns whether and entity has the given tag.
+ *
+ * @param tag
+ * @return true / false
+ */
+bool Entity::HasTag(const std::string &tag) const
+{
+    return registry->EntityHasTag(*this, tag);
+}
+
+/**
+ * @brief Remove entity by tag name.
+ *
+ * @param entity
+ */
+void Registry::RemoveEntityTag(Entity entity)
+{
     auto taggedEntity = tagPerEntity.find(entity.GetId());
     if (taggedEntity != tagPerEntity.end()) {
         auto tag = taggedEntity->second;
@@ -46,24 +72,81 @@ void Registry::RemoveEntityTag(Entity entity) {
     }
 }
 
-bool Registry::EntityHasTag(Entity entity, const std::string &tag) const {
-    if (tagPerEntity.find(entity.GetId()) == tagPerEntity.end()) {
+/**
+ * @brief Has the given entity got an assigned tag name?
+ *
+ * @param entity
+ * @param tag
+ * @return true / false
+ */
+bool Registry::EntityHasTag(Entity entity, const std::string &tag) const
+{
+    if (tagPerEntity.find(entity.GetId()) == tagPerEntity.end())
+    {
         return false;
     }
     return entityPerTag.find(tag)->second == entity;
 }
 
-Entity Registry::GetEntityByTag(const std::string &tag) const {
-    return entityPerTag.at(tag);
+
+/**
+ * @brief Set the group name of the entity.
+ *
+ * @param group name
+ */
+void Entity::SetGroup(const std::string &group)
+{
+    registry->GroupEntity(*this, group);
+}
+
+/**
+ * @brief Does the entity belong to the given group.
+ * @param group
+ * @return
+ */
+bool Entity::BelongsToGroup(const std::string &group) const {
+    return registry->EntityBelongsToGroup(*this, group);
 }
 
 
+
+
+
+const std::string& Entity::getEntityTageName() const
+{
+    return entityTageName;
+}
+
+//void Entity::SetTag(const std::string &tag)
+//{
+//    registry->TagEntity(*this, tag);
+//}
+
+void Entity::setEntityTageName(const std::string& _entityTageName)
+{
+    entityTageName = _entityTageName;
+}
+
+
+
+
+
+/**
+ * @brief Group the entity in given group name.
+ *
+ * @param entity
+ * @param group
+ */
 void Registry::GroupEntity(Entity entity, const std::string &group) {
     entitiesPerGroup.emplace(group, std::set<Entity>());
     entitiesPerGroup[group].emplace(entity);
     groupPerEntity.emplace(entity.GetId(), group);
 }
 
+/**
+ * @brief Remove the entity from given group name.
+ * @param entity
+ */
 void Registry::RemoveEntityGroup(Entity entity) {
     // if in group, remove entity from group management
     auto groupedEntity = groupPerEntity.find(entity.GetId());
@@ -79,6 +162,24 @@ void Registry::RemoveEntityGroup(Entity entity) {
     }
 }
 
+/**
+ * @brief Get the entity by given tag.
+ *
+ * @param tag
+ * @return
+ */
+Entity Registry::GetEntityByTag(const std::string &tag) const {
+    return entityPerTag.at(tag);
+}
+
+
+/**
+ * @brief Does the entity belong in the given group name.
+ *
+ * @param entity
+ * @param group
+ * @return
+ */
 bool Registry::EntityBelongsToGroup(Entity entity, const std::string &group) const {
 //    auto groupEntities = entitiesPerGroup.at(group);
 //    return groupEntities.find(entity.GetId()) != groupEntities.end();
@@ -88,25 +189,41 @@ bool Registry::EntityBelongsToGroup(Entity entity, const std::string &group) con
         return false;
 
     }
-    return true;}
+    return true;
+}
 
+/**
+ * @brief Return a array of entities in given group name.
+ *
+ * @param group
+ * @return array of entities.
+ */
 std::vector<Entity> Registry::GetEntitiesByGroup(const std::string& group) const {
     auto& setOfEntities = entitiesPerGroup.at(group);
     return std::vector<Entity>(setOfEntities.begin(), setOfEntities.end());
 }
 
 
-Entity Registry::CreateEntity() {
+/**
+ * @brief Create an entity abd assing an ID.
+ *
+ * @return entity
+ */
+Entity Registry::CreateEntity()
+{
     int entityId;
 
-    if (freeIds.empty()) {
+    if (freeIds.empty())
+    {
         // If there are no free id's
         entityId = numEntities++;
-        if (entityId >= entityComponentSignatures.size()) {
+        if (entityId >= entityComponentSignatures.size())
+        {
             entityComponentSignatures.resize(entityId + 1);
         }
     }
-    else {
+    else
+    {
         // Reuse an id from the list of previously removed entities
         entityId = freeIds.front();
         freeIds.pop_front();
