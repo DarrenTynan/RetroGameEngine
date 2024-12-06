@@ -169,8 +169,11 @@ class Registry {
         std::unordered_map<std::string, Entity> entityPerTag;
         std::unordered_map<int, std::string> tagPerEntity;
 
+        // GH
+        std::unordered_map<int, std::string> nameOfEntity;
+
         // Entity group tag
-        std::unordered_map<std::string, std::set<Entity>> entitiesPerGroup;
+        std::unordered_map<std::string, std::set<Entity>> namePerEntity;
         std::unordered_map<int, std::string> groupPerEntity;
 
         // List of free entity slot id's that were previously removed after death.
@@ -220,6 +223,7 @@ class Registry {
         // that are interested in it
         void AddEntityToSystems(Entity entity);
         void RemoveEntityFromSystems(Entity entity);
+
 };
 
 

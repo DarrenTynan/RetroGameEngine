@@ -1,6 +1,7 @@
 #ifndef COLLISIONSYSTEM_H
 #define COLLISIONSYSTEM_H
 
+#include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
@@ -57,8 +58,13 @@ class CollisionSystem: public System {
                     if (collision) {
                         Logger::Log("Entity " + std::to_string(a.GetId()) + " collided wih entity " +
                                     std::to_string(b.GetId()));
+
+                        Logger::Error(aCollider.name);
+                        Logger::Error(bCollider.name);
+
 //                        a.Kill();
 //                        b.Kill();
+
                         eventBus->EmitEvent<CollisionEvent>(a, b);
                     }
                 }

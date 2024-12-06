@@ -35,7 +35,16 @@ bool Entity::BelongsToGroup(const std::string &group) const {
 void Registry::TagEntity(Entity entity, const std::string &tag) {
     entityPerTag.emplace(tag, entity);
     tagPerEntity.emplace(entity.GetId(), tag);
+
+    // GH
+    nameOfEntity.emplace(entity.GetId(), tag);
+
 }
+// GH
+//Entity Registry::GetTagByEntity(const int _id) const {
+//    return namePerEntity.key_eq(_id);
+//}
+
 
 void Registry::RemoveEntityTag(Entity entity) {
     auto taggedEntity = tagPerEntity.find(entity.GetId());
@@ -59,8 +68,8 @@ Entity Registry::GetEntityByTag(const std::string &tag) const {
 
 
 void Registry::GroupEntity(Entity entity, const std::string &group) {
-    entitiesPerGroup.emplace(group, std::set<Entity>());
-    entitiesPerGroup[group].emplace(entity);
+    namePerEntity.emplace(group, std::set < Entity > ());
+    namePerEntity[group].emplace(entity);
     groupPerEntity.emplace(entity.GetId(), group);
 }
 
@@ -68,8 +77,8 @@ void Registry::RemoveEntityGroup(Entity entity) {
     // if in group, remove entity from group management
     auto groupedEntity = groupPerEntity.find(entity.GetId());
     if (groupedEntity != groupPerEntity.end()) {
-        auto group = entitiesPerGroup.find(groupedEntity->second);
-        if (group != entitiesPerGroup.end()) {
+        auto group = namePerEntity.find(groupedEntity->second);
+        if (group != namePerEntity.end()) {
             auto entityInGroup = group->second.find(entity);
             if (entityInGroup != group->second.end()) {
                 group->second.erase(entityInGroup);
@@ -80,10 +89,10 @@ void Registry::RemoveEntityGroup(Entity entity) {
 }
 
 bool Registry::EntityBelongsToGroup(Entity entity, const std::string &group) const {
-//    auto groupEntities = entitiesPerGroup.at(group);
+//    auto groupEntities = namePerEntity.at(group);
 //    return groupEntities.find(entity.GetId()) != groupEntities.end();
-    auto groupEntities = entitiesPerGroup.find(group);
-    if (groupEntities == entitiesPerGroup.end())
+    auto groupEntities = namePerEntity.find(group);
+    if (groupEntities == namePerEntity.end())
     {
         return false;
 
@@ -91,12 +100,13 @@ bool Registry::EntityBelongsToGroup(Entity entity, const std::string &group) con
     return true;}
 
 std::vector<Entity> Registry::GetEntitiesByGroup(const std::string& group) const {
-    auto& setOfEntities = entitiesPerGroup.at(group);
+    auto& setOfEntities = namePerEntity.at(group);
     return std::vector<Entity>(setOfEntities.begin(), setOfEntities.end());
 }
 
 
-Entity Registry::CreateEntity() {
+Entity Registry::CreateEntity()
+{
     int entityId;
 
 

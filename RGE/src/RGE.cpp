@@ -266,14 +266,15 @@ void RGE::setupObjects()
 {
     Entity player = registry->CreateEntity();
     player.AddTag("player");
-//    player.AddName("NEW PLAYER");
 
     player.AddComponent<TransformComponent>(glm::vec2(256, 256), glm::vec2(2.0, 2.0), 0.0);
     player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
     player.AddComponent<AnimationComponent>(6, 8, true);
 //    player.AddComponent<CameraFollowComponent>();
-    player.AddComponent<BoxColliderComponent>(32, 32);
+    player.AddComponent<BoxColliderComponent>(32, 32, "PLAYER BOX");
+
+
     player.AddComponent<PlayerControllerComponent>(glm::vec2(0, -80.0), glm::vec2(80.0, 0), glm::vec2(0, 80.0), glm::vec2(-80.0, 0));
     player.AddComponent<HealthComponent>(100);
     player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
@@ -316,7 +317,7 @@ int RGE::setupTMX()
                 {
                     //do stuff with object properties
                     Entity tile = registry->CreateEntity();
-                    tile.AddComponent<BoxColliderComponent>(object.getAABB().width, object.getAABB().height);
+                    tile.AddComponent<BoxColliderComponent>(object.getAABB().width, object.getAABB().height, "OBJECT BOX");
                     tile.AddComponent<TransformComponent>(glm::vec2(object.getAABB().left,  object.getAABB().top));
                     tile.AddTag("ground");
 

@@ -74,11 +74,10 @@ class RenderImGuiSystem: public System
         {
             Entity player = registry->GetEntityByTag("player");
 
-
             if (ImGui::CollapsingHeader("Player Entity"))
             {
-
                 ImGui::Text("Player ID: %i",  player.GetId());
+//                ImGui::Text("Player Name: %s",  player.name_ptr);
 
                 if (ImGui::CollapsingHeader("Transform"))
                 {
