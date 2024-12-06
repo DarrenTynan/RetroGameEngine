@@ -60,12 +60,25 @@ class CollisionSystem: public System {
                         " " + aCollider.name + " collided with entity " +
                         std::to_string(b.GetId()) + " " + bCollider.name);
 
-                        auto playerControllerComponent = a.GetComponent<PlayerControllerComponent>();
+                        auto& playerControllerComponent = a.GetComponent<PlayerControllerComponent>();
                         auto& playerRigidBodyComponent = a.GetComponent<RigidBodyComponent>();
 
-                        playerRigidBodyComponent.setSpeed(100.0f);
+//                        playerRigidBodyComponent.setSpeed(40.0f);
+//                        playerRigidBodyComponent.setSpeed(74.0f);
 
-//                        a.Kill();
+                        if (playerRigidBodyComponent.direction.x != 0)
+                        {
+                            playerRigidBodyComponent.direction.x = playerRigidBodyComponent.direction.x * -1;
+                            playerRigidBodyComponent.velocity.x = (playerRigidBodyComponent.speed * playerRigidBodyComponent.direction.x);
+                        }
+
+                        if (playerRigidBodyComponent.direction.y != 0)
+                        {
+                            playerRigidBodyComponent.direction.y = playerRigidBodyComponent.direction.y * -1;
+                            playerRigidBodyComponent.velocity.y = (playerRigidBodyComponent.speed * playerRigidBodyComponent.direction.y);
+                        }
+
+                        //                        a.Kill();
 //                        b.Kill();
 
                         eventBus->EmitEvent<CollisionEvent>(a, b);
