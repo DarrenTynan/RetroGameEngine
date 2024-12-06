@@ -56,11 +56,14 @@ class CollisionSystem: public System {
                     SDL_bool collision = SDL_HasIntersection(&aa, &bb);
 
                     if (collision) {
-                        Logger::Log("Entity " + std::to_string(a.GetId()) + " collided wih entity " +
-                                    std::to_string(b.GetId()));
+                        Logger::Log("Entity " + std::to_string(a.GetId()) +
+                        " " + aCollider.name + " collided with entity " +
+                        std::to_string(b.GetId()) + " " + bCollider.name);
 
-                        Logger::Error(aCollider.name);
-                        Logger::Error(bCollider.name);
+                        auto playerControllerComponent = a.GetComponent<PlayerControllerComponent>();
+                        auto& playerRigidBodyComponent = a.GetComponent<RigidBodyComponent>();
+
+                        playerRigidBodyComponent.setSpeed(100.0f);
 
 //                        a.Kill();
 //                        b.Kill();
