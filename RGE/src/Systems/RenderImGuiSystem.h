@@ -19,6 +19,7 @@ class RenderImGuiSystem: public System
         bool show_demo_window = true;
         bool show_spawn_entity = true;
         bool show_tmx_window = true;
+        bool show_object_window = true;
 
     void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera)
     {
@@ -32,6 +33,7 @@ class RenderImGuiSystem: public System
         if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
         if (show_spawn_entity) ShowSpawnEntity(registry);
         if (show_tmx_window) ShowTmxWindow(registry, camera);
+        if (show_object_window) ShowObjectWindow(registry);
 
         // Rendering
         ImGui::Render();
@@ -43,7 +45,70 @@ class RenderImGuiSystem: public System
 
     }
 
-    static void ShowTmxWindow(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
+
+    void ShowObjectWindow(const std::unique_ptr<Registry> &registry)
+    {
+        if (ImGui::Begin("Game Object"))
+        {
+            // Left
+            static int selected = 0;
+            {
+                ImGui::BeginChild("left pane", ImVec2(150, 0), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeX);
+
+                auto entities = System::GetSystemEntities();
+
+                char label[128];
+//                ImGui::LabelText(label, "Game Objects");
+                
+                for (auto i = entities.begin(); i != entities.end(); i++)
+                {
+                    Entity a = *i;
+
+                    ImGui::LabelText(label, "Object: %i", a.GetId());
+                    std::string item_id = "##" + std::to_string(a.GetId());
+                    if (ImGui::Selectable(item_id.c_str(), i->GetId() == selected))
+                    {
+                        selected = i->GetId();
+                    }
+                }
+                ImGui::EndChild();
+            }
+            ImGui::SameLine();
+
+            // Right
+            {
+                ImGui::BeginGroup();
+                ImGui::BeginChild("item view", ImVec2(0, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
+                ImGui::Text("MyObject: %d", selected);
+                ImGui::Separator();
+                if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
+                {
+                    if (ImGui::BeginTabItem("Description"))
+                    {
+                        ImGui::TextWrapped("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
+                        ImGui::EndTabItem();
+                    }
+                    if (ImGui::BeginTabItem("Details"))
+                    {
+                        ImGui::Text("ID: 0123456789");
+                        ImGui::EndTabItem();
+                    }
+                    ImGui::EndTabBar();
+                }
+                ImGui::EndChild();
+                if (ImGui::Button("Revert")) {}
+                ImGui::SameLine();
+                if (ImGui::Button("Save")) {}
+                ImGui::EndGroup();
+            }
+        }
+
+        ImGui::End();
+
+    }
+
+
+    void ShowTmxWindow(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
     {
         if (ImGui::Begin("TMX Map"))
         {
@@ -67,7 +132,7 @@ class RenderImGuiSystem: public System
 
     }
 
-    static void ShowGameDebug(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
+    void ShowGameDebug(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
     {
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
         if (ImGui::Begin("Game Debug"))
@@ -116,7 +181,7 @@ class RenderImGuiSystem: public System
     }
 
 
-    static void ShowSpawnEntity(const std::unique_ptr<Registry>& registry)
+    void ShowSpawnEntity(const std::unique_ptr<Registry>& registry)
     {
         if (ImGui::Begin("Spawn Entity"))
         {
@@ -152,7 +217,7 @@ class RenderImGuiSystem: public System
 
     // Demonstrate creating a simple static window with no decoration
     // + a context-menu to choose which corner of the screen to use.
-    static void ShowWorldOverlay(bool* p_open, const SDL_Rect& camera)
+    void ShowWorldOverlay(bool* p_open, const SDL_Rect& camera)
     {
         static int location = 0;
         ImGuiIO& io = ImGui::GetIO();

@@ -12,28 +12,36 @@
 #include "../Components/BoxColliderComponent.h"
 #include "../Components/TransformComponent.h"
 
+/**
+ * Bounding box collision between two rect's.
+ */
 class CollisionSystem: public System {
     public:
-        CollisionSystem() {
+        CollisionSystem()
+        {
             RequireComponent<TransformComponent>();
             RequireComponent<BoxColliderComponent>();
         }
 
-        void Update(std::unique_ptr<EventBus>& eventBus) {
+        void Update(std::unique_ptr<EventBus>& eventBus)
+        {
             auto entities = GetSystemEntities();
 
             // Loop all the entities that the system is interested in
-            for (auto i = entities.begin(); i != entities.end(); i++) {
+            for (auto i = entities.begin(); i != entities.end(); i++)
+            {
                 Entity a = *i;
                 auto aTransform = a.GetComponent<TransformComponent>();
                 auto aCollider = a.GetComponent<BoxColliderComponent>();
 
                 // Loop all the entities that still need to be checked (to the right of i)
-                for (auto j = i; j != entities.end(); j++) {
+                for (auto j = i; j != entities.end(); j++)
+                {
                     Entity b = *j;
 
                     // Bypass if we are trying to test the same entity
-                    if (a == b) {
+                    if (a == b)
+                    {
                         continue;
                     }
 
@@ -55,7 +63,8 @@ class CollisionSystem: public System {
                     // Perform the AABB collision check between entities a and b
                     SDL_bool collision = SDL_HasIntersection(&aa, &bb);
 
-                    if (collision) {
+                    if (collision)
+                    {
                         Logger::Log("Entity " + std::to_string(a.GetId()) +
                         " " + aCollider.name + " collided with entity " +
                         std::to_string(b.GetId()) + " " + bCollider.name);
@@ -78,7 +87,7 @@ class CollisionSystem: public System {
                             playerRigidBodyComponent.velocity.y = (playerRigidBodyComponent.speed * playerRigidBodyComponent.direction.y);
                         }
 
-                        //                        a.Kill();
+//                        a.Kill();
 //                        b.Kill();
 
                         eventBus->EmitEvent<CollisionEvent>(a, b);
