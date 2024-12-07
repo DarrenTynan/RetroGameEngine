@@ -69,15 +69,14 @@ class RenderImGuiSystem: public System
                 ImGui::BeginChild("left pane", ImVec2(150, 0), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeX);
 
                 auto entities = System::GetSystemEntities();
-                for (auto i = entities.begin(); i != entities.end(); i++)
+                for (auto & entity : entities)
                 {
-                    Entity a = *i;
-                    char label[128];
+                    Entity a = entity;
 //                    std::cout << a.GetComponent<BoxColliderComponent>().name << std::endl;
                     std::string item_id = "##" + std::to_string(a.GetId());
-                    if (ImGui::Selectable(item_id.c_str(), i->GetId() == selected))
+                    if (ImGui::Selectable(item_id.c_str(), entity.GetId() == selected))
                     {
-                        selected = i->GetId();
+                        selected = entity.GetId();
                     }
                     ImGui::SameLine();
                     ImGui::Text("Object: %i", a.GetId());
@@ -101,7 +100,9 @@ class RenderImGuiSystem: public System
                     }
                     if (ImGui::BeginTabItem("Details"))
                     {
-                        ImGui::Text("ID: 0123456789");
+                        ImGui::Text("ID: %d", selected);
+                        ImGui::Text("DEUG");
+
                         ImGui::EndTabItem();
                     }
                     ImGui::EndTabBar();
