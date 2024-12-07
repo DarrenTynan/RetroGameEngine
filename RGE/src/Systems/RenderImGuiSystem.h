@@ -45,7 +45,20 @@ class RenderImGuiSystem: public System
 
     }
 
-
+//    int i = 0;
+//    for (std::vector<std::string>::iterator it = m_items.begin(); it != m_items.end(); ++it)
+//    {
+//        std::string itemid = "##" + std::to_string(i);
+//        if (ImGui::Selectable(itemid.c_str(), i == m_selectedItem))
+//        {
+//            m_selectedItem = i;
+//        }
+//        ImGui::SameLine();
+//        ImGui::Text("Item: ");
+//        ImGui::SameLine();
+//        ImGui::Text((*it).c_str());
+//        i++;
+//    }
     void ShowObjectWindow(const std::unique_ptr<Registry> &registry)
     {
         if (ImGui::Begin("Game Object"))
@@ -56,20 +69,18 @@ class RenderImGuiSystem: public System
                 ImGui::BeginChild("left pane", ImVec2(150, 0), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeX);
 
                 auto entities = System::GetSystemEntities();
-
-                char label[128];
-//                ImGui::LabelText(label, "Game Objects");
-                
                 for (auto i = entities.begin(); i != entities.end(); i++)
                 {
                     Entity a = *i;
-
-                    ImGui::LabelText(label, "Object: %i", a.GetId());
+                    char label[128];
+//                    std::cout << a.GetComponent<BoxColliderComponent>().name << std::endl;
                     std::string item_id = "##" + std::to_string(a.GetId());
                     if (ImGui::Selectable(item_id.c_str(), i->GetId() == selected))
                     {
                         selected = i->GetId();
                     }
+                    ImGui::SameLine();
+                    ImGui::Text("Object: %i", a.GetId());
                 }
                 ImGui::EndChild();
             }

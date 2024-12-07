@@ -4,7 +4,6 @@
 
 #include "../include/Game.h"
 #include "../../RGE/include/RGE.h"
-#include <iostream>
 
 Game::Game()
 {
