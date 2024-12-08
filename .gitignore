@@ -2,7 +2,7 @@
 /build/**
 /cmake-build-debug/**
 /assets/**
-/Engine/libs/**
+/RGE/libs/**
 /Game/libs/**
 /Game/assets/**
 
