@@ -4,23 +4,23 @@
 
 #include <iostream>
 #include <utility>
-#include "../include/RGE.h"
+#include "../include/Engine.h"
 
+namespace RGE
+{
+
+}
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 
-void RGE::sayHello()
-{
-    std::cout << "RGE sayHello()" << std::endl;
-}
 
 /**
  * Initial setup of the SDL and true type fonts
  *
  * @return
  */
-int RGE::setupSDL()
+int Engine::setupSDL()
 {
     // Setup SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -52,7 +52,7 @@ int RGE::setupSDL()
  *
  * @return -1 for errors
  */
-int RGE::setupRgeSDL()
+int Engine::setupRgeSDL()
 {
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
@@ -94,7 +94,7 @@ int RGE::setupRgeSDL()
 /**
  * Initial setup of ImGui
  */
-void RGE::setupImGui()
+void Engine::setupImGui()
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -116,7 +116,7 @@ void RGE::setupImGui()
 /**
  * Call render on all objects
  */
-void RGE::render()
+void Engine::render()
 {
     SDL_SetRenderDrawColor(rgeRenderer, (Uint8)(rge_clear_color.x * 255), (Uint8)(rge_clear_color.y * 255), (Uint8)(rge_clear_color.z * 255), (Uint8)(rge_clear_color.w * 255));
     SDL_RenderClear(rgeRenderer);
@@ -156,7 +156,7 @@ void RGE::render()
 /**
  * Initialise the registry with systems.
  */
-void RGE::setupRegistry()
+void Engine::setupRegistry()
 {
     // Add the systems that need to be processed in our game
     registry->AddSystem<MovementSystem>();
@@ -178,30 +178,13 @@ void RGE::setupRegistry()
     registry->AddSystem<RenderRaycastSystem>();
 }
 
-/**
- * Destroy
- */
-void RGE::destroy()
-{
-    ImGui_ImplSDLRenderer2_Shutdown();
-    ImGui_ImplSDL2_Shutdown();
-    ImGui::DestroyContext();
-
-    SDL_DestroyWindow(rgeWindow);
-    SDL_DestroyRenderer(rgeRenderer);
-
-    SDL_DestroyRenderer(rgeRenderer);
-    SDL_DestroyWindow(gameWindow);
-
-    SDL_Quit();
-}
 
 /**
  * Setup game SDL window, renderer and camera
  *
  * @return -1 for errors
  */
-int RGE::setupGameSDL()
+int Engine::setupGameSDL()
 {
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
@@ -243,7 +226,7 @@ int RGE::setupGameSDL()
   * Initialise the assetStore with pointers to png.
   *
  */
-void RGE::setupAssets()
+void Engine::setupAssets()
 {
     // Adding assets to the asset store
     assetStore->AddTexture(gameRenderer, "hud2", "../Game/assets/images/hud3.png");
@@ -262,7 +245,7 @@ void RGE::setupAssets()
 /**
 * Initialise the player object with components.
  */
-void RGE::setupObjects()
+void Engine::setupObjects()
 {
     Entity player = registry->CreateEntity();
     player.AddTag("player");
@@ -299,7 +282,7 @@ void RGE::setupObjects()
  *
  * @return
  */
-int RGE::setupTMX()
+int Engine::setupTMX()
 {
     map.load(MAP_PATH);
 
@@ -385,7 +368,7 @@ int RGE::setupTMX()
  * window quit
  * keyboard
  */
-bool RGE::processInput()
+bool Engine::processInput()
 {
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
@@ -437,7 +420,7 @@ bool RGE::processInput()
 /**
  * UpdateSystems
  */
-void RGE::updateSystems()
+void Engine::updateSystems()
 {
     // The difference in ticks since the last frame, converted to seconds
     double deltaTime = (SDL_GetTicks() - millisecsPreviouseFrame) / 1000.0;
@@ -465,12 +448,29 @@ void RGE::updateSystems()
 
 }
 
-void RGE::setupVars()
+void Engine::setupVars()
 {
     registry = std::make_unique<Registry>();
     assetStore = std::make_unique<AssetStore>();
     eventBus = std::make_unique<EventBus>();
 }
 
+/**
+ * Destroy
+ */
+void Engine::destroy()
+{
+    ImGui_ImplSDLRenderer2_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+
+    SDL_DestroyWindow(rgeWindow);
+    SDL_DestroyRenderer(rgeRenderer);
+
+    SDL_DestroyRenderer(rgeRenderer);
+    SDL_DestroyWindow(gameWindow);
+
+    SDL_Quit();
+}
 
 

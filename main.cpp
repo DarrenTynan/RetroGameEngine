@@ -4,14 +4,14 @@
 int main()
 {
     // Initialise a new Game object
-    Game game;
+//    Game game;
 
     // Game method calls
-    game.Setup();
-    game.Run();
-    game.Destroy();
+    Game::Setup();
+    Game::Run();
+    Game::Destroy();
 
-//    RGE::sayHello();
+//    Engine::sayHello();
 
     std::cout << "main.cpp exit" << std::endl;
     return 0;

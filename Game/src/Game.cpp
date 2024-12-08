@@ -3,7 +3,7 @@
 //
 
 #include "../include/Game.h"
-#include "../../RGE/include/RGE.h"
+#include "../../RGE/include/Engine.h"
 
 Game::Game()
 {
@@ -18,15 +18,15 @@ Game::~Game() { Logger::Log("Game deconstruct called"); }
  */
 void Game::Setup()
 {
-    RGE::setupVars();
-    RGE::setupSDL();
-    RGE::setupRgeSDL();
-    RGE::setupGameSDL();
-    RGE::setupRegistry();
-    RGE::setupAssets();
-    RGE::setupObjects();
-    RGE::setupTMX();
-    RGE::setupImGui();
+    Engine::setupVars();
+    Engine::setupSDL();
+    Engine::setupRgeSDL();
+    Engine::setupGameSDL();
+    Engine::setupRegistry();
+    Engine::setupAssets();
+    Engine::setupObjects();
+    Engine::setupTMX();
+    Engine::setupImGui();
 
     // Set game running on
     isRunning = true;
@@ -41,9 +41,9 @@ void Game::Run()
     bool isGameRunning = true;
     while (isGameRunning)
     {
-        isGameRunning = RGE::processInput();
-        RGE::updateSystems();
-        RGE::render();
+        isGameRunning = Engine::processInput();
+        Engine::updateSystems();
+        Engine::render();
     }
 }
 
@@ -53,6 +53,6 @@ void Game::Run()
  */
 void Game::Destroy()
 {
-    RGE::destroy();
+    Engine::destroy();
 }
 
