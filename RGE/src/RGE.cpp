@@ -3,24 +3,18 @@
 //
 
 #include <iostream>
-#include <utility>
-#include "../include/Engine.h"
+#include "../include/RGE.h"
 
-namespace RGE
-{
-
-}
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 
-
 /**
- * Initial setup of the SDL and true type fonts
+ * @brief Initial setup of the SDL and true type fonts
  *
- * @return
+ * @return true / false
  */
-int Engine::setupSDL()
+int RGE::setupSDL()
 {
     // Setup SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -50,9 +44,9 @@ int Engine::setupSDL()
 /**
  * Setup game SDL window, renderer and camera
  *
- * @return -1 for errors
+ * @return true / false
  */
-int Engine::setupRgeSDL()
+int RGE::setupRgeSDL()
 {
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
@@ -60,7 +54,7 @@ int Engine::setupRgeSDL()
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
     rgeWindow = SDL_CreateWindow(
-            "Retro Game Engine v1",
+            "Retro Game RGE v1",
             GAME_WINDOW_WIDTH,
             0,
             (displayMode.w - GAME_WINDOW_WIDTH),
@@ -92,9 +86,9 @@ int Engine::setupRgeSDL()
 }
 
 /**
- * Initial setup of ImGui
+ * @brief Initial setup of ImGui
  */
-void Engine::setupImGui()
+void RGE::setupImGui()
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -114,9 +108,9 @@ void Engine::setupImGui()
 }
 
 /**
- * Call render on all objects
+ * @brief Call render on all objects
  */
-void Engine::render()
+void RGE::render()
 {
     SDL_SetRenderDrawColor(rgeRenderer, (Uint8)(rge_clear_color.x * 255), (Uint8)(rge_clear_color.y * 255), (Uint8)(rge_clear_color.z * 255), (Uint8)(rge_clear_color.w * 255));
     SDL_RenderClear(rgeRenderer);
@@ -154,9 +148,9 @@ void Engine::render()
 }
 
 /**
- * Initialise the registry with systems.
+ * @brief Initialise the registry with systems.
  */
-void Engine::setupRegistry()
+void RGE::setupRegistry()
 {
     // Add the systems that need to be processed in our game
     registry->AddSystem<MovementSystem>();
@@ -180,11 +174,11 @@ void Engine::setupRegistry()
 
 
 /**
- * Setup game SDL window, renderer and camera
+ * @brief Setup game SDL window, renderer and camera
  *
  * @return -1 for errors
  */
-int Engine::setupGameSDL()
+int RGE::setupGameSDL()
 {
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
@@ -223,10 +217,9 @@ int Engine::setupGameSDL()
 }
 
 /**
-  * Initialise the assetStore with pointers to png.
-  *
+  * @brief Initialise the assetStore with pointers to png.
  */
-void Engine::setupAssets()
+void RGE::setupAssets()
 {
     // Adding assets to the asset store
     assetStore->AddTexture(gameRenderer, "hud2", "../Game/assets/images/hud3.png");
@@ -243,9 +236,9 @@ void Engine::setupAssets()
 }
 
 /**
-* Initialise the player object with components.
+* @brief Initialise the player object with components.
  */
-void Engine::setupObjects()
+void RGE::setupObjects()
 {
     Entity player = registry->CreateEntity();
     player.AddTag("player");
@@ -282,7 +275,7 @@ void Engine::setupObjects()
  *
  * @return
  */
-int Engine::setupTMX()
+int RGE::setupTMX()
 {
     map.load(MAP_PATH);
 
@@ -368,8 +361,10 @@ int Engine::setupTMX()
  * window quit
  * keyboard
  */
-bool Engine::processInput()
+bool RGE::processInput()
 {
+    bool isQuit = true;
+
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
     {
@@ -378,8 +373,8 @@ bool Engine::processInput()
         ImGuiIO io = ImGui::GetIO();
         int mouseX;
         int mouseY;
-        const int buttons = SDL_GetMouseState(&mouseX, &mouseY);
-        io.MousePos = ImVec2(mouseX, mouseY);
+        const unsigned int buttons = SDL_GetMouseState(&mouseX, &mouseY);
+        io.MousePos = ImVec2((float)mouseX, (float)mouseY);
         io.MouseDown[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
         io.MouseDown[1] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
 
@@ -392,11 +387,12 @@ bool Engine::processInput()
         switch (sdlEvent.type)
         {
             case SDL_QUIT:
-                isRunning = false;
+                isQuit = false;
                 break;
 
             case SDL_KEYDOWN:
-                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isRunning = false; testBool = false; }
+                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isQuit = false; }
+//                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isRunning = false; isESC = false; }
                 if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
                 if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
@@ -408,19 +404,19 @@ bool Engine::processInput()
                 {
 
                     case SDL_WINDOWEVENT_CLOSE:
-                        isRunning = false;
+                        isQuit = false;
                         break;
                 }
                 break;
         }
     };
-    return testBool;
+    return isQuit;
 };
 
 /**
  * UpdateSystems
  */
-void Engine::updateSystems()
+void RGE::updateSystems()
 {
     // The difference in ticks since the last frame, converted to seconds
     double deltaTime = (SDL_GetTicks() - millisecsPreviouseFrame) / 1000.0;
@@ -448,7 +444,7 @@ void Engine::updateSystems()
 
 }
 
-void Engine::setupVars()
+void RGE::setupVars()
 {
     registry = std::make_unique<Registry>();
     assetStore = std::make_unique<AssetStore>();
@@ -458,7 +454,7 @@ void Engine::setupVars()
 /**
  * Destroy
  */
-void Engine::destroy()
+void RGE::destroy()
 {
     ImGui_ImplSDLRenderer2_Shutdown();
     ImGui_ImplSDL2_Shutdown();

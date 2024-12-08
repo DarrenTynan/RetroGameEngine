@@ -3,56 +3,53 @@
 //
 
 #include "../include/Game.h"
-#include "../../RGE/include/Engine.h"
+#include "../../RGE/include/RGE.h"
 
-Game::Game()
-{
-    Logger::Log("Game constructor called");
-}
+Game::Game() { Logger::Log("Game constructor called"); }
 
 Game::~Game() { Logger::Log("Game deconstruct called"); }
 
 
 /**
- * Setup the game data
+ * Function calls to setup: setupVars, setupSDL, setupRgeSDL, setupGameSDL, setupRegistry, setupAssets.
  */
 void Game::Setup()
 {
-    Engine::setupVars();
-    Engine::setupSDL();
-    Engine::setupRgeSDL();
-    Engine::setupGameSDL();
-    Engine::setupRegistry();
-    Engine::setupAssets();
-    Engine::setupObjects();
-    Engine::setupTMX();
-    Engine::setupImGui();
+    RGE::setupVars();
+    RGE::setupSDL();
+    RGE::setupRgeSDL();
+    RGE::setupGameSDL();
+    RGE::setupRegistry();
+    RGE::setupAssets();
+    RGE::setupObjects();
+    RGE::setupTMX();
+    RGE::setupImGui();
 
     // Set game running on
-    isRunning = true;
+//    isRunning = true;
 }
 
 
 /**
- * Main loop
+ * game main loop; processInputs, updateSystems and render
  */
 void Game::Run()
 {
     bool isGameRunning = true;
     while (isGameRunning)
     {
-        isGameRunning = Engine::processInput();
-        Engine::updateSystems();
-        Engine::render();
+        isGameRunning = RGE::processInput();
+        RGE::updateSystems();
+        RGE::render();
     }
 }
 
 
 /**
- * Destroy
+ * Destroy the RGE object.
  */
 void Game::Destroy()
 {
-    Engine::destroy();
+    RGE::destroy();
 }
 

@@ -62,28 +62,27 @@
 #include <tmxlite/Property.hpp>
 
 // Global vars
-static const int FPS = 60;
-static const int MILLISECS_PER_FRAME = 1000 / FPS;
-static ImVec4 game_clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
-static ImVec4 rge_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+//static const int FPS = 60;
+//static const int MILLISECS_PER_FRAME = 1000 / FPS;
+//static ImVec4 game_clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+//static ImVec4 rge_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 static std::unique_ptr<Registry> registry;
 static std::unique_ptr<AssetStore> assetStore;
 static std::unique_ptr<EventBus> eventBus;
 
-static bool isRunning = false;
+//static bool isRunning = false;
 static bool isCollider = false;
 static bool isRayCast = false;
 static bool isFullScreen = false;
-
-static bool testBool = true;
+//static bool testBool = true;
 
 static SDL_Rect rgeCamera;
 static SDL_Rect gameCamera;
 static SDL_Window* rgeWindow;
 static SDL_Renderer* rgeRenderer;
-const static int GAME_WINDOW_WIDTH = 800;
-const static int GAME_WINDOW_HEIGHT = 600;
+//const static int GAME_WINDOW_WIDTH = 800;
+//const static int GAME_WINDOW_HEIGHT = 600;
 
 static SDL_Window* gameWindow;
 static SDL_Renderer* gameRenderer;
@@ -94,17 +93,23 @@ static std::string mapImagePath;
 static tmx::Map map;
 
 static int millisecsPreviouseFrame = 0;
-static int windowWidth{};
-static int windowHeight{};
-static int mapWidth{};
-static int mapHeight{};
+static unsigned int mapWidth{};
+static unsigned int mapHeight{};
 
-
+/**
+ * @brief definition pf the class functions.
+ */
 class RGE
 {
 public:
+    static const int FPS = 60;
+    static const int MILLISECS_PER_FRAME = 1000 / FPS;
+    constexpr static const ImVec4 game_clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+    constexpr static const ImVec4 rge_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    const static int GAME_WINDOW_WIDTH = 800;
+    const static int GAME_WINDOW_HEIGHT = 600;
+
     static void setupVars();
-    static void sayHello();
     static int setupSDL();
     static int setupRgeSDL();
     static int setupGameSDL();

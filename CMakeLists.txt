@@ -4,13 +4,13 @@ project(RetroGameEngine)
 set(CMAKE_CXX_STANDARD 17)
 
 # Make my library fie.
-#add_library(Engine STATIC Engine/src/Engine.cpp)
+#add_library(RGE STATIC RGE/src/RGE.cpp)
 
 # Add main.cpp file of the project root directory as a source file
 set(SOURCE_FILES main.cpp
 #        Game/include/Game.h
         Game/src/Game.cpp
-#        Engine/include/Engine.h
+#        RGE/include/RGE.h
         RGE/src/RGE.cpp
 
         RGE/src/Logger/Logger.cpp
@@ -34,7 +34,7 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 include_directories(RGE/libs/imgui_docking/ RGE/libs/imgui_docking/backends/ Game/assets)
 
 # Line compiles but missing error.
-#target_link_libraries(${PROJECT_NAME} /Engine/libs/libRGE.a)
+#target_link_libraries(${PROJECT_NAME} /RGE/libs/libRGE.a)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)

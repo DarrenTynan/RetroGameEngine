@@ -11,7 +11,7 @@ int main()
     Game::Run();
     Game::Destroy();
 
-//    Engine::sayHello();
+//    RGE::sayHello();
 
     std::cout << "main.cpp exit" << std::endl;
     return 0;
