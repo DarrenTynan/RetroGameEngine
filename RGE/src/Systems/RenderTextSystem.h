@@ -5,7 +5,7 @@
 #ifndef RETRO_ENGINE_RENDERTEXTSYSTEM_H
 #define RETRO_ENGINE_RENDERTEXTSYSTEM_H
 
-#include "../ECS/ECS.h"
+#include "../ECS/include/ECS.h"
 #include "../Components/TextLabelComponent.h"
 #include "../AssetStore/AssetStore.h"
 #include <SDL2/SDL.h>

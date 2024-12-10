@@ -21,7 +21,7 @@
 #include <imgui_impl_sdlrenderer2.h>
 
 #include "../../RGE/src/Logger/Logger.h"
-#include "../../RGE/src/ECS/ECS.h"
+#include "../../RGE/src/ECS/include/ECS.h"
 #include "../../RGE/src/AssetStore/AssetStore.h"
 #include "../../RGE/src/EventBus/EventBus.h"
 

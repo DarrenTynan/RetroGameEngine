@@ -1,7 +1,7 @@
 #ifndef RENDERSYSTEM_H
 #define RENDERSYSTEM_H
 
-#include "../ECS/ECS.h"
+#include "../ECS/include/ECS.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../AssetStore/AssetStore.h"

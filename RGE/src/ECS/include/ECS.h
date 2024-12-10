@@ -14,7 +14,7 @@
 #include <memory>
 #include <deque>
 #include <algorithm>
-#include "../Logger/Logger.h"
+#include "../../Logger/Logger.h"
 
 const unsigned int MAX_COMPONENTS = 32;
 

@@ -1,7 +1,7 @@
 #ifndef DAMAGESYSTEM_H
 #define DAMAGESYSTEM_H
 
-#include "../ECS/ECS.h"
+#include "../ECS/include/ECS.h"
 #include "../Components/BoxColliderComponent.h"
 #include "../Components/ProjectileComponent.h"
 #include "../Components/HealthComponent.h"

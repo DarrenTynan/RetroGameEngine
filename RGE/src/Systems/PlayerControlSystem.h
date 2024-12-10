@@ -1,7 +1,7 @@
 #ifndef PLAYERCONTROLSYSTEM_H
 #define PLAYERCONTROLSYSTEM_H
 
-#include "../ECS/ECS.h"
+#include "../ECS/include/ECS.h"
 #include "../EventBus/EventBus.h"
 #include "../Events/KeyPressedEvent.h"
 #include "../Events/KeyReleasedEvent.h"

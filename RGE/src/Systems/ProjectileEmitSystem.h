@@ -1,7 +1,7 @@
 #ifndef PROJECTILEEMITSYSTEM_H
 #define PROJECTILEEMITSYSTEM_H
 
-#include "../ECS/ECS.h"
+#include "../ECS/include/ECS.h"
 #include "../EventBus/EventBus.h"
 #include "../Events/KeyPressedEvent.h"
 #include "../Components/TransformComponent.h"

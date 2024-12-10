@@ -5,7 +5,7 @@
 #ifndef RETRO_ENGINE_RENDERRAYCASTSYSTEM_H
 #define RETRO_ENGINE_RENDERRAYCASTSYSTEM_H
 
-#include "../ECS/ECS.h"
+#include "../ECS/include/ECS.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/RaycastComponent.h"

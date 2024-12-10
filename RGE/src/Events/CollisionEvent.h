@@ -1,7 +1,7 @@
 #ifndef COLLISIONEVENT_H
 #define COLLISIONEVENT_H
 
-#include "../ECS/ECS.h"
+#include "../ECS/include/ECS.h"
 #include "../EventBus/Event.h"
 
 class CollisionEvent: public Event {

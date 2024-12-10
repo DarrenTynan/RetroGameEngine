@@ -1,7 +1,7 @@
 #ifndef ANIMATIONSYSTEM_H
 #define ANIMATIONSYSTEM_H
 
-#include "../ECS/ECS.h"
+#include "../ECS/include/ECS.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/AnimationComponent.h"
 #include <SDL2/SDL.h>

@@ -6,7 +6,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
-#include "../ECS/ECS.h"
+#include "../ECS/include/ECS.h"
 #include "../EventBus/EventBus.h"
 #include "../Events/CollisionEvent.h"
 #include "../Components/BoxColliderComponent.h"

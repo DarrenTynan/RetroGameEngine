@@ -1,7 +1,7 @@
 #ifndef KEYPRESSEDEVENT_H
 #define KEYPRESSEDEVENT_H
 
-#include "../ECS/ECS.h"
+#include "../ECS/include/ECS.h"
 #include "../EventBus/Event.h"
 #include <SDL2/SDL.h>
 

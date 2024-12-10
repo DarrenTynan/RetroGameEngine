@@ -2,7 +2,7 @@
 // Created by Darren Tynan on 27/12/2022.
 //
 
-#include "ECS.h"
+#include "include/ECS.h"
 #include <string>
 #include <algorithm>
 
@@ -25,7 +25,7 @@ bool Entity::HasTag(const std::string &tag) const {
 }
 
 void Entity::Group(const std::string &group) {
-    registry->GroupEntity(*this, group);
+    registry->GroupTheEntity(*this, group);
 }
 
 bool Entity::BelongsToGroup(const std::string &group) const {
@@ -67,13 +67,13 @@ Entity Registry::GetEntityByTag(const std::string &tag) const {
 }
 
 
-void Registry::GroupEntity(Entity entity, const std::string &group) {
+void Registry::GroupTheEntity(Entity entity, const std::string &group) {
     namePerEntity.emplace(group, std::set < Entity > ());
     namePerEntity[group].emplace(entity);
     groupPerEntity.emplace(entity.GetId(), group);
 }
 
-void Registry::RemoveEntityGroup(Entity entity) {
+void Registry::RemoveEntityFromGroup(Entity entity) {
     // if in group, remove entity from group management
     auto groupedEntity = groupPerEntity.find(entity.GetId());
     if (groupedEntity != groupPerEntity.end()) {
@@ -163,7 +163,7 @@ void Registry::Update() {
 
         // Remove any traces of that entity from the tag/group maps
         RemoveEntityTag(entity);
-        RemoveEntityGroup(entity);
+        RemoveEntityFromGroup(entity);
     }
     entitiesToBeKilled.clear();
 }

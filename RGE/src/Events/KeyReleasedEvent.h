@@ -5,7 +5,7 @@
 #ifndef RETRO_ENGINE_KEYRELEASEDEVENT_H
 #define RETRO_ENGINE_KEYRELEASEDEVENT_H
 
-#include "../ECS/ECS.h"
+#include "../ECS/include/ECS.h"
 #include "../EventBus/Event.h"
 #include <SDL2/SDL.h>
 
