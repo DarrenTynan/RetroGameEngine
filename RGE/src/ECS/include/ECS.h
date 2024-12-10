@@ -18,8 +18,10 @@
 
 const unsigned int MAX_COMPONENTS = 32;
 
-// We use a bitset (1s and 0s) to keep track of which components an entity has,
-// and also helps keep track of which entities a system is interested in.
+/**
+ * We use a bitset (1s and 0s) to keep track of which components an entity has,
+ * and also helps keep track of which entities a system is interested in.
+ */
 typedef std::bitset<MAX_COMPONENTS> Signature;
 
 struct IComponent {
@@ -29,9 +31,9 @@ struct IComponent {
 
 
 /**
- * Return the unique id of Component<T>
+ * @brief Used to assign a unique id to a component type
  *
- * Used to assign a unique id to a component type
+ * Return the unique id of Component<T>
  *
  * @tparam T
  */
@@ -46,7 +48,7 @@ class Component: public IComponent {
 
 
 /**
- * A small class to hold data for entity.
+ * @brief A small class to hold data for entity.
  */
 class Entity
 {
@@ -84,7 +86,7 @@ public:
 
 
 /**
- * The system processes entities that contain a specific signature.
+ *  @brief The system processes entities that contain a specific signature.
  */
 class System {
     private:
@@ -106,9 +108,8 @@ class System {
 
 
 /**
- * IPool is just a vector (contiguous data) of objects of type T
+ * @brief IPool is just a vector (contiguous data) of objects of type T
  */
-
 class IPool {
     public:
         virtual ~IPool() = default;
@@ -116,7 +117,7 @@ class IPool {
 
 
 /**
- * A Pool class to hold pointers to entities spawned.
+ * @brief A Pool class to hold pointers to entities spawned.
  *
  * @tparam T
  */
@@ -141,7 +142,7 @@ class Pool: public IPool {
 
 
 /**
- * The registry manages the creation and destruction of entities,
+ * @brief The registry manages the creation and destruction of entities,
  * add systems, and components.
  */
 class Registry {
@@ -180,13 +181,11 @@ class Registry {
         std::deque<int> freeIds;
 
     public:
-        Registry() {
-            Logger::Log("Registry constructor called");
-        }
+        Registry() { Logger::Log("Registry constructor called"); }
 
-        ~Registry() {
-            Logger::Log("Registry destructor called");
-        }
+        ~Registry() { Logger::Log("Registry destructor called"); }
+
+        Entity GetEntityById(Entity entity, int _id);
 
         // The registry UpdateSystems() finally processes the entities that are waiting to be added/killed to the systems
         void Update();
@@ -202,10 +201,10 @@ class Registry {
         void RemoveEntityTag(Entity entity);
 
         // Group management
-        void GroupEntity(Entity entity, const std::string &group);
+        void GroupTheEntity(Entity entity, const std::string &group);
         [[nodiscard]] bool EntityBelongsToGroup(Entity entity, const std::string &group) const;
         [[nodiscard]] std::vector<Entity> GetEntitiesByGroup(const std::string &group) const;
-        void RemoveEntityGroup(Entity entity);
+        void RemoveEntityFromGroup(Entity entity);
 
         // Component management.
         template <typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
@@ -318,7 +317,6 @@ TComponent& Registry::GetComponent(Entity entity) const {
     return componentPool->Get(entityId);
 }
 
-//**********************************************************************************************************************
 template <typename TComponent>
 void Entity::RemoveComponent() {
     registry->RemoveComponent<TComponent>(*this);
@@ -330,12 +328,10 @@ bool Entity::HasComponent() const {
     return registry->HasComponent<TComponent>(*this);
 }
 
-
 template<typename TComponent, typename ...TArgs>
 void Entity::AddComponent(TArgs&& ...args) {
     registry->AddComponent<TComponent>(*this, std::forward<TArgs>(args)...);
 }
-
 
 template <typename TComponent>
 TComponent& Entity::GetComponent() const {
