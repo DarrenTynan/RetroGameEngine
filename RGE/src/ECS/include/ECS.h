@@ -19,6 +19,7 @@
 #include "Pool.h"
 #include "Component.h"
 
+//TODO moved it to a separate header file Component.h
 //const unsigned int MAX_COMPONENTS = 32;
 //
 ///**
@@ -110,7 +111,7 @@ class System {
 };
 
 
-//TODO moved it to a seperate header file Pool.h
+//TODO moved it to a separate header file Pool.h
 ///**
 // * @brief IPool is just a vector (contiguous data) of objects of type T
 // */
