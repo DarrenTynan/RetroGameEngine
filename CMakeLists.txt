@@ -29,6 +29,8 @@ set(SOURCE_FILES main.cpp
         RGE/src/ECS/include/Pool.h
         RGE/src/ECS/include/Component.h
         RGE/src/ECS/include/Entity.h
+        RGE/src/ECS/include/System.h
+        RGE/src/ECS/include/Registry.h
         #        RGE/src/ECS/include/Entity.h
 )
 
