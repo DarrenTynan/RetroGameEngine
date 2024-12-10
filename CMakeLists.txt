@@ -26,6 +26,8 @@ set(SOURCE_FILES main.cpp
         RGE/src/AssetStore/AssetStore.cpp
         RGE/src/ECS/ECS.cpp
         RGE/src/Logger/Logger.cpp
+        RGE/src/ECS/include/Pool.h
+        RGE/src/ECS/include/Component.h
 )
 
 # Add executable target with source files listed in SOURCE_FILES variable
