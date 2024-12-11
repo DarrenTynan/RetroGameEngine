@@ -15,7 +15,8 @@
 /**
  * Bounding box collision between two rect's.
  */
-class CollisionSystem: public System {
+class CollisionSystem: public System
+{
     public:
         CollisionSystem()
         {
@@ -65,6 +66,7 @@ class CollisionSystem: public System {
 
                     if (collision)
                     {
+                        Logger::Error("DEBUG - CollisionSystem.h");
                         Logger::Log("Entity " + std::to_string(a.GetId()) +
                         " " + aCollider.name + " collided with entity " +
                         std::to_string(b.GetId()) + " " + bCollider.name);
@@ -75,6 +77,7 @@ class CollisionSystem: public System {
 //                        playerRigidBodyComponent.setSpeed(40.0f);
 //                        playerRigidBodyComponent.setSpeed(74.0f);
 
+                        // Reverse player direction and bounce off object.
                         if (playerRigidBodyComponent.direction.x != 0)
                         {
                             playerRigidBodyComponent.direction.x = playerRigidBodyComponent.direction.x * -1;

@@ -4,10 +4,12 @@
 
 #ifndef RETROGAMEENGINE_SYSTEM_H
 #define RETROGAMEENGINE_SYSTEM_H
+
 /**
  *  @brief The system processes entities that contain a specific signature.
  */
-class System {
+class System
+{
 private:
     Signature componentSignature;
     std::vector<Entity> entities;
@@ -25,8 +27,14 @@ public:
     template <typename TComponent> void RequireComponent();
 };
 
+/**
+ * @brief A component is mandatory
+ *
+ * @tparam TComponent
+ */
 template <typename TComponent>
-void System::RequireComponent() {
+void System::RequireComponent()
+{
     const auto componentId = Component<TComponent>::GetId();
     componentSignature.set(componentId);
 }

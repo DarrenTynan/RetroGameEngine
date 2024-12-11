@@ -21,7 +21,7 @@ public:
     // Manage entity tags and groups
     void AddTag(const std::string &tag);
     [[nodiscard]] bool HasTag(const std::string &tag) const;
-    void Group(const std::string &group);
+    void AddGroupTag(const std::string &group);
     [[nodiscard]] bool BelongsToGroup(const std::string &group) const;
 
     // Operator overloading for entity objects

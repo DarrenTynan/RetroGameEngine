@@ -45,20 +45,6 @@ class RenderImGuiSystem: public System
 
     }
 
-//    int i = 0;
-//    for (std::vector<std::string>::iterator it = m_items.begin(); it != m_items.end(); ++it)
-//    {
-//        std::string itemid = "##" + std::to_string(i);
-//        if (ImGui::Selectable(itemid.c_str(), i == m_selectedItem))
-//        {
-//            m_selectedItem = i;
-//        }
-//        ImGui::SameLine();
-//        ImGui::Text("Item: ");
-//        ImGui::SameLine();
-//        ImGui::Text((*it).c_str());
-//        i++;
-//    }
     void ShowObjectWindow(const std::unique_ptr<Registry> &registry)
     {
         if (ImGui::Begin("Game Object"))
@@ -103,11 +89,14 @@ class RenderImGuiSystem: public System
                         ImGui::Text("ID: %d", selected);
                         ImGui::Text("DEUG");
 
+//                        auto entities = System::GetSystemEntities();
+
                         ImGui::EndTabItem();
                     }
                     ImGui::EndTabBar();
                 }
                 ImGui::EndChild();
+                ImGui::Separator();
                 if (ImGui::Button("Revert")) {}
                 ImGui::SameLine();
                 if (ImGui::Button("Save")) {}
@@ -120,7 +109,7 @@ class RenderImGuiSystem: public System
     }
 
 
-    void ShowTmxWindow(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
+    static void ShowTmxWindow(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
     {
         if (ImGui::Begin("TMX Map"))
         {
@@ -144,7 +133,7 @@ class RenderImGuiSystem: public System
 
     }
 
-    void ShowGameDebug(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
+    static void ShowGameDebug(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
     {
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
         if (ImGui::Begin("Game Debug"))
@@ -166,11 +155,30 @@ class RenderImGuiSystem: public System
 
                 if (ImGui::CollapsingHeader("Rigid Body"))
                 {
-                    RigidBodyComponent rb = player.GetComponent<RigidBodyComponent>();
+                    auto& rb = player.GetComponent<RigidBodyComponent>();
+                    auto& tc = player.GetComponent<TransformComponent>();
+
                     ImGui::Text("Direction: %.2f %.2f", rb.direction.x, rb.direction.y);
                     ImGui::Text("Delta: %.2f %.2f", rb.delta.x, rb.delta.y);
                     ImGui::Text("Speed: %.2f", rb.speed);
                     ImGui::Text("Gravity: %.2f", rb.gravity);
+                    ImGui::Text("Velocity multiplier: %.2f", rb.velocityMultiplier);
+
+                    static float speed = rb.speed;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Speed", &speed, 1.00f, 1.0f, "%.2f")) { rb.speed = speed; }
+
+                    static float gravity = rb.gravity;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Gravity", &gravity, 0.5f, 1.0f, "%.2f")) { rb.gravity = gravity;}
+
+                    static float multiplier = rb.velocityMultiplier;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Velocity Mult:", &multiplier, 1.00f, 1.0f, "%.2f")) { rb.velocityMultiplier = multiplier;}
+
+                    static float jump = rb.jumpForce;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Jump Force", &jump, 0.5f, 1.0f, "%.2f")) { rb.jumpForce = jump; };
                 }
 
                 ImGui::Spacing();
@@ -193,7 +201,7 @@ class RenderImGuiSystem: public System
     }
 
 
-    void ShowSpawnEntity(const std::unique_ptr<Registry>& registry)
+    static void ShowSpawnEntity(const std::unique_ptr<Registry>& registry)
     {
         if (ImGui::Begin("Spawn Entity"))
         {
@@ -229,7 +237,7 @@ class RenderImGuiSystem: public System
 
     // Demonstrate creating a simple static window with no decoration
     // + a context-menu to choose which corner of the screen to use.
-    void ShowWorldOverlay(bool* p_open, const SDL_Rect& camera)
+    static void ShowWorldOverlay(bool* p_open, const SDL_Rect& camera)
     {
         static int location = 0;
         ImGuiIO& io = ImGui::GetIO();

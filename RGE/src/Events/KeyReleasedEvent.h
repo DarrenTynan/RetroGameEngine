@@ -12,7 +12,7 @@
 class KeyReleasedEvent: public Event {
 public:
     SDL_Keycode symbol;
-    KeyReleasedEvent(SDL_Keycode symbol): symbol(symbol) {}
+    explicit KeyReleasedEvent(SDL_Keycode symbol): symbol(symbol) {}
 };
 
 #endif //RETRO_ENGINE_KEYRELEASEDEVENT_H

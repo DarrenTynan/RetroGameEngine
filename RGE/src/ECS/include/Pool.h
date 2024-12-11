@@ -6,9 +6,10 @@
 #define RETROGAMEENGINE_POOL_H
 
 /**
- * @brief IPool is just a vector (contiguous data) of objects of type T
+ * @brief Interface for the Pool class.
  */
-class IPool {
+class IPool
+{
 public:
     virtual ~IPool() = default;
 };
@@ -20,7 +21,8 @@ public:
  * @tparam T
  */
 template <typename T>
-class Pool: public IPool {
+class Pool: public IPool
+{
 private:
     std::vector<T> data;
 

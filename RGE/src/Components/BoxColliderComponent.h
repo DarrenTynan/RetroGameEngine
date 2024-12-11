@@ -2,25 +2,23 @@
 #define BOXCOLLIDERCOMPONENT_H
 
 #include <glm/glm.hpp>
+#include <utility>
 
-struct BoxColliderComponent {
+/**
+ * @brief A small struct to hold the box collider vars
+ */
+struct BoxColliderComponent
+{
     int width;
     int height;
-    glm::vec2 offset;
+    glm::vec2 offset{};
     std::string name;
 
-// OLD constructor
-//    BoxColliderComponent(int width = 0, int height = 0, glm::vec2 offset = glm::vec2(0)) {
-//        this->width = width;
-//        this->height = height;
-//        this->offset = offset;
-//    }
-
-    BoxColliderComponent(int width = 0, int height = 0,  std::string _name = "default", glm::vec2 offset = glm::vec2(0)) {
+    explicit BoxColliderComponent(int width = 0, int height = 0,  std::string name = "default", glm::vec2 offset = glm::vec2(0,0)) {
         this->width = width;
         this->height = height;
         this->offset = offset;
-        this->name = _name;
+        this->name = std::move(name);
     }
 };
 

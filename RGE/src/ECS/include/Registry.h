@@ -9,7 +9,8 @@
  * @brief The registry manages the creation and destruction of entities,
  * add systems, and components.
  */
-class Registry {
+class Registry
+{
 private:
     int numEntities = 0;
 
@@ -64,7 +65,7 @@ public:
     [[nodiscard]] Entity GetEntityByTag(const std::string &tag) const;
     void RemoveEntityTag(Entity entity);
 
-    // Group management
+    // AddGroupTag management
     void GroupTheEntity(Entity entity, const std::string &group);
     [[nodiscard]] bool EntityBelongsToGroup(Entity entity, const std::string &group) const;
     [[nodiscard]] std::vector<Entity> GetEntitiesByGroup(const std::string &group) const;

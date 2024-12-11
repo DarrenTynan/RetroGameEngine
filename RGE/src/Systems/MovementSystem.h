@@ -9,6 +9,9 @@
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
 
+/**
+ * @brief Movement system
+ */
 class MovementSystem: public System
 {
     public:
@@ -18,16 +21,20 @@ class MovementSystem: public System
             RequireComponent<RigidBodyComponent>();
         }
 
+        // Update position during Delta Time
         void Update(double deltaTime)
         {
+            // Check all entities.
             for (auto entity: GetSystemEntities())
             {
                 auto& transform = entity.GetComponent<TransformComponent>();
                 auto rigidBody = entity.GetComponent<RigidBodyComponent>();
 
+                // Apply the velocity
                 transform.position.x += (rigidBody.velocity.x * deltaTime);
                 transform.position.y += (rigidBody.velocity.y * deltaTime);
 
+                // Reset the transform position.
                 if (transform.position.x < 0) transform.position.x = 0;
                 if (transform.position.y < 0) transform.position.y = 0;
 

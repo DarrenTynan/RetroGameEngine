@@ -3,20 +3,34 @@
 
 #include <glm/glm.hpp>
 
-struct RigidBodyComponent {
-    glm::vec2 velocity;
+struct RigidBodyComponent
+{
+    glm::vec2 velocity{};
     glm::vec2 delta = glm::vec2(0.0, 0.0);
     glm::vec2 direction = glm::vec2 (0.0,0.0);
-    float speed = 74;
-    float gravity = 1.5;
+    float speed = 50.0f;
+    float gravity = 1.5f;
+    float jumpForce = 2.0f;
+    float velocityMultiplier = 0.5f;
+
+    [[nodiscard]] float getSpeed() const
+    {
+//        std::cout << "getSpeed() " << speed << std::endl;
+
+        return speed;
+    }
 
     void setSpeed(float _speed)
     {
-        this->speed = _speed;
+        std::cout << "setSpeed() " << _speed << std::endl;
+        RigidBodyComponent::speed = _speed;
+        std::cout << "after setSpeed " << _speed << std::endl;
+//        this->speed = _speed;
     }
 
 
-    RigidBodyComponent(glm::vec2 _velocity = glm::vec2(0.0, 0.0))
+
+    explicit RigidBodyComponent(glm::vec2 _velocity = glm::vec2(0.0, 0.0))
     {
         this->velocity = _velocity;
     }

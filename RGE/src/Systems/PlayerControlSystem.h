@@ -11,34 +11,45 @@
 #include "../Components/TransformComponent.h"
 #include <algorithm>
 
-class PlayerControlSystem: public System {
+/**
+ * @brief Player control system
+ */
+class PlayerControlSystem: public System
+{
     public:
-        PlayerControlSystem() {
+        PlayerControlSystem()
+        {
             RequireComponent<PlayerControllerComponent>();
             RequireComponent<SpriteComponent>();
             RequireComponent<RigidBodyComponent>();
             RequireComponent<TransformComponent>();
         }
 
-        void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus) {
+        // Subscribe to key pressed and key release event.
+        void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
+        {
             eventBus->SubscribeToEvent<KeyPressedEvent>(this, &PlayerControlSystem::OnKeyPressed);
             eventBus->SubscribeToEvent<KeyReleasedEvent>(this, &PlayerControlSystem::OnKeyReleased);
         }
 
-        void OnKeyPressed(KeyPressedEvent& event) {
-            for (auto entity: GetSystemEntities()) {
+        // Key pressed actions.
+        void OnKeyPressed(KeyPressedEvent& event)
+        {
+            for (auto entity: GetSystemEntities())
+            {
                 const auto playerComponent = entity.GetComponent<PlayerControllerComponent>();
                 auto& spriteComponent = entity.GetComponent<SpriteComponent>();
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
                 auto& transformComponent = entity.GetComponent<TransformComponent>();
 
-                switch (event.symbol) {
+                switch (event.symbol)
+                {
                     case SDLK_UP:
-                        rigidBodyComponent.direction.y = -1;
-                        rigidBodyComponent.velocity = playerComponent.upVelocity;
-//                        rigidBodyComponent.direction.x = -1;
-//                        rigidBodyComponent.velocity = playerComponent.upVelocity * (rigidBodyComponent.delta.y += 0.5);
-//                        rigidBodyComponent.delta.y = std::max(std::min(rigidBodyComponent.delta.y, 18.0f), -999.0f);
+//                        rigidBodyComponent.direction.y = -1;
+//                        rigidBodyComponent.velocity = playerComponent.upVelocity;
+                        rigidBodyComponent.direction.x = -1;
+                        rigidBodyComponent.velocity = playerComponent.upVelocity * (rigidBodyComponent.delta.y += rigidBodyComponent.velocityMultiplier);
+                        rigidBodyComponent.delta.y = std::max(std::min( rigidBodyComponent.delta.y, 18.0f ), -999.0f);
                         break;
                     case SDLK_RIGHT:
                         rigidBodyComponent.direction.x = 1;
@@ -60,14 +71,17 @@ class PlayerControlSystem: public System {
             }
         }
 
-        void OnKeyReleased(KeyReleasedEvent& event) {
-            for (auto entity: GetSystemEntities()) {
+        void OnKeyReleased(KeyReleasedEvent& event)
+        {
+            for (auto entity: GetSystemEntities())
+            {
                 const auto playerController = entity.GetComponent<PlayerControllerComponent>();
                 auto& sprite = entity.GetComponent<SpriteComponent>();
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
 //                auto& fsm = entity.GetComponent<StateMachineComponent>();
 
-                switch (event.symbol) {
+                switch (event.symbol)
+                {
                     case SDLK_UP:
                         rigidBodyComponent.direction = glm::vec2(0,0);
                         rigidBodyComponent.velocity = playerController.idleVelocity;
@@ -91,8 +105,7 @@ class PlayerControlSystem: public System {
             }
         }
 
-        void Update() {
-        }
+        void Update() { }
 
 //    static void move(Entity *e)
 //    {
