@@ -3,7 +3,8 @@
 
 #include <glm/glm.hpp>
 
-struct PlayerControllerComponent {
+struct PlayerControllerComponent
+{
     glm::vec2 upVelocity{};
     glm::vec2 rightVelocity{};
     glm::vec2 downVelocity{};

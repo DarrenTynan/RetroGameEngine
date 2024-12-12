@@ -8,16 +8,17 @@
 #include <functional>
 #include <list>
 
-class IEventCallback {
-    private:
-        virtual void Call(Event& e) = 0;
+class IEventCallback
+{
+private:
+    virtual void Call(Event& e) = 0;
 
-    public:
-        virtual ~IEventCallback() = default;
-        
-        void Execute(Event& e) {
-            Call(e);
-        }
+public:
+    virtual ~IEventCallback() = default;
+
+    void Execute(Event& e) {
+        Call(e);
+    }
 };
 
 template <typename TOwner, typename TEvent>

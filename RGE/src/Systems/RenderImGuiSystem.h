@@ -158,11 +158,15 @@ class RenderImGuiSystem: public System
                     auto& rb = player.GetComponent<RigidBodyComponent>();
                     auto& tc = player.GetComponent<TransformComponent>();
 
-                    ImGui::Text("Direction: %.2f %.2f", rb.direction.x, rb.direction.y);
-                    ImGui::Text("Delta: %.2f %.2f", rb.delta.x, rb.delta.y);
+                    ImGui::Text("Velocity: x: %.2f y: %.2f", rb.velocity.x, rb.velocity.y);
+                    ImGui::Text("Delta: x: %.2f y :%.2f", rb.delta.x, rb.delta.y);
+                    ImGui::Text("Direction: x: %.2f y: %.2f", rb.direction.x, rb.direction.y);
                     ImGui::Text("Speed: %.2f", rb.speed);
                     ImGui::Text("Gravity: %.2f", rb.gravity);
+                    ImGui::Text("Jump: %.2f", rb.gravity);
                     ImGui::Text("Velocity multiplier: %.2f", rb.velocityMultiplier);
+
+                    ImGui::Spacing();
 
                     static float speed = rb.speed;
                     ImGui::SetNextItemWidth(150.0);
@@ -174,11 +178,22 @@ class RenderImGuiSystem: public System
 
                     static float multiplier = rb.velocityMultiplier;
                     ImGui::SetNextItemWidth(150.0);
-                    if (ImGui::InputFloat("Velocity Mult:", &multiplier, 1.00f, 1.0f, "%.2f")) { rb.velocityMultiplier = multiplier;}
+                    if (ImGui::InputFloat("Velocity Mult:", &multiplier, 0.01f, 1.0f, "%.2f")) { rb.velocityMultiplier = multiplier;}
 
                     static float jump = rb.jumpForce;
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Jump Force", &jump, 0.5f, 1.0f, "%.2f")) { rb.jumpForce = jump; };
+                }
+
+                ImGui::Spacing();
+
+                if (ImGui::CollapsingHeader("Player Controller"))
+                {
+                    auto& pc = player.GetComponent<PlayerControllerComponent>();
+                    ImGui::Text("Up Velocity: x: %.2f y: %.2f", pc.upVelocity.x, pc.upVelocity.y);
+                    ImGui::Text("Right Velocity: x: %.2f y: %.2f", pc.rightVelocity.x, pc.rightVelocity.y);
+                    ImGui::Text("Down Velocity: x: %.2f y: %.2f", pc.downVelocity.x, pc.downVelocity.y);
+                    ImGui::Text("Left Velocity: x: %.2f y: %.2f", pc.leftVelocity.x, pc.rightVelocity.y);
                 }
 
                 ImGui::Spacing();

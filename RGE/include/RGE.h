@@ -119,7 +119,7 @@ public:
     static void setupAssets();
     static void setupObjects();
     static int setupTMX();
-    static bool processInput();
+    static bool processWindowInputs();
     static void updateSystems();
     static void destroy();
 

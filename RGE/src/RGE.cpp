@@ -248,8 +248,9 @@ void RGE::setupObjects()
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
     player.AddComponent<AnimationComponent>(6, 8, true);
 //    player.AddComponent<CameraFollowComponent>();
-    player.AddComponent<BoxColliderComponent>(32, 32, "PLAYER BOX");
 
+    player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(10,10));
+    player.GetComponent<BoxColliderComponent>().name = "PLAYER BOX";
 
     player.AddComponent<PlayerControllerComponent>(glm::vec2(0, -80.0), glm::vec2(80.0, 0), glm::vec2(0, 80.0), glm::vec2(-80.0, 0));
     player.AddComponent<HealthComponent>(100);
@@ -257,11 +258,15 @@ void RGE::setupObjects()
 //    player.AddComponent<StateMachineComponent>("idle");
 //    player.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
 
+
 //    Entity tank = registry->CreateEntity();
 //    tank.AddComponent<TransformComponent>(glm::vec2(0.0, 100.0), glm::vec2(2.0, 2.0), 0.0);
 //    tank.AddComponent<RigidBodyComponent>(glm::vec2(20.0, 0.0));
 //    tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1, false, 0, 0);
-//    tank.AddComponent<BoxColliderComponent>(32-10, 32-10, glm::vec2(10,10));
+//
+//    tank.AddComponent<BoxColliderComponent>(22, 22, glm::vec2(10,10));
+//    tank.GetComponent<BoxColliderComponent>().name = "TANK BOX";
+//
 //    tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
 
 //    Entity label = registry->CreateEntity();
@@ -293,7 +298,8 @@ int RGE::setupTMX()
                 {
                     //do stuff with object properties
                     Entity tile = registry->CreateEntity();
-                    tile.AddComponent<BoxColliderComponent>(object.getAABB().width, object.getAABB().height, "OBJECT BOX");
+                    tile.AddComponent<BoxColliderComponent>(object.getAABB().width, object.getAABB().height);
+                    tile.GetComponent<BoxColliderComponent>().name = "TILE BOX";
                     tile.AddComponent<TransformComponent>(glm::vec2(object.getAABB().left,  object.getAABB().top));
                     tile.AddTag("ground");
 
@@ -356,12 +362,12 @@ int RGE::setupTMX()
 }
 
 /**
- * Poll events:
+ * Poll window events:
  *
  * window quit
  * keyboard
  */
-bool RGE::processInput()
+bool RGE::processWindowInputs()
 {
     bool isQuit = true;
 
@@ -392,7 +398,6 @@ bool RGE::processInput()
 
             case SDL_KEYDOWN:
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isQuit = false; }
-//                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isRunning = false; isESC = false; }
                 if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
                 if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
