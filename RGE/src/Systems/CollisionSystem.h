@@ -13,7 +13,8 @@
 #include "../Components/TransformComponent.h"
 
 /**
- * Bounding box collision between two rect's.
+ * Bounding box collision between two box collider rect's.
+ * If a collision has happened to emit a signal (CollisionEvent)
  */
 class CollisionSystem: public System
 {
@@ -24,6 +25,7 @@ public:
         RequireComponent<BoxColliderComponent>();
     }
 
+    // Check entity bounding box for collision.
     void Update(std::unique_ptr<EventBus>& eventBus)
     {
         auto entities = GetSystemEntities();
@@ -74,34 +76,23 @@ public:
                     auto& playerControllerComponent = a.GetComponent<PlayerControllerComponent>();
                     auto& playerRigidBodyComponent = a.GetComponent<RigidBodyComponent>();
 
+                    // Check only for player object. Bounce back by 2 pixels away from object.
                     if (playerRigidBodyComponent.velocity.x != 0)
                     {
-                        if (std::signbit(playerRigidBodyComponent.velocity.x))
-                        {
-                            a.GetComponent<TransformComponent>().position.x += 2.0f;
-                        }
-                        if (!std::signbit(playerRigidBodyComponent.velocity.x))
-                        {
-                            a.GetComponent<TransformComponent>().position.x -= 2.0f;
-                        }
+                        if (std::signbit(playerRigidBodyComponent.velocity.x)) { a.GetComponent<TransformComponent>().position.x += 2.0f; }
+                        if (!std::signbit(playerRigidBodyComponent.velocity.x)) { a.GetComponent<TransformComponent>().position.x -= 2.0f; }
                         playerRigidBodyComponent.velocity.x = 0.0f;
-
-//                         Reverse player direction.
-//                        playerRigidBodyComponent.direction.x = playerRigidBodyComponent.direction.x * -1;
-//                         Bounce player off the object.
-//                        playerRigidBodyComponent.velocity.x = playerRigidBodyComponent.speed * playerRigidBodyComponent.direction.x;
                     }
-//
-//                    if (playerRigidBodyComponent.direction.y != 0)
-//                    {
-//                         Reverse player direction.
-//                        playerRigidBodyComponent.direction.y = playerRigidBodyComponent.direction.y * -1;
-//                         Bounce player off the object.
-//                        playerRigidBodyComponent.velocity.y = playerRigidBodyComponent.speed * playerRigidBodyComponent.direction.y;
-//                    }
 
-//                        a.Kill();
-//                        b.Kill();
+                    if (playerRigidBodyComponent.velocity.y != 0)
+                    {
+                        if (std::signbit(playerRigidBodyComponent.velocity.y)) { a.GetComponent<TransformComponent>().position.y += 2.0f; }
+                        if (!std::signbit(playerRigidBodyComponent.velocity.y)) { a.GetComponent<TransformComponent>().position.y -= 2.0f; }
+                        playerRigidBodyComponent.velocity.y = 0.0f;
+                    }
+
+//                    a.Kill();
+//                    b.Kill();
 
                     eventBus->EmitEvent<CollisionEvent>(a, b);
                 }

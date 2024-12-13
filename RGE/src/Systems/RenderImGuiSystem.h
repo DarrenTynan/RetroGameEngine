@@ -9,6 +9,7 @@
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
 #include "../ECS/include/ECS.h"
+#include "../ECS/include/Registry.h"
 
 class RenderImGuiSystem: public System
 {
@@ -58,14 +59,16 @@ class RenderImGuiSystem: public System
                 for (auto & entity : entities)
                 {
                     Entity a = entity;
-//                    std::cout << a.GetComponent<BoxColliderComponent>().name << std::endl;
+
                     std::string item_id = "##" + std::to_string(a.GetId());
+
                     if (ImGui::Selectable(item_id.c_str(), entity.GetId() == selected))
                     {
                         selected = entity.GetId();
                     }
                     ImGui::SameLine();
-                    ImGui::Text("Object: %i", a.GetId());
+                    auto tag = registry->GetTagById(a.GetId());
+                    ImGui::Text("ID: %i  Tag: %s", a.GetId(), tag.c_str());
                 }
                 ImGui::EndChild();
             }
@@ -75,31 +78,15 @@ class RenderImGuiSystem: public System
             {
                 ImGui::BeginGroup();
                 ImGui::BeginChild("item view", ImVec2(0, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
-                ImGui::Text("MyObject: %d", selected);
+                auto tag = registry->GetTagById(selected);
+                ImGui::Text("Game Objects:");
                 ImGui::Separator();
-                if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
-                {
-                    if (ImGui::BeginTabItem("Description"))
-                    {
-                        ImGui::TextWrapped("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
-                        ImGui::EndTabItem();
-                    }
-                    if (ImGui::BeginTabItem("Details"))
-                    {
-                        ImGui::Text("ID: %d", selected);
-                        ImGui::Text("DEUG");
 
-//                        auto entities = System::GetSystemEntities();
+                ImGui::Text("ID: %d", selected);
+                ImGui::Text("Tag: %s", tag.c_str());
 
-                        ImGui::EndTabItem();
-                    }
-                    ImGui::EndTabBar();
-                }
                 ImGui::EndChild();
                 ImGui::Separator();
-                if (ImGui::Button("Revert")) {}
-                ImGui::SameLine();
-                if (ImGui::Button("Save")) {}
                 ImGui::EndGroup();
             }
         }
@@ -107,7 +94,6 @@ class RenderImGuiSystem: public System
         ImGui::End();
 
     }
-
 
     static void ShowTmxWindow(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
     {

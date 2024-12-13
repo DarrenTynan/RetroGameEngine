@@ -8,6 +8,7 @@
 
 int IComponent::nextId = 0;
 
+
 /**
  * @brief Get the entity id
  *
@@ -32,23 +33,61 @@ void Entity::AddTag(const std::string &tag) { registry->TagEntity(*this, tag); }
  * @brief Has the entity got a tag?
  *
  * @param tag
- * @return
+ * @return true / false
  */
 bool Entity::HasTag(const std::string &tag) const { return registry->EntityHasTag(*this, tag); }
 
-/**
- * @brief Add the entity to a group
- *
- * @param group
- */
-void Entity::AddGroupTag(const std::string &group) { registry->GroupTheEntity(*this, group); }
+
+
+
+
+//************************************
+std::string Registry::GetTagById(int _id)
+{
+    auto taggedEntity = tagPerEntity.find(_id);
+    auto tag = taggedEntity->second;
+    return tag;
+
+//    if (taggedEntity != tagPerEntity.end())
+//    {
+//        auto tag = taggedEntity->second;
+//        entityPerTag.erase(tag);
+//        tagPerEntity.erase(taggedEntity);
+//    }
+
+    // Traversing an unordered map
+//    for (auto x : tagPerEntity)
+//        std::cout << x.first << " " << x.second << std::endl;
+//
+//    return "DEBUG 1";
+}
+//************************************
 
 /**
- * @brief Does the entity belong to a group?
- * @param group
- * @return
+ * @brief Update the entities. Either create new ones or kill off old ones.
  */
-bool Entity::BelongsToGroup(const std::string &group) const { return registry->EntityBelongsToGroup(*this, group); }
+void Registry::Update()
+{
+    // Add the entities that are waiting to be created to the active Systems
+    for (auto entity: entitiesToBeAdded)
+    {
+        AddEntityToSystems(entity);
+    }
+    entitiesToBeAdded.clear();
+
+    // Remove the entities that are waiting to be killed from the active Systems
+    for (auto entity: entitiesToBeKilled)
+    {
+        RemoveEntityFromSystems(entity);
+        entityComponentSignatures[entity.GetId()].reset();
+        freeIds.push_back(entity.GetId());
+
+        // Remove any traces of that entity from the tag/group maps
+        RemoveEntityTag(entity);
+        RemoveEntityFromGroup(entity);
+    }
+    entitiesToBeKilled.clear();
+}
 
 /**
  * @brief Tag entity
@@ -61,15 +100,7 @@ void Registry::TagEntity(Entity entity, const std::string &tag)
     entityPerTag.emplace(tag, entity);
     tagPerEntity.emplace(entity.GetId(), tag);
 
-    // GH
-//    nameOfEntity.emplace(entity.GetId(), tag);
-
 }
-
-// GH
-//Entity Registry::GetTagByEntity(const int _id) const {
-//    return namePerEntity.key_eq(_id);
-//}
 
 /**
  * @brief Remove tag from the entity
@@ -110,6 +141,22 @@ bool Registry::EntityHasTag(Entity entity, const std::string &tag) const
  * @return
  */
 Entity Registry::GetEntityByTag(const std::string &tag) const { return entityPerTag.at(tag); }
+
+
+/**
+ * @brief Add the entity to a group
+ *
+ * @param group
+ */
+void Entity::AddGroupTag(const std::string &group) { registry->GroupTheEntity(*this, group); }
+
+/**
+ * @brief Does the entity belong to a group?
+ *
+ * @param group
+ * @return
+ */
+bool Entity::BelongsToGroup(const std::string &group) const { return registry->EntityBelongsToGroup(*this, group); }
 
 /**
  * @brief Group the entity
@@ -179,6 +226,7 @@ std::vector<Entity> Registry::GetEntitiesByGroup(const std::string& group) const
     return std::vector<Entity>(setOfEntities.begin(), setOfEntities.end());
 }
 
+
 /**
  * @brief Create a new entity object
  *
@@ -187,7 +235,6 @@ std::vector<Entity> Registry::GetEntitiesByGroup(const std::string& group) const
 Entity Registry::CreateEntity()
 {
     int entityId;
-
 
     if (freeIds.empty())
     {
@@ -235,31 +282,6 @@ void Registry::AddEntityToSystems(Entity entity)
     }
 }
 
-/**
- * @brief Update the entities. Either create new ones or kill off old ones.
- */
-void Registry::Update()
-{
-    // Add the entities that are waiting to be created to the active Systems
-    for (auto entity: entitiesToBeAdded)
-    {
-        AddEntityToSystems(entity);
-    }
-    entitiesToBeAdded.clear();
-
-    // Remove the entities that are waiting to be killed from the active Systems
-    for (auto entity: entitiesToBeKilled)
-    {
-        RemoveEntityFromSystems(entity);
-        entityComponentSignatures[entity.GetId()].reset();
-        freeIds.push_back(entity.GetId());
-
-        // Remove any traces of that entity from the tag/group maps
-        RemoveEntityTag(entity);
-        RemoveEntityFromGroup(entity);
-    }
-    entitiesToBeKilled.clear();
-}
 
 /**
  * @brief Kill off the given entity
