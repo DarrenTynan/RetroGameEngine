@@ -58,7 +58,8 @@ int RGE::setupRgeSDL()
             GAME_WINDOW_WIDTH,
             0,
             (displayMode.w - GAME_WINDOW_WIDTH),
-            displayMode.h,
+            GAME_WINDOW_HEIGHT,
+//            displayMode.h,
             windowFlags
     );
 
@@ -243,7 +244,7 @@ void RGE::setupObjects()
     Entity player = registry->CreateEntity();
     player.AddTag("player");
 
-    player.AddComponent<TransformComponent>(glm::vec2(256, 256), glm::vec2(1.0, 1.0), 0.0);
+    player.AddComponent<TransformComponent>(glm::vec2(256, 32*14), glm::vec2(1.0, 1.0), 0.0);
     player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
     player.AddComponent<AnimationComponent>(6, 8, true);

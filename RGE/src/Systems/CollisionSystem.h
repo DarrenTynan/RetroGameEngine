@@ -73,26 +73,11 @@ public:
 //                    " " + aCollider.name + " collided with entity " +
 //                    std::to_string(b.GetId()) + " " + bCollider.name);
 
-                    auto& playerControllerComponent = a.GetComponent<PlayerControllerComponent>();
-                    auto& playerRigidBodyComponent = a.GetComponent<RigidBodyComponent>();
-
-                    // Check only for player object. Bounce back by 2 pixels away from object.
-                    if (playerRigidBodyComponent.velocity.x != 0)
+                    if (a.HasTag("player"))
                     {
-                        if (std::signbit(playerRigidBodyComponent.velocity.x)) { a.GetComponent<TransformComponent>().position.x += 2.0f; }
-                        if (!std::signbit(playerRigidBodyComponent.velocity.x)) { a.GetComponent<TransformComponent>().position.x -= 2.0f; }
-                        playerRigidBodyComponent.velocity.x = 0.0f;
+                        a.GetComponent<RigidBodyComponent>().isGrounded = true;
+                        a.GetComponent<TransformComponent>().position.y -= 2.0;
                     }
-
-                    if (playerRigidBodyComponent.velocity.y != 0)
-                    {
-                        if (std::signbit(playerRigidBodyComponent.velocity.y)) { a.GetComponent<TransformComponent>().position.y += 2.0f; }
-                        if (!std::signbit(playerRigidBodyComponent.velocity.y)) { a.GetComponent<TransformComponent>().position.y -= 2.0f; }
-                        playerRigidBodyComponent.velocity.y = 0.0f;
-                    }
-
-//                    a.Kill();
-//                    b.Kill();
 
                     eventBus->EmitEvent<CollisionEvent>(a, b);
                 }

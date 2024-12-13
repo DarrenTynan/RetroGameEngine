@@ -42,15 +42,11 @@ class PlayerControlSystem: public System
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
                 auto& transformComponent = entity.GetComponent<TransformComponent>();
 
-                // std::max
-                // a: First value to be compared.
-                // b: Second value to be compared.
-                // comp: Binary function that accepts two values and returns a value convertible to bool.
-                // It is optional and by default set to return true if the first element is larger than second.
                 switch (event.symbol)
                 {
                     case SDLK_UP:
                         rigidBodyComponent.velocity = playerComponent.upVelocity;
+                        rigidBodyComponent.isGrounded = false;
                         break;
                     case SDLK_RIGHT:
                         rigidBodyComponent.velocity = playerComponent.rightVelocity;

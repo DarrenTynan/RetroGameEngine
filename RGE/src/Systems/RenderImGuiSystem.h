@@ -150,6 +150,7 @@ class RenderImGuiSystem: public System
                     ImGui::Text("Gravity: %.2f", rb.gravity);
                     ImGui::Text("Jump: %.2f", rb.gravity);
                     ImGui::Text("Velocity multiplier: %.2f", rb.velocityMultiplier);
+                    ImGui::Text("Player on ground: %i", rb.isGrounded);
 
                     ImGui::Spacing();
 

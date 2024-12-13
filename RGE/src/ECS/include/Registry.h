@@ -53,9 +53,6 @@ public:
     // Testing function
     std::string GetTagById(int _id);
 
-    // Maybe ununsed?
-//    Entity GetEntityById(Entity entity, int _id);
-
     // The registry UpdateSystems() finally processes the entities that are waiting to be added/killed to the systems
     void Update();
 
