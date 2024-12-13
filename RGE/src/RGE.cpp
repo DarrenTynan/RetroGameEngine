@@ -250,7 +250,6 @@ void RGE::setupObjects()
 //    player.AddComponent<CameraFollowComponent>();
 
     player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
-    player.GetComponent<BoxColliderComponent>().name = "PLAYER BOX";
 
     player.AddComponent<PlayerControllerComponent>(glm::vec2(0, -80.0), glm::vec2(80.0, 0), glm::vec2(0, 80.0), glm::vec2(-80.0, 0));
     player.AddComponent<HealthComponent>(100);
@@ -265,7 +264,6 @@ void RGE::setupObjects()
 //    tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1, false, 0, 0);
 //
 //    tank.AddComponent<BoxColliderComponent>(22, 22, glm::vec2(10,10));
-//    tank.GetComponent<BoxColliderComponent>().name = "TANK BOX";
 //
 //    tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
 
@@ -299,9 +297,8 @@ int RGE::setupTMX()
                     //do stuff with object properties
                     Entity tile = registry->CreateEntity();
                     tile.AddComponent<BoxColliderComponent>(object.getAABB().width, object.getAABB().height);
-                    tile.GetComponent<BoxColliderComponent>().name = "TILE BOX";
                     tile.AddComponent<TransformComponent>(glm::vec2(object.getAABB().left,  object.getAABB().top));
-                    tile.AddTag("ground");
+                    tile.AddTag("object");
 
                 }
             }

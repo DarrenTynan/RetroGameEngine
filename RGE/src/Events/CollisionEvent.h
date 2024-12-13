@@ -11,8 +11,8 @@ public:
     Entity b;
     CollisionEvent(Entity a, Entity b): a(a), b(b)
     {
-        a.Kill();
-        b.Kill();
+//        a.Kill();
+//        b.Kill();
     }
 };
 

@@ -68,10 +68,10 @@ public:
 
                 if (collision)
                 {
-                    Logger::Error("DEBUG - CollisionSystem.h");
-                    Logger::Log("Entity " + std::to_string(a.GetId()) +
-                    " " + aCollider.name + " collided with entity " +
-                    std::to_string(b.GetId()) + " " + bCollider.name);
+//                    Logger::Error("DEBUG - CollisionSystem.h");
+//                    Logger::Log("Entity " + std::to_string(a.GetId()) +
+//                    " " + aCollider.name + " collided with entity " +
+//                    std::to_string(b.GetId()) + " " + bCollider.name);
 
                     auto& playerControllerComponent = a.GetComponent<PlayerControllerComponent>();
                     auto& playerRigidBodyComponent = a.GetComponent<RigidBodyComponent>();

@@ -8,7 +8,6 @@
 
 int IComponent::nextId = 0;
 
-
 /**
  * @brief Get the entity id
  *
@@ -40,28 +39,18 @@ bool Entity::HasTag(const std::string &tag) const { return registry->EntityHasTa
 
 
 
-
-//************************************
+/**
+ * @brief Get the tag by id.
+ *
+ * @param _id
+ * @return string tag name
+ */
 std::string Registry::GetTagById(int _id)
 {
     auto taggedEntity = tagPerEntity.find(_id);
     auto tag = taggedEntity->second;
     return tag;
-
-//    if (taggedEntity != tagPerEntity.end())
-//    {
-//        auto tag = taggedEntity->second;
-//        entityPerTag.erase(tag);
-//        tagPerEntity.erase(taggedEntity);
-//    }
-
-    // Traversing an unordered map
-//    for (auto x : tagPerEntity)
-//        std::cout << x.first << " " << x.second << std::endl;
-//
-//    return "DEBUG 1";
 }
-//************************************
 
 /**
  * @brief Update the entities. Either create new ones or kill off old ones.
@@ -99,7 +88,6 @@ void Registry::TagEntity(Entity entity, const std::string &tag)
 {
     entityPerTag.emplace(tag, entity);
     tagPerEntity.emplace(entity.GetId(), tag);
-
 }
 
 /**

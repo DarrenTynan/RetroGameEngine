@@ -68,7 +68,7 @@ class RenderImGuiSystem: public System
                     }
                     ImGui::SameLine();
                     auto tag = registry->GetTagById(a.GetId());
-                    ImGui::Text("ID: %i  Tag: %s", a.GetId(), tag.c_str());
+                    ImGui::Text("ID: %02i  Tag: %s", a.GetId(), tag.c_str());
                 }
                 ImGui::EndChild();
             }
@@ -82,7 +82,7 @@ class RenderImGuiSystem: public System
                 ImGui::Text("Game Objects:");
                 ImGui::Separator();
 
-                ImGui::Text("ID: %d", selected);
+                ImGui::Text("ID: %02i", selected);
                 ImGui::Text("Tag: %s", tag.c_str());
 
                 ImGui::EndChild();
