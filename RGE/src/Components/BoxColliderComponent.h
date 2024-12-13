@@ -10,7 +10,6 @@
  * @param int width
  * @param int height
  * @param vec2 offset
- * @param string name
  */
 struct BoxColliderComponent
 {

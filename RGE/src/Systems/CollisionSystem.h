@@ -74,21 +74,31 @@ public:
                     auto& playerControllerComponent = a.GetComponent<PlayerControllerComponent>();
                     auto& playerRigidBodyComponent = a.GetComponent<RigidBodyComponent>();
 
-                    if (playerRigidBodyComponent.direction.x != 0)
+                    if (playerRigidBodyComponent.velocity.x != 0)
                     {
-                        // Reverse player direction.
-                        playerRigidBodyComponent.direction.x = playerRigidBodyComponent.direction.x * -1;
-                        // Bounce player off the object.
-                        playerRigidBodyComponent.velocity.x = (playerRigidBodyComponent.speed * playerRigidBodyComponent.direction.x);
-                    }
+                        if (std::signbit(playerRigidBodyComponent.velocity.x))
+                        {
+                            a.GetComponent<TransformComponent>().position.x += 2.0f;
+                        }
+                        if (!std::signbit(playerRigidBodyComponent.velocity.x))
+                        {
+                            a.GetComponent<TransformComponent>().position.x -= 2.0f;
+                        }
+                        playerRigidBodyComponent.velocity.x = 0.0f;
 
-                    if (playerRigidBodyComponent.direction.y != 0)
-                    {
-                        // Reverse player direction.
-                        playerRigidBodyComponent.direction.y = playerRigidBodyComponent.direction.y * -1;
-                        // Bounce player off the object.
-                        playerRigidBodyComponent.velocity.y = (playerRigidBodyComponent.speed * playerRigidBodyComponent.direction.y);
+//                         Reverse player direction.
+//                        playerRigidBodyComponent.direction.x = playerRigidBodyComponent.direction.x * -1;
+//                         Bounce player off the object.
+//                        playerRigidBodyComponent.velocity.x = playerRigidBodyComponent.speed * playerRigidBodyComponent.direction.x;
                     }
+//
+//                    if (playerRigidBodyComponent.direction.y != 0)
+//                    {
+//                         Reverse player direction.
+//                        playerRigidBodyComponent.direction.y = playerRigidBodyComponent.direction.y * -1;
+//                         Bounce player off the object.
+//                        playerRigidBodyComponent.velocity.y = playerRigidBodyComponent.speed * playerRigidBodyComponent.direction.y;
+//                    }
 
 //                        a.Kill();
 //                        b.Kill();

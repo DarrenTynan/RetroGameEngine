@@ -42,7 +42,6 @@ class PlayerControlSystem: public System
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
                 auto& transformComponent = entity.GetComponent<TransformComponent>();
 
-
                 // std::max
                 // a: First value to be compared.
                 // b: Second value to be compared.
@@ -51,32 +50,17 @@ class PlayerControlSystem: public System
                 switch (event.symbol)
                 {
                     case SDLK_UP:
-//                        rigidBodyComponent.direction.y = -1;
-//                        rigidBodyComponent.velocity = playerComponent.upVelocity;
-                        rigidBodyComponent.direction.y = -1;
-                        rigidBodyComponent.velocity = playerComponent.upVelocity * (rigidBodyComponent.delta.y += rigidBodyComponent.velocityMultiplier);
-                        rigidBodyComponent.delta.y = std::max(std::min( rigidBodyComponent.delta.y, 10.0f ), -999.0f);
-
-                        // Apply the velocity
-//                        transform.position.x += (rigidBody.velocity.x * deltaTime);
-//                        transform.position.y += (rigidBody.velocity.y * deltaTime);
+                        rigidBodyComponent.velocity = playerComponent.upVelocity;
                         break;
                     case SDLK_RIGHT:
-                        rigidBodyComponent.direction.x = 1;
-//                        rigidBodyComponent.velocity.x = (rigidBodyComponent.speed * rigidBodyComponent.direction.x);
-                        rigidBodyComponent.velocity = playerComponent.rightVelocity * (rigidBodyComponent.delta.x += rigidBodyComponent.velocityMultiplier);
-                        rigidBodyComponent.delta.x = std::max(std::min( rigidBodyComponent.delta.x, 10.0f ), -999.0f);
+                        rigidBodyComponent.velocity = playerComponent.rightVelocity;
                         spriteComponent.flipH = false;
                         break;
                     case SDLK_DOWN:
-                        rigidBodyComponent.direction.y = 1;
                         rigidBodyComponent.velocity = playerComponent.downVelocity;
-                        rigidBodyComponent.delta.y = std::max(std::min( rigidBodyComponent.delta.y, 10.0f ), -999.0f);
                         break;
                     case SDLK_LEFT:
-                        rigidBodyComponent.direction.x = -1;
-                        rigidBodyComponent.velocity.x = (rigidBodyComponent.speed * rigidBodyComponent.direction.x);
-                        rigidBodyComponent.delta.x = std::max(std::min( rigidBodyComponent.delta.y, 10.0f ), -999.0f);
+                        rigidBodyComponent.velocity = playerComponent.leftVelocity;
                         spriteComponent.flipH = true;
                         break;
                     default:
@@ -97,20 +81,16 @@ class PlayerControlSystem: public System
                 switch (event.symbol)
                 {
                     case SDLK_UP:
-                        rigidBodyComponent.direction = glm::vec2(0,0);
                         rigidBodyComponent.velocity = playerController.idleVelocity;
 //                        fsm.currentState = "walk_up";
                         break;
                     case SDLK_RIGHT:
-                        rigidBodyComponent.direction = glm::vec2(0,0);
                         rigidBodyComponent.velocity = playerController.idleVelocity;
                         break;
                     case SDLK_DOWN:
-                        rigidBodyComponent.direction = glm::vec2(0,0);
                         rigidBodyComponent.velocity = playerController.idleVelocity;
                         break;
                     case SDLK_LEFT:
-                        rigidBodyComponent.direction = glm::vec2(0,0);
                         rigidBodyComponent.velocity = playerController.idleVelocity;
                         break;
                     default:

@@ -243,13 +243,13 @@ void RGE::setupObjects()
     Entity player = registry->CreateEntity();
     player.AddTag("player");
 
-    player.AddComponent<TransformComponent>(glm::vec2(256, 256), glm::vec2(2.0, 2.0), 0.0);
+    player.AddComponent<TransformComponent>(glm::vec2(256, 256), glm::vec2(1.0, 1.0), 0.0);
     player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
     player.AddComponent<AnimationComponent>(6, 8, true);
 //    player.AddComponent<CameraFollowComponent>();
 
-    player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(10,10));
+    player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
     player.GetComponent<BoxColliderComponent>().name = "PLAYER BOX";
 
     player.AddComponent<PlayerControllerComponent>(glm::vec2(0, -80.0), glm::vec2(80.0, 0), glm::vec2(0, 80.0), glm::vec2(-80.0, 0));
