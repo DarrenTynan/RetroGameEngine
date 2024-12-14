@@ -5,25 +5,13 @@
 #ifndef RETRO_ENGINE_STATEMACHINECOMPONENT_H
 #define RETRO_ENGINE_STATEMACHINECOMPONENT_H
 #include <string>
+#include <utility>
 
-struct Entity {
-    float x;
-    float y;
-    int w;
-    int h;
-    float dx;
-    float dy;
-    int isOnGround;
-    SDL_Texture *texture;
-    long flags;
-    Entity *next;
-};
-struct StateMachineComponent {
+struct StateMachineComponent
+{
     std::string currentState;
 
-    StateMachineComponent(std::string state = "idle") {
-        this->currentState = state;
-    }
+    explicit StateMachineComponent(std::string state = "idle") { this->currentState = std::move(state); }
 
 };
 

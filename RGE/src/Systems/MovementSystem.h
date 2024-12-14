@@ -41,6 +41,11 @@ public:
 //                ", " + std::to_string(transform.position.y));
             }
 
+//            if (entity.HasTag("player") && rigidBody.isGrounded)
+//            {
+//                gravity = -40.0;
+//            }
+
             // Apply the velocity
             transform.position.x += (rigidBody.velocity.x * deltaTime);
             transform.position.y += (rigidBody.velocity.y + gravity) * deltaTime;

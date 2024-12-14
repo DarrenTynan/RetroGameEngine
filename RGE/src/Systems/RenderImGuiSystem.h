@@ -129,7 +129,7 @@ class RenderImGuiSystem: public System
             if (ImGui::CollapsingHeader("Player Entity"))
             {
                 ImGui::Text("Player ID: %i",  player.GetId());
-//                ImGui::Text("Player Name: %s",  player.name_ptr);
+                ImGui::Text("Player State: %s",  player.GetComponent<StateMachineComponent>().currentState.c_str());
 
                 if (ImGui::CollapsingHeader("Transform"))
                 {
@@ -146,10 +146,10 @@ class RenderImGuiSystem: public System
 
                     ImGui::Text("Velocity: x: %.2f y: %.2f", rb.velocity.x, rb.velocity.y);
                     ImGui::Text("Delta: x: %.2f y :%.2f", rb.delta.x, rb.delta.y);
-                    ImGui::Text("Speed: %.2f", rb.speed);
-                    ImGui::Text("Gravity: %.2f", rb.gravity);
-                    ImGui::Text("Jump: %.2f", rb.gravity);
-                    ImGui::Text("Velocity multiplier: %.2f", rb.velocityMultiplier);
+//                    ImGui::Text("Speed: %.2f", rb.speed);
+//                    ImGui::Text("Gravity: %.2f", rb.gravity);
+//                    ImGui::Text("Jump: %.2f", rb.gravity);
+//                    ImGui::Text("Velocity multiplier: %.2f", rb.velocityMultiplier);
                     ImGui::Text("Player on ground: %i", rb.isGrounded);
 
                     ImGui::Spacing();

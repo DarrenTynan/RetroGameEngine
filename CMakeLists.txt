@@ -31,6 +31,8 @@ set(SOURCE_FILES main.cpp
         RGE/src/ECS/include/Entity.h
         RGE/src/ECS/include/System.h
         RGE/src/ECS/include/Registry.h
+        RGE/src/FSM/Light.cpp
+        RGE/src/FSM/ConcreteLightState.cpp
         #        RGE/src/ECS/include/Entity.h
 )
 

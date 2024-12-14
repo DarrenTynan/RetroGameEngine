@@ -41,23 +41,32 @@ class PlayerControlSystem: public System
                 auto& spriteComponent = entity.GetComponent<SpriteComponent>();
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
                 auto& transformComponent = entity.GetComponent<TransformComponent>();
+                auto& stateMachineComponent = entity.GetComponent<StateMachineComponent>();
 
                 switch (event.symbol)
                 {
                     case SDLK_UP:
                         rigidBodyComponent.velocity = playerComponent.upVelocity;
                         rigidBodyComponent.isGrounded = false;
+                        stateMachineComponent.currentState = "up";
                         break;
                     case SDLK_RIGHT:
                         rigidBodyComponent.velocity = playerComponent.rightVelocity;
                         spriteComponent.flipH = false;
+                        stateMachineComponent.currentState = "right";
                         break;
                     case SDLK_DOWN:
                         rigidBodyComponent.velocity = playerComponent.downVelocity;
+                        stateMachineComponent.currentState = "down";
                         break;
                     case SDLK_LEFT:
                         rigidBodyComponent.velocity = playerComponent.leftVelocity;
                         spriteComponent.flipH = true;
+                        stateMachineComponent.currentState = "left";
+                        break;
+                    case SDLK_SPACE:
+                        rigidBodyComponent.velocity = playerComponent.upVelocity;
+                        rigidBodyComponent.isGrounded = false;
                         break;
                     default:
                         break;
