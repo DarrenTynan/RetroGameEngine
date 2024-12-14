@@ -97,7 +97,7 @@ void RGE::setupImGui()
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 //    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
+    io.Fonts->AddFontFromFileTTF("../RGE/include/zx-spectrum.ttf", 12.f);
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 //    ImGui::StyleColorsLight();

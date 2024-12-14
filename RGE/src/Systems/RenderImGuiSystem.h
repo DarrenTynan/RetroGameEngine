@@ -15,10 +15,10 @@ class RenderImGuiSystem: public System
 {
     public:
         RenderImGuiSystem() = default;
-        bool show_world_overlay = true;
-        bool show_game_debug = true;
-        bool show_demo_window = true;
-        bool show_spawn_entity = true;
+        bool show_world_overlay = false;
+        bool show_player_debug = true;
+        bool show_demo_window = false;
+        bool show_spawn_entity = false;
         bool show_tmx_window = true;
         bool show_object_window = true;
 
@@ -30,7 +30,7 @@ class RenderImGuiSystem: public System
         ImGui::NewFrame();
 
         if (show_world_overlay) ShowWorldOverlay(&show_world_overlay, camera);
-        if (show_game_debug) ShowGameDebug(registry, camera);
+        if (show_player_debug) ShowGameDebug(registry, camera);
         if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
         if (show_spawn_entity) ShowSpawnEntity(registry);
         if (show_tmx_window) ShowTmxWindow(registry, camera);
