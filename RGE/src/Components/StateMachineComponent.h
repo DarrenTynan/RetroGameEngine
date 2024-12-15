@@ -7,13 +7,11 @@
 #include <string>
 #include <utility>
 
-#include "../PlayerFSM/include/Entity.h"
-#include "../PlayerFSM/Entity.cpp"
+#include "../../RGE/src/FSM/include/FSM.h"
 
 struct StateMachineComponent
 {
     std::string currentState;
-    Entity *entity = new Entity();
 
     explicit StateMachineComponent(std::string state = "idle")
     {

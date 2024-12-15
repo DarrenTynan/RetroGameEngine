@@ -81,13 +81,13 @@ class PlayerControlSystem: public System
                 const auto playerController = entity.GetComponent<PlayerControllerComponent>();
                 auto& sprite = entity.GetComponent<SpriteComponent>();
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
-//                auto& fsm = entity.GetComponent<StateMachineComponent>();
+//                auto& FSM = entity.GetComponent<StateMachineComponent>();
 
                 switch (event.symbol)
                 {
                     case SDLK_UP:
                         rigidBodyComponent.velocity = playerController.idleVelocity;
-//                        fsm.currentState = "walk_up";
+//                        FSM.currentState = "walk_up";
                         break;
                     case SDLK_RIGHT:
                         rigidBodyComponent.velocity = playerController.idleVelocity;

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "../include/RGE.h"
+#include "FSM/include/FSM.h"
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
@@ -40,6 +41,7 @@ int RGE::setupSDL()
 
     return true;
 }
+
 
 /**
  * Setup game SDL window, renderer and camera
@@ -85,6 +87,7 @@ int RGE::setupRgeSDL()
 
     return true;
 }
+
 
 /**
  * @brief Initial setup of ImGui
@@ -155,6 +158,31 @@ void RGE::setupImGui()
 
 }
 
+
+/**
+ * @brief Initialise the registry with systems.
+ */
+void RGE::setupRegistry()
+{
+    // Add the systems that need to be processed in our game
+    registry->AddSystem<MovementSystem>();
+    registry->AddSystem<RenderSystem>();
+    registry->AddSystem<AnimationSystem>();
+    registry->AddSystem<CollisionSystem>();
+    registry->AddSystem<RenderColliderSystem>();
+    registry->AddSystem<DamageSystem>();
+//    registry->AddSystem<KeyboardControlSystem>();
+    registry->AddSystem<CameraMovementSystem>();
+    registry->AddSystem<ProjectileEmitSystem>();
+    registry->AddSystem<ProjectileLifecycleSystem>();
+    registry->AddSystem<RenderTextSystem>();
+
+    registry->AddSystem<RenderColliderSystem>();
+    registry->AddSystem<PlayerControlSystem>();
+    registry->AddSystem<RenderImGuiSystem>();
+//    registry->AddSystem<StateMachineSystem>();
+    registry->AddSystem<RenderRaycastSystem>();
+}
 /**
  * @brief Call render on all objects
  */
@@ -193,31 +221,6 @@ void RGE::render()
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), rgeRenderer);
     SDL_RenderPresent(rgeRenderer);
 
-}
-
-/**
- * @brief Initialise the registry with systems.
- */
-void RGE::setupRegistry()
-{
-    // Add the systems that need to be processed in our game
-    registry->AddSystem<MovementSystem>();
-    registry->AddSystem<RenderSystem>();
-    registry->AddSystem<AnimationSystem>();
-    registry->AddSystem<CollisionSystem>();
-    registry->AddSystem<RenderColliderSystem>();
-    registry->AddSystem<DamageSystem>();
-//    registry->AddSystem<KeyboardControlSystem>();
-    registry->AddSystem<CameraMovementSystem>();
-    registry->AddSystem<ProjectileEmitSystem>();
-    registry->AddSystem<ProjectileLifecycleSystem>();
-    registry->AddSystem<RenderTextSystem>();
-
-    registry->AddSystem<RenderColliderSystem>();
-    registry->AddSystem<PlayerControlSystem>();
-    registry->AddSystem<RenderImGuiSystem>();
-//    registry->AddSystem<StateMachineSystem>();
-    registry->AddSystem<RenderRaycastSystem>();
 }
 
 
@@ -264,6 +267,7 @@ int RGE::setupGameSDL()
     return true;
 }
 
+
 /**
   * @brief Initialise the assetStore with pointers to png.
  */
@@ -282,6 +286,7 @@ void RGE::setupAssets()
     assetStore->AddTexture(gameRenderer, "player-idle-image", "../Game/assets/sprites/CharacterIdle.png");
     assetStore->AddTexture(gameRenderer, "bullet-image", "../Game/assets/images/bullet.png");
 }
+
 
 /**
 * @brief Initialise the player object with components.
@@ -318,6 +323,7 @@ void RGE::setupObjects()
 //    label.AddComponent<TextLabelComponent>(glm::vec2(200, 200), "This is a label", "charriot-font", red, true);
 
 }
+
 
 /**
  * Load the tmx map files and iterate over.
@@ -461,6 +467,7 @@ bool RGE::processWindowInputs()
     return isQuit;
 };
 
+
 /**
  * UpdateSystems
  */
@@ -492,11 +499,22 @@ void RGE::updateSystems()
 
 }
 
+
+/**
+ * @brief Setup var and instantiate the FSM.
+ */
 void RGE::setupVars()
 {
     registry = std::make_unique<Registry>();
     assetStore = std::make_unique<AssetStore>();
     eventBus = std::make_unique<EventBus>();
+
+    FSM fsm;
+    fsm.toggle();
+    fsm.toggle();
+    fsm.toggle();
+    fsm.toggle();
+
 }
 
 /**

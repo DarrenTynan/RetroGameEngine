@@ -29,9 +29,13 @@ set(SOURCE_FILES main.cpp
         RGE/src/ECS/include/System.h
         RGE/src/ECS/include/Registry.h
 
-        RGE/src/PlayerFSM/include/Entity.h
-        RGE/src/PlayerFSM/Entity.cpp
-        RGE/src/PlayerFSM/StateTransitions.cpp
+        RGE/src/FSM/include/FSM.h
+        RGE/src/FSM/include/fsmBaseState.h
+        RGE/src/FSM/include/fsmStates.h
+        RGE/src/FSM/fsm.cpp
+        RGE/src/FSM/StateTransitions.cpp
+        RGE/src/FSM/FSM.cpp
+        RGE/src/FSM/FSM.cpp
 
 )
 

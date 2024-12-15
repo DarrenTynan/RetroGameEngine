@@ -1,0 +1,26 @@
+//
+// Created by Darren Tynan on 14/12/2024.
+//
+
+#ifndef RETROGAMEENGINE_FSM_H
+#define RETROGAMEENGINE_FSM_H
+
+#include "BaseState.h"
+
+class EntityState;
+
+/**
+ * @brief Mandatory base functions.
+ */
+class FSM
+{
+public:
+    FSM();
+    [[nodiscard]] inline EntityState* getCurrentState() const { return currentState; }
+    void toggle();
+    void setState(EntityState& newState);
+private:
+    EntityState* currentState;
+};
+
+#endif //RETROGAMEENGINE_FSM_H
