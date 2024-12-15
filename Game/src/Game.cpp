@@ -15,6 +15,7 @@ Game::~Game() { Logger::Log("Game deconstruct called"); }
  */
 void Game::Setup()
 {
+//    Light *debug = new Light();
     RGE::setupVars();
     RGE::setupSDL();
     RGE::setupRgeSDL();

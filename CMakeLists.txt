@@ -8,11 +8,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Add main.cpp file of the project root directory as a source file
 set(SOURCE_FILES main.cpp
-#        Game/include/Game.h
         Game/src/Game.cpp
-#        RGE/include/RGE.h
         RGE/src/RGE.cpp
-
         RGE/src/Logger/Logger.cpp
 
         RGE/libs/imgui_docking/imgui.cpp
@@ -31,9 +28,11 @@ set(SOURCE_FILES main.cpp
         RGE/src/ECS/include/Entity.h
         RGE/src/ECS/include/System.h
         RGE/src/ECS/include/Registry.h
-        RGE/src/FSM/Light.cpp
-        RGE/src/FSM/ConcreteLightState.cpp
-        #        RGE/src/ECS/include/Entity.h
+
+        RGE/src/PlayerFSM/include/Entity.h
+        RGE/src/PlayerFSM/Entity.cpp
+        RGE/src/PlayerFSM/StateTransitions.cpp
+
 )
 
 # Add executable target with source files listed in SOURCE_FILES variable

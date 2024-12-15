@@ -7,11 +7,18 @@
 #include <string>
 #include <utility>
 
+#include "../PlayerFSM/include/Entity.h"
+#include "../PlayerFSM/Entity.cpp"
+
 struct StateMachineComponent
 {
     std::string currentState;
+    Entity *entity = new Entity();
 
-    explicit StateMachineComponent(std::string state = "idle") { this->currentState = std::move(state); }
+    explicit StateMachineComponent(std::string state = "idle")
+    {
+        this->currentState = std::move(state);
+    }
 
 };
 

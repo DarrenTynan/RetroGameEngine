@@ -98,7 +98,7 @@ void RGE::setupImGui()
 //    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-    io.Fonts->AddFontFromFileTTF("../RGE/include/charriot.ttf", 12.f);
+    io.Fonts->AddFontFromFileTTF("../RGE/include/Pixellettersfull.ttf", 16.f);
 
     // Setup Dear ImGui style
 //    ImGui::StyleColorsDark();
@@ -293,16 +293,14 @@ void RGE::setupObjects()
 
     player.AddComponent<TransformComponent>(glm::vec2(256, 32*14), glm::vec2(1.0, 1.0), 0.0);
     player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
+    player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
     player.AddComponent<AnimationComponent>(6, 8, true);
-//    player.AddComponent<CameraFollowComponent>();
-
-    player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
-
     player.AddComponent<PlayerControllerComponent>(glm::vec2(0, -80.0), glm::vec2(80.0, 0), glm::vec2(0, 80.0), glm::vec2(-80.0, 0));
     player.AddComponent<HealthComponent>(100);
     player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
     player.AddComponent<StateMachineComponent>("idle");
+//    player.AddComponent<CameraFollowComponent>();
 //    player.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
 
 

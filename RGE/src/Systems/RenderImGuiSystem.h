@@ -30,7 +30,7 @@ class RenderImGuiSystem: public System
         ImGui::NewFrame();
 
         if (show_world_overlay) ShowWorldOverlay(&show_world_overlay, camera);
-        if (show_player_debug) ShowGameDebug(registry, camera);
+        if (show_player_debug) ShowPlayerDebug(registry, camera);
         if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
         if (show_spawn_entity) ShowSpawnEntity(registry);
         if (show_tmx_window) ShowTmxWindow(registry, camera);
@@ -119,7 +119,7 @@ class RenderImGuiSystem: public System
 
     }
 
-    static void ShowGameDebug(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
+    static void ShowPlayerDebug(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
     {
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
         if (ImGui::Begin("Game Debug"))
@@ -183,6 +183,12 @@ class RenderImGuiSystem: public System
                 }
 
                 ImGui::Spacing();
+
+                if (ImGui::CollapsingHeader("State Machine"))
+                {
+                    StateMachineComponent fsm = player.GetComponent<StateMachineComponent>();
+                    ImGui::Text("Current State: %s",  fsm.currentState.c_str());
+                }
 
                 if (ImGui::CollapsingHeader("Ray cast"))
                 {
