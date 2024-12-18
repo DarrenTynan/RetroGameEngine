@@ -111,7 +111,7 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args)
     // Set the entity component signature.
     entityComponentSignatures[entityId].set(componentId);
 
-    Logger::Log("Component id = " + std::to_string(componentId) + " was added to entity id " + std::to_string(entityId));
+//    Logger::Log("Component id = " + std::to_string(componentId) + " was added to entity id " + std::to_string(entityId));
 }
 
 /**

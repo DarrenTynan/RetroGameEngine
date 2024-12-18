@@ -24,7 +24,6 @@
 #include "../../RGE/src/ECS/include/ECS.h"
 #include "../../RGE/src/AssetStore/AssetStore.h"
 #include "../../RGE/src/EventBus/EventBus.h"
-
 #include "../../RGE/src/Components/TransformComponent.h"
 #include "../../RGE/src/Components/RigidBodyComponent.h"
 #include "../../RGE/src/Components/SpriteComponent.h"
@@ -33,7 +32,7 @@
 #include "../../RGE/src/Components/AnimationComponent.h"
 #include "../../RGE/src/Components/BoxColliderComponent.h"
 #include "../../RGE/src/Components/PlayerControllerComponent.h"
-#include "../../RGE/src/Components/StateMachineComponent.h"
+#include "../../RGE/src/Components/PlayerStateMachineComponent.h"
 #include "../../RGE/src/Components/ProjectileComponent.h"
 #include "../../RGE/src/Components/ProjectileEmitterComponent.h"
 #include "../../RGE/src/Components/HealthComponent.h"
@@ -48,12 +47,11 @@
 #include "../../RGE/src/Systems/CollisionSystem.h"
 #include "../../RGE/src/Systems/PlayerControlSystem.h"
 #include "../../RGE/src/Systems/RenderImGuiSystem.h"
-#include "../../RGE/src/Systems/StateMachineSystem.h"
 #include "../../RGE/src/Systems/ProjectileEmitSystem.h"
 #include "../../RGE/src/Systems/ProjectileLifecycleSystem.h"
 #include "../../RGE/src/Systems/DamageSystem.h"
 #include "../../RGE/src/Systems/RenderRaycastSystem.h"
-
+#include "../../RGE/src/Systems/PlayerStateMachineSystem.h"
 
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Layer.hpp>
@@ -62,30 +60,20 @@
 #include <tmxlite/ObjectGroup.hpp>
 #include <tmxlite/Property.hpp>
 
-// Global vars
-//static const int FPS = 60;
-//static const int MILLISECS_PER_FRAME = 1000 / FPS;
-//static ImVec4 game_clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
-//static ImVec4 rge_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
 static std::unique_ptr<Registry> registry;
 static std::unique_ptr<AssetStore> assetStore;
 static std::unique_ptr<EventBus> eventBus;
 
-//static bool isRunning = false;
 static bool isCollider = false;
 static bool isRayCast = false;
 static bool isFullScreen = false;
-//static bool testBool = true;
 
-static SDL_Rect rgeCamera;
-static SDL_Rect gameCamera;
 static SDL_Window* rgeWindow;
+static SDL_Rect rgeCamera;
 static SDL_Renderer* rgeRenderer;
-//const static int GAME_WINDOW_WIDTH = 800;
-//const static int GAME_WINDOW_HEIGHT = 600;
 
 static SDL_Window* gameWindow;
+static SDL_Rect gameCamera;
 static SDL_Renderer* gameRenderer;
 
 static const auto MAP_PATH = "../Game/assets/tilemaps/TestLevel/TestLevel.tmx";
@@ -120,7 +108,7 @@ public:
     static void setupAssets();
     static void setupObjects();
     static int setupTMX();
-    static bool processWindowInputs();
+    static bool processInputEvents();
     static void updateSystems();
     static void destroy();
 

@@ -8,6 +8,7 @@
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
+
 #include "../ECS/include/ECS.h"
 #include "../ECS/include/Registry.h"
 
@@ -129,7 +130,7 @@ class RenderImGuiSystem: public System
             if (ImGui::CollapsingHeader("Player Entity"))
             {
                 ImGui::Text("Player ID: %i",  player.GetId());
-                ImGui::Text("Player State: %s",  player.GetComponent<StateMachineComponent>().currentState.c_str());
+                ImGui::Text("Player State: %s",  player.GetComponent<PlayerStateMachineComponent>().currentState.c_str());
 
                 if (ImGui::CollapsingHeader("Transform"))
                 {
@@ -186,7 +187,7 @@ class RenderImGuiSystem: public System
 
                 if (ImGui::CollapsingHeader("State Machine"))
                 {
-                    StateMachineComponent fsm = player.GetComponent<StateMachineComponent>();
+                    PlayerStateMachineComponent fsm = player.GetComponent<PlayerStateMachineComponent>();
                     ImGui::Text("Current State: %s",  fsm.currentState.c_str());
                 }
 

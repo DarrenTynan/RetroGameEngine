@@ -6,6 +6,7 @@
 #define RETROGAMEENGINE_ENTITYBASESTATE_H
 
 #include "FSM.h"
+#include <iostream>
 
 // Forward declaration to resolve circular dependency/include
 class FSM;
@@ -13,13 +14,14 @@ class FSM;
 /**
  * @brief Pure Virtual (interface) functions implicitly makes the class abstract.
  */
-class EntityState
+class BaseState
 {
 public:
     virtual void enter(FSM* entity) = 0;
+    virtual void update(FSM* entity) = 0;
     virtual void toggle(FSM* entity) = 0;
     virtual void exit(FSM* entity) = 0;
-    virtual ~EntityState() = default;
+    virtual ~BaseState() = default;
 };
 
 

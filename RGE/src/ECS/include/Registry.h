@@ -46,9 +46,9 @@ private:
     std::deque<int> freeIds;
 
 public:
-    Registry() { Logger::Log("Registry constructor called"); }
+    Registry() {};      // { Logger::Log("Registry constructor called"); }
 
-    ~Registry() { Logger::Log("Registry destructor called"); }
+    ~Registry() {};     //{ Logger::Log("Registry destructor called"); }
 
     // Testing function
     std::string GetTagById(int _id);

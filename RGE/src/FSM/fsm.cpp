@@ -4,13 +4,14 @@
 
 #include "include/FSM.h"
 #include "include/States.h"
+#include <string>
 
 /**
  * @brief Logic code for setState, Exit the current, set a new current and enter the new current.
  *
  * @param newState
  */
-void FSM::setState(EntityState& newState)
+void FSM::setState(BaseState& newState)
 {
     currentState->exit(this);
     currentState = &newState;
@@ -27,11 +28,10 @@ void FSM::toggle()
 
 
 /**
- * @brief FSM constructor.
+ * @brief FSM constructor. Set the initial current state to Idle
  */
 FSM::FSM()
 {
     std::cout << "FSM constructor" << std::endl;
     currentState = &Idle::getInstance();
 }
-

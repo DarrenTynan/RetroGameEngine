@@ -37,36 +37,37 @@ class PlayerControlSystem: public System
         {
             for (auto entity: GetSystemEntities())
             {
-                const auto playerComponent = entity.GetComponent<PlayerControllerComponent>();
+                const auto playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
                 auto& spriteComponent = entity.GetComponent<SpriteComponent>();
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
                 auto& transformComponent = entity.GetComponent<TransformComponent>();
-                auto& stateMachineComponent = entity.GetComponent<StateMachineComponent>();
+                auto& finiteStateMachineComponent = entity.GetComponent<PlayerStateMachineComponent>();
 
                 switch (event.symbol)
                 {
                     case SDLK_UP:
-                        rigidBodyComponent.velocity = playerComponent.upVelocity;
+                        rigidBodyComponent.velocity = playerControllerComponent.upVelocity;
                         rigidBodyComponent.isGrounded = false;
-                        stateMachineComponent.currentState = "up";
+                        finiteStateMachineComponent.currentState = "up";
                         break;
                     case SDLK_RIGHT:
-                        rigidBodyComponent.velocity = playerComponent.rightVelocity;
+                        rigidBodyComponent.velocity = playerControllerComponent.rightVelocity;
                         spriteComponent.flipH = false;
-                        stateMachineComponent.currentState = "right";
+                        finiteStateMachineComponent.currentState = "right";
                         break;
                     case SDLK_DOWN:
-                        rigidBodyComponent.velocity = playerComponent.downVelocity;
-                        stateMachineComponent.currentState = "down";
+                        rigidBodyComponent.velocity = playerControllerComponent.downVelocity;
+                        finiteStateMachineComponent.currentState = "down";
                         break;
                     case SDLK_LEFT:
-                        rigidBodyComponent.velocity = playerComponent.leftVelocity;
+                        rigidBodyComponent.velocity = playerControllerComponent.leftVelocity;
                         spriteComponent.flipH = true;
-                        stateMachineComponent.currentState = "left";
+                        finiteStateMachineComponent.currentState = "left";
                         break;
                     case SDLK_SPACE:
-                        rigidBodyComponent.velocity = playerComponent.upVelocity;
+                        rigidBodyComponent.velocity = playerControllerComponent.upVelocity;
                         rigidBodyComponent.isGrounded = false;
+                        finiteStateMachineComponent.currentState = "jump";
                         break;
                     default:
                         break;
@@ -81,22 +82,25 @@ class PlayerControlSystem: public System
                 const auto playerController = entity.GetComponent<PlayerControllerComponent>();
                 auto& sprite = entity.GetComponent<SpriteComponent>();
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
-//                auto& FSM = entity.GetComponent<StateMachineComponent>();
+                auto& finiteStateMachineComponent = entity.GetComponent<PlayerStateMachineComponent>();
 
                 switch (event.symbol)
                 {
                     case SDLK_UP:
                         rigidBodyComponent.velocity = playerController.idleVelocity;
-//                        FSM.currentState = "walk_up";
+                        finiteStateMachineComponent.currentState = "idle";
                         break;
                     case SDLK_RIGHT:
                         rigidBodyComponent.velocity = playerController.idleVelocity;
+                        finiteStateMachineComponent.currentState = "idle";
                         break;
                     case SDLK_DOWN:
                         rigidBodyComponent.velocity = playerController.idleVelocity;
+                        finiteStateMachineComponent.currentState = "idle";
                         break;
                     case SDLK_LEFT:
                         rigidBodyComponent.velocity = playerController.idleVelocity;
+                        finiteStateMachineComponent.currentState = "idle";
                         break;
                     default:
                         break;

@@ -7,7 +7,7 @@
 
 #include "BaseState.h"
 
-class EntityState;
+class BaseState;
 
 /**
  * @brief Mandatory base functions.
@@ -16,11 +16,11 @@ class FSM
 {
 public:
     FSM();
-    [[nodiscard]] inline EntityState* getCurrentState() const { return currentState; }
+    [[nodiscard]] inline BaseState* getCurrentState() const { return currentState; }
     void toggle();
-    void setState(EntityState& newState);
+    void setState(BaseState& newState);
 private:
-    EntityState* currentState;
+    BaseState* currentState;
 };
 
 #endif //RETROGAMEENGINE_FSM_H

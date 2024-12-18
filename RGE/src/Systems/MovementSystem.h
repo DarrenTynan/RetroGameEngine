@@ -11,7 +11,7 @@
 #include "../ECS/include/Registry.h"
 
 /**
- * @brief Movement system
+ * @brief Movement system for all entities.
  */
 class MovementSystem: public System
 {
@@ -31,27 +31,11 @@ public:
             auto& transform = entity.GetComponent<TransformComponent>();
             auto rigidBody = entity.GetComponent<RigidBodyComponent>();
 
-            float gravity = 0;
-            if (entity.HasTag("player") && !rigidBody.isGrounded)
-            {
-                gravity = rigidBody.gravity;
-
-//                Logger::Log("Entity id = " + std::to_string(entity.GetId()) +
-//                " position is now (" + std::to_string(transform.position.x) +
-//                ", " + std::to_string(transform.position.y));
-            }
-
-//            if (entity.HasTag("player") && rigidBody.isGrounded)
-//            {
-//                gravity = -40.0;
-//            }
-
             // Apply the velocity
             transform.position.x += (rigidBody.velocity.x * deltaTime);
-            transform.position.y += (rigidBody.velocity.y + gravity) * deltaTime;
+            transform.position.y += (rigidBody.velocity.y) * deltaTime;
 
-
-            // Reset the transform position.
+            // Reset the transform position for top-left
             if (transform.position.x < 0) transform.position.x = 0;
             if (transform.position.y < 0) transform.position.y = 0;
 

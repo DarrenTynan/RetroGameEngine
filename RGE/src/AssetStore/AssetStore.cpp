@@ -1,12 +1,12 @@
 #include "./AssetStore.h"
 
 AssetStore::AssetStore() {
-    Logger::Log("AssetStore constructor called!");
+//    Logger::Log("AssetStore constructor called!");
 }
 
 AssetStore::~AssetStore() {
     ClearAssets();
-    Logger::Log("AssetStore destructor called!");
+//    Logger::Log("AssetStore destructor called!");
 }
 
 void AssetStore::ClearAssets() {
@@ -30,7 +30,7 @@ void AssetStore::AddTexture(SDL_Renderer* renderer, const std::string& assetId, 
     // Add the texture to the map
     textures.emplace(assetId, texture);
 
-    Logger::Log("Texture added to the AssetStore with id " + assetId);
+//    Logger::Log("Texture added to the AssetStore with id " + assetId);
 }
 
 SDL_Texture* AssetStore::GetTexture(const std::string& assetId) {

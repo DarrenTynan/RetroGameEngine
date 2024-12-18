@@ -4,16 +4,14 @@
 
 int main()
 {
-    // Initialise a new Game object
-//    Game game;
-
-    FSM fsm;
-    fsm.toggle();
-    fsm.toggle();
-    fsm.toggle();
-    fsm.toggle();
+//    FSM fsm;
+//    fsm.toggle();
+//    fsm.toggle();
+//    fsm.toggle();
+//    fsm.toggle();
 
     std::cout << "----------------------" << std::endl;
+
     // Game method calls
     Game::Setup();
     Game::Run();

@@ -13,7 +13,17 @@ class KeyReleasedEvent: public Event
 {
 public:
     SDL_Keycode symbol;
-    explicit KeyReleasedEvent(SDL_Keycode symbol): symbol(symbol) {}
+    explicit KeyReleasedEvent(SDL_Keycode symbol): symbol(symbol)
+    {
+//        if (symbol == SDLK_z)
+//        {
+//            std::cout << "KeyReleasedEvent z" << std::endl;
+//        }
+//        if (symbol == SDLK_x)
+//        {
+//            std::cout << "KeyReleasedEvent x" << std::endl;
+//        }
+    }
 };
 
 #endif //RETRO_ENGINE_KEYRELEASEDEVENT_H

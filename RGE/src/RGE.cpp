@@ -2,9 +2,7 @@
 // Created by Darren Tynan on 17/11/2024.
 //
 
-#include <iostream>
 #include "../include/RGE.h"
-#include "FSM/include/FSM.h"
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
@@ -37,7 +35,7 @@ int RGE::setupSDL()
         SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
     #endif
 
-    Logger::Log("SDL is ready to go!");
+//    Logger::Log("SDL is ready to go!");
 
     return true;
 }
@@ -84,6 +82,50 @@ int RGE::setupRgeSDL()
 
     // SetupSDL the camera view with the entire screen area
     rgeCamera = {0, 0, displayMode.w, displayMode.h};
+
+    return true;
+}
+
+
+/**
+ * @brief Setup game SDL window, renderer and camera
+ *
+ * @return -1 for errors
+ */
+int RGE::setupGameSDL()
+{
+    // Create window with SDL_Renderer graphics context
+    auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
+    gameWindow = SDL_CreateWindow(
+            "Game Window",
+            0,
+            0,
+//            SDL_WINDOWPOS_CENTERED,
+//            SDL_WINDOWPOS_CENTERED,
+            GAME_WINDOW_WIDTH,
+            GAME_WINDOW_HEIGHT,
+            windowFlags
+    );
+
+    if (!gameWindow)
+    {
+        Logger::Error("Window init failed");
+        SDL_Quit();
+        return false;
+    }
+
+    gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    if (!gameRenderer)
+    {
+        Logger::Error("Window renderer init failed");
+        SDL_DestroyRenderer(gameRenderer);
+        SDL_Quit();
+        return false;
+    }
+
+    // SetupSDL the camera view with the entire screen area
+    gameCamera = {0, 0, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT};
 
     return true;
 }
@@ -180,9 +222,11 @@ void RGE::setupRegistry()
     registry->AddSystem<RenderColliderSystem>();
     registry->AddSystem<PlayerControlSystem>();
     registry->AddSystem<RenderImGuiSystem>();
-//    registry->AddSystem<StateMachineSystem>();
+    registry->AddSystem<PlayerStateMachineSystem>();
     registry->AddSystem<RenderRaycastSystem>();
 }
+
+
 /**
  * @brief Call render on all objects
  */
@@ -225,57 +269,13 @@ void RGE::render()
 
 
 /**
- * @brief Setup game SDL window, renderer and camera
- *
- * @return -1 for errors
- */
-int RGE::setupGameSDL()
-{
-    // Create window with SDL_Renderer graphics context
-    auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
-    gameWindow = SDL_CreateWindow(
-            "Game Window",
-            0,
-            0,
-//            SDL_WINDOWPOS_CENTERED,
-//            SDL_WINDOWPOS_CENTERED,
-            GAME_WINDOW_WIDTH,
-            GAME_WINDOW_HEIGHT,
-            windowFlags
-    );
-
-    if (!gameWindow)
-    {
-        Logger::Error("Window init failed");
-        SDL_Quit();
-        return false;
-    }
-
-    gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-    if (!gameRenderer)
-    {
-        Logger::Error("Window renderer init failed");
-        SDL_DestroyRenderer(gameRenderer);
-        SDL_Quit();
-        return false;
-    }
-
-    // SetupSDL the camera view with the entire screen area
-    gameCamera = {0, 0, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT};
-
-    return true;
-}
-
-
-/**
   * @brief Initialise the assetStore with pointers to png.
  */
 void RGE::setupAssets()
 {
     // Adding assets to the asset store
     assetStore->AddTexture(gameRenderer, "hud2", "../Game/assets/images/hud3.png");
-    assetStore->AddFont("charriot-font", "../Game/assets/fonts/zx-spectrum.ttf", 24);
+    assetStore->AddFont("arial-font", "../Game/assets/fonts/arial.ttf", 24);
     assetStore->AddTexture(gameRenderer, "tilemap-image", "../Game/assets/tilemaps/TestLevel/TestLevel.png");
 
     // mapImagePath not correct
@@ -304,18 +304,16 @@ void RGE::setupObjects()
     player.AddComponent<PlayerControllerComponent>(glm::vec2(0, -80.0), glm::vec2(80.0, 0), glm::vec2(0, 80.0), glm::vec2(-80.0, 0));
     player.AddComponent<HealthComponent>(100);
     player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
-    player.AddComponent<StateMachineComponent>("idle");
+    player.AddComponent<PlayerStateMachineComponent>("idle");
 //    player.AddComponent<CameraFollowComponent>();
 //    player.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
 
 
 //    Entity tank = registry->CreateEntity();
-//    tank.AddComponent<TransformComponent>(glm::vec2(0.0, 100.0), glm::vec2(2.0, 2.0), 0.0);
+//    tank.AddComponent<TransformComponent>(glm::vec2(100.0, 100.0), glm::vec2(2.0, 2.0), 0.0);
 //    tank.AddComponent<RigidBodyComponent>(glm::vec2(20.0, 0.0));
 //    tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1, false, 0, 0);
-//
 //    tank.AddComponent<BoxColliderComponent>(22, 22, glm::vec2(10,10));
-//
 //    tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
 
 //    Entity label = registry->CreateEntity();
@@ -399,16 +397,17 @@ int RGE::setupTMX()
             }
         }
 
-        const auto& tilesets = map.getTilesets();
-        for(const auto& tileset : tilesets)
-        {
-            Logger::Log(tileset.getImagePath());
-            //read out tile set properties, load textures etc...
-        }
+//        const auto& tilesets = map.getTilesets();
+//        for(const auto& tileset : tilesets)
+//        {
+//            Logger::Log(tileset.getImagePath());
+//            read out tile set properties, load textures etc...
+//        }
     }
 
     return 0;
 }
+
 
 /**
  * Poll window events:
@@ -416,7 +415,7 @@ int RGE::setupTMX()
  * window quit
  * keyboard
  */
-bool RGE::processWindowInputs()
+bool RGE::processInputEvents()
 {
     bool isQuit = true;
 
@@ -441,6 +440,7 @@ bool RGE::processWindowInputs()
         // Core sdl events.
         switch (sdlEvent.type)
         {
+            // Window close
             case SDL_QUIT:
                 isQuit = false;
                 break;
@@ -449,9 +449,16 @@ bool RGE::processWindowInputs()
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isQuit = false; }
                 if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
                 if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
+
+                if (sdlEvent.key.keysym.sym == SDLK_z)
+                {
+                    registry->GetSystem<PlayerStateMachineSystem>().ChangeState("Idle");           // Update player fsm
+                }
+
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
                 break;
 
+            // Check for window event
             case SDL_WINDOWEVENT:
 
                 switch (sdlEvent.window.event)
@@ -490,12 +497,13 @@ void RGE::updateSystems()
     // UpdateSystems the registry to process the entities that are waiting to be created/deleted
     registry->Update();
 
-    registry->GetSystem<MovementSystem>().Update(deltaTime);
+    registry->GetSystem<MovementSystem>().Update(deltaTime);            // apply velocity and check out of bounds.
     registry->GetSystem<AnimationSystem>().Update();
     registry->GetSystem<CollisionSystem>().Update(eventBus);
     registry->GetSystem<CameraMovementSystem>().Update(gameCamera);
     registry->GetSystem<ProjectileEmitSystem>().Update(registry);
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
+    registry->GetSystem<PlayerStateMachineSystem>().Update();           // Update player fsm
 
 }
 
@@ -509,13 +517,14 @@ void RGE::setupVars()
     assetStore = std::make_unique<AssetStore>();
     eventBus = std::make_unique<EventBus>();
 
-    FSM fsm;
-    fsm.toggle();
-    fsm.toggle();
-    fsm.toggle();
-    fsm.toggle();
+//    FSM fsm;
+//    fsm.toggle();
+//    fsm.toggle();
+//    fsm.toggle();
+//    fsm.toggle();
 
 }
+
 
 /**
  * Destroy

@@ -8,18 +8,21 @@
 #include <iostream>
 #include "BaseState.h"
 #include "FSM.h"
-
+#include <typeinfo>
 
 /**
  * @brief Singleton as denoted by static getInstance() - Low intensity state
  */
-class Idle : public EntityState
+class Idle : public BaseState
 {
 public:
-    void enter(FSM* entity) { std::cout << "Idle enter" << std::endl; };
+    std::string name = "Idle";
+    void enter(FSM* entity) { std::cout << name << " enter" << std::endl; }
+    void update(FSM* entity);
     void toggle(FSM* entity);
-    void exit(FSM* entity) { std::cout << "Idle exit" << std::endl; };
-    static EntityState& getInstance();
+    void exit(FSM* entity) { std::cout << name << " exit" << std::endl; }
+    static BaseState& getInstance();
+    std::string getName() const;
 private:
     Idle() {}
     Idle(const Idle& other);
@@ -30,13 +33,16 @@ private:
 /**
  * @brief Singleton as denoted by static getInstance() - Medium intensity state
  */
-class Walk : public EntityState
+class Walk : public BaseState
 {
 public:
-    void enter(FSM* entity) { std::cout << "Walk enter" << std::endl; };
+    std::string name = "Walk";
+    void enter(FSM* entity) { std::cout << name << " enter" << std::endl; }
+    void update(FSM* entity);
     void toggle(FSM* entity);
-    void exit(FSM* entity) { std::cout << "Walk exit" << std::endl; };
-    static EntityState& getInstance();
+    void exit(FSM* entity) { std::cout << name << " exit" << std::endl; }
+    static BaseState& getInstance();
+    std::string getName() const;
 private:
     Walk() {};
     Walk(const Walk& other);
@@ -47,13 +53,16 @@ private:
 /**
  * @brief Singleton as denoted by static getInstance() - High intensity state
  */
-class Run : public EntityState
+class Run : public BaseState
 {
 public:
-    void enter(FSM* entity) { std::cout << "Run enter" << std::endl; };
+    std::string name = "Run";
+    void enter(FSM* entity) { std::cout << name << " enter" << std::endl; }
+    void update(FSM* entity);
     void toggle(FSM* entity);
-    void exit(FSM* entity) { std::cout << "Run exit" << std::endl; };
-    static EntityState& getInstance();
+    void exit(FSM* entity) { std::cout << name << " exit" << std::endl; }
+    static BaseState& getInstance();
+    std::string getName() const;
 private:
     Run() {};
     Run(const Run& other);
@@ -61,17 +70,21 @@ private:
 };
 
 
-class Jump : public EntityState
+class Jump : public BaseState
 {
 public:
-    void enter(FSM* entity) { std::cout << "Jump enter" << std::endl; };
+    std::string name = "Jump";
+    void enter(FSM* entity) { std::cout << name << " enter" << std::endl; }
+    void update(FSM* entity);
     void toggle(FSM* entity);
-    void exit(FSM* entity) { std::cout << "Jump exit" << std::endl; };
-    static EntityState& getInstance();
+    void exit(FSM* entity) { std::cout << name << " exit" << std::endl; }
+    static BaseState& getInstance();
+    std::string getName() const;
 private:
     Jump() {};
     Jump(const Jump& other);
     Jump& operator = (const Jump& other);
 };
+
 
 #endif //RETROGAMEENGINE_ENTITYSTATE_H
