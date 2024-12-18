@@ -222,7 +222,7 @@ void RGE::setupRegistry()
     registry->AddSystem<RenderColliderSystem>();
     registry->AddSystem<PlayerControlSystem>();
     registry->AddSystem<RenderImGuiSystem>();
-    registry->AddSystem<PlayerStateMachineSystem>();
+//    registry->AddSystem<PlayerStateMachineSystem>();
     registry->AddSystem<RenderRaycastSystem>();
 }
 
@@ -452,7 +452,8 @@ bool RGE::processInputEvents()
 
                 if (sdlEvent.key.keysym.sym == SDLK_z)
                 {
-                    registry->GetSystem<PlayerStateMachineSystem>().ChangeState("Idle");           // Update player fsm
+//                    registry->GetSystem<PlayerStateMachineSystem>().ChangeState("Idle");           // Update player fsm
+                    fsm->toggle();
                 }
 
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
@@ -503,7 +504,7 @@ void RGE::updateSystems()
     registry->GetSystem<CameraMovementSystem>().Update(gameCamera);
     registry->GetSystem<ProjectileEmitSystem>().Update(registry);
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
-    registry->GetSystem<PlayerStateMachineSystem>().Update();           // Update player fsm
+//    registry->GetSystem<PlayerStateMachineSystem>().Update();           // Update player fsm
 
 }
 
@@ -517,8 +518,8 @@ void RGE::setupVars()
     assetStore = std::make_unique<AssetStore>();
     eventBus = std::make_unique<EventBus>();
 
-//    FSM fsm;
-//    fsm.toggle();
+    fsm = new FSM();
+//    fsm->toggle();
 //    fsm.toggle();
 //    fsm.toggle();
 //    fsm.toggle();

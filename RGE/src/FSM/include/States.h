@@ -7,8 +7,6 @@
 
 #include <iostream>
 #include "BaseState.h"
-#include "FSM.h"
-#include <typeinfo>
 
 /**
  * @brief Singleton as denoted by static getInstance() - Low intensity state
@@ -86,5 +84,21 @@ private:
     Jump& operator = (const Jump& other);
 };
 
+
+class Fall : public BaseState
+{
+public:
+    std::string name = "Fall";
+    void enter(FSM* entity) { std::cout << name << " enter" << std::endl; }
+    void update(FSM* entity);
+    void toggle(FSM* entity);
+    void exit(FSM* entity) { std::cout << name << " exit" << std::endl; }
+    static BaseState& getInstance();
+    std::string getName() const;
+private:
+    Fall() {};
+    Fall(const Fall& other);
+    Fall& operator = (const Fall& other);
+};
 
 #endif //RETROGAMEENGINE_ENTITYSTATE_H

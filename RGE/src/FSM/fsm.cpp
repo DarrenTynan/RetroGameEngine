@@ -4,7 +4,6 @@
 
 #include "include/FSM.h"
 #include "include/States.h"
-#include <string>
 
 /**
  * @brief Logic code for setState, Exit the current, set a new current and enter the new current.
@@ -13,13 +12,13 @@
  */
 void FSM::setState(BaseState& newState)
 {
-    currentState->exit(this);
-    currentState = &newState;
-    currentState->enter(this);
+    currentState->exit(this);       // Do something before we chane state.
+    currentState = &newState;             // Change state.
+    currentState->enter(this);      // Do something after we change state.
 }
 
 /**
- * @brief Toggle to a new state.
+ * @brief Delegate the task of determining the next state to the current state.
  */
 void FSM::toggle()
 {

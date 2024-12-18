@@ -60,6 +60,10 @@
 #include <tmxlite/ObjectGroup.hpp>
 #include <tmxlite/Property.hpp>
 
+#include "../../RGE/src/FSM/include/FSM.h"
+
+static FSM* fsm;
+
 static std::unique_ptr<Registry> registry;
 static std::unique_ptr<AssetStore> assetStore;
 static std::unique_ptr<EventBus> eventBus;

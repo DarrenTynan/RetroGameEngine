@@ -13,41 +13,10 @@
 
 class PlayerStateMachineSystem: public System
 {
-    FSM *fsm;
 public:
-    FSM *getFsm() const
-    {
-        return fsm;
-    }
+    PlayerStateMachineSystem() {}
 
-public:
-    PlayerStateMachineSystem()
-    {
-        fsm = new FSM();
-//        auto fsm = new FSM();
-//        fsm->toggle();
-//        fsm->toggle();
-//        fsm->toggle();
-//        fsm->toggle();
-
-        RequireComponent<SpriteComponent>();
-        RequireComponent<PlayerStateMachineComponent>();
-    }
-
-    void ChangeState(std::string newState)
-    {
-        fsm->toggle();
-    }
-
-    void Update()
-    {
-//        std::cout << "PlayerStateMachineSystem" << std::endl;
-//        for (auto entity: GetSystemEntities())
-//        {
-//            auto &state = entity.GetComponent<PlayerStateMachineComponent>();
-//            Logger::Log("Current State: " + state.currentState);
-//        }
-    }
+    void Update() {}
 
 };
 

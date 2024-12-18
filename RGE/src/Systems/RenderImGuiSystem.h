@@ -11,6 +11,7 @@
 
 #include "../ECS/include/ECS.h"
 #include "../ECS/include/Registry.h"
+#include "PlayerStateMachineSystem.h"
 
 class RenderImGuiSystem: public System
 {
@@ -187,6 +188,7 @@ class RenderImGuiSystem: public System
 
                 if (ImGui::CollapsingHeader("State Machine"))
                 {
+//                    registry->GetSystem<PlayerStateMachineSystem>().getFsm()->
                     PlayerStateMachineComponent fsm = player.GetComponent<PlayerStateMachineComponent>();
                     ImGui::Text("Current State: %s",  fsm.currentState.c_str());
                 }

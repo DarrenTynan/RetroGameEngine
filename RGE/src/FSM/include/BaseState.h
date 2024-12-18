@@ -6,7 +6,6 @@
 #define RETROGAMEENGINE_ENTITYBASESTATE_H
 
 #include "FSM.h"
-#include <iostream>
 
 // Forward declaration to resolve circular dependency/include
 class FSM;

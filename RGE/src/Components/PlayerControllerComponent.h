@@ -24,6 +24,7 @@ struct PlayerControllerComponent
         this->rightVelocity = rightVelocity;
         this->downVelocity = downVelocity;
         this->leftVelocity = leftVelocity;
+
     }
 };
 
