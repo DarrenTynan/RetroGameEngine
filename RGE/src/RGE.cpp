@@ -279,8 +279,6 @@ void RGE::setupAssets()
     assetStore->AddFont("arial-font", "../Game/assets/fonts/arial.ttf", 24);
     assetStore->AddTexture(gameRenderer, "tilemap-image", "../Game/assets/tilemaps/TestLevel/TestLevel.png");
 
-    // mapImagePath not correct
-//    assetStore->AddTexture(gameRenderer, "tilemap-image", mapImagePath);
     assetStore->AddTexture(gameRenderer, "tank-image", "../Game/assets/images/tank-panther-right.png");
     assetStore->AddTexture(gameRenderer, "truck-image", "../Game/assets/images/truck-ford-right.png");
     assetStore->AddTexture(gameRenderer, "chopper-image", "../Game/assets/images/chopper.png");
@@ -296,7 +294,6 @@ void RGE::setupObjects()
 {
     Entity player = registry->CreateEntity();
     player.AddTag("player");
-
     player.AddComponent<TransformComponent>(glm::vec2(256, 32*14), glm::vec2(1.0, 1.0), 0.0);
     player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
@@ -305,20 +302,19 @@ void RGE::setupObjects()
     player.AddComponent<PlayerControllerComponent>(glm::vec2(0, -80.0), glm::vec2(80.0, 0), glm::vec2(0, 80.0), glm::vec2(-80.0, 0));
     player.AddComponent<HealthComponent>(100);
     player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
+    player.AddComponent<HealthComponent>(100);
 
-    std::cout << "DEBUG" << std::endl;
-    std::cout << player.GetComponent<RigidBodyComponent>().fsm->isGrounded << std::endl;
+    Entity chopper = registry->CreateEntity();
+    chopper.AddTag("chopper");
+    chopper.AddComponent<TransformComponent>(glm::vec2(50, 32*10), glm::vec2(1.0, 1.0), 0.0);
+    // Add velocity to set the move speed
+    chopper.AddComponent<RigidBodyComponent>(glm::vec2(20.0, 0.0));
+    chopper.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
+    chopper.AddComponent<SpriteComponent>("chopper-image", 32, 32, 1, false, false);
+    chopper.AddComponent<AnimationComponent>(2, 8, true);
+    chopper.AddComponent<HealthComponent>(100);
+//    chopper.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
 
-    //    player.AddComponent<CameraFollowComponent>();
-//    player.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
-
-
-//    Entity tank = registry->CreateEntity();
-//    tank.AddComponent<TransformComponent>(glm::vec2(100.0, 100.0), glm::vec2(2.0, 2.0), 0.0);
-//    tank.AddComponent<RigidBodyComponent>(glm::vec2(20.0, 0.0));
-//    tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1, false, 0, 0);
-//    tank.AddComponent<BoxColliderComponent>(22, 22, glm::vec2(10,10));
-//    tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
 
 //    Entity label = registry->CreateEntity();
 //    SDL_Color red = {255,0,0};
@@ -502,7 +498,6 @@ void RGE::updateSystems()
     registry->GetSystem<CameraMovementSystem>().Update(gameCamera);
     registry->GetSystem<ProjectileEmitSystem>().Update(registry);
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
-//    registry->GetSystem<StateMachineSystem>().Update();           // Update player fsm
 
 }
 
@@ -515,12 +510,6 @@ void RGE::setupVars()
     registry = std::make_unique<Registry>();
     assetStore = std::make_unique<AssetStore>();
     eventBus = std::make_unique<EventBus>();
-
-//    fsm = new FSM();
-//    fsm->toggle();
-//    fsm.toggle();
-//    fsm.toggle();
-//    fsm.toggle();
 
 }
 

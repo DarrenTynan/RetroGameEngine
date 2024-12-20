@@ -2,7 +2,6 @@
 #define PLAYERCONTROLSYSTEM_H
 
 #include "../ECS/include/ECS.h"
-#include "StateMachineSystem.h"
 
 #include "../EventBus/EventBus.h"
 #include "../Events/KeyPressedEvent.h"
@@ -57,34 +56,29 @@ class PlayerControlSystem: public System
                         fsm->toggle();
                         fsm->direction.y = -1.0;
                         fsm->isGrounded = false;
-                        std::cout << "direction x: " << fsm->direction.x << " direction y: " << fsm->direction.y <<std::endl;
                         break;
                     case SDLK_RIGHT:
                         rigidBodyComponent.velocity = playerControllerComponent.rightVelocity;
                         spriteComponent.flipH = false;
                         fsm->toggle();
                         fsm->direction.x = 1.0;
-                        std::cout << "direction x: " << fsm->direction.x << " direction y: " << fsm->direction.y <<std::endl;
                         break;
                     case SDLK_DOWN:
                         rigidBodyComponent.velocity = playerControllerComponent.downVelocity;
                         fsm->toggle();
                         fsm->direction.y = 1.0;
-                        std::cout << "direction x: " << fsm->direction.x << " direction y: " << fsm->direction.y <<std::endl;
                         break;
                     case SDLK_LEFT:
                         rigidBodyComponent.velocity = playerControllerComponent.leftVelocity;
                         spriteComponent.flipH = true;
                         fsm->toggle();
                         fsm->direction.x = -1.0;
-                        std::cout << "direction x: " << fsm->direction.x << " direction y: " << fsm->direction.y <<std::endl;
                         break;
                     case SDLK_SPACE:
                         rigidBodyComponent.velocity = playerControllerComponent.upVelocity;
                         rigidBodyComponent.fsm->isGrounded = false;
                         fsm->toggle();
                         fsm->direction.y = 1.0;
-                        std::cout << "direction x: " << fsm->direction.x << " direction y: " << fsm->direction.y <<std::endl;
                         break;
                     default:
                         break;

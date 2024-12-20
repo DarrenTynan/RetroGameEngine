@@ -31,7 +31,6 @@ void FSM::toggle()
  */
 FSM::FSM()
 {
-    std::cout << "FSM constructor" << std::endl;
     currentState = &Idle::getInstance();
     currentState->update(nullptr);
 }

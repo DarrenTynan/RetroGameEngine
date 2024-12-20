@@ -10,7 +10,6 @@
 #include <imgui_impl_sdlrenderer2.h>
 
 #include "../ECS/include/ECS.h"
-#include "StateMachineSystem.h"
 
 class RenderImGuiSystem: public System
 {

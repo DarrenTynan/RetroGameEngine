@@ -50,7 +50,6 @@
 #include "../../RGE/src/Systems/ProjectileLifecycleSystem.h"
 #include "../../RGE/src/Systems/DamageSystem.h"
 #include "../../RGE/src/Systems/RenderRaycastSystem.h"
-#include "../../RGE/src/Systems/StateMachineSystem.h"
 
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Layer.hpp>
