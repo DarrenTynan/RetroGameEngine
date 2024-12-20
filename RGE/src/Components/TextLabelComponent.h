@@ -9,7 +9,8 @@
 #include <string>
 #include <SDL2/SDL.h>
 
-struct TextLabelComponent {
+struct TextLabelComponent
+{
     glm::vec2 position;
     std::string text;
     std::string assetId;
@@ -32,4 +33,5 @@ struct TextLabelComponent {
         this->isFixed = isFixed;
     }
 };
+
 #endif //RETRO_ENGINE_TEXTLABELCOMPONENT_H

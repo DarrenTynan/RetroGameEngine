@@ -21,6 +21,7 @@ class RenderImGuiSystem: public System
         bool show_spawn_entity = false;
         bool show_tmx_window = true;
         bool show_object_window = true;
+        bool show_game_window = false;
 
     void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera)
     {
@@ -35,6 +36,7 @@ class RenderImGuiSystem: public System
         if (show_spawn_entity) ShowSpawnEntity(registry);
         if (show_tmx_window) ShowTmxWindow(registry, camera);
         if (show_object_window) ShowObjectWindow(registry);
+        if (show_game_window) ShowGameWindow();
 
         // Rendering
         ImGui::Render();
@@ -43,6 +45,22 @@ class RenderImGuiSystem: public System
         ImGuiIO& io = ImGui::GetIO(); (void)io;
 //        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 //        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    }
+
+    void ShowGameWindow()
+    {
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+        if (ImGui::Begin("Game Window"))
+        {
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+            ImGui::Text("x: %i  y: %i", x, y);
+            int tileX = x/32;
+            int tileY = y/32;
+            ImGui::Text("Tile.x: %i  Tile.y %i", tileX, tileY);
+            ImGui::End();
+        }
 
     }
 
@@ -99,6 +117,16 @@ class RenderImGuiSystem: public System
     {
         if (ImGui::Begin("TMX Map"))
         {
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+            ImGui::Text("x: %i  y: %i", x, y);
+            int tileX = x/32;
+            int tileY = y/32;
+            ImGui::Text("Tile.x: %i  Tile.y %i", tileX, tileY);
+
+            ImGui::Separator();
+
+
             Entity tile = registry->GetEntityByTag("tile");
             ImGui::Text("Tile ID: %i",  tile.GetId());
             TransformComponent trans = tile.GetComponent<TransformComponent>();

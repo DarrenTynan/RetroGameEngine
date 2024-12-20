@@ -113,6 +113,7 @@ public:
 
 private:
 
+    static void drawGrid();
 };
 
 #endif //RETROGAMEENGINE_RGE_H

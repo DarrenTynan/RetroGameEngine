@@ -228,11 +228,26 @@ void RGE::setupSystemRegistry()
 }
 
 
+void RGE::drawGrid()
+{
+    SDL_SetRenderDrawColor(gameRenderer, 0,0,0,255);
+    for (int i = 0; i < GAME_WINDOW_HEIGHT; ++i)
+    {
+        SDL_RenderDrawLine(gameRenderer, 0, i*32, GAME_WINDOW_WIDTH, i*32);
+    }
+    for (int i = 0; i < GAME_WINDOW_WIDTH; ++i)
+    {
+        SDL_RenderDrawLine(gameRenderer, i*32, 0, i*32, GAME_WINDOW_WIDTH);
+    }
+    SDL_RenderPresent(gameRenderer);
+}
+
 /**
  * @brief Call render on all objects
  */
 void RGE::render()
 {
+    RGE::drawGrid();
     SDL_SetRenderDrawColor(rgeRenderer, (Uint8)(rge_clear_color.x * 255), (Uint8)(rge_clear_color.y * 255), (Uint8)(rge_clear_color.z * 255), (Uint8)(rge_clear_color.w * 255));
     SDL_RenderClear(rgeRenderer);
 
