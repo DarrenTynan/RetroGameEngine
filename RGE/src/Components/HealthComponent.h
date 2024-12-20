@@ -1,10 +1,12 @@
 #ifndef HEALTHCOMPONENT_H
 #define HEALTHCOMPONENT_H
 
-struct HealthComponent {
+struct HealthComponent
+{
     int healthPercentage;
 
-    HealthComponent(int healthPercentage = 0) {
+    explicit HealthComponent(int healthPercentage = 0)
+    {
         this->healthPercentage = healthPercentage;
     }
 };

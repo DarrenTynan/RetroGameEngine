@@ -7,7 +7,8 @@ set(CMAKE_CXX_STANDARD 17)
 #add_library(RGE STATIC RGE/src/RGE.cpp)
 
 # Add main.cpp file of the project root directory as a source file
-set(SOURCE_FILES main.cpp
+set(SOURCE_FILES
+        main.cpp
         Game/src/Game.cpp
         RGE/include/RGE.h
         RGE/src/RGE.cpp
@@ -21,8 +22,9 @@ set(SOURCE_FILES main.cpp
         RGE/libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
 
         RGE/src/AssetStore/AssetStore.cpp
-        RGE/src/ECS/ECS.cpp
         RGE/src/Logger/Logger.cpp
+
+        RGE/src/ECS/ECS.cpp
         RGE/src/ECS/include/Pool.h
         RGE/src/ECS/include/Component.h
         RGE/src/ECS/include/Entity.h
@@ -30,21 +32,22 @@ set(SOURCE_FILES main.cpp
         RGE/src/ECS/include/Registry.h
 
         RGE/src/FSM/include/FSM.h
+        RGE/src/FSM/FSM.cpp
         RGE/src/FSM/include/BaseState.h
         RGE/src/FSM/include/States.h
-        RGE/src/FSM/fsm.cpp
         RGE/src/FSM/StateTransitions.cpp
-        RGE/src/FSM/FSM.cpp
-        RGE/src/FSM/FSM.cpp
-        RGE/src/Components/PlayerStateMachineComponent.h
-        RGE/src/Systems/PlayerStateMachineSystem.h
 
 )
 
 # Add executable target with source files listed in SOURCE_FILES variable
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-include_directories(Game/assets/ RGE/include/ RGE/libs/imgui_docking/ RGE/libs/imgui_docking/backends/ )
+include_directories(
+        Game/assets/
+        RGE/include/
+        RGE/libs/imgui_docking/
+        RGE/libs/imgui_docking/backends/
+)
 
 # Line compiles but missing error.
 #target_link_libraries(${PROJECT_NAME} /RGE/libs/libRGE.a)

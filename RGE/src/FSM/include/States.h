@@ -14,13 +14,13 @@
 class Idle : public BaseState
 {
 public:
-    std::string name = "Idle";
-    void enter(FSM* entity) { std::cout << name << " enter" << std::endl; }
-    void update(FSM* entity);
-    void toggle(FSM* entity);
-    void exit(FSM* entity) { std::cout << name << " exit" << std::endl; }
+    std::string name = "Name: Idle";
+    std::string getName();
+    void enter(FSM* fsm);
+    void update(FSM* fsm);
+    void toggle(FSM* fsm);
+    void exit(FSM* fsm);
     static BaseState& getInstance();
-    std::string getName() const;
 private:
     Idle() {}
     Idle(const Idle& other);
@@ -34,13 +34,13 @@ private:
 class Walk : public BaseState
 {
 public:
-    std::string name = "Walk";
-    void enter(FSM* entity) { std::cout << name << " enter" << std::endl; }
-    void update(FSM* entity);
-    void toggle(FSM* entity);
-    void exit(FSM* entity) { std::cout << name << " exit" << std::endl; }
+    std::string name = "Name: Walk";
+    std::string getName();
+    void enter(FSM* fsm);
+    void update(FSM* fsm);
+    void toggle(FSM* fsm);
+    void exit(FSM* fsm);
     static BaseState& getInstance();
-    std::string getName() const;
 private:
     Walk() {};
     Walk(const Walk& other);
@@ -55,12 +55,12 @@ class Run : public BaseState
 {
 public:
     std::string name = "Run";
-    void enter(FSM* entity) { std::cout << name << " enter" << std::endl; }
-    void update(FSM* entity);
-    void toggle(FSM* entity);
-    void exit(FSM* entity) { std::cout << name << " exit" << std::endl; }
+    std::string getName();
+    void enter(FSM* fsm);
+    void update(FSM* fsm);
+    void toggle(FSM* fsm);
+    void exit(FSM* fsm);
     static BaseState& getInstance();
-    std::string getName() const;
 private:
     Run() {};
     Run(const Run& other);
@@ -72,12 +72,12 @@ class Jump : public BaseState
 {
 public:
     std::string name = "Jump";
-    void enter(FSM* entity) { std::cout << name << " enter" << std::endl; }
-    void update(FSM* entity);
-    void toggle(FSM* entity);
-    void exit(FSM* entity) { std::cout << name << " exit" << std::endl; }
+    std::string getName();
+    void enter(FSM* fsm);
+    void update(FSM* fsm);
+    void toggle(FSM* fsm);
+    void exit(FSM* fsm);
     static BaseState& getInstance();
-    std::string getName() const;
 private:
     Jump() {};
     Jump(const Jump& other);
@@ -89,12 +89,12 @@ class Fall : public BaseState
 {
 public:
     std::string name = "Fall";
-    void enter(FSM* entity) { std::cout << name << " enter" << std::endl; }
-    void update(FSM* entity);
-    void toggle(FSM* entity);
-    void exit(FSM* entity) { std::cout << name << " exit" << std::endl; }
+    std::string getName();
+    void enter(FSM* fsm);
+    void update(FSM* fsm);
+    void toggle(FSM* fsm);
+    void exit(FSM* fsm);
     static BaseState& getInstance();
-    std::string getName() const;
 private:
     Fall() {};
     Fall(const Fall& other);

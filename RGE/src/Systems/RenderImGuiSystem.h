@@ -11,7 +11,7 @@
 
 #include "../ECS/include/ECS.h"
 #include "../ECS/include/Registry.h"
-#include "PlayerStateMachineSystem.h"
+#include "StateMachineSystem.h"
 
 class RenderImGuiSystem: public System
 {
@@ -131,7 +131,7 @@ class RenderImGuiSystem: public System
             if (ImGui::CollapsingHeader("Player Entity"))
             {
                 ImGui::Text("Player ID: %i",  player.GetId());
-                ImGui::Text("Player State: %s",  player.GetComponent<PlayerStateMachineComponent>().currentState.c_str());
+                ImGui::Text("Player State: %s",  player.GetComponent<StateMachineComponent>().currentState.c_str());
 
                 if (ImGui::CollapsingHeader("Transform"))
                 {
@@ -139,13 +139,14 @@ class RenderImGuiSystem: public System
                     ImGui::Text("Position: %.2f, %.2f",  trans.position.x, trans.position.y);
                 }
 
-                ImGui::Spacing();
+//                ImGui::Spacing();
 
                 if (ImGui::CollapsingHeader("Rigid Body"))
                 {
                     auto& rb = player.GetComponent<RigidBodyComponent>();
                     auto& tc = player.GetComponent<TransformComponent>();
 
+                    ImGui::Text("Direction: x: %.2f y: %.2f", rb.direction.x, rb.direction.y);
                     ImGui::Text("Velocity: x: %.2f y: %.2f", rb.velocity.x, rb.velocity.y);
                     ImGui::Text("Delta: x: %.2f y :%.2f", rb.delta.x, rb.delta.y);
 //                    ImGui::Text("Speed: %.2f", rb.speed);
@@ -154,6 +155,8 @@ class RenderImGuiSystem: public System
 //                    ImGui::Text("Velocity multiplier: %.2f", rb.velocityMultiplier);
                     ImGui::Text("Player on ground: %i", rb.isGrounded);
 
+                    ImGui::Spacing();
+                    ImGui::Separator();
                     ImGui::Spacing();
 
                     static float speed = rb.speed;
@@ -173,7 +176,7 @@ class RenderImGuiSystem: public System
                     if (ImGui::InputFloat("Jump Force", &jump, 0.5f, 1.0f, "%.2f")) { rb.jumpForce = jump; };
                 }
 
-                ImGui::Spacing();
+//                ImGui::Spacing();
 
                 if (ImGui::CollapsingHeader("Player Controller"))
                 {
@@ -184,13 +187,16 @@ class RenderImGuiSystem: public System
                     ImGui::Text("Left Velocity: x: %.2f y: %.2f", pc.leftVelocity.x, pc.rightVelocity.y);
                 }
 
-                ImGui::Spacing();
-
-                if (ImGui::CollapsingHeader("State Machine"))
+//                ImGui::Spacing();
+                if (ImGui::CollapsingHeader("State Machine OLD"))
                 {
-//                    registry->GetSystem<PlayerStateMachineSystem>().getFsm()->
-                    PlayerStateMachineComponent fsm = player.GetComponent<PlayerStateMachineComponent>();
-                    ImGui::Text("Current State: %s",  fsm.currentState.c_str());
+                    StateMachineComponent sm = player.GetComponent<StateMachineComponent>();
+                    ImGui::Text("Current State: %s",  sm.currentState.c_str());
+                    ImGui::Separator();
+
+
+//                    std::string &g = globals::global_debug;
+//                    ImGui::Text("Current State: %s",  g.c_str());
                 }
 
                 if (ImGui::CollapsingHeader("Ray cast"))

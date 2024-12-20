@@ -204,26 +204,27 @@ void RGE::setupImGui()
 /**
  * @brief Initialise the registry with systems.
  */
-void RGE::setupRegistry()
+void RGE::setupSystemRegistry()
 {
     // Add the systems that need to be processed in our game
-    registry->AddSystem<MovementSystem>();
-    registry->AddSystem<RenderSystem>();
-    registry->AddSystem<AnimationSystem>();
-    registry->AddSystem<CollisionSystem>();
-    registry->AddSystem<RenderColliderSystem>();
-    registry->AddSystem<DamageSystem>();
-//    registry->AddSystem<KeyboardControlSystem>();
-    registry->AddSystem<CameraMovementSystem>();
-    registry->AddSystem<ProjectileEmitSystem>();
-    registry->AddSystem<ProjectileLifecycleSystem>();
-    registry->AddSystem<RenderTextSystem>();
+    registry->AddSystem<PlayerControlSystem>();         // Read keys and control player movements.
 
-    registry->AddSystem<RenderColliderSystem>();
-    registry->AddSystem<PlayerControlSystem>();
-    registry->AddSystem<RenderImGuiSystem>();
-//    registry->AddSystem<PlayerStateMachineSystem>();
-    registry->AddSystem<RenderRaycastSystem>();
+//    registry->AddSystem<KeyboardControlSystem>();
+
+    registry->AddSystem<MovementSystem>();              // Move all entities
+    registry->AddSystem<AnimationSystem>();             // Animate all entities
+    registry->AddSystem<CollisionSystem>();             // Check all entity collisions
+    registry->AddSystem<DamageSystem>();                // Check all damage systems
+    registry->AddSystem<CameraMovementSystem>();        // Check the camera move system
+    registry->AddSystem<ProjectileEmitSystem>();        // Check entity bullets
+    registry->AddSystem<ProjectileLifecycleSystem>();   // Check the life cycle and kill off bullets
+
+    registry->AddSystem<RenderColliderSystem>();        // Debug render collision box's
+    registry->AddSystem<RenderSystem>();                // Render windows
+    registry->AddSystem<RenderTextSystem>();            // Render any label's
+    registry->AddSystem<RenderImGuiSystem>();           // Render the engine window
+    registry->AddSystem<RenderRaycastSystem>();         // Debug render the ray cast's
+
 }
 
 
@@ -304,8 +305,9 @@ void RGE::setupObjects()
     player.AddComponent<PlayerControllerComponent>(glm::vec2(0, -80.0), glm::vec2(80.0, 0), glm::vec2(0, 80.0), glm::vec2(-80.0, 0));
     player.AddComponent<HealthComponent>(100);
     player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
-    player.AddComponent<PlayerStateMachineComponent>("idle");
-//    player.AddComponent<CameraFollowComponent>();
+    player.AddComponent<StateMachineComponent>("idle");
+
+    //    player.AddComponent<CameraFollowComponent>();
 //    player.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
 
 
@@ -318,7 +320,7 @@ void RGE::setupObjects()
 
 //    Entity label = registry->CreateEntity();
 //    SDL_Color red = {255,0,0};
-//    label.AddComponent<TextLabelComponent>(glm::vec2(200, 200), "This is a label", "charriot-font", red, true);
+//    label.AddComponent<TextLabelComponent>(glm::vec2(200, 200), "This is a label", "arial-font", red, true);
 
 }
 
@@ -450,12 +452,6 @@ bool RGE::processInputEvents()
                 if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
                 if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
 
-                if (sdlEvent.key.keysym.sym == SDLK_z)
-                {
-//                    registry->GetSystem<PlayerStateMachineSystem>().ChangeState("Idle");           // Update player fsm
-                    fsm->toggle();
-                }
-
                 eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
                 break;
 
@@ -504,7 +500,7 @@ void RGE::updateSystems()
     registry->GetSystem<CameraMovementSystem>().Update(gameCamera);
     registry->GetSystem<ProjectileEmitSystem>().Update(registry);
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
-//    registry->GetSystem<PlayerStateMachineSystem>().Update();           // Update player fsm
+//    registry->GetSystem<StateMachineSystem>().Update();           // Update player fsm
 
 }
 
@@ -518,7 +514,7 @@ void RGE::setupVars()
     assetStore = std::make_unique<AssetStore>();
     eventBus = std::make_unique<EventBus>();
 
-    fsm = new FSM();
+//    fsm = new FSM();
 //    fsm->toggle();
 //    fsm.toggle();
 //    fsm.toggle();

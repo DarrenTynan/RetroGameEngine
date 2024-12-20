@@ -5,9 +5,6 @@
 #ifndef RETRO_ENGINE_STATEMACHINECOMPONENT_H
 #define RETRO_ENGINE_STATEMACHINECOMPONENT_H
 #include <string>
-#include <utility>
-
-#include "../../RGE/src/FSM/include/FSM.h"
 
 struct StateMachineComponent
 {
@@ -16,6 +13,7 @@ struct StateMachineComponent
     explicit StateMachineComponent(std::string state = "idle")
     {
         this->currentState = std::move(state);
+
     }
 
 };

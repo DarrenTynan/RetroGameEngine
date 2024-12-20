@@ -32,7 +32,7 @@
 #include "../../RGE/src/Components/AnimationComponent.h"
 #include "../../RGE/src/Components/BoxColliderComponent.h"
 #include "../../RGE/src/Components/PlayerControllerComponent.h"
-#include "../../RGE/src/Components/PlayerStateMachineComponent.h"
+#include "../../RGE/src/Components/StateMachineComponent.h"
 #include "../../RGE/src/Components/ProjectileComponent.h"
 #include "../../RGE/src/Components/ProjectileEmitterComponent.h"
 #include "../../RGE/src/Components/HealthComponent.h"
@@ -51,7 +51,7 @@
 #include "../../RGE/src/Systems/ProjectileLifecycleSystem.h"
 #include "../../RGE/src/Systems/DamageSystem.h"
 #include "../../RGE/src/Systems/RenderRaycastSystem.h"
-#include "../../RGE/src/Systems/PlayerStateMachineSystem.h"
+#include "../../RGE/src/Systems/StateMachineSystem.h"
 
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Layer.hpp>
@@ -81,7 +81,6 @@ static SDL_Rect gameCamera;
 static SDL_Renderer* gameRenderer;
 
 static const auto MAP_PATH = "../Game/assets/tilemaps/TestLevel/TestLevel.tmx";
-//const auto MAP_PATH = "../Game/assets/tilemaps/Level_01.tmx";
 static std::string mapImagePath;
 static tmx::Map map;
 
@@ -108,7 +107,7 @@ public:
     static int setupGameSDL();
     static void setupImGui();
     static void render();
-    static void setupRegistry();
+    static void setupSystemRegistry();
     static void setupAssets();
     static void setupObjects();
     static int setupTMX();

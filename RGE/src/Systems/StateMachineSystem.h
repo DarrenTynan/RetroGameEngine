@@ -10,27 +10,32 @@
 #include "../Components/StateMachineComponent.h"
 #include "../Logger/Logger.h"
 
+#include "../../RGE/src/FSM/include/FSM.h"
+
+
 class StateMachineSystem: public System
 {
 public:
-    StateMachineSystem() {
+    static std::string debug;
+
+    FSM* fsm{};
+    StateMachineSystem()
+    {
+        fsm = new FSM();
         RequireComponent<SpriteComponent>();
         RequireComponent<StateMachineComponent>();
     }
 
-    void ChangeState(std::string newState)
+    void ChangeState(const std::string& newState) {}
+
+    void Update() const
     {
-
-    }
-
-    void Update() {
-        for (auto entity: GetSystemEntities()) {
+//        for (auto entity: GetSystemEntities()) {
 //                auto& sprite = entity.GetComponent<SpriteComponent>();
 //                sprite.flipH = true;
-            auto &state = entity.GetComponent<StateMachineComponent>();
-            Logger::Log("Current State: " + state.currentState);
-
-        }
+//            auto &state = entity.GetComponent<StateMachineComponent>();
+//            Logger::Log("Current State: " + state.currentState);
+//        }
     }
 
 };

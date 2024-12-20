@@ -5,6 +5,8 @@
 #ifndef RETROGAMEENGINE_FSM_H
 #define RETROGAMEENGINE_FSM_H
 
+//#include "GLOBALS.h"
+
 #include "BaseState.h"
 
 class BaseState;

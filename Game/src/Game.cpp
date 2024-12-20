@@ -6,28 +6,23 @@
 #include "../../RGE/include/RGE.h"
 
 Game::Game() { Logger::Log("Game constructor called"); }
-
 Game::~Game() { Logger::Log("Game deconstruct called"); }
 
 
 /**
- * Function calls to setup: setupVars, setupSDL, setupRgeSDL, setupGameSDL, setupRegistry, setupAssets.
+ * Function calls to setup: setupVars, setupSDL, setupRgeSDL, setupGameSDL, setupSystemRegistry, setupAssets.
  */
 void Game::Setup()
 {
-//    Light *debug = new Light();
     RGE::setupVars();
     RGE::setupSDL();
     RGE::setupRgeSDL();
     RGE::setupGameSDL();
-    RGE::setupRegistry();
+    RGE::setupSystemRegistry();
     RGE::setupAssets();
     RGE::setupObjects();
     RGE::setupTMX();
     RGE::setupImGui();
-
-    // Set game running on
-//    isRunning = true;
 }
 
 

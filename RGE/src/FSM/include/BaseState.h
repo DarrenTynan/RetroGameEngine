@@ -6,6 +6,7 @@
 #define RETROGAMEENGINE_ENTITYBASESTATE_H
 
 #include "FSM.h"
+#include <string>
 
 // Forward declaration to resolve circular dependency/include
 class FSM;
@@ -16,10 +17,11 @@ class FSM;
 class BaseState
 {
 public:
-    virtual void enter(FSM* entity) = 0;
-    virtual void update(FSM* entity) = 0;
-    virtual void toggle(FSM* entity) = 0;
-    virtual void exit(FSM* entity) = 0;
+    virtual void enter(FSM* fsm) = 0;
+    virtual void update(FSM* fsm) = 0;
+    virtual void toggle(FSM* fsm) = 0;
+    virtual void exit(FSM* fsm) = 0;
+    virtual std::string getName() = 0;
     virtual ~BaseState() = default;
 };
 

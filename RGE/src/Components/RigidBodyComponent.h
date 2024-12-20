@@ -5,6 +5,7 @@
 
 struct RigidBodyComponent
 {
+    glm::vec2 direction = glm::vec2 (0.0, 0.0);
     glm::vec2 velocity = glm::vec2(0.0, 0.0);
     glm::vec2 delta = glm::vec2(0.0, 0.0);
     float speed = 50.0f;

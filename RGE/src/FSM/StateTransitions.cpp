@@ -7,11 +7,11 @@
 /**
  * @brief Idle -> Walk transitions.
  *
- * @param entity
+ * @param fsm
  */
-void Idle::toggle(FSM* entity)
+void Idle::toggle(FSM* fsm)
 {
-    entity->setState(Walk::getInstance());
+     fsm->setState(Walk::getInstance());
 }
 
 BaseState& Idle::getInstance()
@@ -20,25 +20,30 @@ BaseState& Idle::getInstance()
     return singleton;
 }
 
-void Idle::update(FSM *entity)
+void Idle::update(FSM *fsm) {}
+
+std::string Idle::getName()
 {
-    std::cout << this->name << std::endl;
+    return "Idle";
 }
 
-std::string Idle::getName() const
+void Idle::enter(FSM *fsm)
 {
-    return this->name;
+}
+
+void Idle::exit(FSM *fsm)
+{
 }
 
 
 /**
  * @brief Walk -> Idle transitions
  *
- * @param entity
+ * @param fsm
  */
-void Walk::toggle(FSM* entity)
+void Walk::toggle(FSM* fsm)
 {
-    entity->setState(Idle::getInstance());
+    fsm->setState(Idle::getInstance());
 }
 
 BaseState& Walk::getInstance()
@@ -47,25 +52,30 @@ BaseState& Walk::getInstance()
     return singleton;
 }
 
-void Walk::update(FSM *entity)
+void Walk::update(FSM *fsm) {}
+
+std::string Walk::getName()
 {
-    std::cout << this->name << std::endl;
+    return "Walk";
 }
 
-std::string Walk::getName() const
+void Walk::enter(FSM *fsm)
 {
-    return this->name;
+}
+
+void Walk::exit(FSM *fsm)
+{
 }
 
 
 /**
  * @brief Run -> Walk transitions
  *
- * @param entity
+ * @param fsm
  */
-void Run::toggle(FSM *entity)
+void Run::toggle(FSM *fsm)
 {
-    entity->setState(Walk::getInstance());
+    fsm->setState(Walk::getInstance());
 }
 
 BaseState& Run::getInstance()
@@ -74,26 +84,30 @@ BaseState& Run::getInstance()
     return singleton;
 }
 
-void Run::update(FSM *entity)
+void Run::update(FSM *fsm) {}
+
+std::string Run::getName()
 {
-    std::cout << this->name << std::endl;
+    return "Run";
 }
 
-std::string Run::getName() const
+void Run::enter(FSM *fsm)
 {
-    return this->name;
+}
+
+void Run::exit(FSM *fsm)
+{
 }
 
 
 /**
  * @brief Jump -> Fall transitions
  *
- * @param entity
+ * @param fsm
  */
-void Jump::toggle(FSM* entity)
+void Jump::toggle(FSM* fsm)
 {
-    // Off -> Low
-    entity->setState(Fall::getInstance());
+    fsm->setState(Fall::getInstance());
 }
 
 BaseState& Jump::getInstance()
@@ -102,25 +116,30 @@ BaseState& Jump::getInstance()
     return singleton;
 }
 
-void Jump::update(FSM *entity)
+void Jump::update(FSM *fsm) {}
+
+std::string Jump::getName()
 {
-    std::cout << this->name << std::endl;
+    return "Jump";
 }
 
-std::string Jump::getName() const
+void Jump::enter(FSM *fsm)
 {
-    return this->name;
+}
+
+void Jump::exit(FSM *fsm)
+{
 }
 
 
 /**
- * @brief Fall -> Idlde transitions
+ * @brief Fall -> Idle transitions
  *
- * @param entity
+ * @param fsm
  */
-void Fall::toggle(FSM* entity)
+void Fall::toggle(FSM* fsm)
 {
-    entity->setState(Idle::getInstance());
+    fsm->setState(Idle::getInstance());
 }
 
 BaseState& Fall::getInstance()
@@ -129,12 +148,18 @@ BaseState& Fall::getInstance()
     return singleton;
 }
 
-void Fall::update(FSM *entity)
+void Fall::update(FSM *fsm) {}
+
+std::string Fall::getName()
 {
-    std::cout << this->name << std::endl;
+    return "Fall";
 }
 
-std::string Fall::getName() const
+void Fall::enter(FSM *fsm)
 {
-    return this->name;
 }
+
+void Fall::exit(FSM *fsm)
+{
+}
+
