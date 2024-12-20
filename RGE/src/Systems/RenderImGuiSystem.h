@@ -139,7 +139,6 @@ class RenderImGuiSystem: public System
                     ImGui::Text("Position: %.2f, %.2f",  trans.position.x, trans.position.y);
                 }
 
-//                ImGui::Spacing();
 
                 if (ImGui::CollapsingHeader("Rigid Body"))
                 {
@@ -149,10 +148,6 @@ class RenderImGuiSystem: public System
                     ImGui::Text("Direction: x: %.2f y: %.2f", rb.direction.x, rb.direction.y);
                     ImGui::Text("Velocity: x: %.2f y: %.2f", rb.velocity.x, rb.velocity.y);
                     ImGui::Text("Delta: x: %.2f y :%.2f", rb.delta.x, rb.delta.y);
-//                    ImGui::Text("Speed: %.2f", rb.speed);
-//                    ImGui::Text("Gravity: %.2f", rb.gravity);
-//                    ImGui::Text("Jump: %.2f", rb.gravity);
-//                    ImGui::Text("Velocity multiplier: %.2f", rb.velocityMultiplier);
                     ImGui::Text("Player on ground: %i", rb.isGrounded);
 
                     ImGui::Spacing();
@@ -176,8 +171,6 @@ class RenderImGuiSystem: public System
                     if (ImGui::InputFloat("Jump Force", &jump, 0.5f, 1.0f, "%.2f")) { rb.jumpForce = jump; };
                 }
 
-//                ImGui::Spacing();
-
                 if (ImGui::CollapsingHeader("Player Controller"))
                 {
                     auto& pc = player.GetComponent<PlayerControllerComponent>();
@@ -187,16 +180,16 @@ class RenderImGuiSystem: public System
                     ImGui::Text("Left Velocity: x: %.2f y: %.2f", pc.leftVelocity.x, pc.rightVelocity.y);
                 }
 
-//                ImGui::Spacing();
-                if (ImGui::CollapsingHeader("State Machine OLD"))
+                if (ImGui::CollapsingHeader("Finate State Machine"))
                 {
                     StateMachineComponent sm = player.GetComponent<StateMachineComponent>();
-                    ImGui::Text("Current State: %s",  sm.currentState.c_str());
+                    ImGui::Text("Current State Old: %s",  sm.currentState.c_str());
                     ImGui::Separator();
 
-
-//                    std::string &g = globals::global_debug;
-//                    ImGui::Text("Current State: %s",  g.c_str());
+                    auto ctrl = registry->GetSystem<PlayerControlSystem>();
+                    auto fsm = ctrl.fsm;
+                    auto state = fsm->getCurrentState()->getName();
+                    ImGui::Text("Current State New: %s",  state.c_str());
                 }
 
                 if (ImGui::CollapsingHeader("Ray cast"))
