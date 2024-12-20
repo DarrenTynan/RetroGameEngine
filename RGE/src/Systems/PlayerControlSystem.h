@@ -2,6 +2,7 @@
 #define PLAYERCONTROLSYSTEM_H
 
 #include "../ECS/include/ECS.h"
+#include "StateMachineSystem.h"
 
 #include "../EventBus/EventBus.h"
 #include "../Events/KeyPressedEvent.h"
@@ -11,7 +12,6 @@
 #include "../Components/RigidBodyComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/TransformComponent.h"
-#include "../Components/StateMachineComponent.h"
 
 #include "../FSM/include/FSM.h"
 #include "RGE.h"
@@ -23,13 +23,8 @@
 class PlayerControlSystem: public System
 {
     public:
-
-        FSM* fsm;
-
         PlayerControlSystem()
         {
-            fsm = new FSM();
-            RequireComponent<StateMachineComponent>();
             RequireComponent<PlayerControllerComponent>();
             RequireComponent<SpriteComponent>();
             RequireComponent<RigidBodyComponent>();
@@ -46,55 +41,50 @@ class PlayerControlSystem: public System
         // Key pressed actions.
         void OnKeyPressed(KeyPressedEvent& event)
         {
-
             for (auto entity: GetSystemEntities())
             {
                 const auto playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
                 auto& spriteComponent = entity.GetComponent<SpriteComponent>();
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
                 auto& transformComponent = entity.GetComponent<TransformComponent>();
-                auto& stateMachineComponent = entity.GetComponent<StateMachineComponent>();
+                auto fsm = rigidBodyComponent.fsm;
 
                 switch (event.symbol)
                 {
                     case SDLK_UP:
-                        rigidBodyComponent.direction.y = -1.0;
                         rigidBodyComponent.velocity = playerControllerComponent.upVelocity;
-                        rigidBodyComponent.isGrounded = false;
-                        stateMachineComponent.currentState = "up";
-
+                        rigidBodyComponent.fsm->isGrounded = false;
                         fsm->toggle();
-                        std::cout << fsm->getCurrentState()->getName() << std::endl;
+                        fsm->direction.y = -1.0;
+                        fsm->isGrounded = false;
+                        std::cout << "direction x: " << fsm->direction.x << " direction y: " << fsm->direction.y <<std::endl;
                         break;
                     case SDLK_RIGHT:
-                        rigidBodyComponent.direction.x = 1.0;
                         rigidBodyComponent.velocity = playerControllerComponent.rightVelocity;
                         spriteComponent.flipH = false;
-                        stateMachineComponent.currentState = "right";
                         fsm->toggle();
-                        std::cout << fsm->getCurrentState()->getName() << std::endl;
+                        fsm->direction.x = 1.0;
+                        std::cout << "direction x: " << fsm->direction.x << " direction y: " << fsm->direction.y <<std::endl;
                         break;
                     case SDLK_DOWN:
-                        rigidBodyComponent.direction.y = 1.0;
                         rigidBodyComponent.velocity = playerControllerComponent.downVelocity;
-                        stateMachineComponent.currentState = "down";
                         fsm->toggle();
-                        std::cout << fsm->getCurrentState()->getName() << std::endl;
+                        fsm->direction.y = 1.0;
+                        std::cout << "direction x: " << fsm->direction.x << " direction y: " << fsm->direction.y <<std::endl;
                         break;
                     case SDLK_LEFT:
-                        rigidBodyComponent.direction.x = -1;
                         rigidBodyComponent.velocity = playerControllerComponent.leftVelocity;
                         spriteComponent.flipH = true;
-                        stateMachineComponent.currentState = "left";
                         fsm->toggle();
-                        std::cout << fsm->getCurrentState()->getName() << std::endl;
+                        fsm->direction.x = -1.0;
+                        std::cout << "direction x: " << fsm->direction.x << " direction y: " << fsm->direction.y <<std::endl;
                         break;
                     case SDLK_SPACE:
                         rigidBodyComponent.velocity = playerControllerComponent.upVelocity;
-                        rigidBodyComponent.isGrounded = false;
-                        stateMachineComponent.currentState = "jump";
+                        rigidBodyComponent.fsm->isGrounded = false;
                         fsm->toggle();
-                        std::cout << fsm->getCurrentState()->getName() << std::endl;
+                        fsm->direction.y = 1.0;
+                        std::cout << "direction x: " << fsm->direction.x << " direction y: " << fsm->direction.y <<std::endl;
                         break;
                     default:
                         break;
@@ -109,37 +99,29 @@ class PlayerControlSystem: public System
                 const auto playerController = entity.GetComponent<PlayerControllerComponent>();
                 auto& sprite = entity.GetComponent<SpriteComponent>();
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
-                auto& finiteStateMachineComponent = entity.GetComponent<StateMachineComponent>();
+                auto fsm = rigidBodyComponent.fsm;
 
                 switch (event.symbol)
                 {
                     case SDLK_UP:
-                        rigidBodyComponent.direction.y = 0.0;
                         rigidBodyComponent.velocity = playerController.idleVelocity;
-                        finiteStateMachineComponent.currentState = "idle";
                         fsm->toggle();
-                        std::cout << fsm->getCurrentState()->getName() << std::endl;
+                        fsm->direction.y = 0.0;
                         break;
                     case SDLK_RIGHT:
-                        rigidBodyComponent.direction.x = 0.0;
                         rigidBodyComponent.velocity = playerController.idleVelocity;
-                        finiteStateMachineComponent.currentState = "idle";
                         fsm->toggle();
-                        std::cout << fsm->getCurrentState()->getName() << std::endl;
+                        fsm->direction.x = 0.0;
                         break;
                     case SDLK_DOWN:
-                        rigidBodyComponent.direction.y = 0.0;
                         rigidBodyComponent.velocity = playerController.idleVelocity;
-                        finiteStateMachineComponent.currentState = "idle";
                         fsm->toggle();
-                        std::cout << fsm->getCurrentState()->getName() << std::endl;
+                        fsm->direction.y = 0.0;
                         break;
                     case SDLK_LEFT:
-                        rigidBodyComponent.direction.x = 0.0;
                         rigidBodyComponent.velocity = playerController.idleVelocity;
-                        finiteStateMachineComponent.currentState = "idle";
                         fsm->toggle();
-                        std::cout << fsm->getCurrentState()->getName() << std::endl;
+                        fsm->direction.x = 0.0;
                         break;
                     default:
                         break;

@@ -7,23 +7,16 @@
 
 #include "../ECS/include/ECS.h"
 #include "../Components/SpriteComponent.h"
-#include "../Components/StateMachineComponent.h"
 #include "../Logger/Logger.h"
-
-#include "../../RGE/src/FSM/include/FSM.h"
-
 
 class StateMachineSystem: public System
 {
 public:
     static std::string debug;
 
-    FSM* fsm{};
     StateMachineSystem()
     {
-        fsm = new FSM();
         RequireComponent<SpriteComponent>();
-        RequireComponent<StateMachineComponent>();
     }
 
     void ChangeState(const std::string& newState) {}

@@ -75,7 +75,7 @@ public:
 
                     if (a.HasTag("player"))
                     {
-                        a.GetComponent<RigidBodyComponent>().isGrounded = true;
+                        a.GetComponent<RigidBodyComponent>().fsm->isGrounded = true;
                         a.GetComponent<TransformComponent>().position.y -= 2.0;
                     }
 

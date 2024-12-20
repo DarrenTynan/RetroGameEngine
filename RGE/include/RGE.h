@@ -32,7 +32,6 @@
 #include "../../RGE/src/Components/AnimationComponent.h"
 #include "../../RGE/src/Components/BoxColliderComponent.h"
 #include "../../RGE/src/Components/PlayerControllerComponent.h"
-#include "../../RGE/src/Components/StateMachineComponent.h"
 #include "../../RGE/src/Components/ProjectileComponent.h"
 #include "../../RGE/src/Components/ProjectileEmitterComponent.h"
 #include "../../RGE/src/Components/HealthComponent.h"
@@ -61,8 +60,6 @@
 #include <tmxlite/Property.hpp>
 
 #include "../../RGE/src/FSM/include/FSM.h"
-
-static FSM* fsm;
 
 static std::unique_ptr<Registry> registry;
 static std::unique_ptr<AssetStore> assetStore;

@@ -2,17 +2,18 @@
 #define RIGIDBODYCOMPONENT_H
 
 #include <glm/glm.hpp>
+#include "../../RGE/src/FSM/include/FSM.h"
 
 struct RigidBodyComponent
 {
-    glm::vec2 direction = glm::vec2 (0.0, 0.0);
+    FSM* fsm = new FSM();
+
     glm::vec2 velocity = glm::vec2(0.0, 0.0);
     glm::vec2 delta = glm::vec2(0.0, 0.0);
     float speed = 50.0f;
     float gravity = 70.0f;
     float jumpForce = 2.0f;
     float velocityMultiplier = 0.2f;
-    bool isGrounded = false;
 
     [[nodiscard]] float getSpeed() const { return speed; }
 

@@ -305,7 +305,9 @@ void RGE::setupObjects()
     player.AddComponent<PlayerControllerComponent>(glm::vec2(0, -80.0), glm::vec2(80.0, 0), glm::vec2(0, 80.0), glm::vec2(-80.0, 0));
     player.AddComponent<HealthComponent>(100);
     player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
-    player.AddComponent<StateMachineComponent>("idle");
+
+    std::cout << "DEBUG" << std::endl;
+    std::cout << player.GetComponent<RigidBodyComponent>().fsm->isGrounded << std::endl;
 
     //    player.AddComponent<CameraFollowComponent>();
 //    player.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);

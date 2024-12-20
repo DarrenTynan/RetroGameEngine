@@ -10,7 +10,6 @@
 #include <imgui_impl_sdlrenderer2.h>
 
 #include "../ECS/include/ECS.h"
-#include "../ECS/include/Registry.h"
 #include "StateMachineSystem.h"
 
 class RenderImGuiSystem: public System
@@ -128,10 +127,15 @@ class RenderImGuiSystem: public System
         {
             Entity player = registry->GetEntityByTag("player");
 
+            // The fsm ptr is held in RigidBodyComponent.
+            auto fsm = player.GetComponent<RigidBodyComponent>().fsm;
+            //  The current state is held in fsm
+            auto state = fsm->getCurrentState()->getName();
+
             if (ImGui::CollapsingHeader("Player Entity"))
             {
                 ImGui::Text("Player ID: %i",  player.GetId());
-                ImGui::Text("Player State: %s",  player.GetComponent<StateMachineComponent>().currentState.c_str());
+                ImGui::Text("Player State: %s",  state.c_str());
 
                 if (ImGui::CollapsingHeader("Transform"))
                 {
@@ -139,16 +143,13 @@ class RenderImGuiSystem: public System
                     ImGui::Text("Position: %.2f, %.2f",  trans.position.x, trans.position.y);
                 }
 
-
                 if (ImGui::CollapsingHeader("Rigid Body"))
                 {
                     auto& rb = player.GetComponent<RigidBodyComponent>();
                     auto& tc = player.GetComponent<TransformComponent>();
 
-                    ImGui::Text("Direction: x: %.2f y: %.2f", rb.direction.x, rb.direction.y);
                     ImGui::Text("Velocity: x: %.2f y: %.2f", rb.velocity.x, rb.velocity.y);
                     ImGui::Text("Delta: x: %.2f y :%.2f", rb.delta.x, rb.delta.y);
-                    ImGui::Text("Player on ground: %i", rb.isGrounded);
 
                     ImGui::Spacing();
                     ImGui::Separator();
@@ -182,14 +183,9 @@ class RenderImGuiSystem: public System
 
                 if (ImGui::CollapsingHeader("Finate State Machine"))
                 {
-                    StateMachineComponent sm = player.GetComponent<StateMachineComponent>();
-                    ImGui::Text("Current State Old: %s",  sm.currentState.c_str());
-                    ImGui::Separator();
-
-                    auto ctrl = registry->GetSystem<PlayerControlSystem>();
-                    auto fsm = ctrl.fsm;
-                    auto state = fsm->getCurrentState()->getName();
-                    ImGui::Text("Current State New: %s",  state.c_str());
+                    ImGui::Text("Current State: %s",  state.c_str());
+                    ImGui::Text("isGrounded: %i",  fsm->isGrounded);
+                    ImGui::Text("Direction: x: %.2f y: %.2f", fsm->direction.x, fsm->direction.y);
                 }
 
                 if (ImGui::CollapsingHeader("Ray cast"))

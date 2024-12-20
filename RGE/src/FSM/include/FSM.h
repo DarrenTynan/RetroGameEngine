@@ -5,9 +5,8 @@
 #ifndef RETROGAMEENGINE_FSM_H
 #define RETROGAMEENGINE_FSM_H
 
-//#include "GLOBALS.h"
-
 #include "BaseState.h"
+#include <glm/glm.hpp>
 
 class BaseState;
 
@@ -17,6 +16,9 @@ class BaseState;
 class FSM
 {
 public:
+    bool isGrounded;
+    glm::vec2 direction = glm::vec2(0.0, 0.0);
+
     FSM();
     [[nodiscard]] inline BaseState* getCurrentState() const { return currentState; }
     void toggle();

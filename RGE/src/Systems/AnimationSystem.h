@@ -6,15 +6,19 @@
 #include "../Components/AnimationComponent.h"
 #include <SDL2/SDL.h>
 
-class AnimationSystem: public System {
+class AnimationSystem: public System
+{
     public:
-        AnimationSystem() {
+        AnimationSystem()
+        {
             RequireComponent<SpriteComponent>();
             RequireComponent<AnimationComponent>();
         }
 
-        void Update() {
-            for (auto entity: GetSystemEntities()) {
+        void Update()
+        {
+            for (auto entity: GetSystemEntities())
+            {
                 auto& animation = entity.GetComponent<AnimationComponent>();
                 auto& sprite = entity.GetComponent<SpriteComponent>();
 

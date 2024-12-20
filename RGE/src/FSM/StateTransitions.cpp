@@ -29,10 +29,12 @@ std::string Idle::getName()
 
 void Idle::enter(FSM *fsm)
 {
+    std::cout << "StateTransitions: idle enter" << std::endl;
 }
 
 void Idle::exit(FSM *fsm)
 {
+    std::cout << "StateTransitions: idle exit" << std::endl;
 }
 
 
@@ -61,10 +63,12 @@ std::string Walk::getName()
 
 void Walk::enter(FSM *fsm)
 {
+    std::cout << "StateTransitions: walk enter" << std::endl;
 }
 
 void Walk::exit(FSM *fsm)
 {
+    std::cout << "StateTransitions: walk exit" << std::endl;
 }
 
 
