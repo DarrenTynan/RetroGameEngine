@@ -60,43 +60,12 @@
 
 #include "../../RGE/src/FSM/include/FSM.h"
 
-static std::unique_ptr<Registry> registry;
-static std::unique_ptr<AssetStore> assetStore;
-static std::unique_ptr<EventBus> eventBus;
-
-static bool isCollider = false;
-static bool isRayCast = false;
-static bool isFullScreen = false;
-
-static SDL_Window* rgeWindow;
-static SDL_Rect rgeCamera;
-static SDL_Renderer* rgeRenderer;
-
-static SDL_Window* gameWindow;
-static SDL_Rect gameCamera;
-static SDL_Renderer* gameRenderer;
-
-static const auto MAP_PATH = "../Game/assets/tilemaps/TestLevel/TestLevel.tmx";
-static std::string mapImagePath;
-static tmx::Map map;
-
-static int millisecsPreviouseFrame = 0;
-static unsigned int mapWidth{};
-static unsigned int mapHeight{};
-
 /**
  * @brief definition pf the class functions.
  */
 class RGE
 {
 public:
-    static const int FPS = 60;
-    static const int MILLISECS_PER_FRAME = 1000 / FPS;
-    constexpr static const ImVec4 game_clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
-    constexpr static const ImVec4 rge_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    const static int GAME_WINDOW_WIDTH = 800;
-    const static int GAME_WINDOW_HEIGHT = 600;
-
     static void setupVars();
     static int setupSDL();
     static int setupRgeSDL();
