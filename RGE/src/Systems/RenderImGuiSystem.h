@@ -186,9 +186,9 @@ class RenderImGuiSystem: public System
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Speed", &speed, 1.00f, 1.0f, "%.2f")) { rb.speed = speed; }
 
-                    static float gravity = rb.gravity;
+                    static float gravity = rb.gravityForce;
                     ImGui::SetNextItemWidth(150.0);
-                    if (ImGui::InputFloat("Gravity", &gravity, 0.5f, 1.0f, "%.2f")) { rb.gravity = gravity;}
+                    if (ImGui::InputFloat("Gravity", &gravity, 0.5f, 1.0f, "%.2f")) { rb.gravityForce = gravity;}
 
                     static float multiplier = rb.velocityMultiplier;
                     ImGui::SetNextItemWidth(150.0);

@@ -27,7 +27,7 @@ void Game::Setup()
 
 
 /**
- * game main loop; processInputs, updateSystems and render
+ * game main loop; processInputs, updateSystems and updateRender
  */
 void Game::Run()
 {
@@ -36,7 +36,7 @@ void Game::Run()
     {
         isGameRunning = RGE::processInputEvents();
         RGE::updateSystems();
-        RGE::render();
+        RGE::updateRenderer();
     }
 }
 

@@ -71,7 +71,7 @@ public:
     static int setupRgeSDL();
     static int setupGameSDL();
     static void setupImGui();
-    static void render();
+    static void updateRenderer();
     static void setupSystemRegistry();
     static void setupAssets();
     static void setupObjects();

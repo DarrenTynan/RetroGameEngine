@@ -231,11 +231,11 @@ void RGE::setupSystemRegistry()
     g_registry->AddSystem<ProjectileEmitSystem>();        // Check entity bullets
     g_registry->AddSystem<ProjectileLifecycleSystem>();   // Check the life cycle and kill off bullets
 
-    g_registry->AddSystem<RenderColliderSystem>();        // Debug render collision box's
+    g_registry->AddSystem<RenderColliderSystem>();        // Debug updateRender collision box's
     g_registry->AddSystem<RenderSystem>();                // Render windows
     g_registry->AddSystem<RenderTextSystem>();            // Render any label's
     g_registry->AddSystem<RenderImGuiSystem>();           // Render the engine window
-    g_registry->AddSystem<RenderRaycastSystem>();         // Debug render the ray cast's
+    g_registry->AddSystem<RenderRaycastSystem>();         // Debug updateRender the ray cast's
 
 }
 
@@ -255,9 +255,9 @@ void RGE::drawGrid()
 }
 
 /**
- * @brief Call render on all objects
+ * @brief Call updateRender on all objects
  */
-void RGE::render()
+void RGE::updateRenderer()
 {
     RGE::drawGrid();
 
@@ -267,7 +267,7 @@ void RGE::render()
     SDL_SetRenderDrawColor(g_gameRenderer, (Uint8)(g_game_clear_color.x * 255), (Uint8)(g_game_clear_color.y * 255), (Uint8)(g_game_clear_color.z * 255), (Uint8)(g_game_clear_color.w * 255));
     SDL_RenderClear(g_gameRenderer);
 
-    // Invoke all the systems that need to render
+    // Invoke all the systems that need to updateRender
     g_registry->GetSystem<RenderSystem>().Update(g_gameRenderer, g_assetStore, g_gameCamera);
     g_registry->GetSystem<RenderTextSystem>().Update(g_gameRenderer, g_assetStore, g_gameCamera);
     g_registry->GetSystem<RenderImGuiSystem>().Update(g_registry, g_rgeCamera);
@@ -322,7 +322,7 @@ void RGE::setupObjects()
 {
     Entity player = g_registry->CreateEntity();
     player.AddTag("player");
-    player.AddComponent<TransformComponent>(glm::vec2(256, 32*14), glm::vec2(1.0, 1.0), 0.0);
+    player.AddComponent<TransformComponent>(glm::vec2(32*2, 32*9), glm::vec2(1.0, 1.0), 0.0);
     player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
@@ -334,7 +334,7 @@ void RGE::setupObjects()
 
     Entity chopper = g_registry->CreateEntity();
     chopper.AddTag("chopper");
-    chopper.AddComponent<TransformComponent>(glm::vec2(50, 32*10), glm::vec2(1.0, 1.0), 0.0);
+    chopper.AddComponent<TransformComponent>(glm::vec2(50, 32*6), glm::vec2(1.0, 1.0), 0.0);
     // Add velocity to set the move speed
     chopper.AddComponent<RigidBodyComponent>(glm::vec2(20.0, 0.0));
     chopper.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));

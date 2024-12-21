@@ -9,7 +9,7 @@
 bool g_isCollider = false;
 bool g_isRayCast = false;
 
-// Keep track off time for the render loop
+// Keep track off time for the updateRender loop
 int g_millisecsPreviouseFrame = 0;
 
 SDL_Window* g_rgeWindow;

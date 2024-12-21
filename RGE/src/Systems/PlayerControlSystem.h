@@ -15,6 +15,7 @@
 #include "../FSM/include/FSM.h"
 #include "RGE.h"
 #include <algorithm>
+//#include "Globals.h"
 
 /**
  * @brief Player control system
@@ -42,7 +43,7 @@ class PlayerControlSystem: public System
         {
             for (auto entity: GetSystemEntities())
             {
-                const auto playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
+                auto playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
                 auto& spriteComponent = entity.GetComponent<SpriteComponent>();
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
                 auto& transformComponent = entity.GetComponent<TransformComponent>();
@@ -75,7 +76,7 @@ class PlayerControlSystem: public System
                         fsm->direction.x = -1.0;
                         break;
                     case SDLK_SPACE:
-                        rigidBodyComponent.velocity = playerControllerComponent.upVelocity;
+                        rigidBodyComponent.velocity.y = playerControllerComponent.upVelocity.y - rigidBodyComponent.jumpForce;
                         rigidBodyComponent.fsm->isGrounded = false;
                         fsm->toggle();
                         fsm->direction.y = 1.0;
@@ -88,9 +89,11 @@ class PlayerControlSystem: public System
 
         void OnKeyReleased(KeyReleasedEvent& event)
         {
+//            Entity player = g_registry->GetEntityByTag("player");
+
             for (auto entity: GetSystemEntities())
             {
-                const auto playerController = entity.GetComponent<PlayerControllerComponent>();
+                auto playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
                 auto& sprite = entity.GetComponent<SpriteComponent>();
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
                 auto fsm = rigidBodyComponent.fsm;
@@ -98,24 +101,30 @@ class PlayerControlSystem: public System
                 switch (event.symbol)
                 {
                     case SDLK_UP:
-                        rigidBodyComponent.velocity = playerController.idleVelocity;
+                        rigidBodyComponent.velocity = playerControllerComponent.idleVelocity;
                         fsm->toggle();
                         fsm->direction.y = 0.0;
                         break;
                     case SDLK_RIGHT:
-                        rigidBodyComponent.velocity = playerController.idleVelocity;
+                        rigidBodyComponent.velocity = playerControllerComponent.idleVelocity;
                         fsm->toggle();
                         fsm->direction.x = 0.0;
                         break;
                     case SDLK_DOWN:
-                        rigidBodyComponent.velocity = playerController.idleVelocity;
+                        rigidBodyComponent.velocity = playerControllerComponent.idleVelocity;
                         fsm->toggle();
                         fsm->direction.y = 0.0;
                         break;
                     case SDLK_LEFT:
-                        rigidBodyComponent.velocity = playerController.idleVelocity;
+                        rigidBodyComponent.velocity = playerControllerComponent.idleVelocity;
                         fsm->toggle();
                         fsm->direction.x = 0.0;
+                        break;
+                    case SDLK_SPACE:
+                        rigidBodyComponent.velocity.y = playerControllerComponent.upVelocity.y = rigidBodyComponent.gravityForce;
+                        rigidBodyComponent.fsm->isGrounded = false;
+                        fsm->toggle();
+                        fsm->direction.y = -1.0;
                         break;
                     default:
                         break;
