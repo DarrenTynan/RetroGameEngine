@@ -53,7 +53,6 @@ class PlayerControlSystem: public System
                 {
                     case SDLK_UP:
                         rigidBodyComponent.velocity = playerControllerComponent.upVelocity;
-                        rigidBodyComponent.fsm->isGrounded = false;
                         fsm->toggle();
                         fsm->direction.y = -1.0;
                         fsm->isGrounded = false;
@@ -80,6 +79,7 @@ class PlayerControlSystem: public System
                         rigidBodyComponent.fsm->isGrounded = false;
                         fsm->toggle();
                         fsm->direction.y = 1.0;
+//                        std::cout << "pressed " << fsm->isGrounded << std::endl;
                         break;
                     default:
                         break;
@@ -125,6 +125,7 @@ class PlayerControlSystem: public System
                         rigidBodyComponent.fsm->isGrounded = false;
                         fsm->toggle();
                         fsm->direction.y = -1.0;
+//                        std::cout << "released " << fsm->isGrounded << std::endl;
                         break;
                     default:
                         break;

@@ -32,6 +32,6 @@ void FSM::toggle()
 FSM::FSM()
 {
     currentState = &Idle::getInstance();
-    isGrounded = true;
+    isGrounded = false;
     currentState->update(nullptr);
 }

@@ -36,6 +36,7 @@ set(SOURCE_FILES
         RGE/src/FSM/include/BaseState.h
         RGE/src/FSM/include/States.h
         RGE/src/FSM/StateTransitions.cpp
+        RGE/src/Systems/PlayerMovementSystem.h
 
 )
 

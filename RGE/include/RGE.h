@@ -38,6 +38,7 @@
 #include "../../RGE/src/Components/RaycastComponent.h"
 
 #include "../../RGE/src/Systems/CameraMovementSystem.h"
+#include "../../RGE/src/Systems/PlayerMovementSystem.h"
 #include "../../RGE/src/Systems/MovementSystem.h"
 #include "../../RGE/src/Systems/RenderSystem.h"
 #include "../../RGE/src/Systems/RenderTextSystem.h"

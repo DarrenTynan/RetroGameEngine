@@ -223,19 +223,20 @@ void RGE::setupSystemRegistry()
 
 //    g_registry->AddSystem<KeyboardControlSystem>();
 
-    g_registry->AddSystem<MovementSystem>();              // Move all entities
-    g_registry->AddSystem<AnimationSystem>();             // Animate all entities
-    g_registry->AddSystem<CollisionSystem>();             // Check all entity collisions
-    g_registry->AddSystem<DamageSystem>();                // Check all damage systems
-    g_registry->AddSystem<CameraMovementSystem>();        // Check the camera move system
-    g_registry->AddSystem<ProjectileEmitSystem>();        // Check entity bullets
-    g_registry->AddSystem<ProjectileLifecycleSystem>();   // Check the life cycle and kill off bullets
+    g_registry->AddSystem<MovementSystem>();                        // Move all entities
+    g_registry->AddSystem<PlayerMovementSystem>();        // Move the player
+    g_registry->AddSystem<AnimationSystem>();                       // Animate all entities
+    g_registry->AddSystem<CollisionSystem>();                       // Check all entity collisions
+    g_registry->AddSystem<DamageSystem>();                          // Check all damage systems
+    g_registry->AddSystem<CameraMovementSystem>();                  // Check the camera move system
+    g_registry->AddSystem<ProjectileEmitSystem>();                  // Check entity bullets
+    g_registry->AddSystem<ProjectileLifecycleSystem>();             // Check the life cycle and kill off bullets
 
-    g_registry->AddSystem<RenderColliderSystem>();        // Debug updateRender collision box's
-    g_registry->AddSystem<RenderSystem>();                // Render windows
-    g_registry->AddSystem<RenderTextSystem>();            // Render any label's
-    g_registry->AddSystem<RenderImGuiSystem>();           // Render the engine window
-    g_registry->AddSystem<RenderRaycastSystem>();         // Debug updateRender the ray cast's
+    g_registry->AddSystem<RenderColliderSystem>();                  // Debug updateRender collision box's
+    g_registry->AddSystem<RenderSystem>();                          // Render windows
+    g_registry->AddSystem<RenderTextSystem>();                      // Render any label's
+    g_registry->AddSystem<RenderImGuiSystem>();                     // Render the engine window
+    g_registry->AddSystem<RenderRaycastSystem>();                   // Debug updateRender the ray cast's
 
 }
 
@@ -322,7 +323,7 @@ void RGE::setupObjects()
 {
     Entity player = g_registry->CreateEntity();
     player.AddTag("player");
-    player.AddComponent<TransformComponent>(glm::vec2(32*2, 32*9), glm::vec2(1.0, 1.0), 0.0);
+    player.AddComponent<TransformComponent>(glm::vec2(32*2, 32*8), glm::vec2(1.0, 1.0), 0.0);
     player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
@@ -336,7 +337,7 @@ void RGE::setupObjects()
     chopper.AddTag("chopper");
     chopper.AddComponent<TransformComponent>(glm::vec2(50, 32*6), glm::vec2(1.0, 1.0), 0.0);
     // Add velocity to set the move speed
-    chopper.AddComponent<RigidBodyComponent>(glm::vec2(20.0, 0.0));
+    chopper.AddComponent<RigidBodyComponent>(glm::vec2(25.0, 0.0));
     chopper.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
     chopper.AddComponent<SpriteComponent>("chopper-image", 32, 32, 1, false, false);
     chopper.AddComponent<AnimationComponent>(2, 8, true);
@@ -523,6 +524,7 @@ void RGE::updateSystems()
     g_registry->Update();
 
     g_registry->GetSystem<MovementSystem>().Update(deltaTime);            // apply velocity and check out of bounds.
+    g_registry->GetSystem<PlayerMovementSystem>().Update(g_registry, deltaTime);            // apply velocity and check out of bounds.
     g_registry->GetSystem<AnimationSystem>().Update();
     g_registry->GetSystem<CollisionSystem>().Update(g_eventBus);
     g_registry->GetSystem<CameraMovementSystem>().Update(g_gameCamera);

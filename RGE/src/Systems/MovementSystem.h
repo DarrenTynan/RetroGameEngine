@@ -28,12 +28,18 @@ public:
         // Check all entities.
         for (auto entity: GetSystemEntities())
         {
+            // We are not going to apply forces to player.
+            if (entity.HasTag("player"))
+            {
+                continue;
+            }
+
             auto& transform = entity.GetComponent<TransformComponent>();
             auto rigidBody = entity.GetComponent<RigidBodyComponent>();
 
             // Apply the velocity
             transform.position.x += (rigidBody.velocity.x * deltaTime);
-            transform.position.y += (rigidBody.velocity.y) * deltaTime;
+            transform.position.y += (rigidBody.velocity.y * deltaTime);
 
             // Reset the transform position for top-left
             if (transform.position.x < 0) transform.position.x = 0;

@@ -22,6 +22,7 @@ SDL_Renderer* g_gameRenderer;
 
 const auto g_MAP_PATH = "../Game/assets/tilemaps/TestLevel/TestLevel.tmx";
 std::string g_mapImagePath;
+//#include <tmxlite/Map.hpp>
 tmx::Map g_map;
 
 std::unique_ptr<Registry> g_registry;

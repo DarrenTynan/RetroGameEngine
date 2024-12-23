@@ -77,6 +77,7 @@ public:
                     {
                         a.GetComponent<RigidBodyComponent>().fsm->isGrounded = true;
                         a.GetComponent<TransformComponent>().position.y -= 2.0;
+//                        std::cout << "collision " << a.GetComponent<RigidBodyComponent>().fsm->isGrounded << std::endl;
                     }
 
                     eventBus->EmitEvent<CollisionEvent>(a, b);

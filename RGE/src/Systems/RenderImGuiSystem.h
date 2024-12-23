@@ -159,24 +159,23 @@ class RenderImGuiSystem: public System
             //  The current state is held in fsm
             auto state = fsm->getCurrentState()->getName();
 
-            if (ImGui::CollapsingHeader("Player Entity"))
+            if (ImGui::CollapsingHeader("Player Entity", ImGuiTreeNodeFlags_DefaultOpen))
             {
                 ImGui::Text("Player ID: %i",  player.GetId());
                 ImGui::Text("Player State: %s",  state.c_str());
 
-                if (ImGui::CollapsingHeader("Transform"))
+                if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
                 {
                     TransformComponent trans = player.GetComponent<TransformComponent>();
                     ImGui::Text("Position: %.2f, %.2f",  trans.position.x, trans.position.y);
                 }
 
-                if (ImGui::CollapsingHeader("Rigid Body"))
+                if (ImGui::CollapsingHeader("Rigid Body", ImGuiTreeNodeFlags_DefaultOpen))
                 {
                     auto& rb = player.GetComponent<RigidBodyComponent>();
                     auto& tc = player.GetComponent<TransformComponent>();
 
                     ImGui::Text("Velocity: x: %.2f y: %.2f", rb.velocity.x, rb.velocity.y);
-                    ImGui::Text("Delta: x: %.2f y :%.2f", rb.delta.x, rb.delta.y);
 
                     ImGui::Spacing();
                     ImGui::Separator();
@@ -190,16 +189,12 @@ class RenderImGuiSystem: public System
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Gravity", &gravity, 0.5f, 1.0f, "%.2f")) { rb.gravityForce = gravity;}
 
-                    static float multiplier = rb.velocityMultiplier;
-                    ImGui::SetNextItemWidth(150.0);
-                    if (ImGui::InputFloat("Velocity Mult:", &multiplier, 0.01f, 1.0f, "%.2f")) { rb.velocityMultiplier = multiplier;}
-
                     static float jump = rb.jumpForce;
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Jump Force", &jump, 0.5f, 1.0f, "%.2f")) { rb.jumpForce = jump; };
                 }
 
-                if (ImGui::CollapsingHeader("Player Controller"))
+                if (ImGui::CollapsingHeader("Player Controller", ImGuiTreeNodeFlags_DefaultOpen))
                 {
                     auto& pc = player.GetComponent<PlayerControllerComponent>();
                     ImGui::Text("Up Velocity: x: %.2f y: %.2f", pc.upVelocity.x, pc.upVelocity.y);
@@ -208,7 +203,7 @@ class RenderImGuiSystem: public System
                     ImGui::Text("Left Velocity: x: %.2f y: %.2f", pc.leftVelocity.x, pc.rightVelocity.y);
                 }
 
-                if (ImGui::CollapsingHeader("Finate State Machine"))
+                if (ImGui::CollapsingHeader("Finate State Machine", ImGuiTreeNodeFlags_DefaultOpen))
                 {
                     ImGui::Text("Current State: %s",  state.c_str());
                     ImGui::Text("isGrounded: %i",  fsm->isGrounded);
