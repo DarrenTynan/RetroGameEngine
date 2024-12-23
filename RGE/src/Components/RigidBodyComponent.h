@@ -9,9 +9,11 @@ struct RigidBodyComponent
     FSM* fsm = new FSM();
 
     glm::vec2 velocity = glm::vec2(0.0, 0.0);
-    float speed = 50.0f;
-    float gravityForce = 2.0f;
-    float jumpForce = 100.0f;
+    float speed = 0.02f;
+    float gravityForce = -9.81f;
+    float jumpHeight = 3.5;
+    float timeToJumpApex = 0.4f;
+    float jumpForce = 0.2f;
 
     [[nodiscard]] float getSpeed() const { return speed; }
 

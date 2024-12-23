@@ -78,8 +78,7 @@ class PlayerControlSystem: public System
                         rigidBodyComponent.velocity.y = playerControllerComponent.upVelocity.y - rigidBodyComponent.jumpForce;
                         rigidBodyComponent.fsm->isGrounded = false;
                         fsm->toggle();
-                        fsm->direction.y = 1.0;
-//                        std::cout << "pressed " << fsm->isGrounded << std::endl;
+                        fsm->direction.y = -1.0;
                         break;
                     default:
                         break;
@@ -124,8 +123,7 @@ class PlayerControlSystem: public System
                         rigidBodyComponent.velocity.y = playerControllerComponent.upVelocity.y = rigidBodyComponent.gravityForce;
                         rigidBodyComponent.fsm->isGrounded = false;
                         fsm->toggle();
-                        fsm->direction.y = -1.0;
-//                        std::cout << "released " << fsm->isGrounded << std::endl;
+                        fsm->direction.y = 1.0;
                         break;
                     default:
                         break;

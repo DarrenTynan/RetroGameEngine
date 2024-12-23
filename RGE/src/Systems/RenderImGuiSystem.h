@@ -176,6 +176,7 @@ class RenderImGuiSystem: public System
                     auto& tc = player.GetComponent<TransformComponent>();
 
                     ImGui::Text("Velocity: x: %.2f y: %.2f", rb.velocity.x, rb.velocity.y);
+//                    ImGui::Text("Player ID: %f",  rb.speed);
 
                     ImGui::Spacing();
                     ImGui::Separator();
@@ -192,6 +193,14 @@ class RenderImGuiSystem: public System
                     static float jump = rb.jumpForce;
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Jump Force", &jump, 0.5f, 1.0f, "%.2f")) { rb.jumpForce = jump; };
+
+                    static float jumpHeight = rb.jumpHeight;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Jump Height", &jumpHeight, 0.5f, 1.0f, "%.2f")) { rb.jumpHeight = jumpHeight; };
+
+                    static float time2apex = rb.timeToJumpApex;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Time 2 Apex", &time2apex, 0.5f, 1.0f, "%.2f")) { rb.timeToJumpApex = time2apex; };
                 }
 
                 if (ImGui::CollapsingHeader("Player Controller", ImGuiTreeNodeFlags_DefaultOpen))

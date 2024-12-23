@@ -323,7 +323,7 @@ void RGE::setupObjects()
 {
     Entity player = g_registry->CreateEntity();
     player.AddTag("player");
-    player.AddComponent<TransformComponent>(glm::vec2(32*2, 32*8), glm::vec2(1.0, 1.0), 0.0);
+    player.AddComponent<TransformComponent>(glm::vec2(32*2, 32*2), glm::vec2(1.0, 1.0), 0.0);
     player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
@@ -333,16 +333,16 @@ void RGE::setupObjects()
     player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
     player.AddComponent<HealthComponent>(100);
 
-    Entity chopper = g_registry->CreateEntity();
-    chopper.AddTag("chopper");
-    chopper.AddComponent<TransformComponent>(glm::vec2(50, 32*6), glm::vec2(1.0, 1.0), 0.0);
-    // Add velocity to set the move speed
-    chopper.AddComponent<RigidBodyComponent>(glm::vec2(25.0, 0.0));
-    chopper.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
-    chopper.AddComponent<SpriteComponent>("chopper-image", 32, 32, 1, false, false);
-    chopper.AddComponent<AnimationComponent>(2, 8, true);
-    chopper.AddComponent<HealthComponent>(100);
-//    chopper.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
+//    Entity chopper = g_registry->CreateEntity();
+//    chopper.AddTag("chopper");
+//    chopper.AddComponent<TransformComponent>(glm::vec2(50, 32*6), glm::vec2(1.0, 1.0), 0.0);
+////     Add velocity to set the move speed
+//    chopper.AddComponent<RigidBodyComponent>(glm::vec2(25.0, 0.0));
+//    chopper.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
+//    chopper.AddComponent<SpriteComponent>("chopper-image", 32, 32, 1, false, false);
+//    chopper.AddComponent<AnimationComponent>(2, 8, true);
+//    chopper.AddComponent<HealthComponent>(100);
+//    choppe//r.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
 
 
 //    Entity label = g_registry->CreateEntity();

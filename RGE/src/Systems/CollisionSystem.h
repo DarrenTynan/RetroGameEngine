@@ -75,9 +75,9 @@ public:
 
                     if (a.HasTag("player"))
                     {
+                        // Reset player to stand on top of the ground.
+                        a.GetComponent<TransformComponent>().position.y = bb.y - aa.h;
                         a.GetComponent<RigidBodyComponent>().fsm->isGrounded = true;
-                        a.GetComponent<TransformComponent>().position.y -= 2.0;
-//                        std::cout << "collision " << a.GetComponent<RigidBodyComponent>().fsm->isGrounded << std::endl;
                     }
 
                     eventBus->EmitEvent<CollisionEvent>(a, b);
