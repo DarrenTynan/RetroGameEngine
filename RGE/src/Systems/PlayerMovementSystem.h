@@ -35,13 +35,13 @@ public:
         auto rigidBody = player.GetComponent<RigidBodyComponent>();
 
         // Apply the velocity
-        transform.position.x += rigidBody.velocity.x * deltaTime;
-//        transform.position.y += rigidBody.velocity.y * deltaTime;
+        transform.position.x += rigidBody.velocity.x * rigidBody.speed * deltaTime;
+        transform.position.y += rigidBody.velocity.y * rigidBody.speed * deltaTime;
 
-        if (!rigidBody.fsm->isGrounded)
-        {
-            transform.position.y += (rigidBody.velocity.y * deltaTime) + 2.0f;
-        }
+//        if (!rigidBody.fsm->isGrounded)
+//        {
+//            transform.position.y += (rigidBody.velocity.y * deltaTime) + 2.0f;
+//        }
 
     }
 };
