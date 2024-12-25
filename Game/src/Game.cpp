@@ -8,7 +8,6 @@
 Game::Game() { Logger::Log("Game constructor called"); }
 Game::~Game() { Logger::Log("Game deconstruct called"); }
 
-
 /**
  * Function calls to setup: setupVars, setupSDL, setupRgeSDL, setupGameSDL, setupSystemRegistry, setupAssets.
  */

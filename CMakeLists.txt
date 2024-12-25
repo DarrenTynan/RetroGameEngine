@@ -12,6 +12,7 @@ set(SOURCE_FILES
         Game/src/Game.cpp
         RGE/include/RGE.h
         RGE/src/RGE.cpp
+        RGE/include/Globals.h
 
         RGE/libs/imgui_docking/imgui.cpp
         RGE/libs/imgui_docking/imgui_demo.cpp

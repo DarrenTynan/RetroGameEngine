@@ -21,9 +21,13 @@
 #include <imgui_impl_sdlrenderer2.h>
 
 #include "../../RGE/src/Logger/Logger.h"
+
 #include "../../RGE/src/ECS/include/ECS.h"
+
 #include "../../RGE/src/AssetStore/AssetStore.h"
+
 #include "../../RGE/src/EventBus/EventBus.h"
+
 #include "../../RGE/src/Components/TransformComponent.h"
 #include "../../RGE/src/Components/RigidBodyComponent.h"
 #include "../../RGE/src/Components/SpriteComponent.h"
@@ -60,6 +64,12 @@
 #include <tmxlite/Property.hpp>
 
 #include "../../RGE/src/FSM/include/FSM.h"
+
+
+
+//#include "Globals.h"
+
+
 
 /**
  * @brief definition pf the class functions.

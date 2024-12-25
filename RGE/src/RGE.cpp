@@ -224,7 +224,7 @@ void RGE::setupSystemRegistry()
 //    g_registry->AddSystem<KeyboardControlSystem>();
 
     g_registry->AddSystem<MovementSystem>();                        // Move all entities
-    g_registry->AddSystem<PlayerMovementSystem>();        // Move the player
+    g_registry->AddSystem<PlayerMovementSystem>();                  // Move the player
     g_registry->AddSystem<AnimationSystem>();                       // Animate all entities
     g_registry->AddSystem<CollisionSystem>();                       // Check all entity collisions
     g_registry->AddSystem<DamageSystem>();                          // Check all damage systems
