@@ -362,6 +362,8 @@ void RGE::setupObjects()
  */
 int RGE::setupTMX()
 {
+    tmx::Map g_map;
+
     g_map.load(g_MAP_PATH);
     unsigned int mapWidth;
     unsigned int mapHeight;

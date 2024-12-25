@@ -14,8 +14,8 @@
 
 #include "../FSM/include/FSM.h"
 #include "RGE.h"
-#include <algorithm>
 //#include "Globals.h"
+#include <algorithm>
 
 /**
  * @brief Player control system
@@ -41,6 +41,8 @@ class PlayerControlSystem: public System
         // Key pressed actions.
         void OnKeyPressed(KeyPressedEvent& event)
         {
+//            Entity entity = g_registry->GetEntityByTag("player");
+
             for (auto entity: GetSystemEntities())
             {
                 auto playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
@@ -49,30 +51,45 @@ class PlayerControlSystem: public System
                 auto& transformComponent = entity.GetComponent<TransformComponent>();
                 auto fsm = rigidBodyComponent.fsm;
 
+                const float PLAYER_MAX_SPEED = 1.0f;
+                const float PLAYER_ACCELERATION = 0.2f;
+                const float PLAYER_SPEED = 6.0f;
                 switch (event.symbol)
                 {
                     case SDLK_UP:
-                        rigidBodyComponent.velocity = playerControllerComponent.upVelocity;
+                        rigidBodyComponent.direction = playerControllerComponent.upVelocity;
                         fsm->toggle();
                         fsm->direction.y = -1.0;
                         fsm->isGrounded = false;
                         break;
                     case SDLK_RIGHT:
-                        rigidBodyComponent.velocity = playerControllerComponent.rightVelocity;
+                        rigidBodyComponent.direction = playerControllerComponent.rightVelocity;
                         spriteComponent.flipH = false;
                         fsm->toggle();
                         fsm->direction.x = 1.0;
+
+                        // The player is holding the "move forward" button
+                        rigidBodyComponent.velocity.x += (PLAYER_SPEED + PLAYER_ACCELERATION);
+                        if (rigidBodyComponent.velocity.x > (PLAYER_SPEED + PLAYER_MAX_SPEED)) {
+                            rigidBodyComponent.velocity.x = (PLAYER_SPEED + PLAYER_MAX_SPEED);
+                        }
                         break;
                     case SDLK_DOWN:
-                        rigidBodyComponent.velocity = playerControllerComponent.downVelocity;
+                        rigidBodyComponent.direction = playerControllerComponent.downVelocity;
                         fsm->toggle();
                         fsm->direction.y = 1.0;
                         break;
                     case SDLK_LEFT:
-                        rigidBodyComponent.velocity = playerControllerComponent.leftVelocity;
+                        rigidBodyComponent.direction = playerControllerComponent.leftVelocity;
                         spriteComponent.flipH = true;
                         fsm->toggle();
                         fsm->direction.x = -1.0;
+
+                        // The player is holding the "move forward" button
+                        rigidBodyComponent.velocity.x -= (PLAYER_SPEED + PLAYER_ACCELERATION);
+                        if (rigidBodyComponent.velocity.x < -(PLAYER_SPEED + PLAYER_MAX_SPEED)) {
+                            rigidBodyComponent.velocity.x = -(PLAYER_SPEED + PLAYER_MAX_SPEED);
+                        }
                         break;
                     case SDLK_SPACE:
                         rigidBodyComponent.velocity.y = playerControllerComponent.upVelocity.y - rigidBodyComponent.jumpForce;
@@ -95,32 +112,45 @@ class PlayerControlSystem: public System
                 auto playerControllerComponent = entity.GetComponent<PlayerControllerComponent>();
                 auto& sprite = entity.GetComponent<SpriteComponent>();
                 auto& rigidBodyComponent = entity.GetComponent<RigidBodyComponent>();
+                auto& transformComponent = entity.GetComponent<TransformComponent>();
                 auto fsm = rigidBodyComponent.fsm;
 
+                const float PLAYER_ACCELERATION = 0.2f;
+                const float PLAYER_SPEED = 80.0f;
                 switch (event.symbol)
                 {
                     case SDLK_UP:
-                        rigidBodyComponent.velocity = playerControllerComponent.idleVelocity;
+                        rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
                         fsm->toggle();
                         fsm->direction.y = 0.0;
                         break;
                     case SDLK_RIGHT:
-                        rigidBodyComponent.velocity = playerControllerComponent.idleVelocity;
+                        rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
                         fsm->toggle();
                         fsm->direction.x = 0.0;
+                        rigidBodyComponent.velocity.x -= (PLAYER_SPEED + PLAYER_ACCELERATION);
+                        if (rigidBodyComponent.velocity.x <= 0)
+                        {
+                            rigidBodyComponent.velocity.x = 0.0f;
+                        }
                         break;
                     case SDLK_DOWN:
-                        rigidBodyComponent.velocity = playerControllerComponent.idleVelocity;
+                        rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
                         fsm->toggle();
                         fsm->direction.y = 0.0;
                         break;
                     case SDLK_LEFT:
-                        rigidBodyComponent.velocity = playerControllerComponent.idleVelocity;
+                        rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
                         fsm->toggle();
                         fsm->direction.x = 0.0;
+                        rigidBodyComponent.velocity.x -= (PLAYER_SPEED + PLAYER_ACCELERATION);
+                        if (rigidBodyComponent.velocity.x <= 0)
+                        {
+                            rigidBodyComponent.velocity.x = 0.0f;
+                        }
                         break;
                     case SDLK_SPACE:
-                        rigidBodyComponent.velocity.y = playerControllerComponent.upVelocity.y = rigidBodyComponent.gravityForce;
+                        rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
                         rigidBodyComponent.fsm->isGrounded = false;
                         fsm->toggle();
                         fsm->direction.y = 1.0;

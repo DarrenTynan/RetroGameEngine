@@ -17,7 +17,7 @@ class RenderImGuiSystem: public System
         RenderImGuiSystem() = default;
         bool show_world_overlay = false;
         bool show_player_debug = true;
-        bool show_demo_window = false;
+        bool show_demo_window = true;
         bool show_spawn_entity = false;
         bool show_tmx_window = true;
         bool show_object_window = true;
@@ -38,6 +38,18 @@ class RenderImGuiSystem: public System
         if (show_object_window) ShowObjectWindow(registry);
         if (show_game_window) ShowGameWindow();
 
+//        if (ImGui::BeginMenu("Menu"))
+//        {
+//            ImGui::EndMenu();
+//        }
+//        if (ImGui::BeginMenu("Menu 2"))
+//        {
+//            ImGui::EndMenu();
+//        }
+//        if (ImGui::BeginMenu("Menu 3"))
+//        {
+//            ImGui::EndMenu();
+//        }
         // Rendering
         ImGui::Render();
 
@@ -150,7 +162,8 @@ class RenderImGuiSystem: public System
     static void ShowPlayerDebug(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
     {
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
-        if (ImGui::Begin("Game Debug"))
+
+        if (ImGui::Begin("Player Debug"))
         {
             Entity player = registry->GetEntityByTag("player");
 
@@ -176,23 +189,29 @@ class RenderImGuiSystem: public System
                     auto& tc = player.GetComponent<TransformComponent>();
 
                     ImGui::Text("Velocity: x: %.2f y: %.2f", rb.velocity.x, rb.velocity.y);
+                    ImGui::Text("Old Velocity: x: %.2f y: %.2f", rb.oldVelocity.x, rb.oldVelocity.y);
+                    ImGui::Text("Direction: x: %.2f y: %.2f", rb.direction.x, rb.direction.y);
 //                    ImGui::Text("Player ID: %f",  rb.speed);
 
                     ImGui::Spacing();
                     ImGui::Separator();
                     ImGui::Spacing();
 
+                    static float acceleration = rb.acceleration;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Acceleration", &acceleration, 1.00f, 1.0f, "%.2f")) { rb.speed = acceleration; }
+
                     static float speed = rb.speed;
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Speed", &speed, 1.00f, 1.0f, "%.2f")) { rb.speed = speed; }
 
-                    static float gravity = rb.gravityForce;
+                    static float friction = rb.friction;
                     ImGui::SetNextItemWidth(150.0);
-                    if (ImGui::InputFloat("Gravity", &gravity, 0.5f, 1.0f, "%.2f")) { rb.gravityForce = gravity;}
+                    if (ImGui::InputFloat("Friction", &friction, 0.5f, 1.0f, "%.2f")) { rb.friction = friction;}
 
-                    static float jump = rb.jumpForce;
+                    static float gravityForce = rb.gravityForce;
                     ImGui::SetNextItemWidth(150.0);
-                    if (ImGui::InputFloat("Jump Force", &jump, 0.5f, 1.0f, "%.2f")) { rb.jumpForce = jump; };
+                    if (ImGui::InputFloat("Gravity Force", &gravityForce, 0.5f, 1.0f, "%.2f")) { rb.gravityForce = gravityForce; };
 
                     static float jumpHeight = rb.jumpHeight;
                     ImGui::SetNextItemWidth(150.0);
@@ -201,6 +220,10 @@ class RenderImGuiSystem: public System
                     static float time2apex = rb.timeToJumpApex;
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Time 2 Apex", &time2apex, 0.5f, 1.0f, "%.2f")) { rb.timeToJumpApex = time2apex; };
+
+                    static float jumpForce = rb.jumpForce;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Jump Force", &jumpForce, 0.5f, 1.0f, "%.2f")) { rb.jumpForce = jumpForce; };
                 }
 
                 if (ImGui::CollapsingHeader("Player Controller", ImGuiTreeNodeFlags_DefaultOpen))

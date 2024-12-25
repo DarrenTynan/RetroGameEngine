@@ -31,18 +31,20 @@ public:
 
         Entity player = registry->GetEntityByTag("player");
 
-        auto& transform = player.GetComponent<TransformComponent>();
+        auto &transform = player.GetComponent<TransformComponent>();
         auto rigidBody = player.GetComponent<RigidBodyComponent>();
 
-        // Apply the velocity
-        transform.position.x += rigidBody.velocity.x * rigidBody.speed * deltaTime;
-        transform.position.y += rigidBody.velocity.y * rigidBody.speed * deltaTime;
+        // NOT NEEDED ANYMORE -  Kinematics - Apply the velocity
+//        transform.position.x += rigidBody.velocity.x * rigidBody.speed * deltaTime;
+//        transform.position.y += rigidBody.velocity.y * rigidBody.speed * deltaTime;
 
-//        if (!rigidBody.fsm->isGrounded)
-//        {
-//            transform.position.y += (rigidBody.velocity.y * deltaTime) + 2.0f;
-//        }
 
+        if (!rigidBody.fsm->isGrounded)
+            rigidBody.velocity.y += 2.0f;
+
+        // Change position based on velocity.
+        transform.position.x += rigidBody.velocity.x;
+        transform.position.y += rigidBody.velocity.y;
     }
 };
 
