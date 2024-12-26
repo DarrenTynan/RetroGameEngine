@@ -25,7 +25,6 @@ class PlayerControlSystem: public System
         {
             RequireComponent<SpriteComponent>();
             RequireComponent<RigidBodyComponent>();
-            RequireComponent<TransformComponent>();
         }
 
         // Subscribe to key pressed and key release event.
@@ -43,22 +42,22 @@ class PlayerControlSystem: public System
 
             auto& spriteComponent = player.GetComponent<SpriteComponent>();
             auto& rigidBodyComponent = player.GetComponent<RigidBodyComponent>();
-            auto& transformComponent = player.GetComponent<TransformComponent>();
             auto fsm = rigidBodyComponent.fsm;
 
             const float PLAYER_MAX_SPEED = 1.0f;
             const float PLAYER_ACCELERATION = 0.2f;
             const float PLAYER_SPEED = 6.0f;
+
             switch (event.symbol)
             {
                 case SDLK_UP:
-//                    rigidBodyComponent.direction = playerControllerComponent.upVelocity;
+                    rigidBodyComponent.direction.y = -1.0;
                     fsm->toggle();
                     fsm->direction.y = -1.0;
                     fsm->isGrounded = false;
                     break;
                 case SDLK_RIGHT:
-//                    rigidBodyComponent.direction = playerControllerComponent.rightVelocity;
+                    rigidBodyComponent.direction.x = 1.0;
                     spriteComponent.flipH = false;
                     fsm->toggle();
                     fsm->direction.x = 1.0;
@@ -70,12 +69,12 @@ class PlayerControlSystem: public System
                     }
                     break;
                 case SDLK_DOWN:
-//                    rigidBodyComponent.direction = playerControllerComponent.downVelocity;
+                    rigidBodyComponent.direction.y = 1.0;
                     fsm->toggle();
                     fsm->direction.y = 1.0;
                     break;
                 case SDLK_LEFT:
-//                    rigidBodyComponent.direction = playerControllerComponent.leftVelocity;
+                    rigidBodyComponent.direction.x = -1.0;
                     spriteComponent.flipH = true;
                     fsm->toggle();
                     fsm->direction.x = -1.0;
@@ -87,7 +86,7 @@ class PlayerControlSystem: public System
                     }
                     break;
                 case SDLK_SPACE:
-//                    rigidBodyComponent.velocity.y = playerControllerComponent.upVelocity.y - rigidBodyComponent.jumpForce;
+                    rigidBodyComponent.velocity.y -= rigidBodyComponent.jumpForce;
                     rigidBodyComponent.fsm->isGrounded = false;
                     fsm->toggle();
                     fsm->direction.y = -1.0;
@@ -99,13 +98,10 @@ class PlayerControlSystem: public System
 
         void OnKeyReleased(KeyReleasedEvent& event)
         {
-
             extern std::unique_ptr<Registry> g_registry;
             Entity player = g_registry->GetEntityByTag("player");
 
-            auto& sprite = player.GetComponent<SpriteComponent>();
             auto& rigidBodyComponent = player.GetComponent<RigidBodyComponent>();
-            auto& transformComponent = player.GetComponent<TransformComponent>();
             auto fsm = rigidBodyComponent.fsm;
 
             const float PLAYER_ACCELERATION = 0.2f;
@@ -113,12 +109,12 @@ class PlayerControlSystem: public System
             switch (event.symbol)
             {
                 case SDLK_UP:
-//                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
+                    rigidBodyComponent.direction.y = 0.0f;
                     fsm->toggle();
                     fsm->direction.y = 0.0;
                     break;
                 case SDLK_RIGHT:
-//                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
+                    rigidBodyComponent.direction.x = 0.0f;
                     fsm->toggle();
                     fsm->direction.x = 0.0;
                     rigidBodyComponent.velocity.x -= (PLAYER_SPEED + PLAYER_ACCELERATION);
@@ -128,12 +124,12 @@ class PlayerControlSystem: public System
                     }
                     break;
                 case SDLK_DOWN:
-//                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
+                    rigidBodyComponent.direction.y = 0.0f;
                     fsm->toggle();
                     fsm->direction.y = 0.0;
                     break;
                 case SDLK_LEFT:
-//                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
+                    rigidBodyComponent.direction.y = 0.0;
                     fsm->toggle();
                     fsm->direction.x = 0.0;
                     rigidBodyComponent.velocity.x -= (PLAYER_SPEED + PLAYER_ACCELERATION);
@@ -143,7 +139,9 @@ class PlayerControlSystem: public System
                     }
                     break;
                 case SDLK_SPACE:
-//                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
+                    rigidBodyComponent.direction.y = 1.0;
+                    rigidBodyComponent.velocity.y = 0.0;
+
                     rigidBodyComponent.fsm->isGrounded = false;
                     fsm->toggle();
                     fsm->direction.y = 1.0;
