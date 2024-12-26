@@ -7,7 +7,6 @@
 #include "../Events/KeyPressedEvent.h"
 #include "../Events/KeyReleasedEvent.h"
 
-#include "../Components/PlayerControllerComponent.h"
 #include "../Components/RigidBodyComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/TransformComponent.h"
@@ -24,7 +23,6 @@ class PlayerControlSystem: public System
     public:
         PlayerControlSystem()
         {
-            RequireComponent<PlayerControllerComponent>();
             RequireComponent<SpriteComponent>();
             RequireComponent<RigidBodyComponent>();
             RequireComponent<TransformComponent>();
@@ -43,7 +41,6 @@ class PlayerControlSystem: public System
             extern std::unique_ptr<Registry> g_registry;
             Entity player = g_registry->GetEntityByTag("player");
 
-            auto playerControllerComponent = player.GetComponent<PlayerControllerComponent>();
             auto& spriteComponent = player.GetComponent<SpriteComponent>();
             auto& rigidBodyComponent = player.GetComponent<RigidBodyComponent>();
             auto& transformComponent = player.GetComponent<TransformComponent>();
@@ -55,13 +52,13 @@ class PlayerControlSystem: public System
             switch (event.symbol)
             {
                 case SDLK_UP:
-                    rigidBodyComponent.direction = playerControllerComponent.upVelocity;
+//                    rigidBodyComponent.direction = playerControllerComponent.upVelocity;
                     fsm->toggle();
                     fsm->direction.y = -1.0;
                     fsm->isGrounded = false;
                     break;
                 case SDLK_RIGHT:
-                    rigidBodyComponent.direction = playerControllerComponent.rightVelocity;
+//                    rigidBodyComponent.direction = playerControllerComponent.rightVelocity;
                     spriteComponent.flipH = false;
                     fsm->toggle();
                     fsm->direction.x = 1.0;
@@ -73,12 +70,12 @@ class PlayerControlSystem: public System
                     }
                     break;
                 case SDLK_DOWN:
-                    rigidBodyComponent.direction = playerControllerComponent.downVelocity;
+//                    rigidBodyComponent.direction = playerControllerComponent.downVelocity;
                     fsm->toggle();
                     fsm->direction.y = 1.0;
                     break;
                 case SDLK_LEFT:
-                    rigidBodyComponent.direction = playerControllerComponent.leftVelocity;
+//                    rigidBodyComponent.direction = playerControllerComponent.leftVelocity;
                     spriteComponent.flipH = true;
                     fsm->toggle();
                     fsm->direction.x = -1.0;
@@ -90,7 +87,7 @@ class PlayerControlSystem: public System
                     }
                     break;
                 case SDLK_SPACE:
-                    rigidBodyComponent.velocity.y = playerControllerComponent.upVelocity.y - rigidBodyComponent.jumpForce;
+//                    rigidBodyComponent.velocity.y = playerControllerComponent.upVelocity.y - rigidBodyComponent.jumpForce;
                     rigidBodyComponent.fsm->isGrounded = false;
                     fsm->toggle();
                     fsm->direction.y = -1.0;
@@ -106,7 +103,6 @@ class PlayerControlSystem: public System
             extern std::unique_ptr<Registry> g_registry;
             Entity player = g_registry->GetEntityByTag("player");
 
-            auto playerControllerComponent = player.GetComponent<PlayerControllerComponent>();
             auto& sprite = player.GetComponent<SpriteComponent>();
             auto& rigidBodyComponent = player.GetComponent<RigidBodyComponent>();
             auto& transformComponent = player.GetComponent<TransformComponent>();
@@ -117,12 +113,12 @@ class PlayerControlSystem: public System
             switch (event.symbol)
             {
                 case SDLK_UP:
-                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
+//                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
                     fsm->toggle();
                     fsm->direction.y = 0.0;
                     break;
                 case SDLK_RIGHT:
-                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
+//                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
                     fsm->toggle();
                     fsm->direction.x = 0.0;
                     rigidBodyComponent.velocity.x -= (PLAYER_SPEED + PLAYER_ACCELERATION);
@@ -132,12 +128,12 @@ class PlayerControlSystem: public System
                     }
                     break;
                 case SDLK_DOWN:
-                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
+//                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
                     fsm->toggle();
                     fsm->direction.y = 0.0;
                     break;
                 case SDLK_LEFT:
-                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
+//                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
                     fsm->toggle();
                     fsm->direction.x = 0.0;
                     rigidBodyComponent.velocity.x -= (PLAYER_SPEED + PLAYER_ACCELERATION);
@@ -147,7 +143,7 @@ class PlayerControlSystem: public System
                     }
                     break;
                 case SDLK_SPACE:
-                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
+//                    rigidBodyComponent.direction = playerControllerComponent.idleVelocity;
                     rigidBodyComponent.fsm->isGrounded = false;
                     fsm->toggle();
                     fsm->direction.y = 1.0;

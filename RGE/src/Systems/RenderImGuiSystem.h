@@ -226,15 +226,6 @@ class RenderImGuiSystem: public System
                     if (ImGui::InputFloat("Jump Force", &jumpForce, 0.5f, 1.0f, "%.2f")) { rb.jumpForce = jumpForce; };
                 }
 
-                if (ImGui::CollapsingHeader("Player Controller", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    auto& pc = player.GetComponent<PlayerControllerComponent>();
-                    ImGui::Text("Up Velocity: x: %.2f y: %.2f", pc.upVelocity.x, pc.upVelocity.y);
-                    ImGui::Text("Right Velocity: x: %.2f y: %.2f", pc.rightVelocity.x, pc.rightVelocity.y);
-                    ImGui::Text("Down Velocity: x: %.2f y: %.2f", pc.downVelocity.x, pc.downVelocity.y);
-                    ImGui::Text("Left Velocity: x: %.2f y: %.2f", pc.leftVelocity.x, pc.rightVelocity.y);
-                }
-
                 if (ImGui::CollapsingHeader("Finate State Machine", ImGuiTreeNodeFlags_DefaultOpen))
                 {
                     ImGui::Text("Current State: %s",  state.c_str());

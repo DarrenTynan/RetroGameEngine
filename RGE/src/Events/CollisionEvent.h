@@ -13,7 +13,6 @@ public:
     CollisionEvent(Entity a, Entity b): a(a), b(b)
     {
         // Player collision with BoxCollider
-        auto& playerControllerComponent = a.GetComponent<PlayerControllerComponent>();
         auto& playerRigidBodyComponent = a.GetComponent<RigidBodyComponent>();
 
         // Check only for player object. Bounce back by 2 pixels away from object.

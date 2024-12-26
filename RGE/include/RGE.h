@@ -35,7 +35,6 @@
 #include "../../RGE/src/Components/TextLabelComponent.h"
 #include "../../RGE/src/Components/AnimationComponent.h"
 #include "../../RGE/src/Components/BoxColliderComponent.h"
-#include "../../RGE/src/Components/PlayerControllerComponent.h"
 #include "../../RGE/src/Components/ProjectileComponent.h"
 #include "../../RGE/src/Components/ProjectileEmitterComponent.h"
 #include "../../RGE/src/Components/HealthComponent.h"

@@ -328,10 +328,6 @@ void RGE::setupObjects()
     player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
     player.AddComponent<AnimationComponent>(6, 8, true);
-    player.AddComponent<PlayerControllerComponent>(glm::vec2(0, -1),
-                                                   glm::vec2(1, 0),
-                                                   glm::vec2(0, 1),
-                                                   glm::vec2(-1, 0) );
     player.AddComponent<HealthComponent>(100);
     player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
     player.AddComponent<HealthComponent>(100);
