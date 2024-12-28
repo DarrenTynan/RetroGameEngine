@@ -72,12 +72,40 @@ public:
                 {
                     if (a.HasTag("player"))
                     {
+                        // Down
                         if (aRB.fsm->direction.y > 0)
                         {
-                            std::cout << bb.y - aa.h << std::endl;
                             // Reset player to stand on top of the ground.
                             aTransform.position.y = (bb.y - aa.h) - 1.0;
                             aRB.fsm->isGrounded = true;
+
+                            aRB.fsm->direction.y = 0.0;
+                            aRB.velocity.y = 0.0f;
+                        }
+
+                        // Up
+                        else if (aRB.fsm->direction.y < 0)
+                        {
+                            // Reset player to stand on top of the ground.
+                            aTransform.position.y = (bb.y + bb.h) + 1.0;
+
+                            aRB.fsm->direction.y = 0.0;
+                            aRB.velocity.y = 0.0f;
+                        }
+
+                        // Right
+                        else if (aRB.fsm->direction.x > 0)
+                        {
+                            aTransform.position.x = (bb.x - aa.w) - 1;
+
+                            aRB.fsm->direction.y = 0.0;
+                            aRB.velocity.y = 0.0f;
+                        }
+
+                        // Left
+                        else if (aRB.fsm->direction.x < 0)
+                        {
+                            aTransform.position.x = bb.w + 1;
 
                             aRB.fsm->direction.y = 0.0;
                             aRB.velocity.y = 0.0f;
