@@ -26,26 +26,34 @@ public:
     }
 
     // Update position during Delta Time
-    static void Update(const std::unique_ptr<Registry>& registry, double deltaTime)
+    static void Update(double deltaTime)
     {
-
-        Entity player = registry->GetEntityByTag("player");
+        extern std::unique_ptr<Registry> g_registry;
+        Entity player = g_registry->GetEntityByTag("player");
 
         auto &transform = player.GetComponent<TransformComponent>();
-        auto rigidBody = player.GetComponent<RigidBodyComponent>();
+        auto &rigidBody = player.GetComponent<RigidBodyComponent>();
+
+        // Save the current velocity
+//        rigidBody.oldVelocity = rigidBody.velocity;
+//        glm::vec2 v2(0.0, 0.0);
+//        v2.x = rigidBody.oldVelocity.x + rigidBody.acceleration * (float)deltaTime;
+//        v2.y = rigidBody.oldVelocity.y + rigidBody.acceleration * (float)deltaTime;
+//        rigidBody.velocity = v2;
 
         // NOT NEEDED ANYMORE -  Kinematics - Apply the velocity
 //        transform.position.x += rigidBody.velocity.x * rigidBody.speed * deltaTime;
 //        transform.position.y += rigidBody.velocity.y * rigidBody.speed * deltaTime;
 
+        // Add gravity
+//        if (!rigidBody.fsm->isGrounded)
+//            rigidBody.velocity.y += 2.0f;
 
-        if (!rigidBody.fsm->isGrounded)
-            rigidBody.velocity.y += 2.0f;
-
-        // Change position based on velocity.
+        // Change position based on the new velocity + force.
         transform.position.x += rigidBody.velocity.x;
         transform.position.y += rigidBody.velocity.y;
     }
+
 };
 
 #endif //RETROGAMEENGINE_PLAYERMOVEMENTSYSTEM_H

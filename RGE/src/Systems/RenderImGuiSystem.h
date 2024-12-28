@@ -175,7 +175,7 @@ class RenderImGuiSystem: public System
             if (ImGui::CollapsingHeader("Player Entity", ImGuiTreeNodeFlags_DefaultOpen))
             {
                 ImGui::Text("Player ID: %i",  player.GetId());
-                ImGui::Text("Player State: %s",  state.c_str());
+//                ImGui::Text("Player State: %s",  state.c_str());
 
                 if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
                 {
@@ -190,7 +190,7 @@ class RenderImGuiSystem: public System
 
                     ImGui::Text("Velocity: x: %.2f y: %.2f", rb.velocity.x, rb.velocity.y);
                     ImGui::Text("Old Velocity: x: %.2f y: %.2f", rb.oldVelocity.x, rb.oldVelocity.y);
-                    ImGui::Text("Direction: x: %.2f y: %.2f", rb.direction.x, rb.direction.y);
+//                    ImGui::Text("Direction: x: %.2f y: %.2f", rb.direction.x, rb.direction.y);
 //                    ImGui::Text("Player ID: %f",  rb.speed);
 
                     ImGui::Spacing();
@@ -201,17 +201,23 @@ class RenderImGuiSystem: public System
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Acceleration", &acceleration, 1.00f, 1.0f, "%.2f")) { rb.speed = acceleration; }
 
+                    static float maxAcceleration = rb.maxAcceleration;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Max Acceleration", &maxAcceleration, 1.00f, 1.0f, "%.2f")) { rb.maxAcceleration = maxAcceleration; }
+
                     static float speed = rb.speed;
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Speed", &speed, 1.00f, 1.0f, "%.2f")) { rb.speed = speed; }
+
+                    ImGui::Separator();
 
                     static float friction = rb.friction;
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Friction", &friction, 0.5f, 1.0f, "%.2f")) { rb.friction = friction;}
 
-                    static float gravityForce = rb.gravityForce;
+                    static float gravity = rb.gravity;
                     ImGui::SetNextItemWidth(150.0);
-                    if (ImGui::InputFloat("Gravity Force", &gravityForce, 0.5f, 1.0f, "%.2f")) { rb.gravityForce = gravityForce; };
+                    if (ImGui::InputFloat("Gravity", &gravity, 0.5f, 1.0f, "%.2f")) { rb.gravity = gravity; };
 
                     static float jumpHeight = rb.jumpHeight;
                     ImGui::SetNextItemWidth(150.0);

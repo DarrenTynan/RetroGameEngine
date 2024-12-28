@@ -219,24 +219,20 @@ void RGE::setupImGui()
 void RGE::setupSystemRegistry()
 {
     // Add the systems that need to be processed in our game
-    g_registry->AddSystem<PlayerControlSystem>();         // Read keys and control player movements.
-
-//    g_registry->AddSystem<KeyboardControlSystem>();
-
-    g_registry->AddSystem<MovementSystem>();                        // Move all entities
-    g_registry->AddSystem<PlayerMovementSystem>();                  // Move the player
-    g_registry->AddSystem<AnimationSystem>();                       // Animate all entities
-    g_registry->AddSystem<CollisionSystem>();                       // Check all entity collisions
-    g_registry->AddSystem<DamageSystem>();                          // Check all damage systems
-    g_registry->AddSystem<CameraMovementSystem>();                  // Check the camera move system
-    g_registry->AddSystem<ProjectileEmitSystem>();                  // Check entity bullets
-    g_registry->AddSystem<ProjectileLifecycleSystem>();             // Check the life cycle and kill off bullets
-
-    g_registry->AddSystem<RenderColliderSystem>();                  // Debug updateRender collision box's
-    g_registry->AddSystem<RenderSystem>();                          // Render windows
-    g_registry->AddSystem<RenderTextSystem>();                      // Render any label's
-    g_registry->AddSystem<RenderImGuiSystem>();                     // Render the engine window
-    g_registry->AddSystem<RenderRaycastSystem>();                   // Debug updateRender the ray cast's
+    g_registry->AddSystem<PlayerControlComponent>();        // Read keys and control player movements.
+    g_registry->AddSystem<MovementSystem>();                // Move all entities
+    g_registry->AddSystem<PlayerMovementSystem>();          // Move the player & apply forces
+    g_registry->AddSystem<AnimationSystem>();               // Animate all entities
+    g_registry->AddSystem<CollisionSystem>();               // Check all entity collisions AABB
+    g_registry->AddSystem<DamageSystem>();                  // Check all damage systems
+    g_registry->AddSystem<CameraMovementSystem>();          // Check the camera move system
+    g_registry->AddSystem<ProjectileEmitSystem>();          // Check entity bullets AABB
+    g_registry->AddSystem<ProjectileLifecycleSystem>();     // Check the life cycle and kill off bullets
+    g_registry->AddSystem<RenderColliderSystem>();          // Debug updateRender collision box's
+    g_registry->AddSystem<RenderSystem>();                  // Render windows
+    g_registry->AddSystem<RenderTextSystem>();              // Render any label's
+    g_registry->AddSystem<RenderImGuiSystem>();             // Render the engine window
+    g_registry->AddSystem<RenderRaycastSystem>();           // Debug updateRender the ray cast's
 
 }
 
@@ -260,7 +256,7 @@ void RGE::drawGrid()
  */
 void RGE::updateRenderer()
 {
-    RGE::drawGrid();
+//    RGE::drawGrid();
 
     SDL_SetRenderDrawColor(g_rgeRenderer, (Uint8)(g_rge_clear_color.x * 255), (Uint8)(g_rge_clear_color.y * 255), (Uint8)(g_rge_clear_color.z * 255), (Uint8)(g_rge_clear_color.w * 255));
     SDL_RenderClear(g_rgeRenderer);
@@ -323,7 +319,7 @@ void RGE::setupObjects()
 {
     Entity player = g_registry->CreateEntity();
     player.AddTag("player");
-    player.AddComponent<TransformComponent>(glm::vec2(32*2, 32*2), glm::vec2(1.0, 1.0), 0.0);
+    player.AddComponent<TransformComponent>(glm::vec2(32*12, 32*8), glm::vec2(1.0, 1.0), 0.0);
     player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
@@ -358,7 +354,7 @@ void RGE::setupObjects()
  */
 int RGE::setupTMX()
 {
-    tmx::Map g_map;
+    extern tmx::Map g_map;
 
     g_map.load(g_MAP_PATH);
     unsigned int mapWidth;
@@ -447,7 +443,7 @@ int RGE::setupTMX()
  * window quit
  * keyboard
  */
-bool RGE::processInputEvents()
+bool RGE::processDebugInputEvents()
 {
     bool isQuit = true;
 
@@ -490,7 +486,6 @@ bool RGE::processInputEvents()
 
                 switch (sdlEvent.window.event)
                 {
-
                     case SDL_WINDOWEVENT_CLOSE:
                         isQuit = false;
                         break;
@@ -518,14 +513,14 @@ void RGE::updateSystems()
 
     // Perform the subscription of the events for all systems
     g_registry->GetSystem<DamageSystem>().SubscribeToEvents(g_eventBus);
-    g_registry->GetSystem<PlayerControlSystem>().SubscribeToEvents(g_eventBus);
+    g_registry->GetSystem<PlayerControlComponent>().SubscribeToEvents(g_eventBus);
     g_registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(g_eventBus);
 
     // UpdateSystems the registry to process the entities that are waiting to be created/deleted
     g_registry->Update();
 
-    g_registry->GetSystem<MovementSystem>().Update(deltaTime);            // apply velocity and check out of bounds.
-    g_registry->GetSystem<PlayerMovementSystem>().Update(g_registry, deltaTime);            // apply velocity and check out of bounds.
+    g_registry->GetSystem<MovementSystem>().Update(deltaTime);              // apply velocity and check out of bounds.
+    g_registry->GetSystem<PlayerMovementSystem>().Update(deltaTime);        // apply velocity and check out of bounds.
     g_registry->GetSystem<AnimationSystem>().Update();
     g_registry->GetSystem<CollisionSystem>().Update(g_eventBus);
     g_registry->GetSystem<CameraMovementSystem>().Update(g_gameCamera);

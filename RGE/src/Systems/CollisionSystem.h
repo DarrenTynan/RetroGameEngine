@@ -34,8 +34,9 @@ public:
         for (auto i = entities.begin(); i != entities.end(); i++)
         {
             Entity a = *i;
-            auto aTransform = a.GetComponent<TransformComponent>();
-            auto aCollider = a.GetComponent<BoxColliderComponent>();
+            auto &aTransform = a.GetComponent<TransformComponent>();
+            auto &aCollider = a.GetComponent<BoxColliderComponent>();
+            auto &aRB = a.GetComponent<RigidBodyComponent>();
 
             // Loop all the entities that still need to be checked (to the right of i)
             for (auto j = i; j != entities.end(); j++)
@@ -48,8 +49,9 @@ public:
                     continue;
                 }
 
-                auto bTransform = b.GetComponent<TransformComponent>();
-                auto bCollider = b.GetComponent<BoxColliderComponent>();
+                auto &bTransform = b.GetComponent<TransformComponent>();
+                auto &bCollider = b.GetComponent<BoxColliderComponent>();
+                auto &bRB = a.GetComponent<RigidBodyComponent>();
 
                 SDL_Rect aa;
                 aa.x = (int)aTransform.position.x;
@@ -70,12 +72,19 @@ public:
                 {
                     if (a.HasTag("player"))
                     {
-                        // Reset player to stand on top of the ground.
-                        a.GetComponent<TransformComponent>().position.y = bb.y - aa.h;
-                        a.GetComponent<RigidBodyComponent>().fsm->isGrounded = true;
+                        if (aRB.fsm->direction.y > 0)
+                        {
+                            std::cout << bb.y - aa.h << std::endl;
+                            // Reset player to stand on top of the ground.
+                            aTransform.position.y = (bb.y - aa.h) - 1.0;
+                            aRB.fsm->isGrounded = true;
+
+                            aRB.fsm->direction.y = 0.0;
+                            aRB.velocity.y = 0.0f;
+                        }
                     }
 
-                    eventBus->EmitEvent<CollisionEvent>(a, b);
+                    else eventBus->EmitEvent<CollisionEvent>(a, b);
                 }
             }
         }

@@ -41,10 +41,6 @@ public:
             transform.position.x += (rigidBody.velocity.x * deltaTime);
             transform.position.y += (rigidBody.velocity.y * deltaTime);
 
-            // Reset the transform position for top-left
-            if (transform.position.x < 0) transform.position.x = 0;
-            if (transform.position.y < 0) transform.position.y = 0;
-
         }
     }
 };

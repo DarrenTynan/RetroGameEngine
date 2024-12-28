@@ -33,7 +33,7 @@ void Game::Run()
     bool isGameRunning = true;
     while (isGameRunning)
     {
-        isGameRunning = RGE::processInputEvents();
+        isGameRunning = RGE::processDebugInputEvents();
         RGE::updateSystems();
         RGE::updateRenderer();
     }

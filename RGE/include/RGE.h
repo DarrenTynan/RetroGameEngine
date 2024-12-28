@@ -39,6 +39,7 @@
 #include "../../RGE/src/Components/ProjectileEmitterComponent.h"
 #include "../../RGE/src/Components/HealthComponent.h"
 #include "../../RGE/src/Components/RaycastComponent.h"
+#include "../../RGE/src/Components/PlayerControlComponent.h"
 
 #include "../../RGE/src/Systems/CameraMovementSystem.h"
 #include "../../RGE/src/Systems/PlayerMovementSystem.h"
@@ -48,7 +49,6 @@
 #include "../../RGE/src/Systems/RenderColliderSystem.h"
 #include "../../RGE/src/Systems/AnimationSystem.h"
 #include "../../RGE/src/Systems/CollisionSystem.h"
-#include "../../RGE/src/Systems/PlayerControlSystem.h"
 #include "../../RGE/src/Systems/RenderImGuiSystem.h"
 #include "../../RGE/src/Systems/ProjectileEmitSystem.h"
 #include "../../RGE/src/Systems/ProjectileLifecycleSystem.h"
@@ -86,7 +86,7 @@ public:
     static void setupAssets();
     static void setupObjects();
     static int setupTMX();
-    static bool processInputEvents();
+    static bool processDebugInputEvents();
     static void updateSystems();
     static void destroy();
 
