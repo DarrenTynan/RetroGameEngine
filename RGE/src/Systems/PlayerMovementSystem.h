@@ -46,12 +46,14 @@ public:
 //        transform.position.y += rigidBody.velocity.y * rigidBody.speed * deltaTime;
 
         // Add gravity
-//        if (!rigidBody.fsm->isGrounded)
-//            rigidBody.velocity.y += 2.0f;
+        if (!rigidBody.fsm->isGrounded)
+            rigidBody.fsm->isGrounded = false;
+            rigidBody.fsm->direction.y = 1;
+            rigidBody.velocity.y += rigidBody.gravity * deltaTime;
 
         // Change position based on the new velocity + force.
-        transform.position.x += rigidBody.velocity.x;
-        transform.position.y += rigidBody.velocity.y;
+        transform.position.x += rigidBody.velocity.x;// * deltaTime;
+        transform.position.y += rigidBody.velocity.y;// * deltaTime;
     }
 
 };
