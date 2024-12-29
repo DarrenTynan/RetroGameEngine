@@ -18,10 +18,12 @@ struct RigidBodyComponent
     float gravity = 1.2f;
     float maxGravity = 3.5f;
 
+    float jumpHeight = -3.5f;
+    float jumpForce = -2.2f;
+    float jumpFrames = 10;
+    float jumpCounter;
+
     float friction = 0.32f;
-    float jumpHeight = 3.5f;
-    float timeToJumpApex = 0.4f;
-    float jumpForce = 0.2f;
 
     explicit RigidBodyComponent(glm::vec2 _velocity = glm::vec2(0.0, 0.0))
     {

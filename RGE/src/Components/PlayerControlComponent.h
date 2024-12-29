@@ -91,12 +91,20 @@ class PlayerControlComponent: public System
                     }
                     break;
                 case SDLK_SPACE:
-                    rb.velocity.y -= rb.jumpForce;
-                    rb.fsm->isGrounded = false;
+                    if (fsm->isGrounded)
+                    {
+                        rb.velocity.y += rb.jumpForce * 2;
+                        rb.jumpCounter = rb.jumpFrames;
+                        rb.fsm->isGrounded = false;
+                    }
+                    else if (rb.velocity.y > rb.jumpHeight)
+                    {
+                        rb.velocity.y = 0.0;
+                        fsm->direction.y = 1.0;
+                    }
+
                     fsm->toggle();
                     fsm->direction.y = -1.0;
-// Testing
-//                    rb.velocity.y += sqrt(rb.jumpForce * -2.0f * rb.gravity);
                     break;
                 default:
                     break;
@@ -157,8 +165,7 @@ class PlayerControlComponent: public System
                     }
                     break;
                 case SDLK_SPACE:
-                    // TODO NB. We do not need 2 direction vectors
-//                    rb.direction.y = 1.0;
+                    rb.jumpCounter = 0;
                     rb.velocity.y = 0.0;
 
                     rb.fsm->isGrounded = false;

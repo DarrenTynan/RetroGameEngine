@@ -253,9 +253,9 @@ class RenderImGuiSystem: public System
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Jump Height", &jumpHeight, 0.5f, 1.0f, "%.2f")) { rb.jumpHeight = jumpHeight; };
 
-                    static float time2apex = rb.timeToJumpApex;
+                    static float jumpFrames = rb.jumpFrames;
                     ImGui::SetNextItemWidth(150.0);
-                    if (ImGui::InputFloat("Time 2 Apex", &time2apex, 0.5f, 1.0f, "%.2f")) { rb.timeToJumpApex = time2apex; };
+                    if (ImGui::InputFloat("Jump Frames", &jumpFrames, 0.5f, 1.0f, "%.2f")) { rb.jumpFrames = jumpFrames; };
 
                     static float jumpForce = rb.jumpForce;
                     ImGui::SetNextItemWidth(150.0);
@@ -268,7 +268,7 @@ class RenderImGuiSystem: public System
                     if (ImGui::InputFloat("Friction", &friction, 0.5f, 1.0f, "%.2f")) { rb.friction = friction;}
 
                 }
-                
+
                 if (ImGui::CollapsingHeader("Finate State Machine", ImGuiTreeNodeFlags_DefaultOpen))
                 {
                     ImGui::Text("Current State: %s",  state.c_str());
