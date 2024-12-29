@@ -19,6 +19,7 @@ public:
     void enter(FSM* fsm);
     void update(FSM* fsm);
     void toggle(FSM* fsm);
+    void toggleTest(FSM *fsm);
     void exit(FSM* fsm);
     static BaseState& getInstance();
 private:
@@ -39,6 +40,7 @@ public:
     void enter(FSM* fsm);
     void update(FSM* fsm);
     void toggle(FSM* fsm);
+    void toggleTest(FSM *fsm);
     void exit(FSM* fsm);
     static BaseState& getInstance();
 private:
@@ -59,6 +61,7 @@ public:
     void enter(FSM* fsm);
     void update(FSM* fsm);
     void toggle(FSM* fsm);
+    void toggleTest(FSM *fsm);
     void exit(FSM* fsm);
     static BaseState& getInstance();
 private:
@@ -76,6 +79,7 @@ public:
     void enter(FSM* fsm);
     void update(FSM* fsm);
     void toggle(FSM* fsm);
+    void toggleTest(FSM *fsm);
     void exit(FSM* fsm);
     static BaseState& getInstance();
 private:
@@ -93,6 +97,7 @@ public:
     void enter(FSM* fsm);
     void update(FSM* fsm);
     void toggle(FSM* fsm);
+    void toggleTest(FSM *fsm);
     void exit(FSM* fsm);
     static BaseState& getInstance();
 private:

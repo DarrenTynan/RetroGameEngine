@@ -47,9 +47,15 @@ public:
 
         // Add gravity
         if (!rigidBody.fsm->isGrounded)
+        {
+            rigidBody.fsm->toggleTest();
             rigidBody.fsm->isGrounded = false;
             rigidBody.fsm->direction.y = 1;
             rigidBody.velocity.y += rigidBody.gravity * deltaTime;
+
+            if (rigidBody.velocity.y > rigidBody.maxGravity)
+                rigidBody.velocity.y = rigidBody.maxGravity;
+        }
 
         // Change position based on the new velocity + force.
         transform.position.x += rigidBody.velocity.x;// * deltaTime;

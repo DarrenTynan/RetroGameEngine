@@ -22,6 +22,7 @@ public:
     FSM();
     [[nodiscard]] inline BaseState* getCurrentState() const { return currentState; }
     void toggle();
+    void toggleTest();
     void setState(BaseState& newState);
 private:
     BaseState* currentState;

@@ -15,13 +15,13 @@ class RenderImGuiSystem: public System
 {
     public:
         RenderImGuiSystem() = default;
-        bool show_world_overlay = false;
-        bool show_player_debug = true;
-        bool show_demo_window = true;
-        bool show_spawn_entity = false;
-        bool show_tmx_window = true;
-        bool show_object_window = true;
-        bool show_game_window = false;
+//        bool show_world_overlay = false;
+//        bool show_player_debug = false;
+//        bool show_demo_window = false;
+//        bool show_spawn_entity = true;
+//        bool show_tmx_window = false;
+//        bool show_object_window = false;
+//        bool show_game_window = false;
 
     void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera)
     {
@@ -30,26 +30,16 @@ class RenderImGuiSystem: public System
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        if (show_world_overlay) ShowWorldOverlay(&show_world_overlay, camera);
-        if (show_player_debug) ShowPlayerDebug(registry, camera);
-        if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
-        if (show_spawn_entity) ShowSpawnEntity(registry);
-        if (show_tmx_window) ShowTmxWindow(registry, camera);
-        if (show_object_window) ShowObjectWindow(registry);
-        if (show_game_window) ShowGameWindow();
+//        if (show_world_overlay) ShowWorldOverlay(&show_world_overlay, camera);
+//        if (show_player_debug) ShowPlayerDebug(registry, camera);
+//        if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
+//        if (show_spawn_entity) ShowSpawnEntity(registry);
+//        if (show_tmx_window) ShowTmxWindow(registry, camera);
+//        if (show_object_window) ShowObjectWindow(registry);
+//        if (show_game_window) ShowGameGrid();
+        ShowWorldWindow(registry, camera);
+//        ImGui::ShowDemoWindow();
 
-//        if (ImGui::BeginMenu("Menu"))
-//        {
-//            ImGui::EndMenu();
-//        }
-//        if (ImGui::BeginMenu("Menu 2"))
-//        {
-//            ImGui::EndMenu();
-//        }
-//        if (ImGui::BeginMenu("Menu 3"))
-//        {
-//            ImGui::EndMenu();
-//        }
         // Rendering
         ImGui::Render();
 
@@ -60,7 +50,51 @@ class RenderImGuiSystem: public System
 
     }
 
-    void ShowGameWindow()
+    void ShowWorldWindow(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
+    {
+        if (ImGui::Begin("World Debug"))
+        {
+            if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
+            {
+                if (ImGui::BeginTabItem("Player"))
+                {
+                    ShowPlayerDebug(registry, camera);
+                    ImGui::EndTabItem();
+                }
+
+                if (ImGui::BeginTabItem("Objects"))
+                {
+                    ShowObjectWindow(registry);
+                    ImGui::EndTabItem();
+                }
+
+                if (ImGui::BeginTabItem("TMX"))
+                {
+                    ShowTmxWindow(registry, camera);
+                    ImGui::EndTabItem();
+                }
+
+                if (ImGui::BeginTabItem("Spawn Entity"))
+                {
+                    ShowSpawnEntity(registry);
+                    ImGui::EndTabItem();
+                }
+
+                if (ImGui::BeginTabItem("Game Grid"))
+                {
+                    ShowGameGrid();
+                    ImGui::EndTabItem();
+                }
+
+                ImGui::EndTabBar();
+            }
+
+        }
+        ImGui::End();
+
+    }
+
+    void ShowGameGrid()
     {
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
         if (ImGui::Begin("Game Window"))
@@ -162,7 +196,6 @@ class RenderImGuiSystem: public System
     static void ShowPlayerDebug(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
     {
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
-
         if (ImGui::Begin("Player Debug"))
         {
             Entity player = registry->GetEntityByTag("player");
@@ -175,7 +208,6 @@ class RenderImGuiSystem: public System
             if (ImGui::CollapsingHeader("Player Entity", ImGuiTreeNodeFlags_DefaultOpen))
             {
                 ImGui::Text("Player ID: %i",  player.GetId());
-//                ImGui::Text("Player State: %s",  state.c_str());
 
                 if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
                 {
@@ -190,8 +222,6 @@ class RenderImGuiSystem: public System
 
                     ImGui::Text("Velocity: x: %.2f y: %.2f", rb.velocity.x, rb.velocity.y);
                     ImGui::Text("Old Velocity: x: %.2f y: %.2f", rb.oldVelocity.x, rb.oldVelocity.y);
-//                    ImGui::Text("Direction: x: %.2f y: %.2f", rb.direction.x, rb.direction.y);
-//                    ImGui::Text("Player ID: %f",  rb.speed);
 
                     ImGui::Spacing();
                     ImGui::Separator();
@@ -205,19 +235,19 @@ class RenderImGuiSystem: public System
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Max Acceleration", &maxAcceleration, 1.00f, 1.0f, "%.2f")) { rb.maxAcceleration = maxAcceleration; }
 
+                    static float gravity = rb.gravity;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Gravity", &gravity, 0.5f, 1.0f, "%.2f")) { rb.gravity = gravity; };
+
+                    static float maxGravity = rb.maxGravity;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Max Gravity", &maxGravity, 0.5f, 1.0f, "%.2f")) { rb.maxGravity = maxGravity; };
+
                     static float speed = rb.speed;
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Speed", &speed, 1.00f, 1.0f, "%.2f")) { rb.speed = speed; }
 
                     ImGui::Separator();
-
-                    static float friction = rb.friction;
-                    ImGui::SetNextItemWidth(150.0);
-                    if (ImGui::InputFloat("Friction", &friction, 0.5f, 1.0f, "%.2f")) { rb.friction = friction;}
-
-                    static float gravity = rb.gravity;
-                    ImGui::SetNextItemWidth(150.0);
-                    if (ImGui::InputFloat("Gravity", &gravity, 0.5f, 1.0f, "%.2f")) { rb.gravity = gravity; };
 
                     static float jumpHeight = rb.jumpHeight;
                     ImGui::SetNextItemWidth(150.0);
@@ -230,8 +260,15 @@ class RenderImGuiSystem: public System
                     static float jumpForce = rb.jumpForce;
                     ImGui::SetNextItemWidth(150.0);
                     if (ImGui::InputFloat("Jump Force", &jumpForce, 0.5f, 1.0f, "%.2f")) { rb.jumpForce = jumpForce; };
-                }
 
+                    ImGui::Separator();
+
+                    static float friction = rb.friction;
+                    ImGui::SetNextItemWidth(150.0);
+                    if (ImGui::InputFloat("Friction", &friction, 0.5f, 1.0f, "%.2f")) { rb.friction = friction;}
+
+                }
+                
                 if (ImGui::CollapsingHeader("Finate State Machine", ImGuiTreeNodeFlags_DefaultOpen))
                 {
                     ImGui::Text("Current State: %s",  state.c_str());

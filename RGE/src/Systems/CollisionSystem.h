@@ -66,9 +66,9 @@ public:
                 bb.h = (int)bCollider.height * (int)bTransform.scale.y;
 
                 // Perform the AABB collision check between entities a and b
-                SDL_bool collision = SDL_HasIntersection(&aa, &bb);
+                SDL_bool isCollision = SDL_HasIntersection(&aa, &bb);
 
-                if (collision)
+                if (isCollision)
                 {
                     if (a.HasTag("player"))
                     {

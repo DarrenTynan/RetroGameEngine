@@ -16,6 +16,7 @@ struct RigidBodyComponent
     float maxAcceleration = 1.0f;
     float speed = 3.0f;
     float gravity = 1.2f;
+    float maxGravity = 3.5f;
 
     float friction = 0.32f;
     float jumpHeight = 3.5f;

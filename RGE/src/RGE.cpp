@@ -166,9 +166,14 @@ void RGE::setupImGui()
     style.FrameRounding = 2.3f;
     style.ScrollbarRounding = 0;
 
+    style.Colors[ImGuiCol_Tab]                = ImVec4(0.30f, 0.69f, 1.00f, 0.53f);
+    style.Colors[ImGuiCol_TabHovered]         = ImVec4(0.44f, 0.61f, 0.86f, 1.00f);
+    style.Colors[ImGuiCol_TabActive]          = ImVec4(0.38f, 0.62f, 0.83f, 1.00f);
+
     style.Colors[ImGuiCol_Text]                  = ImVec4(0.90f, 0.90f, 0.90f, 0.90f);
     style.Colors[ImGuiCol_TextDisabled]          = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
-    style.Colors[ImGuiCol_WindowBg]              = ImVec4(0.09f, 0.09f, 0.15f, 1.00f);
+    style.Colors[ImGuiCol_WindowBg]              = ImVec4(0.09f, 0.09f, 0.15f, 0.50f);
+//    style.Colors[ImGuiCol_WindowBg]              = ImVec4(0.09f, 0.09f, 0.15f, 1.00f);
     style.Colors[ImGuiCol_ChildBg]               = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     style.Colors[ImGuiCol_PopupBg]               = ImVec4(0.05f, 0.05f, 0.10f, 0.85f);
     style.Colors[ImGuiCol_Border]                = ImVec4(0.70f, 0.70f, 0.70f, 0.65f);
@@ -319,7 +324,7 @@ void RGE::setupObjects()
 {
     Entity player = g_registry->CreateEntity();
     player.AddTag("player");
-    player.AddComponent<TransformComponent>(glm::vec2(32*12, 32*8), glm::vec2(1.0, 1.0), 0.0);
+    player.AddComponent<TransformComponent>(glm::vec2(32*12, 32*6), glm::vec2(1.0, 1.0), 0.0);
     player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
     player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);

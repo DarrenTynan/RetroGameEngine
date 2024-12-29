@@ -42,7 +42,7 @@ class PlayerControlComponent: public System
 
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rb = player.GetComponent<RigidBodyComponent>();
-            auto fsm = rb.fsm;
+            auto fsm= rb.fsm;
 
             switch (event.symbol)
             {

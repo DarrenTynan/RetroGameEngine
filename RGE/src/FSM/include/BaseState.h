@@ -20,6 +20,7 @@ public:
     virtual void enter(FSM* fsm) = 0;
     virtual void update(FSM* fsm) = 0;
     virtual void toggle(FSM* fsm) = 0;
+    virtual void toggleTest(FSM* fsm) = 0;
     virtual void exit(FSM* fsm) = 0;
     virtual std::string getName() = 0;
     virtual ~BaseState() = default;

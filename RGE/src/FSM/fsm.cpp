@@ -13,7 +13,7 @@
 void FSM::setState(BaseState& newState)
 {
     currentState->exit(this);       // Do something before we chane state.
-    currentState = &newState;             // Change state.
+    currentState = &newState;            // Change state.
     currentState->enter(this);      // Do something after we change state.
 }
 
@@ -34,4 +34,9 @@ FSM::FSM()
     currentState = &Idle::getInstance();
     isGrounded = false;
     currentState->update(nullptr);
+}
+
+void FSM::toggleTest()
+{
+    std::cout << "FSM.cpp - toggleTest()" << std::endl;
 }

@@ -14,6 +14,12 @@ void Idle::toggle(FSM* fsm)
      fsm->setState(Walk::getInstance());
 }
 
+void Idle::toggleTest(FSM* fsm)
+{
+    std::cout << "toggleTest()" << std::endl;
+    fsm->setState(Walk::getInstance());
+}
+
 BaseState& Idle::getInstance()
 {
     static Idle singleton;
@@ -46,6 +52,12 @@ void Idle::exit(FSM *fsm)
 void Walk::toggle(FSM* fsm)
 {
     fsm->setState(Idle::getInstance());
+}
+
+void Walk::toggleTest(FSM* fsm)
+{
+    std::cout << "toggleTest()" << std::endl;
+    fsm->setState(Walk::getInstance());
 }
 
 BaseState& Walk::getInstance()
@@ -82,6 +94,12 @@ void Run::toggle(FSM *fsm)
     fsm->setState(Walk::getInstance());
 }
 
+void Run::toggleTest(FSM* fsm)
+{
+    std::cout << "toggleTest()" << std::endl;
+    fsm->setState(Walk::getInstance());
+}
+
 BaseState& Run::getInstance()
 {
     static Run singleton;
@@ -114,6 +132,12 @@ void Jump::toggle(FSM* fsm)
     fsm->setState(Fall::getInstance());
 }
 
+void Jump::toggleTest(FSM* fsm)
+{
+    std::cout << "toggleTest()" << std::endl;
+    fsm->setState(Walk::getInstance());
+}
+
 BaseState& Jump::getInstance()
 {
     static Jump singleton;
@@ -144,6 +168,12 @@ void Jump::exit(FSM *fsm)
 void Fall::toggle(FSM* fsm)
 {
     fsm->setState(Idle::getInstance());
+}
+
+void Fall::toggleTest(FSM* fsm)
+{
+    std::cout << "toggleTest()" << std::endl;
+    fsm->setState(Walk::getInstance());
 }
 
 BaseState& Fall::getInstance()
