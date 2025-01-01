@@ -15,13 +15,6 @@ class RenderImGuiSystem: public System
 {
     public:
         RenderImGuiSystem() = default;
-//        bool show_world_overlay = false;
-//        bool show_player_debug = false;
-//        bool show_demo_window = false;
-//        bool show_spawn_entity = true;
-//        bool show_tmx_window = false;
-//        bool show_object_window = false;
-//        bool show_game_window = false;
 
     void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera)
     {
@@ -30,13 +23,6 @@ class RenderImGuiSystem: public System
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-//        if (show_world_overlay) ShowWorldOverlay(&show_world_overlay, camera);
-//        if (show_player_debug) ShowPlayerDebug(registry, camera);
-//        if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
-//        if (show_spawn_entity) ShowSpawnEntity(registry);
-//        if (show_tmx_window) ShowTmxWindow(registry, camera);
-//        if (show_object_window) ShowObjectWindow(registry);
-//        if (show_game_window) ShowGameGrid();
         ShowWorldWindow(registry, camera);
 //        ImGui::ShowDemoWindow();
 
@@ -50,6 +36,12 @@ class RenderImGuiSystem: public System
 
     }
 
+    /**
+     * @brief Render the tabs for World Debug
+     *
+     * @param registry
+     * @param camera
+     */
     void ShowWorldWindow(const std::unique_ptr<Registry> &registry, const SDL_Rect &camera)
     {
         if (ImGui::Begin("World Debug"))
@@ -86,11 +78,31 @@ class RenderImGuiSystem: public System
                     ImGui::EndTabItem();
                 }
 
+                if (ImGui::BeginTabItem("Camera Follow"))
+                {
+                    ShowCameraFollow();
+                    ImGui::EndTabItem();
+                }
                 ImGui::EndTabBar();
             }
 
         }
         ImGui::End();
+
+    }
+
+    /**
+     * @brief Show the Camera Follow component
+     */
+    void ShowCameraFollow()
+    {
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+        if (ImGui::Begin("Camera Follow"))
+        {
+            ImGui::Text("camera follow");
+//            ImGui::Text("Tile.x: %i  Tile.y %i", tileX, tileY);
+            ImGui::End();
+        }
 
     }
 
