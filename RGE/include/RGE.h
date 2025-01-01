@@ -40,6 +40,7 @@
 #include "../../RGE/src/Components/HealthComponent.h"
 #include "../../RGE/src/Components/RaycastComponent.h"
 #include "../../RGE/src/Components/PlayerControlComponent.h"
+#include "../../RGE/src/Components/CameraFollowComponent.h"
 
 #include "../../RGE/src/Systems/CameraMovementSystem.h"
 #include "../../RGE/src/Systems/PlayerMovementSystem.h"

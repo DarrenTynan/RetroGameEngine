@@ -8,6 +8,7 @@
 // Debug keyboard toggles
 bool g_isCollider = false;
 bool g_isRayCast = false;
+bool g_isCamera = true;
 
 SDL_Window* g_rgeWindow;
 SDL_Rect g_rgeCamera;

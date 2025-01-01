@@ -274,6 +274,11 @@ void RGE::updateRenderer()
     g_registry->GetSystem<RenderTextSystem>().Update(g_gameRenderer, g_assetStore, g_gameCamera);
     g_registry->GetSystem<RenderImGuiSystem>().Update(g_registry, g_rgeCamera);
 
+    if (g_isCamera)
+    {
+        auto player = g_registry->GetEntityByTag("player");
+        g_registry->GetSystem<CameraMovementSystem>().Update(g_gameRenderer, g_gameCamera);
+    }
     if (g_isCollider)
     {
         g_registry->GetSystem<RenderColliderSystem>().Update(g_gameRenderer, g_gameCamera);
@@ -332,6 +337,7 @@ void RGE::setupObjects()
     player.AddComponent<HealthComponent>(100);
     player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
     player.AddComponent<HealthComponent>(100);
+    player.AddComponent<CameraMovementSystem>();
 
 //    Entity chopper = g_registry->CreateEntity();
 //    chopper.AddTag("chopper");
@@ -528,7 +534,9 @@ void RGE::updateSystems()
     g_registry->GetSystem<PlayerMovementSystem>().Update(deltaTime);        // apply velocity and check out of bounds.
     g_registry->GetSystem<AnimationSystem>().Update();
     g_registry->GetSystem<CollisionSystem>().Update(g_eventBus);
-    g_registry->GetSystem<CameraMovementSystem>().Update(g_gameCamera);
+
+    g_registry->GetSystem<CameraMovementSystem>().Update(g_gameRenderer, g_gameCamera);
+
     g_registry->GetSystem<ProjectileEmitSystem>().Update(g_registry);
     g_registry->GetSystem<ProjectileLifecycleSystem>().Update();
 
