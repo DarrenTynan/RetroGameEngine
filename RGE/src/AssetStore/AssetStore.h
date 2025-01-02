@@ -8,7 +8,8 @@
 #include <SDL2/SDL_image.h>
 #include "../Logger/Logger.h"
 
-class AssetStore {
+class AssetStore
+{
     private:
         std::map<std::string, SDL_Texture*> textures;
         std::map<std::string, TTF_Font*> fonts;

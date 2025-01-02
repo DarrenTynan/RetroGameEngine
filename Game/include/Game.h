@@ -4,7 +4,6 @@
 
 #ifndef RETROGAMEENGINE_GAME_H
 #define RETROGAMEENGINE_GAME_H
-#include <string>
 
 class Game
 {

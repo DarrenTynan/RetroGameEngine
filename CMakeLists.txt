@@ -52,11 +52,10 @@ add_library(
 # Add main.cpp file of the project root directory as a source file
 set(SOURCE_FILES
         main.cpp
-        Game/src/Game.cpp
 
+        RGE/include/Globals.h
         RGE/include/RGE.h
         RGE/src/RGE.cpp
-        RGE/include/Globals.h
 
         RGE/libs/imgui_docking/imgui.cpp
         RGE/libs/imgui_docking/imgui_demo.cpp
@@ -70,13 +69,14 @@ set(SOURCE_FILES
 
         RGE/src/AssetStore/AssetStore.cpp
         RGE/src/Logger/Logger.cpp
-
         RGE/src/ECS/ECS.cpp
         RGE/src/ECS/include/Pool.h
         RGE/src/ECS/include/Component.h
         RGE/src/ECS/include/Entity.h
         RGE/src/ECS/include/System.h
         RGE/src/ECS/include/Registry.h
+#        RGE/src/LevelLoader/LevelLoader.h
+#        RGE/src/LevelLoader/LevelLoader.cpp
 
         RGE/src/FSM/include/FSM.h
         RGE/src/FSM/FSM.cpp
@@ -84,6 +84,7 @@ set(SOURCE_FILES
         RGE/src/FSM/include/States.h
         RGE/src/FSM/StateTransitions.cpp
 
+        Game/src/Game.cpp
         Game/scripts/test.lua
         Game/scripts/Level1.lua
 )

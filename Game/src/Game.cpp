@@ -3,7 +3,8 @@
 //
 
 #include "../include/Game.h"
-#include "../../RGE/include/RGE.h"
+#include "../../RGE/src/Logger/Logger.h"
+#include "RGE.h"
 
 Game::Game() { Logger::Log("Game constructor called"); }
 Game::~Game() { Logger::Log("Game deconstruct called"); }

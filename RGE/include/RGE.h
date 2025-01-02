@@ -21,12 +21,11 @@
 #include <imgui_impl_sdlrenderer2.h>
 
 #include "../../RGE/src/Logger/Logger.h"
-
 #include "../../RGE/src/ECS/include/ECS.h"
-
 #include "../../RGE/src/AssetStore/AssetStore.h"
-
 #include "../../RGE/src/EventBus/EventBus.h"
+//#include "../../RGE/src/LevelLoader/LevelLoader.h"
+#include "../../RGE/src/FSM/include/FSM.h"
 
 #include "../../RGE/src/Components/TransformComponent.h"
 #include "../../RGE/src/Components/RigidBodyComponent.h"
@@ -55,6 +54,7 @@
 #include "../../RGE/src/Systems/ProjectileLifecycleSystem.h"
 #include "../../RGE/src/Systems/DamageSystem.h"
 #include "../../RGE/src/Systems/RenderRaycastSystem.h"
+//#include "../../RGE/src/Systems/ScriptSystem.h"
 
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Layer.hpp>
@@ -62,13 +62,6 @@
 #include <tmxlite/Tileset.hpp>
 #include <tmxlite/ObjectGroup.hpp>
 #include <tmxlite/Property.hpp>
-
-#include "../../RGE/src/FSM/include/FSM.h"
-
-
-
-//#include "Globals.h"
-
 
 
 /**

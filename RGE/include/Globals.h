@@ -5,6 +5,8 @@
 #ifndef RETROGAMEENGINE_GLOBALS_H
 #define RETROGAMEENGINE_GLOBALS_H
 
+#include <sol/sol.hpp>
+
 // Debug keyboard toggles
 bool g_isCollider = false;
 bool g_isRayCast = false;
@@ -21,6 +23,10 @@ SDL_Renderer* g_gameRenderer;
 const auto g_MAP_PATH = "../Game/assets/tilemaps/TestLevel/TestLevel.tmx";
 std::string g_mapImagePath;
 tmx::Map g_map;
+//unsigned int g_mapWidth;
+//unsigned int g_mapHeight;
+
+sol::state g_lua;
 
 std::unique_ptr<Registry> g_registry;
 std::unique_ptr<AssetStore> g_assetStore;

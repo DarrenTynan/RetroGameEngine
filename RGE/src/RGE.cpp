@@ -238,6 +238,15 @@ void RGE::setupSystemRegistry()
     g_registry->AddSystem<RenderTextSystem>();              // Render any label's
     g_registry->AddSystem<RenderImGuiSystem>();             // Render the engine window
     g_registry->AddSystem<RenderRaycastSystem>();           // Debug updateRender the ray cast's
+//    g_registry->AddSystem<ScriptSystem>();                  // Lua scripting system
+
+    // Create the bindings between C++ and Lua
+//    g_registry->GetSystem<ScriptSystem>().CreateLuaBindings(g_lua);
+
+    // Load the first level
+//    LevelLoader loader;
+//    g_lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
+//    loader.LoadLevel(g_lua, g_registry, g_assetStore, g_gameRenderer, 2);
 
 }
 
@@ -337,23 +346,7 @@ void RGE::setupObjects()
     player.AddComponent<HealthComponent>(100);
     player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
     player.AddComponent<HealthComponent>(100);
-    player.AddComponent<CameraMovementSystem>();
-
-//    Entity chopper = g_registry->CreateEntity();
-//    chopper.AddTag("chopper");
-//    chopper.AddComponent<TransformComponent>(glm::vec2(50, 32*6), glm::vec2(1.0, 1.0), 0.0);
-////     Add velocity to set the move speed
-//    chopper.AddComponent<RigidBodyComponent>(glm::vec2(25.0, 0.0));
-//    chopper.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
-//    chopper.AddComponent<SpriteComponent>("chopper-image", 32, 32, 1, false, false);
-//    chopper.AddComponent<AnimationComponent>(2, 8, true);
-//    chopper.AddComponent<HealthComponent>(100);
-//    choppe//r.AddComponent<ProjectileEmitterComponent>(glm::vec2(150, 0), 1000, 1000, 10, false);
-
-
-//    Entity label = g_registry->CreateEntity();
-//    SDL_Color red = {255,0,0};
-//    label.AddComponent<TextLabelComponent>(glm::vec2(200, 200), "This is a label", "arial-font", red, true);
+//    player.AddComponent<CameraFollowComponent>();
 
 }
 
@@ -368,8 +361,8 @@ int RGE::setupTMX()
     extern tmx::Map g_map;
 
     g_map.load(g_MAP_PATH);
-    unsigned int mapWidth;
-    unsigned int mapHeight;
+    int mapWidth;
+    int mapHeight;
 
     if(g_map.load(g_MAP_PATH))
     {
