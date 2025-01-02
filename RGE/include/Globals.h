@@ -41,5 +41,7 @@ const ImVec4 g_game_clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
 const ImVec4 g_rge_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 const int g_GAME_WINDOW_WIDTH = 800;
 const int g_GAME_WINDOW_HEIGHT = 600;
+//const int g_GAME_WINDOW_WIDTH = 640;
+//const int g_GAME_WINDOW_HEIGHT = 360;
 
 #endif //RETROGAMEENGINE_GLOBALS_H

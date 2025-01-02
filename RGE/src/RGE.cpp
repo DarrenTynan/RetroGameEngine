@@ -74,8 +74,8 @@ int RGE::setupRgeSDL()
             g_GAME_WINDOW_WIDTH,
             0,
             (displayMode.w - g_GAME_WINDOW_WIDTH),
-            g_GAME_WINDOW_HEIGHT,
-//            displayMode.h,
+//            g_GAME_WINDOW_HEIGHT,
+            displayMode.h,
             windowFlags
     );
 
@@ -340,6 +340,8 @@ void RGE::setupAssets()
  */
 void RGE::setupObjects()
 {
+    // Not used as now loaded via lua script.
+
 //    Entity player = g_registry->CreateEntity();
 //    player.AddTag("player");
 //    player.AddComponent<TransformComponent>(glm::vec2(32*12, 32*6), glm::vec2(1.0, 1.0), 0.0);
