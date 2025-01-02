@@ -6,6 +6,7 @@
 /Game/libs/**
 /Game/assets/**
 /RGE/libs/**
+/Game/scripts/**
 
 # Project specific
 .DS_Store
