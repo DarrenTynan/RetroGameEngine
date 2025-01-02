@@ -54,6 +54,8 @@
 #include "../../RGE/src/Systems/ProjectileLifecycleSystem.h"
 #include "../../RGE/src/Systems/DamageSystem.h"
 #include "../../RGE/src/Systems/RenderRaycastSystem.h"
+
+// Linker errors if ScriptSystem.h included
 //#include "../../RGE/src/Systems/ScriptSystem.h"
 
 #include <tmxlite/Map.hpp>

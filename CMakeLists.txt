@@ -75,8 +75,8 @@ set(SOURCE_FILES
         RGE/src/ECS/include/Entity.h
         RGE/src/ECS/include/System.h
         RGE/src/ECS/include/Registry.h
-#        RGE/src/LevelLoader/LevelLoader.h
-#        RGE/src/LevelLoader/LevelLoader.cpp
+        RGE/src/LevelLoader/LevelLoader.h
+        RGE/src/LevelLoader/LevelLoader.cpp
 
         RGE/src/FSM/include/FSM.h
         RGE/src/FSM/FSM.cpp

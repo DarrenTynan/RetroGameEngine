@@ -4,6 +4,10 @@
 
 #include "../include/RGE.h"
 #include "../include/Globals.h"
+// Linker errors if ScriptSystem.h included
+#include "../../RGE/src/Systems/ScriptSystem.h"
+
+#include "../../RGE/src/LevelLoader/LevelLoader.h"
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
@@ -238,15 +242,15 @@ void RGE::setupSystemRegistry()
     g_registry->AddSystem<RenderTextSystem>();              // Render any label's
     g_registry->AddSystem<RenderImGuiSystem>();             // Render the engine window
     g_registry->AddSystem<RenderRaycastSystem>();           // Debug updateRender the ray cast's
-//    g_registry->AddSystem<ScriptSystem>();                  // Lua scripting system
+    g_registry->AddSystem<ScriptSystem>();                  // Lua scripting system
 
     // Create the bindings between C++ and Lua
-//    g_registry->GetSystem<ScriptSystem>().CreateLuaBindings(g_lua);
+    g_registry->GetSystem<ScriptSystem>().CreateLuaBindings(g_lua);
 
     // Load the first level
-//    LevelLoader loader;
-//    g_lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
-//    loader.LoadLevel(g_lua, g_registry, g_assetStore, g_gameRenderer, 2);
+    LevelLoader loader;
+    g_lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
+    loader.LoadLevel(g_lua, g_registry, g_assetStore, g_gameRenderer, 1);
 
 }
 
@@ -336,17 +340,17 @@ void RGE::setupAssets()
  */
 void RGE::setupObjects()
 {
-    Entity player = g_registry->CreateEntity();
-    player.AddTag("player");
-    player.AddComponent<TransformComponent>(glm::vec2(32*12, 32*6), glm::vec2(1.0, 1.0), 0.0);
-    player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
-    player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
-    player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
-    player.AddComponent<AnimationComponent>(6, 8, true);
-    player.AddComponent<HealthComponent>(100);
-    player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
-    player.AddComponent<HealthComponent>(100);
-//    player.AddComponent<CameraFollowComponent>();
+//    Entity player = g_registry->CreateEntity();
+//    player.AddTag("player");
+//    player.AddComponent<TransformComponent>(glm::vec2(32*12, 32*6), glm::vec2(1.0, 1.0), 0.0);
+//    player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
+//    player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
+//    player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
+//    player.AddComponent<AnimationComponent>(6, 8, true);
+//    player.AddComponent<HealthComponent>(100);
+//    player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
+//    player.AddComponent<HealthComponent>(100);
+////    player.AddComponent<CameraFollowComponent>();
 
 }
 
