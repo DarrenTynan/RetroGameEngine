@@ -4,9 +4,7 @@
 
 #include "../include/RGE.h"
 #include "../include/Globals.h"
-// Linker errors if ScriptSystem.h included
 #include "../../RGE/src/Systems/ScriptSystem.h"
-
 #include "../../RGE/src/LevelLoader/LevelLoader.h"
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
@@ -71,9 +69,9 @@ int RGE::setupRgeSDL()
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
      g_rgeWindow = SDL_CreateWindow(
             "Retro Game RGE v1",
-            g_GAME_WINDOW_WIDTH,
+            g_game_window_width,
             0,
-            (displayMode.w - g_GAME_WINDOW_WIDTH),
+            (displayMode.w - g_game_window_width),
 //            g_GAME_WINDOW_HEIGHT,
             displayMode.h,
             windowFlags
@@ -118,8 +116,8 @@ int RGE::setupGameSDL()
             0,
 //            SDL_WINDOWPOS_CENTERED,
 //            SDL_WINDOWPOS_CENTERED,
-            g_GAME_WINDOW_WIDTH,
-            g_GAME_WINDOW_HEIGHT,
+            g_game_window_width,
+            g_game_window_height,
             windowFlags
     );
 
@@ -141,7 +139,7 @@ int RGE::setupGameSDL()
     }
 
     // SetupSDL the camera view with the entire screen area
-    g_gameCamera = {0, 0, g_GAME_WINDOW_WIDTH, g_GAME_WINDOW_HEIGHT};
+    g_gameCamera = {0, 0, g_game_window_width, g_game_window_height };
 
     return true;
 }
@@ -159,7 +157,7 @@ void RGE::setupImGui()
 //    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-    io.Fonts->AddFontFromFileTTF("../RGE/include/Pixellettersfull.ttf", 18.f);
+    io.Fonts->AddFontFromFileTTF("../RGE/fonts/Pixellettersfull.ttf", 18.f);
 
     // Setup Dear ImGui style
 //    ImGui::StyleColorsDark();
@@ -223,7 +221,7 @@ void RGE::setupImGui()
 
 
 /**
- * @brief Initialise the registry with systems.
+ * @brief Initialise the registry with systems. Set up the Lua level loader system.
  */
 void RGE::setupSystemRegistry()
 {
@@ -248,23 +246,23 @@ void RGE::setupSystemRegistry()
     g_registry->GetSystem<ScriptSystem>().CreateLuaBindings(g_lua);
 
     // Load the first level
-    LevelLoader loader;
+    LevelLoader levelLoader;
     g_lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
-    loader.LoadLevel(g_lua, g_registry, g_assetStore, g_gameRenderer, 1);
-
+    levelLoader.LoadConfig(g_lua);
+    levelLoader.LoadLevel(g_lua, g_registry, g_assetStore, g_gameRenderer, 1);
 }
 
 
 void RGE::drawGrid()
 {
     SDL_SetRenderDrawColor(g_gameRenderer, 0,0,0,255);
-    for (int i = 0; i < g_GAME_WINDOW_HEIGHT; ++i)
+    for (int i = 0; i < g_game_window_height; ++i)
     {
-        SDL_RenderDrawLine(g_gameRenderer, 0, i*32, g_GAME_WINDOW_WIDTH, i*32);
+        SDL_RenderDrawLine(g_gameRenderer, 0, i*32, g_game_window_width, i*32);
     }
-    for (int i = 0; i < g_GAME_WINDOW_WIDTH; ++i)
+    for (int i = 0; i < g_game_window_width; ++i)
     {
-        SDL_RenderDrawLine(g_gameRenderer, i*32, 0, i*32, g_GAME_WINDOW_WIDTH);
+        SDL_RenderDrawLine(g_gameRenderer, i*32, 0, i*32, g_game_window_width);
     }
     SDL_RenderPresent(g_gameRenderer);
 }

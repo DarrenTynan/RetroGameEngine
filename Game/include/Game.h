@@ -5,6 +5,9 @@
 #ifndef RETROGAMEENGINE_GAME_H
 #define RETROGAMEENGINE_GAME_H
 
+/**
+ * @brief Interface for the game class functions.
+ */
 class Game
 {
 public:

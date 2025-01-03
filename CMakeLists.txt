@@ -85,7 +85,6 @@ set(SOURCE_FILES
         RGE/src/FSM/StateTransitions.cpp
 
         Game/src/Game.cpp
-        Game/scripts/test.lua
         Game/scripts/Level1.lua
 )
 

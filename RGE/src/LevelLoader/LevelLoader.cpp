@@ -27,14 +27,45 @@ LevelLoader::~LevelLoader()
     Logger::Log("LevelLoader destructor called!");    
 }
 
+void LevelLoader::LoadConfig(sol::state& lua)
+{
+    // This checks the syntax of our script, but it does not execute the script
+    sol::load_result script = lua.load_file("../Game/scripts/Config.lua");
+    if (!script.valid())
+    {
+        sol::error error = script;
+        std::string errorMessage = error.what();
+        Logger::Error("Error loading the lua script: " + errorMessage);
+        return;
+    }
+
+    // Executes the script using the Sol state
+    lua.script_file("../Game/scripts/Config.lua");
+
+    // Read the big table for the current level
+    sol::table config = lua["Config"];
+
+    std::string title = config["title"];
+    std::cout << title << std::endl;
+}
+
+/**
+ * @brief Load the Lua script describing level entities and tmx map
+ *
+ * @param lua           Pointer
+ * @param registry      Pointer
+ * @param assetStore    Pointer
+ * @param renderer      Pointer
+ * @param levelNumber   int
+ */
 void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& registry, const std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer, int levelNumber)
 {
     // This checks the syntax of our script, but it does not execute the script
     sol::load_result script = lua.load_file("../Game/scripts/Level" + std::to_string(levelNumber) + ".lua");
     if (!script.valid())
     {
-        sol::error err = script;
-        std::string errorMessage = err.what();
+        sol::error error = script;
+        std::string errorMessage = error.what();
         Logger::Error("Error loading the lua script: " + errorMessage);
         return;
     }
@@ -45,9 +76,7 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
     // Read the big table for the current level
     sol::table level = lua["Level"];
 
-    ////////////////////////////////////////////////////////////////////////////
     // Read the level assets
-    ////////////////////////////////////////////////////////////////////////////
     sol::table assets = level["assets"];
 
     int i = 0;
@@ -58,14 +87,17 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
         {
             break;
         }
+
         sol::table asset = assets[i];
         std::string assetType = asset["type"];
         std::string assetId = asset["id"];
+
         if (assetType == "texture")
         {
             assetStore->AddTexture(renderer, assetId, asset["file"]);
             Logger::Log("A new texture asset was added to the asset store, id: " + assetId);
         }
+
         if (assetType == "font")
         {
             assetStore->AddFont(assetId, asset["file"], asset["font_size"]);
@@ -259,3 +291,4 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
         i++;
     }
 }
+

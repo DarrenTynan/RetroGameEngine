@@ -19,6 +19,8 @@ class LevelLoader
                        SDL_Renderer* renderer,
                        int level
         );
+
+        void LoadConfig(sol::state& lua);
 };
 
 #endif

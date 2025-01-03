@@ -39,8 +39,12 @@ int g_millisecsPreviouseFrame = 0;
 
 const ImVec4 g_game_clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
 const ImVec4 g_rge_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-const int g_GAME_WINDOW_WIDTH = 800;
-const int g_GAME_WINDOW_HEIGHT = 600;
+
+std::string g_game_window_title = "Default Game Title";
+const int g_game_window_width = 800;
+const int g_game_window_height = 600;
+
+// Best for Android
 //const int g_GAME_WINDOW_WIDTH = 640;
 //const int g_GAME_WINDOW_HEIGHT = 360;
 
