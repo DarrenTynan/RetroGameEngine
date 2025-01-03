@@ -5,38 +5,38 @@
 #ifndef RETROGAMEENGINE_GLOBALS_H
 #define RETROGAMEENGINE_GLOBALS_H
 
-#include <sol/sol.hpp>
+//#include <sol/sol.hpp>
 
-// Debug keyboard toggles
-bool g_isCollider = false;
-bool g_isRayCast = false;
-bool g_isCamera = true;
+//// Debug keyboard toggles
+//bool g_isCollider = false;
+//bool g_isRayCast = false;
+//bool g_isCamera = true;
 
-SDL_Window* g_rgeWindow;
-SDL_Rect g_rgeCamera;
-SDL_Renderer* g_rgeRenderer;
+//SDL_Window* g_rgeWindow;
+//SDL_Rect g_rgeCamera;
+//SDL_Renderer* g_rgeRenderer;
 
-SDL_Window* g_gameWindow;
-SDL_Rect g_gameCamera;
-SDL_Renderer* g_gameRenderer;
+//SDL_Window* g_gameWindow;
+//SDL_Rect g_gameCamera;
+//SDL_Renderer* g_gameRenderer;
 
-sol::state g_lua;
+//sol::state g_lua;
 
-std::unique_ptr<Registry> g_registry;
-std::unique_ptr<AssetStore> g_assetStore;
-std::unique_ptr<EventBus> g_eventBus;
+//std::unique_ptr<Registry> g_registry;
+//std::unique_ptr<AssetStore> g_assetStore;
+//std::unique_ptr<EventBus> g_eventBus;
 
-const int g_FPS = 60;
-const int g_MILLISECS_PER_FRAME = 1000 / g_FPS;
-// Keep track off time for the updateRender loop
-int g_millisecsPreviouseFrame = 0;
+//const int g_FPS = 60;
+//const int g_MILLISECS_PER_FRAME = 1000 / g_FPS;
+//// Keep track off time for the updateRender loop
+//int g_millisecsPreviouseFrame = 0;
 
-const ImVec4 g_game_clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
-const ImVec4 g_rge_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+//const ImVec4 g_game_clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+//const ImVec4 g_rge_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-std::string g_game_window_title = "Default Game Title";
-const int g_game_window_width = 800;
-const int g_game_window_height = 600;
+//std::string g_gameWindowTitle = "Default Game Title";
+//const int g_gameWindowWidth = 800;
+//const int g_gameWindowHeight = 600;
 
 // Best for Android
 //const int g_GAME_WINDOW_WIDTH = 640;

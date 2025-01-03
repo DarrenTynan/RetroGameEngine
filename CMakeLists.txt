@@ -54,6 +54,7 @@ set(SOURCE_FILES
         main.cpp
 
         RGE/include/Globals.h
+        RGE/include/Config.h
         RGE/include/RGE.h
         RGE/src/RGE.cpp
 

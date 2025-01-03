@@ -1,5 +1,4 @@
 #include "LevelLoader.h"
-//#include "./Game.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
 #include "../Components/SpriteComponent.h"
@@ -11,9 +10,9 @@
 #include "../Components/TextLabelComponent.h"
 #include "../Components/ScriptComponent.h"
 #include "../Components/CameraFollowComponent.h"
-//#include "Globals.h"
 
-//#include <fstream>
+#include "Config.h"
+
 #include <string>
 #include <sol/sol.hpp>
 
@@ -47,6 +46,11 @@ void LevelLoader::LoadConfig(sol::state& lua)
 
     std::string title = config["title"];
     std::cout << title << std::endl;
+
+    std::string str = config["title"];
+    const char * c = str.c_str();
+
+    c_testTitle = c;
 }
 
 /**

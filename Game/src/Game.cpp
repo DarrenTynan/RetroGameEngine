@@ -10,32 +10,30 @@ Game::Game() { Logger::Log("Game constructor called"); }
 Game::~Game() { Logger::Log("Game deconstruct called"); }
 
 /**
- * Function calls to setup: setupVars, setupSDL, setupRgeSDL, setupGameSDL, setupSystemRegistry, setupAssets.
+ * Function calls to setup: setupVars, setupSDL, SetupRgeSDL, SetupGameSDL, InitialSetup, LoadLevel.
  */
 void Game::Setup()
 {
-    RGE::setupVars();
-    RGE::setupSDL();
-    RGE::setupRgeSDL();
-    RGE::setupGameSDL();
-    RGE::setupSystemRegistry();
-    RGE::setupAssets();
-    RGE::setupTMX();
-    RGE::setupImGui();
+    RGE::InitialSetup();
+    RGE::SetupRgeSDL();
+    RGE::SetupGameSDL();
+    RGE::LoadLevel();
+    RGE::SetupTMX();
+    RGE::SetupImGui();
 }
 
 
 /**
- * game main loop; processInputs, updateSystems and updateRender
+ * game main loop; processInputs, UpdateSystems and updateRender
  */
 void Game::Run()
 {
     bool isGameRunning = true;
     while (isGameRunning)
     {
-        isGameRunning = RGE::processDebugInputEvents();
-        RGE::updateSystems();
-        RGE::updateRenderer();
+        isGameRunning = RGE::ProcessDebugInputEvents();
+        RGE::UpdateSystems();
+        RGE::UpdateRenderer();
     }
 }
 

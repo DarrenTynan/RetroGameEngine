@@ -7,41 +7,88 @@
 #include "../../RGE/src/Systems/ScriptSystem.h"
 #include "../../RGE/src/LevelLoader/LevelLoader.h"
 
+#include "Config.h"
+
+SDL_Window* rgeWindow;
+SDL_Rect rgeCamera;
+SDL_Renderer* rgeRenderer;
+
+SDL_Window* gameWindow;
+SDL_Rect gameCamera;
+SDL_Renderer* gameRenderer;
+
+std::unique_ptr<Registry> registry  = std::make_unique<Registry>();
+std::unique_ptr<AssetStore> assetStore = std::make_unique<AssetStore>();
+std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
+
+const ImVec4 g_game_clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+const ImVec4 g_rge_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+std::string gameWindowTitle = "Default Game Title";
+const int gameWindowWidth = 800;
+const int gameWindowHeight = 600;
+
+// Debug keyboard toggles
+bool isCollider = false;
+bool isRayCast = false;
+bool isCamera = true;
+
+int g_millisecsPreviouseFrame = 0;
+
+// Instance
+LevelLoader levelLoader;
+
+sol::state lua;
+
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 
-/**
- * @brief Setup var and instantiate the FSM.
- */
-void RGE::setupVars()
-{
-    g_registry = std::make_unique<Registry>();
-    g_assetStore = std::make_unique<AssetStore>();
-    g_eventBus = std::make_unique<EventBus>();
-
-}
 
 /**
- * @brief Initial setup of the SDL and true type fonts
- *
- * @return true / false
+ * @brief Initialise the registry with systems. Set up the Lua level loader system.
  */
-int RGE::setupSDL()
+void RGE::InitialSetup()
 {
+    // Add the systems that need to be processed in our game
+    registry->AddSystem<PlayerControlComponent>();        // Read keys and control player movements.
+    registry->AddSystem<MovementSystem>();                // Move all entities
+    registry->AddSystem<PlayerMovementSystem>();          // Move the player & apply forces
+    registry->AddSystem<AnimationSystem>();               // Animate all entities
+    registry->AddSystem<CollisionSystem>();               // Check all entity collisions AABB
+    registry->AddSystem<DamageSystem>();                  // Check all damage systems
+    registry->AddSystem<CameraMovementSystem>();          // Check the camera move system
+    registry->AddSystem<ProjectileEmitSystem>();          // Check entity bullets AABB
+    registry->AddSystem<ProjectileLifecycleSystem>();     // Check the life cycle and kill off bullets
+    registry->AddSystem<RenderColliderSystem>();          // Debug updateRender collision box's
+    registry->AddSystem<RenderSystem>();                  // Render windows
+    registry->AddSystem<RenderTextSystem>();              // Render any label's
+    registry->AddSystem<RenderImGuiSystem>();             // Render the engine window
+    registry->AddSystem<RenderRaycastSystem>();           // Debug updateRender the ray cast's
+    registry->AddSystem<ScriptSystem>();                  // Lua scripting system
+
+    // Create the bindings between C++ and Lua
+    registry->GetSystem<ScriptSystem>().CreateLuaBindings(lua);
+
+    // Use all the libraries
+    lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
+
+    // Load config file
+    levelLoader.LoadConfig(lua);
+
     // Setup SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         std::cout << "SDL could not be initialised\n" << SDL_GetError();
         Logger::Error2Arg("SDL could not be initialised ", SDL_GetError());
-        return false;
+        exit(1);
     }
 
     // Setup true type fonts
     if (TTF_Init() != 0)
     {
         Logger::Error("Error initializing SDL TTF");
-        return false;
+        exit(1);
     }
 
     // From 2.0.18: Enable native IME.
@@ -49,9 +96,8 @@ int RGE::setupSDL()
         SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
     #endif
 
-//    Logger::Log("SDL is ready to go!");
+    Logger::Log("SDL is ready to go!");
 
-    return true;
 }
 
 
@@ -60,44 +106,43 @@ int RGE::setupSDL()
  *
  * @return true / false
  */
-int RGE::setupRgeSDL()
+void RGE::SetupRgeSDL()
 {
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
 
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
-     g_rgeWindow = SDL_CreateWindow(
-            "Retro Game RGE v1",
-            g_game_window_width,
+    rgeWindow = SDL_CreateWindow(
+            "Retro Game Engine v1",
+            gameWindowWidth,
             0,
-            (displayMode.w - g_game_window_width),
+            (displayMode.w - gameWindowWidth),
 //            g_GAME_WINDOW_HEIGHT,
             displayMode.h,
             windowFlags
     );
 
-    if (!g_rgeWindow)
+    if (!rgeWindow)
     {
         Logger::Error("Window init failed");
         SDL_Quit();
-        return false;
+        exit(1);
     }
 
-    g_rgeRenderer = SDL_CreateRenderer(g_rgeWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    rgeRenderer = SDL_CreateRenderer(rgeWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    if (!g_rgeRenderer)
+    if (!rgeRenderer)
     {
         Logger::Error("Window renderer init failed");
-        SDL_DestroyRenderer(g_rgeRenderer);
+        SDL_DestroyRenderer(rgeRenderer);
         SDL_Quit();
-        return false;
+        exit(1);
     }
 
     // SetupSDL the camera view with the entire screen area
-    g_rgeCamera = {0, 0, displayMode.w, displayMode.h};
+    rgeCamera = {0, 0, displayMode.w, displayMode.h};
 
-    return true;
 }
 
 
@@ -106,49 +151,59 @@ int RGE::setupRgeSDL()
  *
  * @return -1 for errors
  */
-int RGE::setupGameSDL()
+void RGE::SetupGameSDL()
 {
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
-    g_gameWindow = SDL_CreateWindow(
-            "Game Window",
+    gameWindow = SDL_CreateWindow(
+            "Game",
             0,
             0,
 //            SDL_WINDOWPOS_CENTERED,
 //            SDL_WINDOWPOS_CENTERED,
-            g_game_window_width,
-            g_game_window_height,
+            gameWindowWidth,
+            gameWindowHeight,
             windowFlags
     );
 
-    if (!g_gameWindow)
+    if (!gameWindow)
     {
         Logger::Error("Window init failed");
         SDL_Quit();
-        return false;
+        exit(1);
     }
 
-    g_gameRenderer = SDL_CreateRenderer(g_gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    if (!g_gameRenderer)
+    if (!gameRenderer)
     {
         Logger::Error("Window renderer init failed");
-        SDL_DestroyRenderer(g_gameRenderer);
+        SDL_DestroyRenderer(gameRenderer);
         SDL_Quit();
-        return false;
+        exit(1);
     }
 
     // SetupSDL the camera view with the entire screen area
-    g_gameCamera = {0, 0, g_game_window_width, g_game_window_height };
+    gameCamera = {0, 0, gameWindowWidth, gameWindowHeight };
 
-    return true;
+}
+
+
+/**
+  * @brief Initialise the assetStore with pointers to png.
+ */
+void RGE::LoadLevel()
+{
+    // Load the entity data for level 1
+    levelLoader.LoadLevel(lua, registry, assetStore, gameRenderer, 1);
+
 }
 
 
 /**
  * @brief Initial setup of ImGui
  */
-void RGE::setupImGui()
+void RGE::SetupImGui()
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -214,118 +269,72 @@ void RGE::setupImGui()
     style.Colors[ImGuiCol_ModalWindowDimBg]      = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
 
     // Setup Platform/Renderer backends
-    ImGui_ImplSDL2_InitForSDLRenderer(g_rgeWindow, g_rgeRenderer);
-    ImGui_ImplSDLRenderer2_Init(g_rgeRenderer);
+    ImGui_ImplSDL2_InitForSDLRenderer(rgeWindow, rgeRenderer);
+    ImGui_ImplSDLRenderer2_Init(rgeRenderer);
 
 }
 
 
-/**
- * @brief Initialise the registry with systems. Set up the Lua level loader system.
- */
-void RGE::setupSystemRegistry()
+void RGE::DrawGrid()
 {
-    // Add the systems that need to be processed in our game
-    g_registry->AddSystem<PlayerControlComponent>();        // Read keys and control player movements.
-    g_registry->AddSystem<MovementSystem>();                // Move all entities
-    g_registry->AddSystem<PlayerMovementSystem>();          // Move the player & apply forces
-    g_registry->AddSystem<AnimationSystem>();               // Animate all entities
-    g_registry->AddSystem<CollisionSystem>();               // Check all entity collisions AABB
-    g_registry->AddSystem<DamageSystem>();                  // Check all damage systems
-    g_registry->AddSystem<CameraMovementSystem>();          // Check the camera move system
-    g_registry->AddSystem<ProjectileEmitSystem>();          // Check entity bullets AABB
-    g_registry->AddSystem<ProjectileLifecycleSystem>();     // Check the life cycle and kill off bullets
-    g_registry->AddSystem<RenderColliderSystem>();          // Debug updateRender collision box's
-    g_registry->AddSystem<RenderSystem>();                  // Render windows
-    g_registry->AddSystem<RenderTextSystem>();              // Render any label's
-    g_registry->AddSystem<RenderImGuiSystem>();             // Render the engine window
-    g_registry->AddSystem<RenderRaycastSystem>();           // Debug updateRender the ray cast's
-    g_registry->AddSystem<ScriptSystem>();                  // Lua scripting system
-
+    SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 255);
+    for (int i = 0; i < gameWindowHeight; ++i)
+    {
+        SDL_RenderDrawLine(gameRenderer, 0, i * 32, gameWindowWidth, i * 32);
+    }
+    for (int i = 0; i < gameWindowWidth; ++i)
+    {
+        SDL_RenderDrawLine(gameRenderer, i * 32, 0, i * 32, gameWindowWidth);
+    }
+    SDL_RenderPresent(gameRenderer);
 }
 
-
-void RGE::drawGrid()
-{
-    SDL_SetRenderDrawColor(g_gameRenderer, 0,0,0,255);
-    for (int i = 0; i < g_game_window_height; ++i)
-    {
-        SDL_RenderDrawLine(g_gameRenderer, 0, i*32, g_game_window_width, i*32);
-    }
-    for (int i = 0; i < g_game_window_width; ++i)
-    {
-        SDL_RenderDrawLine(g_gameRenderer, i*32, 0, i*32, g_game_window_width);
-    }
-    SDL_RenderPresent(g_gameRenderer);
-}
 
 /**
  * @brief Call updateRender on all objects
  */
-void RGE::updateRenderer()
+void RGE::UpdateRenderer()
 {
-//    RGE::drawGrid();
+//    RGE::DrawGrid();
 
-    SDL_SetRenderDrawColor(g_rgeRenderer, (Uint8)(g_rge_clear_color.x * 255), (Uint8)(g_rge_clear_color.y * 255), (Uint8)(g_rge_clear_color.z * 255), (Uint8)(g_rge_clear_color.w * 255));
-    SDL_RenderClear(g_rgeRenderer);
+    SDL_SetRenderDrawColor(rgeRenderer, (Uint8)(g_rge_clear_color.x * 255), (Uint8)(g_rge_clear_color.y * 255), (Uint8)(g_rge_clear_color.z * 255), (Uint8)(g_rge_clear_color.w * 255));
+    SDL_RenderClear(rgeRenderer);
 
-    SDL_SetRenderDrawColor(g_gameRenderer, (Uint8)(g_game_clear_color.x * 255), (Uint8)(g_game_clear_color.y * 255), (Uint8)(g_game_clear_color.z * 255), (Uint8)(g_game_clear_color.w * 255));
-    SDL_RenderClear(g_gameRenderer);
+    SDL_SetRenderDrawColor(gameRenderer, (Uint8)(g_game_clear_color.x * 255), (Uint8)(g_game_clear_color.y * 255), (Uint8)(g_game_clear_color.z * 255), (Uint8)(g_game_clear_color.w * 255));
+    SDL_RenderClear(gameRenderer);
 
     // Invoke all the systems that need to updateRender
-    g_registry->GetSystem<RenderSystem>().Update(g_gameRenderer, g_assetStore, g_gameCamera);
-    g_registry->GetSystem<RenderTextSystem>().Update(g_gameRenderer, g_assetStore, g_gameCamera);
-    g_registry->GetSystem<RenderImGuiSystem>().Update(g_registry, g_rgeCamera);
+    registry->GetSystem<RenderSystem>().Update(gameRenderer, assetStore, gameCamera);
+    registry->GetSystem<RenderTextSystem>().Update(gameRenderer, assetStore, gameCamera);
+    registry->GetSystem<RenderImGuiSystem>().Update(registry, rgeCamera);
 
-    if (g_isCamera)
+    if (isCamera)
     {
-        auto player = g_registry->GetEntityByTag("player");
-        g_registry->GetSystem<CameraMovementSystem>().Update(g_gameRenderer, g_gameCamera);
+        auto player = registry->GetEntityByTag("player");
+        registry->GetSystem<CameraMovementSystem>().Update(gameRenderer, gameCamera);
     }
-    if (g_isCollider)
+    if (isCollider)
     {
-        g_registry->GetSystem<RenderColliderSystem>().Update(g_gameRenderer, g_gameCamera);
+        registry->GetSystem<RenderColliderSystem>().Update(gameRenderer, gameCamera);
     }
 
-    if (g_isRayCast)
+    if (isRayCast)
     {
-        auto player = g_registry->GetEntityByTag("player");
-        g_registry->GetSystem<RenderRaycastSystem>().Update(g_gameRenderer, player);
+        auto player = registry->GetEntityByTag("player");
+        registry->GetSystem<RenderRaycastSystem>().Update(gameRenderer, player);
     }
 
     // Display HUD
-    SDL_Texture* hud = g_assetStore->GetTexture("hud2");
+    SDL_Texture* hud = assetStore->GetTexture("hud2");
     SDL_Rect source = {0,0,800, 56};
     SDL_Rect destination = {0,600-56,800,56};
 
-    SDL_RenderCopy(g_gameRenderer, hud, &source, &destination);
-    SDL_RenderPresent(g_gameRenderer);
+    SDL_RenderCopy(gameRenderer, hud, &source, &destination);
+    SDL_RenderPresent(gameRenderer);
 
-    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), g_rgeRenderer);
-    SDL_RenderPresent(g_rgeRenderer);
+    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), rgeRenderer);
+    SDL_RenderPresent(rgeRenderer);
 
-}
-
-
-/**
-  * @brief Initialise the assetStore with pointers to png.
- */
-void RGE::setupAssets()
-{
-    // Create the bindings between C++ and Lua
-    g_registry->GetSystem<ScriptSystem>().CreateLuaBindings(g_lua);
-
-    // Use all the libraries
-    g_lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
-
-    // Instance
-    LevelLoader levelLoader;
-
-    // Load config file
-    levelLoader.LoadConfig(g_lua);
-
-    // Load the entity data for level 1
-    levelLoader.LoadLevel(g_lua, g_registry, g_assetStore, g_gameRenderer, 1);
 }
 
 
@@ -334,7 +343,7 @@ void RGE::setupAssets()
  *
  * @return
  */
-int RGE::setupTMX()
+void RGE::SetupTMX()
 {
     const auto MAP_PATH = "../Game/assets/tilemaps/TestLevel/TestLevel.tmx";
     std::string mapImagePath;
@@ -355,7 +364,7 @@ int RGE::setupTMX()
                 for(const auto& object : objects)
                 {
                     //do stuff with object properties
-                    Entity tile = g_registry->CreateEntity();
+                    Entity tile = registry->CreateEntity();
                     tile.AddComponent<BoxColliderComponent>(object.getAABB().width, object.getAABB().height);
                     tile.AddComponent<TransformComponent>(glm::vec2(object.getAABB().left,  object.getAABB().top));
                     tile.AddTag("object");
@@ -396,7 +405,7 @@ int RGE::setupTMX()
                         int srcRectX = ( (tiles[index].ID - firstgid) % tilesPerRow )  * tileWidth;
                         int srcRectY = ( (tiles[index].ID - firstgid) / tilesPerRow ) * tileHeight;
 
-                        Entity tile = g_registry->CreateEntity();
+                        Entity tile = registry->CreateEntity();
                         tile.AddTag("tile");
 
                         tile.AddComponent<TransformComponent>(glm::vec2(x * tileWidth, y * tileHeight), glm::vec2(1, 1), 0.0);
@@ -415,7 +424,6 @@ int RGE::setupTMX()
 //        }
     }
 
-    return 0;
 }
 
 
@@ -425,7 +433,7 @@ int RGE::setupTMX()
  * window quit
  * keyboard
  */
-bool RGE::processDebugInputEvents()
+bool RGE::ProcessDebugInputEvents()
 {
     bool isQuit = true;
 
@@ -444,7 +452,7 @@ bool RGE::processDebugInputEvents()
 
         if (sdlEvent.type == SDL_KEYUP)
         {
-            g_eventBus->EmitEvent<KeyReleasedEvent>(sdlEvent.key.keysym.sym);
+            eventBus->EmitEvent<KeyReleasedEvent>(sdlEvent.key.keysym.sym);
         }
 
         // Core sdl events.
@@ -457,10 +465,10 @@ bool RGE::processDebugInputEvents()
 
             case SDL_KEYDOWN:
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isQuit = false; }
-                if (sdlEvent.key.keysym.sym == SDLK_c) { g_isCollider = !g_isCollider; }
-                if (sdlEvent.key.keysym.sym == SDLK_r) { g_isRayCast = !g_isRayCast; }
+                if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
+                if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
 
-                g_eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
+                eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
                 break;
 
             // Check for window event
@@ -482,7 +490,7 @@ bool RGE::processDebugInputEvents()
 /**
  * UpdateSystems
  */
-void RGE::updateSystems()
+void RGE::UpdateSystems()
 {
     // The difference in ticks since the last frame, converted to seconds
     double deltaTime = (SDL_GetTicks() - g_millisecsPreviouseFrame) / 1000.0;
@@ -491,25 +499,25 @@ void RGE::updateSystems()
     g_millisecsPreviouseFrame = SDL_GetTicks();
 
     // Reset all event handlers for the current frame
-    g_eventBus->Reset();
+    eventBus->Reset();
 
     // Perform the subscription of the events for all systems
-    g_registry->GetSystem<DamageSystem>().SubscribeToEvents(g_eventBus);
-    g_registry->GetSystem<PlayerControlComponent>().SubscribeToEvents(g_eventBus);
-    g_registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(g_eventBus);
+    registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
+    registry->GetSystem<PlayerControlComponent>().SubscribeToEvents(eventBus);
+    registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
 
     // UpdateSystems the registry to process the entities that are waiting to be created/deleted
-    g_registry->Update();
+    registry->Update();
 
-    g_registry->GetSystem<MovementSystem>().Update(deltaTime);              // apply velocity and check out of bounds.
-    g_registry->GetSystem<PlayerMovementSystem>().Update(deltaTime);        // apply velocity and check out of bounds.
-    g_registry->GetSystem<AnimationSystem>().Update();
-    g_registry->GetSystem<CollisionSystem>().Update(g_eventBus);
+    registry->GetSystem<MovementSystem>().Update(deltaTime);              // apply velocity and check out of bounds.
+    registry->GetSystem<PlayerMovementSystem>().Update(registry, deltaTime);        // apply velocity and check out of bounds.
+    registry->GetSystem<AnimationSystem>().Update();
+    registry->GetSystem<CollisionSystem>().Update(eventBus);
 
-    g_registry->GetSystem<CameraMovementSystem>().Update(g_gameRenderer, g_gameCamera);
+    registry->GetSystem<CameraMovementSystem>().Update(gameRenderer, gameCamera);
 
-    g_registry->GetSystem<ProjectileEmitSystem>().Update(g_registry);
-    g_registry->GetSystem<ProjectileLifecycleSystem>().Update();
+    registry->GetSystem<ProjectileEmitSystem>().Update(registry);
+    registry->GetSystem<ProjectileLifecycleSystem>().Update();
 
 }
 
@@ -523,11 +531,11 @@ void RGE::destroy()
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
 
-    SDL_DestroyWindow(g_rgeWindow);
-    SDL_DestroyRenderer(g_rgeRenderer);
+    SDL_DestroyWindow(rgeWindow);
+    SDL_DestroyRenderer(rgeRenderer);
 
-    SDL_DestroyRenderer(g_rgeRenderer);
-    SDL_DestroyWindow(g_gameWindow);
+    SDL_DestroyRenderer(rgeRenderer);
+    SDL_DestroyWindow(gameWindow);
 
     SDL_Quit();
 }

@@ -72,22 +72,20 @@
 class RGE
 {
 public:
-    static void setupVars();
-    static int setupSDL();
-    static int setupRgeSDL();
-    static int setupGameSDL();
-    static void setupImGui();
-    static void updateRenderer();
-    static void setupSystemRegistry();
-    static void setupAssets();
-    static int setupTMX();
-    static bool processDebugInputEvents();
-    static void updateSystems();
+    static void InitialSetup();
+    static void SetupRgeSDL();
+    static void SetupGameSDL();
+    static void UpdateRenderer();
+    static bool ProcessDebugInputEvents();
+    static void UpdateSystems();
+    static void SetupImGui();
+    static void LoadLevel();
+    static void SetupTMX();
     static void destroy();
 
 private:
 
-    static void drawGrid();
+    static void DrawGrid();
 };
 
 #endif //RETROGAMEENGINE_RGE_H

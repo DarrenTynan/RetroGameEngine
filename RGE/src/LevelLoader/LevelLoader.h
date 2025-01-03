@@ -3,7 +3,6 @@
 
 #include "../ECS/include/ECS.h"
 #include "../AssetStore/AssetStore.h"
-
 #include <SDL2/SDL.h>
 #include <sol/sol.hpp>
 #include <memory>

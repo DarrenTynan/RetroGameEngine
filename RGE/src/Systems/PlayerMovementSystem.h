@@ -26,10 +26,9 @@ public:
     }
 
     // Update position during Delta Time
-    static void Update(double deltaTime)
+    static void Update(std::unique_ptr<Registry>& registry, double deltaTime)
     {
-        extern std::unique_ptr<Registry> g_registry;
-        Entity player = g_registry->GetEntityByTag("player");
+        Entity player = registry->GetEntityByTag("player");
 
         auto &transform = player.GetComponent<TransformComponent>();
         auto &rigidBody = player.GetComponent<RigidBodyComponent>();

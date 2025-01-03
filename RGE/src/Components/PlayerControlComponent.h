@@ -37,8 +37,8 @@ class PlayerControlComponent: public System
         // Key pressed actions.
         void OnKeyPressed(KeyPressedEvent& event)
         {
-            extern std::unique_ptr<Registry> g_registry;
-            Entity player = g_registry->GetEntityByTag("player");
+            extern std::unique_ptr<Registry> registry;
+            Entity player = registry->GetEntityByTag("player");
 
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rb = player.GetComponent<RigidBodyComponent>();
@@ -113,8 +113,8 @@ class PlayerControlComponent: public System
 
         void OnKeyReleased(KeyReleasedEvent& event)
         {
-            extern std::unique_ptr<Registry> g_registry;
-            Entity player = g_registry->GetEntityByTag("player");
+            extern std::unique_ptr<Registry> registry;
+            Entity player = registry->GetEntityByTag("player");
 
             auto& rb = player.GetComponent<RigidBodyComponent>();
             auto fsm = rb.fsm;
