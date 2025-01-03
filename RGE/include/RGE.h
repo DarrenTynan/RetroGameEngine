@@ -80,7 +80,6 @@ public:
     static void updateRenderer();
     static void setupSystemRegistry();
     static void setupAssets();
-    static void setupObjects();
     static int setupTMX();
     static bool processDebugInputEvents();
     static void updateSystems();

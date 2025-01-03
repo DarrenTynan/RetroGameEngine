@@ -242,14 +242,6 @@ void RGE::setupSystemRegistry()
     g_registry->AddSystem<RenderRaycastSystem>();           // Debug updateRender the ray cast's
     g_registry->AddSystem<ScriptSystem>();                  // Lua scripting system
 
-    // Create the bindings between C++ and Lua
-    g_registry->GetSystem<ScriptSystem>().CreateLuaBindings(g_lua);
-
-    // Load the first level
-    LevelLoader levelLoader;
-    g_lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
-    levelLoader.LoadConfig(g_lua);
-    levelLoader.LoadLevel(g_lua, g_registry, g_assetStore, g_gameRenderer, 1);
 }
 
 
@@ -320,38 +312,20 @@ void RGE::updateRenderer()
  */
 void RGE::setupAssets()
 {
-    // Adding assets to the asset store
-    g_assetStore->AddTexture(g_gameRenderer, "hud2", "../Game/assets/images/hud3.png");
-    g_assetStore->AddFont("arial-font", "../Game/assets/fonts/arial.ttf", 24);
-    g_assetStore->AddTexture(g_gameRenderer, "tilemap-image", "../Game/assets/tilemaps/TestLevel/TestLevel.png");
+    // Create the bindings between C++ and Lua
+    g_registry->GetSystem<ScriptSystem>().CreateLuaBindings(g_lua);
 
-    g_assetStore->AddTexture(g_gameRenderer, "tank-image", "../Game/assets/images/tank-panther-right.png");
-    g_assetStore->AddTexture(g_gameRenderer, "truck-image", "../Game/assets/images/truck-ford-right.png");
-    g_assetStore->AddTexture(g_gameRenderer, "chopper-image", "../Game/assets/images/chopper.png");
-    g_assetStore->AddTexture(g_gameRenderer, "player-idle-image", "../Game/assets/sprites/CharacterIdle.png");
-    g_assetStore->AddTexture(g_gameRenderer, "bullet-image", "../Game/assets/images/bullet.png");
-}
+    // Use all the libraries
+    g_lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
 
+    // Instance
+    LevelLoader levelLoader;
 
-/**
-* @brief Initialise the player object with components.
- */
-void RGE::setupObjects()
-{
-    // Not used as now loaded via lua script.
+    // Load config file
+    levelLoader.LoadConfig(g_lua);
 
-//    Entity player = g_registry->CreateEntity();
-//    player.AddTag("player");
-//    player.AddComponent<TransformComponent>(glm::vec2(32*12, 32*6), glm::vec2(1.0, 1.0), 0.0);
-//    player.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
-//    player.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(0,0));
-//    player.AddComponent<SpriteComponent>("player-idle-image", 32, 32, 1, false, false);
-//    player.AddComponent<AnimationComponent>(6, 8, true);
-//    player.AddComponent<HealthComponent>(100);
-//    player.AddComponent<RaycastComponent>(glm::vec2(256, 256));
-//    player.AddComponent<HealthComponent>(100);
-////    player.AddComponent<CameraFollowComponent>();
-
+    // Load the entity data for level 1
+    levelLoader.LoadLevel(g_lua, g_registry, g_assetStore, g_gameRenderer, 1);
 }
 
 
@@ -362,15 +336,15 @@ void RGE::setupObjects()
  */
 int RGE::setupTMX()
 {
-    extern tmx::Map g_map;
-
-    g_map.load(g_MAP_PATH);
+    const auto MAP_PATH = "../Game/assets/tilemaps/TestLevel/TestLevel.tmx";
+    std::string mapImagePath;
+    tmx::Map map;
     int mapWidth;
     int mapHeight;
 
-    if(g_map.load(g_MAP_PATH))
+    if(map.load(MAP_PATH))
     {
-        const auto& layers = g_map.getLayers();
+        const auto& layers = map.getLayers();
         for(const auto& layer : layers)
         {
             // Get Object layer
@@ -396,22 +370,22 @@ int RGE::setupTMX()
 
                 const auto& tiles = layer->getLayerAs<tmx::TileLayer>().getTiles();
 
-                const auto& imagePath = g_map.getTilesets();
-                g_mapImagePath = imagePath[0].getImagePath();
+                const auto& imagePath = map.getTilesets();
+                mapImagePath = imagePath[0].getImagePath();
 
                 // Tile width in pixels (32)
-                unsigned int tileWidth = g_map.getTileSize().x;
+                unsigned int tileWidth = map.getTileSize().x;
                 // Tile height in pixels (32)
-                unsigned int tileHeight = g_map.getTileSize().x;
+                unsigned int tileHeight = map.getTileSize().x;
                 // Image width
-                unsigned int imageWidth = g_map.getTilesets().size();
+                unsigned int imageWidth = map.getTilesets().size();
 
                 // How many tiles per row (25)
-                unsigned int tileCountX = g_map.getTileCount().x;
-                mapWidth = g_map.getTileCount().x * tileWidth;
+                unsigned int tileCountX = map.getTileCount().x;
+                mapWidth = map.getTileCount().x * tileWidth;
                 // How many tiles per column (20)
-                unsigned int tileCountY = g_map.getTileCount().y;
-                mapHeight = g_map.getTileCount().y * tileHeight;
+                unsigned int tileCountY = map.getTileCount().y;
+                mapHeight = map.getTileCount().y * tileHeight;
 
                 int index = 0;
                 for (int y = 0; y < tileCountY; y++) {

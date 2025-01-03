@@ -20,7 +20,6 @@ void Game::Setup()
     RGE::setupGameSDL();
     RGE::setupSystemRegistry();
     RGE::setupAssets();
-    RGE::setupObjects();
     RGE::setupTMX();
     RGE::setupImGui();
 }

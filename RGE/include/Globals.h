@@ -20,12 +20,6 @@ SDL_Window* g_gameWindow;
 SDL_Rect g_gameCamera;
 SDL_Renderer* g_gameRenderer;
 
-const auto g_MAP_PATH = "../Game/assets/tilemaps/TestLevel/TestLevel.tmx";
-std::string g_mapImagePath;
-tmx::Map g_map;
-//unsigned int g_mapWidth;
-//unsigned int g_mapHeight;
-
 sol::state g_lua;
 
 std::unique_ptr<Registry> g_registry;
