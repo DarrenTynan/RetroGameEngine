@@ -3,7 +3,6 @@
 //
 
 #include "../include/RGE.h"
-#include "../include/Globals.h"
 #include "../../RGE/src/Systems/ScriptSystem.h"
 #include "../../RGE/src/LevelLoader/LevelLoader.h"
 
@@ -35,10 +34,9 @@ bool isCamera = true;
 
 int g_millisecsPreviouseFrame = 0;
 
-// Instance
-LevelLoader levelLoader;
-
+// Lua
 sol::state lua;
+//LevelLoader levelLoader;
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
@@ -74,7 +72,7 @@ void RGE::InitialSetup()
     lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
 
     // Load config file
-    levelLoader.LoadConfig(lua);
+    LevelLoader::LoadConfig(lua);
 
     // Setup SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -195,7 +193,7 @@ void RGE::SetupGameSDL()
 void RGE::LoadLevel()
 {
     // Load the entity data for level 1
-    levelLoader.LoadLevel(lua, registry, assetStore, gameRenderer, 1);
+    LevelLoader::LoadLevel(lua, registry, assetStore, gameRenderer, 1);
 
 }
 

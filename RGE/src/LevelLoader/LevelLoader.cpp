@@ -16,16 +16,6 @@
 #include <string>
 #include <sol/sol.hpp>
 
-LevelLoader::LevelLoader()
-{
-    Logger::Log("LevelLoader constructor called!");    
-}
-
-LevelLoader::~LevelLoader()
-{
-    Logger::Log("LevelLoader destructor called!");    
-}
-
 void LevelLoader::LoadConfig(sol::state& lua)
 {
     // This checks the syntax of our script, but it does not execute the script

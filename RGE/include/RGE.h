@@ -65,7 +65,6 @@
 #include <tmxlite/ObjectGroup.hpp>
 #include <tmxlite/Property.hpp>
 
-
 /**
  * @brief definition pf the class functions.
  */
