@@ -1,12 +1,15 @@
 cmake_minimum_required(VERSION 3.24)
-project(RetroGameEngine)
-
 set(CMAKE_CXX_STANDARD 17)
 
-# Make my library fie.
-#add_library(RGE STATIC RGE/src/RGE.cpp)
+project(RetroGameEngine)
 
-SET( LIBS_DIR "${PROJECT_SOURCE_DIR}/RGE/libs")
+
+# Make my library fie.
+#add_library(RGE STATIC
+#        Engine/src/RGE.cpp
+#)
+
+SET( LIBS_DIR "${PROJECT_SOURCE_DIR}/Engine/libs")
 SET( LUA_DIR "${LIBS_DIR}/lua" )
 SET( SOL2_DIR "${LIBS_DIR}/sol" )
 
@@ -53,39 +56,41 @@ add_library(
 set(SOURCE_FILES
         main.cpp
 
-        RGE/include/Config.h
-        RGE/include/RGE.h
-        RGE/src/RGE.cpp
+        Engine/include/Config.h
+        Engine/include/RGE.h
+        Engine/src/RGE.cpp
 
-        RGE/libs/imgui_docking/imgui.cpp
-        RGE/libs/imgui_docking/imgui_demo.cpp
-        RGE/libs/imgui_docking/imgui_draw.cpp
-        RGE/libs/imgui_docking/imgui_tables.cpp
-        RGE/libs/imgui_docking/imgui_widgets.cpp
-        RGE/libs/imgui_docking/backends/imgui_impl_sdl2.cpp
-        RGE/libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
+        Engine/libs/imgui_docking/imgui.cpp
+        Engine/libs/imgui_docking/imgui_demo.cpp
+        Engine/libs/imgui_docking/imgui_draw.cpp
+        Engine/libs/imgui_docking/imgui_tables.cpp
+        Engine/libs/imgui_docking/imgui_widgets.cpp
+        Engine/libs/imgui_docking/backends/imgui_impl_sdl2.cpp
+        Engine/libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
 
-        RGE/libs/sol/sol.hpp
+        Engine/libs/sol/sol.hpp
 
-        RGE/src/AssetStore/AssetStore.cpp
-        RGE/src/Logger/Logger.cpp
-        RGE/src/ECS/ECS.cpp
-        RGE/src/ECS/include/Pool.h
-        RGE/src/ECS/include/Component.h
-        RGE/src/ECS/include/Entity.h
-        RGE/src/ECS/include/System.h
-        RGE/src/ECS/include/Registry.h
-        RGE/src/LevelLoader/LevelLoader.h
-        RGE/src/LevelLoader/LevelLoader.cpp
+        Engine/src/AssetStore/AssetStore.cpp
+        Engine/src/Logger/Logger.cpp
+        Engine/src/ECS/ECS.cpp
+        Engine/src/ECS/include/Pool.h
+        Engine/src/ECS/include/Component.h
+        Engine/src/ECS/include/Entity.h
+        Engine/src/ECS/include/System.h
+        Engine/src/ECS/include/Registry.h
+        Engine/src/LevelLoader/LevelLoader.h
+        Engine/src/LevelLoader/LevelLoader.cpp
 
-        RGE/src/FSM/include/FSM.h
-        RGE/src/FSM/FSM.cpp
-        RGE/src/FSM/include/BaseState.h
-        RGE/src/FSM/include/States.h
-        RGE/src/FSM/StateTransitions.cpp
+        Engine/src/FSM/include/FSM.h
+        Engine/src/FSM/FSM.cpp
+        Engine/src/FSM/include/BaseState.h
+        Engine/src/FSM/include/States.h
+        Engine/src/FSM/StateTransitions.cpp
 
         Game/src/Game.cpp
         Game/scripts/Level1.lua
+
+        Editor/src/Editor.cpp
 )
 
 # Add executable target with source files listed in SOURCE_FILES variable
@@ -93,15 +98,16 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 include_directories(
         Game/assets/
-        RGE/include/
-        RGE/libs/imgui_docking/
-        RGE/libs/imgui_docking/backends/
-        RGE/libs/lua/
-        RGE/libs/sol/
+        Editor/include/
+        Engine/include/
+        Engine/libs/imgui_docking/
+        Engine/libs/imgui_docking/backends/
+        Engine/libs/lua/
+        Engine/libs/sol/
 )
 
 # Line compiles but missing error.
-#target_link_libraries(${PROJECT_NAME} /RGE/libs/libRGE.a)
+#target_link_libraries(${PROJECT_NAME} /Engine/libs/libRGE.a)
 
 target_include_directories( ${PROJECT_NAME} PUBLIC ${LIBS_DIR} PUBLIC ${LUA_DIR} )
 

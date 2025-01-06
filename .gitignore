@@ -5,7 +5,7 @@
 /Engine/libs/**
 /Game/libs/**
 /Game/assets/**
-/RGE/libs/**
+/Engine/libs/**
 /Game/scripts/**
 
 # Project specific

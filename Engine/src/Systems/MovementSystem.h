@@ -1,0 +1,48 @@
+//
+// Created by Darren Tynan on 27/12/2022.
+//
+
+#ifndef RETRO_ENGINE_MOVEMENTSYSTEM_H
+#define RETRO_ENGINE_MOVEMENTSYSTEM_H
+
+#include "../ECS/include/ECS.h"
+#include "../Components/TransformComponent.h"
+#include "../Components/RigidBodyComponent.h"
+#include "../ECS/include/Registry.h"
+
+/**
+ * @brief Movement system for all entities.
+ */
+class MovementSystem: public System
+{
+public:
+    MovementSystem()
+    {
+        RequireComponent<TransformComponent>();
+        RequireComponent<RigidBodyComponent>();
+    }
+
+    // Update position during Delta Time
+    void Update(double deltaTime)
+    {
+        // Check all entities.
+        for (auto entity: GetSystemEntities())
+        {
+            // We are not going to apply forces to player.
+            if (entity.HasTag("player"))
+            {
+                continue;
+            }
+
+            auto& transform = entity.GetComponent<TransformComponent>();
+            auto rigidBody = entity.GetComponent<RigidBodyComponent>();
+
+            // Apply the velocity
+            transform.position.x += (rigidBody.velocity.x * deltaTime);
+            transform.position.y += (rigidBody.velocity.y * deltaTime);
+
+        }
+    }
+};
+
+#endif //RETRO_ENGINE_MOVEMENTSYSTEM_H

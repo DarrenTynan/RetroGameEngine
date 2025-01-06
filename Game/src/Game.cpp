@@ -3,7 +3,7 @@
 //
 
 #include "../include/Game.h"
-#include "../../RGE/src/Logger/Logger.h"
+#include "../../Engine/src/Logger/Logger.h"
 #include "RGE.h"
 
 Game::Game() { Logger::Log("Game constructor called"); }
@@ -39,7 +39,7 @@ void Game::Run()
 
 
 /**
- * Destroy the RGE object.
+ * Destroy the Engine object.
  */
 void Game::Destroy()
 {
