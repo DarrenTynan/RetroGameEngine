@@ -10,13 +10,18 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
+#include <imgui.h>
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_sdlrenderer2.h>
+
 class Editor
 {
 public:
-    static void Setup();
+    static void SetupSDL();
     static void Run();
     static void Destroy();
     static bool ProcessDebugInputEvents();
+    static void SetupImGui();
 
 };
 

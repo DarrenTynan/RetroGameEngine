@@ -343,9 +343,9 @@ void RGE::UpdateRenderer()
  */
 void RGE::SetupTMX()
 {
+    tmx::Map map;
     const auto MAP_PATH = "../Game/assets/tilemaps/TestLevel/TestLevel.tmx";
     std::string mapImagePath;
-    tmx::Map map;
     int mapWidth;
     int mapHeight;
 

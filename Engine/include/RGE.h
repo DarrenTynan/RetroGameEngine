@@ -55,15 +55,19 @@
 #include "../../Engine/src/Systems/DamageSystem.h"
 #include "../../Engine/src/Systems/RenderRaycastSystem.h"
 
-// Linker errors if ScriptSystem.h included
-//#include "../../Engine/src/Systems/ScriptSystem.h"
-
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Layer.hpp>
 #include <tmxlite/TileLayer.hpp>
 #include <tmxlite/Tileset.hpp>
 #include <tmxlite/ObjectGroup.hpp>
 #include <tmxlite/Property.hpp>
+
+//#include "../../Engine/libs/tmxlite/Map.hpp"
+//#include "../../Engine/libs/tmxlite/Layer.hpp"
+//#include "../../Engine/libs/tmxlite/TileLayer.hpp"
+//#include "../../Engine/libs/tmxlite/Tileset.hpp"
+//#include "../../Engine/libs/tmxlite/ObjectGroup.hpp"
+//#include "../../Engine/libs/tmxlite/Property.hpp"
 
 /**
  * @brief definition pf the class functions.
