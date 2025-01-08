@@ -49,7 +49,9 @@
 #include "../../Engine/src/Systems/RenderColliderSystem.h"
 #include "../../Engine/src/Systems/AnimationSystem.h"
 #include "../../Engine/src/Systems/CollisionSystem.h"
+//#############################################################
 #include "../../Engine/src/Systems/RenderImGuiSystem.h"
+
 #include "../../Engine/src/Systems/ProjectileEmitSystem.h"
 #include "../../Engine/src/Systems/ProjectileLifecycleSystem.h"
 #include "../../Engine/src/Systems/DamageSystem.h"
@@ -62,12 +64,6 @@
 #include <tmxlite/ObjectGroup.hpp>
 #include <tmxlite/Property.hpp>
 
-//#include "../../Engine/libs/tmxlite/Map.hpp"
-//#include "../../Engine/libs/tmxlite/Layer.hpp"
-//#include "../../Engine/libs/tmxlite/TileLayer.hpp"
-//#include "../../Engine/libs/tmxlite/Tileset.hpp"
-//#include "../../Engine/libs/tmxlite/ObjectGroup.hpp"
-//#include "../../Engine/libs/tmxlite/Property.hpp"
 
 /**
  * @brief definition pf the class functions.
@@ -81,7 +77,7 @@ public:
     static void UpdateRenderer();
     static bool ProcessDebugInputEvents();
     static void UpdateSystems();
-    static void SetupImGui();
+//    static void SetupImGui();
     static void LoadLevel();
     static void SetupTMX();
     static void destroy();

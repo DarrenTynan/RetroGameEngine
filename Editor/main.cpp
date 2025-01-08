@@ -3,7 +3,7 @@
 
 int main()
 {
-    Editor::Setup();
+    Editor::SetupSDL();
     Editor::Run();
     Editor::Destroy();
 

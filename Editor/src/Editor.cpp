@@ -87,6 +87,8 @@ void Editor::SetupImGui()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 //    ImGui::StyleColorsLight();
