@@ -3,17 +3,16 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(RetroGameEngine)
 
-
 # Make my library fie.
 #add_library(RGE STATIC
 #        Engine/src/RGE.cpp
 #)
 
-SET( LIBS_DIR "${PROJECT_SOURCE_DIR}/Engine/libs")
-SET( LUA_DIR "${LIBS_DIR}/lua" )
-SET( SOL2_DIR "${LIBS_DIR}/sol" )
+SET( LIBS_DIR       "${PROJECT_SOURCE_DIR}/Engine/libs")
+SET( LUA_DIR        "${LIBS_DIR}/lua" )
+SET( SOL2_DIR       "${LIBS_DIR}/sol" )
 
-# lua lib
+# Build lua library
 add_library(
         lua STATIC
         ${LUA_DIR}/lapi.c
@@ -88,16 +87,20 @@ set(SOURCE_FILES
         Engine/src/FSM/StateTransitions.cpp
 
         Game/src/Game.cpp
-        Game/scripts/Level1.lua
 
         Editor/src/Editor.cpp
 )
 
+link_directories( /usr/local/lib )
+
 # Add executable target with source files listed in SOURCE_FILES variable
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+add_executable( ${PROJECT_NAME} ${SOURCE_FILES} )
 
 include_directories(
         Game/assets/
+        Game/include/
+        Game/scripts/
+        Game/src/
         Editor/include/
         Engine/include/
         Engine/libs/imgui_docking/
@@ -106,18 +109,15 @@ include_directories(
         Engine/libs/sol/
 )
 
-# Line compiles but missing error.
-#target_link_libraries(${PROJECT_NAME} /Engine/libs/libRGE.a)
+include_directories( /usr/local/include ${LUA_INCLUDE_DIR} )
 
 target_include_directories( ${PROJECT_NAME} PUBLIC ${LIBS_DIR} PUBLIC ${LUA_DIR} )
 
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(SDL2_TTF REQUIRED)
-find_package(GLM REQUIRED)
-
-find_package(Lua REQUIRED)
-include_directories(/usr/local/include ${LUA_INCLUDE_DIR})
+find_package( SDL2 REQUIRED )
+find_package( SDL2_image REQUIRED )
+find_package( SDL2_TTF REQUIRED )
+find_package( GLM REQUIRED )
+find_package( Lua REQUIRED )
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} SDL2_image::SDL2_image)
