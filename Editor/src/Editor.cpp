@@ -9,8 +9,8 @@
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 
-//namespace EDITOR
-//{
+namespace EDITOR
+{
 
     SDL_Window *editorWindow;
     SDL_Renderer *editorRenderer;
@@ -27,14 +27,14 @@
         if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         {
             std::cout << "SDL could not be initialised\n" << SDL_GetError();
-            Logger::Error2Arg("SDL could not be initialised ", SDL_GetError());
+            LOGGER::Logger::Error2Arg("SDL could not be initialised ", SDL_GetError());
             exit(1);
         }
 
         // Setup true type fonts
         if (TTF_Init() != 0)
         {
-            Logger::Error("Error initializing SDL TTF");
+            LOGGER::Logger::Error("Error initializing SDL TTF");
             exit(1);
         }
 
@@ -43,7 +43,7 @@
             SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
         #endif
 
-        Logger::Log("SDL is ready to go!");
+        LOGGER::Logger::Log("SDL is ready to go!");
 
         SDL_DisplayMode displayMode;
         SDL_GetCurrentDisplayMode(0, &displayMode);
@@ -62,7 +62,7 @@
 
         if (!editorWindow)
         {
-            Logger::Error("Window init failed");
+            LOGGER::Logger::Error("Window init failed");
             SDL_Quit();
             exit(1);
         }
@@ -71,7 +71,7 @@
 
         if (!editorRenderer)
         {
-            Logger::Error("Window renderer init failed");
+            LOGGER::Logger::Error("Window renderer init failed");
             SDL_DestroyRenderer(editorRenderer);
             SDL_Quit();
             exit(1);
@@ -331,5 +331,5 @@
 
     }
 
-//}
+} // EDITOR END
 

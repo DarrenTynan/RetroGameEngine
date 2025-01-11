@@ -4,7 +4,7 @@
 int main()
 {
 //    EDITOR::Editor editor;
-    Editor editor;
+    EDITOR::Editor editor;
 
     editor.SetupSDL();
     editor.Run();

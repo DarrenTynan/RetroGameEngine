@@ -16,8 +16,8 @@
 
 #include "../src/Logger/Logger.h"
 
-//namespace EDITOR
-//{
+namespace EDITOR
+{
     class Editor
     {
     public:
@@ -32,6 +32,6 @@
 
     };
 
-//}
+}
 
 #endif //RETROGAMEENGINE_EDITOR_H

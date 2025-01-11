@@ -51,21 +51,22 @@ add_library(
 )
 
 
-#       Editor
-set(SOURCE_FILES_EDITOR
-        main.cpp
-        Editor/src/Editor.cpp
+# Editor
+#set(SOURCE_FILES_EDITOR
+#        Editor/main.cpp
+#        Editor/src/Editor.cpp
+#
+#        Editor/libs/imgui_docking/imgui.cpp
+#        Editor/libs/imgui_docking/imgui_demo.cpp
+#        Editor/libs/imgui_docking/imgui_draw.cpp
+#        Editor/libs/imgui_docking/imgui_tables.cpp
+#        Editor/libs/imgui_docking/imgui_widgets.cpp
+#        Editor/libs/imgui_docking/backends/imgui_impl_sdl2.cpp
+#        Editor/libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
+#        Editor/src/Logger/Logger.cpp
+#)
 
-        Editor/libs/imgui_docking/imgui.cpp
-        Editor/libs/imgui_docking/imgui_demo.cpp
-        Editor/libs/imgui_docking/imgui_draw.cpp
-        Editor/libs/imgui_docking/imgui_tables.cpp
-        Editor/libs/imgui_docking/imgui_widgets.cpp
-        Editor/libs/imgui_docking/backends/imgui_impl_sdl2.cpp
-        Editor/libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
-)
-
-#       Engine
+# Engine
 set(SOURCE_FILES_ENGINE
         main.cpp
 
@@ -73,18 +74,17 @@ set(SOURCE_FILES_ENGINE
         Engine/include/RGE.h
         Engine/src/RGE.cpp
 
-#        Engine/libs/imgui_basic/imgui.cpp
-#        Engine/libs/imgui_basic/imgui_demo.cpp
-#        Engine/libs/imgui_basic/imgui_draw.cpp
-#        Engine/libs/imgui_basic/imgui_tables.cpp
-#        Engine/libs/imgui_basic/imgui_widgets.cpp
-#        Engine/libs/imgui_basic/backends/imgui_impl_sdl2.cpp
-#        Engine/libs/imgui_basic/backends/imgui_impl_sdlrenderer2.cpp
+        Engine/libs/imgui_basic/imgui.cpp
+        Engine/libs/imgui_basic/imgui_demo.cpp
+        Engine/libs/imgui_basic/imgui_draw.cpp
+        Engine/libs/imgui_basic/imgui_tables.cpp
+        Engine/libs/imgui_basic/imgui_widgets.cpp
+        Engine/libs/imgui_basic/backends/imgui_impl_sdl2.cpp
+        Engine/libs/imgui_basic/backends/imgui_impl_sdlrenderer2.cpp
 
         Engine/libs/sol/sol.hpp
 
         Engine/src/AssetStore/AssetStore.cpp
-        Editor/src/Logger/Logger.cpp
         Engine/src/ECS/ECS.cpp
         Engine/src/ECS/include/Pool.h
         Engine/src/ECS/include/Component.h
@@ -104,10 +104,19 @@ set(SOURCE_FILES_ENGINE
 
 )
 
+add_subdirectory(Editor)
+
 link_directories( /usr/local/lib )
 
 # Add executable target with source files listed in SOURCE_FILES variable
-add_executable( ${PROJECT_NAME} ${SOURCE_FILES_EDITOR} ${SOURCE_FILES_ENGINE} )
+#add_executable( ${PROJECT_NAME} ${SOURCE_FILES_EDITOR} ${SOURCE_FILES_ENGINE} )
+add_executable( ${PROJECT_NAME} ${SOURCE_FILES_ENGINE} )
+
+#include_directories(
+#        Editor/include/
+#        Editor/libs/imgui_docking/
+#        Editor/libs/imgui_docking/backends
+#)
 
 include_directories(
         Game/assets/
@@ -115,13 +124,9 @@ include_directories(
         Game/scripts/
         Game/src/
 
-        Editor/include/
-        Editor/libs/imgui_docking/
-        Editor/libs/imgui_docking/backends
-
         Engine/include/
-#        Engine/libs/imgui_basic/
-#        Engine/libs/imgui_basic/backends/
+        Engine/libs/imgui_basic/
+        Engine/libs/imgui_basic/backends/
         Engine/libs/lua/
         Engine/libs/sol/
 )
