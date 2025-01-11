@@ -5,8 +5,8 @@
 /Engine/libs/**
 /Game/libs/**
 /Game/assets/**
-/Engine/libs/**
 /Game/scripts/**
+/Editor/cmake-build-debug/**
 
 # Project specific
 .DS_Store
