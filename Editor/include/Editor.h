@@ -14,15 +14,24 @@
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
 
-class Editor
-{
-public:
-    static void SetupSDL();
-    static void Run();
-    static void Destroy();
-    static bool ProcessDebugInputEvents();
-    static void SetupImGui();
+#include "../src/Logger/Logger.h"
 
-};
+//namespace EDITOR
+//{
+    class Editor
+    {
+    public:
+        void SetupSDL();
+        void Run();
+        void Destroy();
+        bool ProcessDebugInputEvents();
+        void SetupImGui();
+        void ShowLeftPanel();
+        void ShowMainPanel();
+        void ShowRightPanel();
+
+    };
+
+//}
 
 #endif //RETROGAMEENGINE_EDITOR_H

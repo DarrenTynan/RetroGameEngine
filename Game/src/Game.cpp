@@ -3,11 +3,11 @@
 //
 
 #include "../include/Game.h"
-#include "../../Engine/src/Logger/Logger.h"
+//#include "../../Engine/src/Logger/Logger.h"
 #include "RGE.h"
 
-Game::Game() { Logger::Log("Game constructor called"); }
-Game::~Game() { Logger::Log("Game deconstruct called"); }
+Game::Game() {}
+Game::~Game() {}
 
 /**
  * Function calls to setup: setupVars, setupSDL, SetupRgeSDL, SetupGameSDL, InitialSetup, LoadLevel.

@@ -20,7 +20,7 @@
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
 
-#include "../../Engine/src/Logger/Logger.h"
+//#include "../../Engine/src/Logger/Logger.h"
 #include "../../Engine/src/ECS/include/ECS.h"
 #include "../../Engine/src/AssetStore/AssetStore.h"
 #include "../../Engine/src/EventBus/EventBus.h"

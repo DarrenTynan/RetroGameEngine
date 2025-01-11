@@ -49,8 +49,8 @@ class DamageSystem: public System {
 
             if (!projectileComponent.isFriendly && player.HasComponent<HealthComponent>())
             {
-                Logger::Log("Projectile id: " + std::to_string(projectile.GetId()) + " collided with player id: " +
-                            std::to_string(player.GetId()));
+//                Logger::Log("Projectile id: " + std::to_string(projectile.GetId()) + " collided with player id: " +
+//                            std::to_string(player.GetId()));
 
                 // Reduce the health of the player by the projectile hitPercentDamage
                 auto& health = player.GetComponent<HealthComponent>();
@@ -72,8 +72,8 @@ class DamageSystem: public System {
 
             if (projectileComponent.isFriendly && enemy.HasComponent<HealthComponent>())
             {
-                Logger::Log("Projectile id: " + std::to_string(projectile.GetId()) + " collided with enemy id: " +
-                            std::to_string(enemy.GetId()));
+//                Logger::Log("Projectile id: " + std::to_string(projectile.GetId()) + " collided with enemy id: " +
+//                            std::to_string(enemy.GetId()));
                 
                 // Reduce the health of the enemy by the projectile hitPercentDamage
                 auto& health = enemy.GetComponent<HealthComponent>();

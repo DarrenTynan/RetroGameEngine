@@ -24,7 +24,7 @@ void LevelLoader::LoadConfig(sol::state& lua)
     {
         sol::error error = script;
         std::string errorMessage = error.what();
-        Logger::Error("Error loading the lua script: " + errorMessage);
+//        Logger::Error("Error loading the lua script: " + errorMessage);
         return;
     }
 
@@ -60,7 +60,7 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
     {
         sol::error error = script;
         std::string errorMessage = error.what();
-        Logger::Error("Error loading the lua script: " + errorMessage);
+//        Logger::Error("Error loading the lua script: " + errorMessage);
         return;
     }
 
@@ -89,13 +89,13 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
         if (assetType == "texture")
         {
             assetStore->AddTexture(renderer, assetId, asset["file"]);
-            Logger::Log("A new texture asset was added to the asset store, id: " + assetId);
+//            Logger::Log("A new texture asset was added to the asset store, id: " + assetId);
         }
 
         if (assetType == "font")
         {
             assetStore->AddFont(assetId, asset["file"], asset["font_size"]);
-            Logger::Log("A new font asset was added to the asset store, id: " + assetId);
+//            Logger::Log("A new font asset was added to the asset store, id: " + assetId);
         }
         i++;
     }

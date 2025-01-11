@@ -84,7 +84,7 @@ set(SOURCE_FILES_ENGINE
         Engine/libs/sol/sol.hpp
 
         Engine/src/AssetStore/AssetStore.cpp
-        Engine/src/Logger/Logger.cpp
+        Editor/src/Logger/Logger.cpp
         Engine/src/ECS/ECS.cpp
         Engine/src/ECS/include/Pool.h
         Engine/src/ECS/include/Component.h

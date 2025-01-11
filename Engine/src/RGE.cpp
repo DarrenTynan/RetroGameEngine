@@ -78,14 +78,14 @@ void RGE::InitialSetup()
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         std::cout << "SDL could not be initialised\n" << SDL_GetError();
-        Logger::Error2Arg("SDL could not be initialised ", SDL_GetError());
+//        Logger::Error2Arg("SDL could not be initialised ", SDL_GetError());
         exit(1);
     }
 
     // Setup true type fonts
     if (TTF_Init() != 0)
     {
-        Logger::Error("Error initializing SDL TTF");
+//        Logger::Error("Error initializing SDL TTF");
         exit(1);
     }
 
@@ -94,7 +94,7 @@ void RGE::InitialSetup()
         SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
     #endif
 
-    Logger::Log("SDL is ready to go!");
+//    Logger::Log("SDL is ready to go!");
 
 }
 
@@ -164,7 +164,7 @@ void RGE::SetupGameSDL()
 
     if (!gameWindow)
     {
-        Logger::Error("Window init failed");
+//        Logger::Error("Window init failed");
         SDL_Quit();
         exit(1);
     }
@@ -173,7 +173,7 @@ void RGE::SetupGameSDL()
 
     if (!gameRenderer)
     {
-        Logger::Error("Window renderer init failed");
+//        Logger::Error("Window renderer init failed");
         SDL_DestroyRenderer(gameRenderer);
         SDL_Quit();
         exit(1);

@@ -4,13 +4,16 @@
 
 int main()
 {
-//    Game::Setup();
-//    Game::Run();
-//    Game::Destroy();
+    Game::Setup();
+    Game::Run();
+    Game::Destroy();
 
-    Editor::Setup();
-    Editor::Run();
-    Editor::Destroy();
+//    EDITOR::Editor editor;
+//
+//    editor.SetupSDL();
+//    editor.SetupImGui();
+//    editor.Run();
+//    editor.Destroy();
 
     std::cout << "main.cpp exit" << std::endl;
     return 0;
