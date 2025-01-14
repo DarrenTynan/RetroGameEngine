@@ -15,11 +15,11 @@ Game::~Game() {}
 void Game::Setup()
 {
     RGE::InitialSetup();
-//    RGE::SetupRgeSDL();
+    RGE::SetupRgeSDL();
     RGE::SetupGameSDL();
     RGE::LoadLevel();
     RGE::SetupTMX();
-//    RGE::SetupImGui();
+    RGE::SetupImGui();
 }
 
 

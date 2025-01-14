@@ -77,7 +77,7 @@ public:
     static void UpdateRenderer();
     static bool ProcessDebugInputEvents();
     static void UpdateSystems();
-//    static void SetupImGui();
+    static void SetupImGui();
     static void LoadLevel();
     static void SetupTMX();
     static void destroy();
