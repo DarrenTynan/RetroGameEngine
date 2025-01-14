@@ -3,10 +3,9 @@
 
 int main()
 {
-//    EDITOR::Editor editor;
     EDITOR::Editor editor;
-
     editor.SetupSDL();
+    editor.SetupImGui();
     editor.Run();
     editor.Destroy();
 

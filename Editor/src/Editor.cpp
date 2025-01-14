@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "../include/Editor.h"
+#include "imgui_internal.h"
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
@@ -11,7 +12,6 @@
 
 namespace EDITOR
 {
-
     SDL_Window *editorWindow;
     SDL_Renderer *editorRenderer;
 
@@ -77,7 +77,33 @@ namespace EDITOR
             exit(1);
         }
 
-        Editor::SetupImGui();
+    }
+
+
+    /**
+     * @brief Load up pointers to display classes.
+     */
+    void Editor::CreateDisplays()
+    {
+        // DisplayHolder is a struct in IDisplay.
+        // std::vector< std::unique_ptr<IDisplay> > displays;
+        auto pDisplayHolder = std::make_shared<DisplayHolder>();
+
+        // Instantiate the display windows via magic pointers
+        auto pTestDisplayA = std::make_unique<TestDisplayA>();
+        auto pTestDisplayB = std::make_unique<TestDisplayB>();
+        auto pSceneDisplay = std::make_unique<SceneDisplay>();
+
+        // Add display class's to the vector array in IDisplay
+        pDisplayHolder->displays.push_back( std::move( pTestDisplayA ) );
+        pDisplayHolder->displays.push_back( std::move( pTestDisplayB ) );
+        pDisplayHolder->displays.push_back( std::move( pSceneDisplay ) );
+
+//        auto& pDisplayHolder = mainRegistry.GetContext<std::shared_ptr<DisplayHolder>>();
+        for ( const auto& pDisplay : pDisplayHolder->displays )
+        {
+            pDisplay->Draw();
+        }
 
     }
 
@@ -186,9 +212,9 @@ namespace EDITOR
             // Set docking to main viewport
             ImGui::DockSpaceOverViewport();
 
-            Editor::ShowLeftPanel();
-            Editor::ShowMainPanel();
-            Editor::ShowRightPanel();
+            // Create my custom display class's
+            Editor::CreateDisplays();
+
             ImGui::ShowDemoWindow();
 
             // Rendering
@@ -200,59 +226,6 @@ namespace EDITOR
             ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), editorRenderer);
             SDL_RenderPresent(editorRenderer);
         }
-    }
-
-
-    /**
-     * @brief Show Main Window
-     */
-    void Editor::ShowMainPanel()
-    {
-        SDL_DisplayMode displayMode;
-        SDL_GetCurrentDisplayMode(0, &displayMode);
-
-        ImGui::SetNextWindowSize(ImVec2(800, 600));
-        ImGui::SetNextWindowPos(ImVec2((displayMode.w - 800) / 2, 0)); // Set the position of the new window
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse;
-
-        if (ImGui::Begin("Scene"))
-        {
-            ImGui::Button("Play");
-            ImGui::Button("Stop");
-
-            ImGui::End();
-        }
-
-    }
-
-
-/**
- * @brief Show the Left panel
- */
-    void Editor::ShowLeftPanel()
-    {
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBringToFrontOnFocus;
-        if (ImGui::Begin("Left Panel"))
-        {
-            ImGui::Text("Left Panel");
-            ImGui::SameLine();
-            ImGui::End();
-        }
-    }
-
-
-/**
- * @brief Show the Right panel
- */
-    void Editor::ShowRightPanel()
-    {
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBringToFrontOnFocus;
-        if (ImGui::Begin("Right Panel"))
-        {
-            ImGui::Text("Right Panel");
-            ImGui::End();
-        }
-
     }
 
 

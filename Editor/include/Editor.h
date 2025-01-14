@@ -16,6 +16,10 @@
 
 #include "../src/Logger/Logger.h"
 
+#include "../src/displays/TestDisplayA.h"
+#include "../src/displays/TestDisplayB.h"
+#include "../src/displays/SceneDisplay.h"
+
 namespace EDITOR
 {
     class Editor
@@ -29,6 +33,9 @@ namespace EDITOR
         void ShowLeftPanel();
         void ShowMainPanel();
         void ShowRightPanel();
+        void Test();
+        void RenderImGui();
+        void CreateDisplays();
 
     };
 

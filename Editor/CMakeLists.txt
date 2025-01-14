@@ -16,6 +16,10 @@ set(SOURCE_FILES
         libs/imgui_docking/imgui_widgets.cpp
         libs/imgui_docking/backends/imgui_impl_sdl2.cpp
         libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
+
+        src/displays/TestDisplayA.cpp
+        src/displays/TestDisplayB.cpp
+        src/displays/SceneDisplay.cpp
 )
 
 link_directories( /usr/local/lib )
@@ -28,6 +32,9 @@ include_directories(
         include/
         libs/imgui_docking/
         libs/imgui_docking/backends
+        src/displays/TestDisplayA.h
+        scr/displays/TestDisplayB.h
+        src/displays/SceneDisplay.h
 )
 
 find_package( SDL2 REQUIRED )
