@@ -20,6 +20,9 @@ set(SOURCE_FILES
         src/displays/TestDisplayA.cpp
         src/displays/TestDisplayB.cpp
         src/displays/SceneDisplay.cpp
+        src/displays/MainMenuBar.cpp
+        src/displays/MainMenuBar.h
+
 )
 
 link_directories( /usr/local/lib )
@@ -31,16 +34,16 @@ include_directories(
         /usr/local/include
         include/
         libs/imgui_docking/
-        libs/imgui_docking/backends
-        src/displays/TestDisplayA.h
-        scr/displays/TestDisplayB.h
-        src/displays/SceneDisplay.h
+        libs/imgui_docking/backends/
+        libs/nativefiledialog-extended/
+        src/displays/
 )
 
 find_package( SDL2 REQUIRED )
 find_package( SDL2_image REQUIRED )
 find_package( SDL2_TTF REQUIRED )
 
+target_link_libraries(${PROJECT_NAME} nfd)
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} SDL2_image::SDL2_image)
 target_link_libraries(${PROJECT_NAME} SDL2_ttf::SDL2_ttf)

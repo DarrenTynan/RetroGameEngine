@@ -5,6 +5,8 @@
 #ifndef RETROGAMEENGINE_EDITOR_H
 #define RETROGAMEENGINE_EDITOR_H
 
+#include <iostream>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -14,11 +16,15 @@
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
 
+//#include "../libs/tinyfiledialogs/tinyfiledialogs.h"
+#include "../libs/nativefiledialog-extended/src/include/nfd.h"
+
 #include "../src/Logger/Logger.h"
 
 #include "../src/displays/TestDisplayA.h"
 #include "../src/displays/TestDisplayB.h"
 #include "../src/displays/SceneDisplay.h"
+#include "../src/displays/MainMenuBar.h"
 
 namespace EDITOR
 {
@@ -30,12 +36,10 @@ namespace EDITOR
         void Destroy();
         bool ProcessDebugInputEvents();
         void SetupImGui();
-        void ShowLeftPanel();
-        void ShowMainPanel();
-        void ShowRightPanel();
-        void Test();
-        void RenderImGui();
+//        void Test();
+//        void RenderImGui();
         void CreateDisplays();
+        void FileLoader();
 
     };
 
