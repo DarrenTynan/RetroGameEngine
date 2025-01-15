@@ -2,9 +2,7 @@
 // Created by Darren Tynan on 06/01/2025.
 //
 
-#include <iostream>
 #include "../include/Editor.h"
-#include "imgui_internal.h"
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
@@ -90,11 +88,13 @@ namespace EDITOR
         auto pDisplayHolder = std::make_shared<DisplayHolder>();
 
         // Instantiate the display windows via magic pointers
+        auto pMainMenuBar = std::make_unique<MainMenuBar>();
         auto pTestDisplayA = std::make_unique<TestDisplayA>();
         auto pTestDisplayB = std::make_unique<TestDisplayB>();
         auto pSceneDisplay = std::make_unique<SceneDisplay>();
 
         // Add display class's to the vector array in IDisplay
+        pDisplayHolder->displays.push_back( std::move( pMainMenuBar ) );
         pDisplayHolder->displays.push_back( std::move( pTestDisplayA ) );
         pDisplayHolder->displays.push_back( std::move( pTestDisplayB ) );
         pDisplayHolder->displays.push_back( std::move( pSceneDisplay ) );
@@ -229,12 +229,41 @@ namespace EDITOR
     }
 
 
-/**
- * Poll window events:
- *
- * window quit
- * keyboard
- */
+    void Editor::FileLoader()
+    {
+        NFD_Init();
+
+        nfdu8char_t *outPath;
+        nfdu8filteritem_t filters[2] = { { "Source code", "c,cpp,cc" }, { "Headers", "h,hpp" } };
+        nfdopendialogu8args_t args = {0};
+        args.filterList = filters;
+        args.filterCount = 2;
+        nfdresult_t result = NFD_OpenDialogU8_With(&outPath, &args);
+        if (result == NFD_OKAY)
+        {
+            puts("Success!");
+            puts(outPath);
+            NFD_FreePathU8(outPath);
+        }
+        else if (result == NFD_CANCEL)
+        {
+            puts("User pressed cancel.");
+        }
+        else
+        {
+            printf("Error: %s\n", NFD_GetError());
+        }
+
+        NFD_Quit();
+    }
+
+
+    /**
+     * Poll window events:
+     *
+     * window quit
+     * keyboard
+     */
     bool Editor::ProcessDebugInputEvents()
     {
         bool isQuit = true;
@@ -281,8 +310,12 @@ namespace EDITOR
     };
 
 
+    /**
+     * @brief Game Loop
+     */
     void Editor::Run()
     {
+//        Editor::FileLoader();
         bool isGameRunning = true;
         while (isGameRunning)
         {

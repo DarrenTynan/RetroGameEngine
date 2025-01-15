@@ -3,6 +3,7 @@
 /cmake-build-debug/**
 /assets/**
 /Engine/libs/**
+/Editor/libs/**
 /Game/libs/**
 /Game/assets/**
 /Game/scripts/**
