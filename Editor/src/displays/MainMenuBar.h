@@ -17,6 +17,7 @@ namespace EDITOR
         MainMenuBar();
         ~MainMenuBar() = default;
         virtual void Draw() override;
+        void FileLoader();
     };
 
 } // namespace end

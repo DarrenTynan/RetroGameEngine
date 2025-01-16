@@ -37,6 +37,7 @@ namespace EDITOR
         std::vector<std::unique_ptr<IDisplay> > displays;
     };
 
+    void AddLog(const char *fmt, ...);
 }
 
 #endif // EDITOR_IDISPLAY_H

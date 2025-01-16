@@ -16,15 +16,13 @@
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
 
-//#include "../libs/tinyfiledialogs/tinyfiledialogs.h"
-#include "../libs/nativefiledialog-extended/src/include/nfd.h"
-
 #include "../src/Logger/Logger.h"
 
 #include "../src/displays/TestDisplayA.h"
 #include "../src/displays/TestDisplayB.h"
 #include "../src/displays/SceneDisplay.h"
 #include "../src/displays/MainMenuBar.h"
+#include "../src/displays/LogDisplay.h"
 
 namespace EDITOR
 {
@@ -36,11 +34,7 @@ namespace EDITOR
         void Destroy();
         bool ProcessDebugInputEvents();
         void SetupImGui();
-//        void Test();
-//        void RenderImGui();
         void CreateDisplays();
-        void FileLoader();
-
     };
 
 }

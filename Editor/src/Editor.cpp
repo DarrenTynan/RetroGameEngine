@@ -92,14 +92,15 @@ namespace EDITOR
         auto pTestDisplayA = std::make_unique<TestDisplayA>();
         auto pTestDisplayB = std::make_unique<TestDisplayB>();
         auto pSceneDisplay = std::make_unique<SceneDisplay>();
+        auto pLogDisplay = std::make_unique<LogDisplay>();
 
         // Add display class's to the vector array in IDisplay
-        pDisplayHolder->displays.push_back( std::move( pMainMenuBar ) );
-        pDisplayHolder->displays.push_back( std::move( pTestDisplayA ) );
-        pDisplayHolder->displays.push_back( std::move( pTestDisplayB ) );
-        pDisplayHolder->displays.push_back( std::move( pSceneDisplay ) );
+        pDisplayHolder->displays.push_back( std::move(pMainMenuBar) );
+        pDisplayHolder->displays.push_back( std::move(pTestDisplayA) );
+        pDisplayHolder->displays.push_back( std::move(pTestDisplayB) );
+        pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
+        pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
 
-//        auto& pDisplayHolder = mainRegistry.GetContext<std::shared_ptr<DisplayHolder>>();
         for ( const auto& pDisplay : pDisplayHolder->displays )
         {
             pDisplay->Draw();
@@ -229,35 +230,6 @@ namespace EDITOR
     }
 
 
-    void Editor::FileLoader()
-    {
-        NFD_Init();
-
-        nfdu8char_t *outPath;
-        nfdu8filteritem_t filters[2] = { { "Source code", "c,cpp,cc" }, { "Headers", "h,hpp" } };
-        nfdopendialogu8args_t args = {0};
-        args.filterList = filters;
-        args.filterCount = 2;
-        nfdresult_t result = NFD_OpenDialogU8_With(&outPath, &args);
-        if (result == NFD_OKAY)
-        {
-            puts("Success!");
-            puts(outPath);
-            NFD_FreePathU8(outPath);
-        }
-        else if (result == NFD_CANCEL)
-        {
-            puts("User pressed cancel.");
-        }
-        else
-        {
-            printf("Error: %s\n", NFD_GetError());
-        }
-
-        NFD_Quit();
-    }
-
-
     /**
      * Poll window events:
      *
@@ -266,7 +238,7 @@ namespace EDITOR
      */
     bool Editor::ProcessDebugInputEvents()
     {
-        bool isQuit = true;
+        bool isRunning = true;
 
         SDL_Event sdlEvent;
         while (SDL_PollEvent(&sdlEvent))
@@ -286,12 +258,12 @@ namespace EDITOR
             {
                 // Window close
                 case SDL_QUIT:
-                    isQuit = false;
+                    isRunning = false;
                     break;
 
                 case SDL_KEYDOWN:
                     if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
-                    { isQuit = false; }
+                    { isRunning = false; }
                     break;
 
                     // Check for window event
@@ -300,13 +272,13 @@ namespace EDITOR
                     switch (sdlEvent.window.event)
                     {
                         case SDL_WINDOWEVENT_CLOSE:
-                            isQuit = false;
+                            isRunning = false;
                             break;
                     }
                     break;
             }
         };
-        return isQuit;
+        return isRunning;
     };
 
 
@@ -315,7 +287,10 @@ namespace EDITOR
      */
     void Editor::Run()
     {
-//        Editor::FileLoader();
+//        static LogDisplay my_log;
+//        my_log.AddLog("Hello %d world\n", 123);
+//        my_log.Draw();
+
         bool isGameRunning = true;
         while (isGameRunning)
         {
@@ -324,6 +299,9 @@ namespace EDITOR
     }
 
 
+    /**
+     * @brief End all processes
+     */
     void Editor::Destroy()
     {
         ImGui_ImplSDLRenderer2_Shutdown();
@@ -337,5 +315,5 @@ namespace EDITOR
 
     }
 
-} // EDITOR END
+} // namespace end
 

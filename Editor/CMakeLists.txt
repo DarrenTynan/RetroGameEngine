@@ -22,6 +22,8 @@ set(SOURCE_FILES
         src/displays/SceneDisplay.cpp
         src/displays/MainMenuBar.cpp
         src/displays/MainMenuBar.h
+        src/displays/LogDisplay.cpp
+        src/displays/LogDisplay.h
 
 )
 
