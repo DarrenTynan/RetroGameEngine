@@ -79,38 +79,7 @@ namespace EDITOR
 
 
     /**
-     * @brief Load up pointers to display classes.
-     */
-//    void Editor::CreateDisplays()
-//    {
-//        // DisplayHolder is a struct in IDisplay.
-//        // std::vector< std::unique_ptr<IDisplay> > displays;
-//        auto pDisplayHolder = std::make_shared<DisplayHolder>();
-//
-//        // Instantiate the display windows via magic pointers
-//        auto pMainMenuBar = std::make_unique<MainMenuBar>();
-//        auto pTestDisplayA = std::make_unique<TestDisplayA>();
-//        auto pTestDisplayB = std::make_unique<TestDisplayB>();
-//        auto pSceneDisplay = std::make_unique<SceneDisplay>();
-//        auto pLogDisplay = std::make_unique<LogDisplay>();
-//
-//        // Add display class's to the vector array in IDisplay
-//        pDisplayHolder->displays.push_back( std::move(pMainMenuBar) );
-//        pDisplayHolder->displays.push_back( std::move(pTestDisplayA) );
-//        pDisplayHolder->displays.push_back( std::move(pTestDisplayB) );
-//        pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
-//        pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
-//
-////        for ( const auto& pDisplay : pDisplayHolder->displays )
-////        {
-////            pDisplay->Draw();
-////        }
-//
-//    }
-
-
-    /**
-     * @brief Initial setup of ImGui
+     * @brief Initial setup of ImGui and display panels.
      */
     void Editor::SetupImGui()
     {
@@ -211,12 +180,13 @@ namespace EDITOR
             while (SDL_PollEvent(&event))
             {
                 ImGui_ImplSDL2_ProcessEvent(&event);
-                if (event.type == SDL_QUIT)
-                    done = true;
+                if (event.key.keysym.sym == SDLK_ESCAPE) done = true;
+                if (event.type == SDL_QUIT) done = true;
                 if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE &&
                     event.window.windowID == SDL_GetWindowID(editorWindow))
                     done = true;
             }
+
             if (SDL_GetWindowFlags(editorWindow) & SDL_WINDOW_MINIMIZED)
             {
                 SDL_Delay(10);
@@ -252,67 +222,15 @@ namespace EDITOR
 
 
     /**
-     * Poll window events:
-     *
-     * window quit
-     * keyboard
-     */
-    bool Editor::ProcessDebugInputEvents()
-    {
-        bool isRunning = true;
-
-        SDL_Event sdlEvent;
-        while (SDL_PollEvent(&sdlEvent))
-        {
-            // ImGui
-            ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
-            ImGuiIO io = ImGui::GetIO();
-            int mouseX;
-            int mouseY;
-            const unsigned int buttons = SDL_GetMouseState(&mouseX, &mouseY);
-            io.MousePos = ImVec2((float) mouseX, (float) mouseY);
-            io.MouseDown[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
-            io.MouseDown[1] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
-
-            // Core sdl events.
-            switch (sdlEvent.type)
-            {
-                // Window close
-                case SDL_QUIT:
-                    isRunning = false;
-                    break;
-
-                case SDL_KEYDOWN:
-                    if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
-                    { isRunning = false; }
-                    break;
-
-                    // Check for window event
-                case SDL_WINDOWEVENT:
-
-                    switch (sdlEvent.window.event)
-                    {
-                        case SDL_WINDOWEVENT_CLOSE:
-                            isRunning = false;
-                            break;
-                    }
-                    break;
-            }
-        };
-        return isRunning;
-    };
-
-
-    /**
      * @brief Game Loop
      */
     void Editor::Run()
     {
-        bool isGameRunning = true;
-        while (isGameRunning)
-        {
-            isGameRunning = Editor::ProcessDebugInputEvents();
-        }
+//        bool isGameRunning = true;
+//        while (isGameRunning)
+//        {
+//            isGameRunning = Editor::ProcessDebugInputEvents();
+//        }
     }
 
 
