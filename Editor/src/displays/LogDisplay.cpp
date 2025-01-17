@@ -7,7 +7,8 @@
 namespace EDITOR
 {
 
-EDITOR::LogDisplay::LogDisplay() = default;
+EDITOR::LogDisplay::LogDisplay() { std::cout << "Constructor" << std::endl; }
+//    EDITOR::LogDisplay::LogDisplay() = default;
 
 
 // ImGui

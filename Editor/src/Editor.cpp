@@ -81,32 +81,32 @@ namespace EDITOR
     /**
      * @brief Load up pointers to display classes.
      */
-    void Editor::CreateDisplays()
-    {
-        // DisplayHolder is a struct in IDisplay.
-        // std::vector< std::unique_ptr<IDisplay> > displays;
-        auto pDisplayHolder = std::make_shared<DisplayHolder>();
-
-        // Instantiate the display windows via magic pointers
-        auto pMainMenuBar = std::make_unique<MainMenuBar>();
-        auto pTestDisplayA = std::make_unique<TestDisplayA>();
-        auto pTestDisplayB = std::make_unique<TestDisplayB>();
-        auto pSceneDisplay = std::make_unique<SceneDisplay>();
-        auto pLogDisplay = std::make_unique<LogDisplay>();
-
-        // Add display class's to the vector array in IDisplay
-        pDisplayHolder->displays.push_back( std::move(pMainMenuBar) );
-        pDisplayHolder->displays.push_back( std::move(pTestDisplayA) );
-        pDisplayHolder->displays.push_back( std::move(pTestDisplayB) );
-        pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
-        pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
-
-        for ( const auto& pDisplay : pDisplayHolder->displays )
-        {
-            pDisplay->Draw();
-        }
-
-    }
+//    void Editor::CreateDisplays()
+//    {
+//        // DisplayHolder is a struct in IDisplay.
+//        // std::vector< std::unique_ptr<IDisplay> > displays;
+//        auto pDisplayHolder = std::make_shared<DisplayHolder>();
+//
+//        // Instantiate the display windows via magic pointers
+//        auto pMainMenuBar = std::make_unique<MainMenuBar>();
+//        auto pTestDisplayA = std::make_unique<TestDisplayA>();
+//        auto pTestDisplayB = std::make_unique<TestDisplayB>();
+//        auto pSceneDisplay = std::make_unique<SceneDisplay>();
+//        auto pLogDisplay = std::make_unique<LogDisplay>();
+//
+//        // Add display class's to the vector array in IDisplay
+//        pDisplayHolder->displays.push_back( std::move(pMainMenuBar) );
+//        pDisplayHolder->displays.push_back( std::move(pTestDisplayA) );
+//        pDisplayHolder->displays.push_back( std::move(pTestDisplayB) );
+//        pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
+//        pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
+//
+////        for ( const auto& pDisplay : pDisplayHolder->displays )
+////        {
+////            pDisplay->Draw();
+////        }
+//
+//    }
 
 
     /**
@@ -185,6 +185,24 @@ namespace EDITOR
 
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+        // DisplayHolder is a struct in IDisplay.
+        // std::vector< std::unique_ptr<IDisplay> > displays;
+        auto pDisplayHolder = std::make_shared<DisplayHolder>();
+
+        // Instantiate the display windows via magic pointers
+        auto pMainMenuBar = std::make_unique<MainMenuBar>();
+        auto pTestDisplayA = std::make_unique<TestDisplayA>();
+        auto pTestDisplayB = std::make_unique<TestDisplayB>();
+        auto pSceneDisplay = std::make_unique<SceneDisplay>();
+        auto pLogDisplay = std::make_unique<LogDisplay>();
+
+        // Add display class's to the vector array in IDisplay
+        pDisplayHolder->displays.push_back( std::move(pMainMenuBar) );
+        pDisplayHolder->displays.push_back( std::move(pTestDisplayA) );
+        pDisplayHolder->displays.push_back( std::move(pTestDisplayB) );
+        pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
+        pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
+
         // Main loop
         bool done = false;
         while (!done)
@@ -213,8 +231,11 @@ namespace EDITOR
             // Set docking to main viewport
             ImGui::DockSpaceOverViewport();
 
-            // Create my custom display class's
-            Editor::CreateDisplays();
+            // Draw the editor display panels.
+            for ( const auto& pDisplay : pDisplayHolder->displays )
+            {
+                pDisplay->Draw();
+            }
 
             ImGui::ShowDemoWindow();
 
@@ -287,10 +308,6 @@ namespace EDITOR
      */
     void Editor::Run()
     {
-//        static LogDisplay my_log;
-//        my_log.AddLog("Hello %d world\n", 123);
-//        my_log.Draw();
-
         bool isGameRunning = true;
         while (isGameRunning)
         {
