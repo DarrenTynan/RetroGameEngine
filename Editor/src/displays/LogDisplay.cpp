@@ -7,11 +7,11 @@
 namespace EDITOR
 {
 
-EDITOR::LogDisplay::LogDisplay() { std::cout << "Constructor" << std::endl; }
-//    EDITOR::LogDisplay::LogDisplay() = default;
+//    EDITOR::LogDisplay::LogDisplay() { std::cout << "Constructor" << std::endl; }
 
-
-// ImGui
+/**
+ * @brief Clear the arrays.
+ */
 void EDITOR::LogDisplay::Clear()
 {
     textBuffer.clear();
@@ -20,7 +20,12 @@ void EDITOR::LogDisplay::Clear()
 }
 
 
-// ImGui
+/**
+ * @brief Add a new log entry
+ *
+ * @param fmt
+ * @param ...
+ */
 void EDITOR::LogDisplay::AddLog(const char* fmt, ...) IM_FMTARGS(2)
 {
     int old_size = textBuffer.size();
@@ -35,7 +40,9 @@ void EDITOR::LogDisplay::AddLog(const char* fmt, ...) IM_FMTARGS(2)
 }
 
 
-// ImGui
+/**
+ * @brief Update the text window
+ */
 void EDITOR::LogDisplay::Draw()
 {
     if (!ImGui::Begin("Debug Log Window"))
@@ -58,6 +65,8 @@ void EDITOR::LogDisplay::Draw()
             counter++;
         }
     }
+
+    ImGui::Separator();
 
     // Options menu
     if (ImGui::BeginPopup("Options"))

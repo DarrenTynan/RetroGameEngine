@@ -23,6 +23,7 @@
 #include "../src/displays/SceneDisplay.h"
 #include "../src/displays/MainMenuBar.h"
 #include "../src/displays/LogDisplay.h"
+#include "../src/displays/DebugDisplay.h"
 
 namespace EDITOR
 {
@@ -32,9 +33,7 @@ namespace EDITOR
         void SetupSDL();
         void Run();
         void Destroy();
-        bool ProcessDebugInputEvents();
         void SetupImGui();
-        void CreateDisplays();
     };
 
 }

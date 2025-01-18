@@ -13,19 +13,17 @@ namespace EDITOR
 {
     class LogDisplay : public IDisplay
     {
-//    private:
-    public:
+    private:
         ImGuiTextBuffer textBuffer;
         ImGuiTextFilter textFilter;
         ImVector<int> lineOffsets;  // Index to lines offset. We maintain this with AddLog() calls.
         bool AutoScroll{};          // Keep scrolling if already at the bottom.
 
     public:
-        LogDisplay();
-        ~LogDisplay() = default;
+        ~LogDisplay() override = default;
 
         void Clear();
-        virtual void Draw() override;
+        void Draw() override;
         void AddLog(const char *fmt, ...);
 
     };

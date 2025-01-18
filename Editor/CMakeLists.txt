@@ -25,6 +25,9 @@ set(SOURCE_FILES
         src/displays/LogDisplay.cpp
         src/displays/LogDisplay.h
 
+        src/displays/DebugDisplay.cpp
+        src/displays/DebugDisplay.h
+
 )
 
 link_directories( /usr/local/lib )

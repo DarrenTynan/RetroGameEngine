@@ -20,15 +20,11 @@ namespace EDITOR
     {
     public:
         virtual ~IDisplay() = default;
-
         virtual void Draw() = 0;
-
-        virtual void Update()
-        {}
+        virtual void Update() {}
 
     protected:
-        virtual void DrawToolbar()
-        {}
+        virtual void DrawToolbar() {}
     };
 
 
@@ -37,7 +33,6 @@ namespace EDITOR
         std::vector<std::unique_ptr<IDisplay> > displays;
     };
 
-    void AddLog(const char *fmt, ...);
 }
 
 #endif // EDITOR_IDISPLAY_H

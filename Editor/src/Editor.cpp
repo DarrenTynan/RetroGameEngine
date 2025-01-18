@@ -172,19 +172,24 @@ namespace EDITOR
         pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
         pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
 
-        // Main loop
-        bool done = false;
-        while (!done)
+
+        auto dd = DebugDisplay::GetInstance();
+        dd->TestLog();
+
+
+        // Main render loop
+        bool isRunning = true;
+        while (isRunning)
         {
             SDL_Event event;
             while (SDL_PollEvent(&event))
             {
                 ImGui_ImplSDL2_ProcessEvent(&event);
-                if (event.key.keysym.sym == SDLK_ESCAPE) done = true;
-                if (event.type == SDL_QUIT) done = true;
+                if (event.key.keysym.sym == SDLK_ESCAPE) isRunning = false;
+                if (event.type == SDL_QUIT) isRunning = false;
                 if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE &&
                     event.window.windowID == SDL_GetWindowID(editorWindow))
-                    done = true;
+                    isRunning = false;
             }
 
             if (SDL_GetWindowFlags(editorWindow) & SDL_WINDOW_MINIMIZED)
@@ -226,11 +231,8 @@ namespace EDITOR
      */
     void Editor::Run()
     {
-//        bool isGameRunning = true;
-//        while (isGameRunning)
-//        {
-//            isGameRunning = Editor::ProcessDebugInputEvents();
-//        }
+        // TODO
+        std::cout << "Run" << std::endl;
     }
 
 
