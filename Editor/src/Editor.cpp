@@ -25,14 +25,14 @@ namespace EDITOR
         if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         {
             std::cout << "SDL could not be initialised\n" << SDL_GetError();
-            LOGGER::Logger::Error2Arg("SDL could not be initialised ", SDL_GetError());
+            LOGGER::TerminalLogger::Error2Arg("SDL could not be initialised ", SDL_GetError());
             exit(1);
         }
 
         // Setup true type fonts
         if (TTF_Init() != 0)
         {
-            LOGGER::Logger::Error("Error initializing SDL TTF");
+            LOGGER::TerminalLogger::Error("Error initializing SDL TTF");
             exit(1);
         }
 
@@ -41,7 +41,7 @@ namespace EDITOR
             SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
         #endif
 
-        LOGGER::Logger::Log("SDL is ready to go!");
+        LOGGER::TerminalLogger::Log("SDL is ready to go!");
 
         SDL_DisplayMode displayMode;
         SDL_GetCurrentDisplayMode(0, &displayMode);
@@ -60,7 +60,7 @@ namespace EDITOR
 
         if (!editorWindow)
         {
-            LOGGER::Logger::Error("Window init failed");
+            LOGGER::TerminalLogger::Error("Window init failed");
             SDL_Quit();
             exit(1);
         }
@@ -69,7 +69,7 @@ namespace EDITOR
 
         if (!editorRenderer)
         {
-            LOGGER::Logger::Error("Window renderer init failed");
+            LOGGER::TerminalLogger::Error("Window renderer init failed");
             SDL_DestroyRenderer(editorRenderer);
             SDL_Quit();
             exit(1);
@@ -172,11 +172,6 @@ namespace EDITOR
         pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
         pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
 
-
-        auto dd = DebugDisplay::GetInstance();
-        dd->TestLog();
-
-
         // Main render loop
         bool isRunning = true;
         while (isRunning)
@@ -227,6 +222,20 @@ namespace EDITOR
 
 
     /**
+     * @brief Editor Setup vars
+     */
+    void Editor::Setup()
+    {
+        // Instantiate instance
+        auto dd = DebugDisplay::GetInstance();
+        dd->TestLog();
+
+        Editor::SetupSDL();
+        Editor::SetupImGui();
+    }
+
+
+    /**
      * @brief Game Loop
      */
     void Editor::Run()
@@ -251,6 +260,7 @@ namespace EDITOR
         SDL_Quit();
 
     }
+
 
 } // namespace end
 

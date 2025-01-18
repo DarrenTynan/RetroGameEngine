@@ -2,14 +2,14 @@
 // Created by Darren Tynan on 27/12/2022.
 //
 
-#ifndef EDITOR_LOGGER_H
-#define EDITOR_LOGGER_H
+#ifndef EDITOR_TERMINALLOGGER_H
+#define EDITOR_TERMINALLOGGER_H
 
 #include <iostream>
 
 namespace LOGGER
 {
-    class Logger
+    class TerminalLogger
     {
     public:
         static void Log(const std::string &message);
@@ -18,4 +18,4 @@ namespace LOGGER
     };
 }
 
-#endif //EDITOR_LOGGER_H
+#endif //EDITOR_TERMINALLOGGER_H

@@ -7,7 +7,7 @@ project(Editor)
 set(SOURCE_FILES
         main.cpp
         src/Editor.cpp
-        src/Logger/Logger.cpp
+        src/Logger/TerminalLogger.cpp
 
         libs/imgui_docking/imgui.cpp
         libs/imgui_docking/imgui_demo.cpp

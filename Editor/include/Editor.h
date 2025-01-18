@@ -16,7 +16,7 @@
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
 
-#include "../src/Logger/Logger.h"
+#include "../src/Logger/TerminalLogger.h"
 
 #include "../src/displays/TestDisplayA.h"
 #include "../src/displays/TestDisplayB.h"
@@ -30,9 +30,11 @@ namespace EDITOR
     class Editor
     {
     public:
-        void SetupSDL();
+        void Setup();
         void Run();
         void Destroy();
+    private:
+        void SetupSDL();
         void SetupImGui();
     };
 

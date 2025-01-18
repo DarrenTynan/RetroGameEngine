@@ -4,8 +4,7 @@
 int main()
 {
     EDITOR::Editor editor;
-    editor.SetupSDL();
-    editor.SetupImGui();
+    editor.Setup();
     editor.Run();           // Not used as SetupImGui has a while loop to render
     editor.Destroy();
 
