@@ -180,6 +180,11 @@ namespace EDITOR
             while (SDL_PollEvent(&event))
             {
                 ImGui_ImplSDL2_ProcessEvent(&event);
+                if (event.key.keysym.sym == SDLK_d)
+                {
+                    LOGGER::TerminalLogger::Error("debug");
+
+                }
                 if (event.key.keysym.sym == SDLK_ESCAPE) isRunning = false;
                 if (event.type == SDL_QUIT) isRunning = false;
                 if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE &&
@@ -227,8 +232,11 @@ namespace EDITOR
     void Editor::Setup()
     {
         // Instantiate instance
-        auto dd = DebugDisplay::GetInstance();
-        dd->TestLog();
+//        auto dd = DebugDisplay::GetInstance();
+//        dd->TestLog();
+
+        auto logger = EDITOR_LOGGER::Logger::GetInstance();
+        logger->TestLog();
 
         Editor::SetupSDL();
         Editor::SetupImGui();

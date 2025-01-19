@@ -8,6 +8,7 @@
 #include "IDisplay.h"
 #include <imgui.h>
 #include "../libs/nativefiledialog-extended/src/include/nfd.h"
+#include "../src/Logger/Logger.h"
 
 namespace EDITOR
 {

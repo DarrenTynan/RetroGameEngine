@@ -23,6 +23,7 @@ void EDITOR::MainMenuBar::Draw()
             if (ImGui::MenuItem("Quit")) {}
             ImGui::EndMenu();
         }
+
         if (ImGui::BeginMenu("Edit"))
         {
             if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
@@ -33,6 +34,21 @@ void EDITOR::MainMenuBar::Draw()
             if (ImGui::MenuItem("Paste", "CTRL+V")) {}
             ImGui::EndMenu();
         }
+
+        if (ImGui::BeginMenu("Debug"))
+        {
+            if (ImGui::MenuItem("Log Entry"))
+            {
+                // Instantiate instance
+//                auto& logger = EDITOR_LOGGER::Logger::GetInstance();
+//                logger->TestLog();
+//
+//                auto textBuffer = logger->getTextBuffer();
+//                textBuffer.append("Just appended");
+            }
+            ImGui::EndMenu();
+        }
+
         ImGui::EndMainMenuBar();
     }
 

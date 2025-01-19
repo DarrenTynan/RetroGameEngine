@@ -20,6 +20,8 @@ namespace EDITOR
         bool AutoScroll{};          // Keep scrolling if already at the bottom.
 
     public:
+        [[nodiscard]] const ImGuiTextBuffer &getTextBuffer() const;
+
         ~LogDisplay() override = default;
 
         void Clear();

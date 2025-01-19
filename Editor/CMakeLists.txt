@@ -27,6 +27,8 @@ set(SOURCE_FILES
 
         src/displays/DebugDisplay.cpp
         src/displays/DebugDisplay.h
+        src/Logger/Logger.cpp
+        src/Logger/Logger.h
 
 )
 

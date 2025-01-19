@@ -159,6 +159,11 @@ void EDITOR::LogDisplay::Draw()
     ImGui::End();
 }
 
+    const ImGuiTextBuffer &LogDisplay::getTextBuffer() const
+    {
+        return textBuffer;
+    }
+
 
 } // end namespace
 

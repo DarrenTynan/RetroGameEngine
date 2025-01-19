@@ -25,6 +25,8 @@
 #include "../src/displays/LogDisplay.h"
 #include "../src/displays/DebugDisplay.h"
 
+#include "../src/Logger/Logger.h"
+
 namespace EDITOR
 {
     class Editor

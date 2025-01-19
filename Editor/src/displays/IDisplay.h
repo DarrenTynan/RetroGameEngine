@@ -30,7 +30,7 @@ namespace EDITOR
 
     struct DisplayHolder
     {
-        std::vector<std::unique_ptr<IDisplay> > displays;
+        std::vector<std::unique_ptr<IDisplay>> displays;
     };
 
 }
