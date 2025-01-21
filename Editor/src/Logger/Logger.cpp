@@ -29,10 +29,6 @@ namespace EDITOR_LOGGER
      */
     void Logger::AddLog(const char* fmt, ...) IM_FMTARGS(2)
     {
-//        auto logger = EDITOR_LOGGER::Logger::GetInstance();
-//        auto textBuffer = logger->getTextBuffer();
-//        auto lineOffsets = logger->getLineOffsets();
-
         int old_size = textBuffer.size();
         va_list args;
         va_start(args, fmt);
