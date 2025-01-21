@@ -232,11 +232,8 @@ namespace EDITOR
     void Editor::Setup()
     {
         // Instantiate instance
-//        auto dd = DebugDisplay::GetInstance();
-//        dd->TestLog();
-
         auto logger = EDITOR_LOGGER::Logger::GetInstance();
-        logger->TestLog();
+        EDITOR_LOGGER::Logger::TestLog();
 
         Editor::SetupSDL();
         Editor::SetupImGui();

@@ -16,7 +16,7 @@ void EDITOR::MainMenuBar::Draw()
         if (ImGui::BeginMenu("File"))
         {
             if (ImGui::MenuItem("New")) {}
-            if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+            if (ImGui::MenuItem("Open", "Ctrl+O")) { FileLoader(); }
             if (ImGui::MenuItem("Open Recent")) {}
             if (ImGui::MenuItem("Save", "Ctrl+S")) {}
             if (ImGui::MenuItem("Save As")) {}
@@ -40,11 +40,8 @@ void EDITOR::MainMenuBar::Draw()
             if (ImGui::MenuItem("Log Entry"))
             {
                 // Instantiate instance
-//                auto& logger = EDITOR_LOGGER::Logger::GetInstance();
-//                logger->TestLog();
-//
-//                auto textBuffer = logger->getTextBuffer();
-//                textBuffer.append("Just appended");
+//                auto logger = EDITOR_LOGGER::Logger::GetInstance();
+//                EDITOR_LOGGER::Logger::TestLog();
             }
             ImGui::EndMenu();
         }

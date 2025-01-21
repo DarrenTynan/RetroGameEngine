@@ -7,44 +7,16 @@
 namespace EDITOR
 {
 
-//    EDITOR::LogDisplay::LogDisplay() { std::cout << "Constructor" << std::endl; }
-
-/**
- * @brief Clear the arrays.
- */
-void EDITOR::LogDisplay::Clear()
-{
-    textBuffer.clear();
-    lineOffsets.clear();
-    lineOffsets.push_back(0);
-}
-
-
-/**
- * @brief Add a new log entry
- *
- * @param fmt
- * @param ...
- */
-void EDITOR::LogDisplay::AddLog(const char* fmt, ...) IM_FMTARGS(2)
-{
-    int old_size = textBuffer.size();
-    va_list args;
-    va_start(args, fmt);
-    textBuffer.appendfv(fmt, args);
-    va_end(args);
-    for (int new_size = textBuffer.size(); old_size < new_size; old_size++)
-        if (textBuffer[old_size] == '\n')
-            lineOffsets.push_back(old_size + 1);
-
-}
-
-
 /**
  * @brief Update the text window
  */
 void EDITOR::LogDisplay::Draw()
 {
+    auto logger = EDITOR_LOGGER::Logger::GetInstance();
+    auto textBuffer = logger->getTextBuffer();
+    auto textFilter = logger->getTextFilter();
+    auto lineOffsets = logger->getLineOffsets();
+
     if (!ImGui::Begin("Debug Log Window"))
     {
         ImGui::End();
@@ -56,14 +28,21 @@ void EDITOR::LogDisplay::Draw()
         static int counter = 0;
         const char* categories[3] = { "info", "warn", "error" };
         const char* words[] = { "Bumfuzzled", "Cattywampus", "Snickersnee", "Abibliophobia", "Absquatulate", "Nincompoop", "Pauciloquent" };
+
         for (int n = 0; n < 5; n++)
         {
             const char* category = categories[counter % IM_ARRAYSIZE(categories)];
             const char* word = words[counter % IM_ARRAYSIZE(words)];
-            EDITOR::LogDisplay::AddLog("[%05d] [%s] Hello, current time is %.1f, here's a word: '%s'\n",
-                       ImGui::GetFrameCount(), category, ImGui::GetTime(), word);
+            logger->AddLog("[%05d] [%s] Hello, current time is %.1f, here's a word: '%s'\n", ImGui::GetFrameCount(), category, ImGui::GetTime(), word);
             counter++;
         }
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::SmallButton("Log"))
+    {
+        logger->AddLog("Test Log entry... '%s'\n", "DEBUG");
     }
 
     ImGui::Separator();
@@ -86,6 +65,7 @@ void EDITOR::LogDisplay::Draw()
     ImGui::SameLine();
     bool copy = ImGui::Button("Copy");
     ImGui::SameLine();
+
     textFilter.Draw("Filter", -100.0f);
 
     ImGui::Separator();
@@ -94,7 +74,7 @@ void EDITOR::LogDisplay::Draw()
     {
         if (clear)
         {
-            Clear();
+            logger->Clear();
         }
 
         if (copy)
@@ -112,6 +92,7 @@ void EDITOR::LogDisplay::Draw()
             // This is because we don't have random access to the result of our filter.
             // A real application processing logs with ten of thousands of entries may want to store the result of
             // search/filter.. especially if the filtering function is not trivial (e.g. reg-exp).
+
             for (int line_no = 0; line_no < lineOffsets.Size; line_no++)
             {
                 const char* line_start = buf + lineOffsets[line_no];
@@ -136,7 +117,12 @@ void EDITOR::LogDisplay::Draw()
             // anymore, which is why we don't use the clipper. Storing or skimming through the search result would make
             // it possible (and would be recommended if you want to search through tens of thousands of entries).
             ImGuiListClipper clipper;
+
             clipper.Begin(lineOffsets.Size);
+
+            ImGuiStyle &style = ImGui::GetStyle();
+            style.Colors[ImGuiCol_WindowBg] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+
             while (clipper.Step())
             {
                 for (int line_no = clipper.DisplayStart; line_no < clipper.DisplayEnd; line_no++)
@@ -147,6 +133,7 @@ void EDITOR::LogDisplay::Draw()
                 }
             }
             clipper.End();
+            style.Colors[ImGuiCol_WindowBg] = ImVec4(0.09f, 0.09f, 0.15f, 0.50f);
         }
         ImGui::PopStyleVar();
 
@@ -158,12 +145,6 @@ void EDITOR::LogDisplay::Draw()
     ImGui::EndChild();
     ImGui::End();
 }
-
-    const ImGuiTextBuffer &LogDisplay::getTextBuffer() const
-    {
-        return textBuffer;
-    }
-
 
 } // end namespace
 
