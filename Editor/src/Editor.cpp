@@ -206,10 +206,10 @@ namespace EDITOR
             // Set docking to main viewport
             ImGui::DockSpaceOverViewport();
 
-            // Draw the editor display panels.
+            // Render the editor display panels.
             for ( const auto& pDisplay : pDisplayHolder->displays )
             {
-                pDisplay->Draw();
+                pDisplay->Render();
             }
 
             ImGui::ShowDemoWindow();

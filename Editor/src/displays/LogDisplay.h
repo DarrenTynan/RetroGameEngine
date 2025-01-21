@@ -17,7 +17,7 @@ namespace EDITOR
     public:
         ~LogDisplay() override = default;
 
-        void Draw() override;
+        void Render() override;
     };
 
 } // end namespace

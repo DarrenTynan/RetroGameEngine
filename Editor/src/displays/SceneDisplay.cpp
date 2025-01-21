@@ -10,7 +10,7 @@
 
 EDITOR::SceneDisplay::SceneDisplay() {}
 
-void EDITOR::SceneDisplay::Draw()
+void EDITOR::SceneDisplay::Render()
 {
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);

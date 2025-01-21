@@ -6859,7 +6859,7 @@ Other Changes:
 - Fix hovering of child window extending past their parent not taking account of parent clipping
   rectangle (fix #137)
 - Sliders: value text is clipped inside the frame when resizing sliders to be small.
-- ImGuITextFilter::Draw() use regular width call rather than computing its own arbitrary width.
+- ImGuITextFilter::Render() use regular width call rather than computing its own arbitrary width.
 - ImGuiTextFilter: can take a default filter string during construction.
 
 

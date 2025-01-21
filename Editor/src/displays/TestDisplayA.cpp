@@ -7,7 +7,7 @@
 
 EDITOR::TestDisplayA::TestDisplayA() {}
 
-void EDITOR::TestDisplayA::Draw()
+void EDITOR::TestDisplayA::Render()
 {
     if ( ImGui::Begin( "Test Window A" ) )
     {

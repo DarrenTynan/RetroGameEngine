@@ -39,7 +39,7 @@ namespace EDITOR
 
         void TestLog();
 
-        void Draw() override {};
+        void Render() override {};
         void Update() override {}
 
     };

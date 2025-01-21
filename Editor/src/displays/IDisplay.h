@@ -20,7 +20,7 @@ namespace EDITOR
     {
     public:
         virtual ~IDisplay() = default;
-        virtual void Draw() = 0;
+        virtual void Render() = 0;
         virtual void Update() {}
 
     protected:

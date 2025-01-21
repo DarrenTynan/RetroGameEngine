@@ -16,7 +16,7 @@ namespace EDITOR
         SceneDisplay();
         ~SceneDisplay() = default;
 
-        virtual void Draw() override;
+        virtual void Render() override;
     };
 } // namespace EDITOR
 

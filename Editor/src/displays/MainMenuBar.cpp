@@ -9,7 +9,7 @@ namespace EDITOR
 
 EDITOR::MainMenuBar::MainMenuBar() {}
 
-void EDITOR::MainMenuBar::Draw()
+void EDITOR::MainMenuBar::Render()
 {
     if (ImGui::BeginMainMenuBar())
     {
