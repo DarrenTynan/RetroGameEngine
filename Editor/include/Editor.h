@@ -18,12 +18,13 @@
 
 #include "../src/Logger/TerminalLogger.h"
 
-#include "../src/displays/TestDisplayA.h"
-#include "../src/displays/TestDisplayB.h"
-#include "../src/displays/SceneDisplay.h"
-#include "../src/displays/MainMenuBar.h"
-#include "../src/displays/LogDisplay.h"
-#include "../src/displays/DebugDisplay.h"
+#include "../src/Displays/TestDisplayA.h"
+#include "../src/Displays/TestDisplayB.h"
+#include "../src/Displays/SceneDisplay.h"
+#include "../src/Displays/MainMenuBar.h"
+#include "../src/Displays/LogDisplay.h"
+#include "../src/Displays/DebugDisplay.h"
+#include "../src/Displays/FileDisplay.h"
 
 #include "../src/Logger/Logger.h"
 

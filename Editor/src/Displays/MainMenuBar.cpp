@@ -3,6 +3,7 @@
 //
 
 #include "MainMenuBar.h"
+#include <SDL2/SDL.h>
 
 namespace EDITOR
 {
@@ -11,12 +12,26 @@ EDITOR::MainMenuBar::MainMenuBar() {}
 
 void EDITOR::MainMenuBar::Render()
 {
+    auto logger = EDITOR_LOGGER::Logger::GetInstance();
+    auto fileDialogs = EDITOR_FILEDIALOG::FileDialogs::GetInstance();
+
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("New")) {}
-            if (ImGui::MenuItem("Open", "Ctrl+O")) { FileLoader(); }
+            if (ImGui::MenuItem("New"))
+            {
+                // TinyFileDialog
+                auto folderPtr = fileDialogs->SelectFolderDialog2( "New Project", SDL_GetBasePath() );
+                // /users/darren/desktop
+                logger->AddLog("New project... %s", folderPtr.c_str());
+
+            }
+            if (ImGui::MenuItem("Open", "Ctrl+O"))
+            {
+                logger->AddLog("File open...");
+                fileDialogs->OpenFileDialog();
+            }
             if (ImGui::MenuItem("Open Recent")) {}
             if (ImGui::MenuItem("Save", "Ctrl+S")) {}
             if (ImGui::MenuItem("Save As")) {}
@@ -49,38 +64,6 @@ void EDITOR::MainMenuBar::Render()
         ImGui::EndMainMenuBar();
     }
 
-}
-
-
-/**
- * @brief Open the file picker window
- */
-void EDITOR::MainMenuBar::FileLoader()
-{
-    NFD_Init();
-
-    nfdu8char_t *outPath;
-    nfdu8filteritem_t filters[2] = { { "Source code", "c,cpp,cc" }, { "Headers", "h,hpp" } };
-    nfdopendialogu8args_t args = {0};
-    args.filterList = filters;
-    args.filterCount = 2;
-    nfdresult_t result = NFD_OpenDialogU8_With(&outPath, &args);
-    if (result == NFD_OKAY)
-    {
-        puts("Success!");
-        puts(outPath);
-        NFD_FreePathU8(outPath);
-    }
-    else if (result == NFD_CANCEL)
-    {
-        puts("User pressed cancel.");
-    }
-    else
-    {
-        printf("Error: %s\n", NFD_GetError());
-    }
-
-    NFD_Quit();
 }
 
 } // end namespace

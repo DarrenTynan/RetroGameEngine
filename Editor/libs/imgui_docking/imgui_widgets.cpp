@@ -5444,7 +5444,7 @@ static void ColorEditRestoreH(const float* col, float* H)
 }
 
 // ColorEdit supports RGB and HSV inputs. In case of RGB input resulting color may have undefined hue and/or saturation.
-// Since widget displays both RGB and HSV values we must preserve hue and saturation to prevent these values resetting.
+// Since widget Displays both RGB and HSV values we must preserve hue and saturation to prevent these values resetting.
 static void ColorEditRestoreHS(const float* col, float* H, float* S, float* V)
 {
     ImGuiContext& g = *GImGui;

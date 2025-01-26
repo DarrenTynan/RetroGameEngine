@@ -1791,7 +1791,7 @@ GLFWAPI void glfwWindowHint(int hint, int value);
  *  [compile-time option](@ref compile_options_osx).
  *
  *  @remark @osx On OS X 10.10 and later the window frame will not be rendered
- *  at full resolution on Retina displays unless the `NSHighResolutionCapable`
+ *  at full resolution on Retina Displays unless the `NSHighResolutionCapable`
  *  key is enabled in the application bundle's `Info.plist`.  For more
  *  information, see
  *  [High Resolution Guidelines for OS X](https://developer.apple.com/library/mac/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Explained/Explained.html)

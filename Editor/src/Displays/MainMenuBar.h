@@ -7,8 +7,8 @@
 
 #include "IDisplay.h"
 #include <imgui.h>
-#include "../libs/nativefiledialog-extended/src/include/nfd.h"
 #include "../src/Logger/Logger.h"
+#include "../src/FileSystem/include/FileDialogs.h"
 
 namespace EDITOR
 {
@@ -18,7 +18,6 @@ namespace EDITOR
         MainMenuBar();
         ~MainMenuBar() = default;
         virtual void Render() override;
-        void FileLoader();
     };
 
 } // namespace end

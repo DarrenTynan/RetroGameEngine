@@ -17,18 +17,22 @@ set(SOURCE_FILES
         libs/imgui_docking/backends/imgui_impl_sdl2.cpp
         libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
 
-        src/displays/TestDisplayA.cpp
-        src/displays/TestDisplayB.cpp
-        src/displays/SceneDisplay.cpp
-        src/displays/MainMenuBar.cpp
-        src/displays/MainMenuBar.h
-        src/displays/LogDisplay.cpp
-        src/displays/LogDisplay.h
+        src/Displays/TestDisplayA.cpp
+        src/Displays/TestDisplayB.cpp
+        src/Displays/SceneDisplay.cpp
+        src/Displays/MainMenuBar.cpp
+        src/Displays/MainMenuBar.h
+        src/Displays/LogDisplay.cpp
+        src/Displays/LogDisplay.h
 
-        src/displays/DebugDisplay.cpp
-        src/displays/DebugDisplay.h
+        src/Displays/DebugDisplay.cpp
+        src/Displays/DebugDisplay.h
         src/Logger/Logger.cpp
         src/Logger/Logger.h
+        src/FileSystem/src/FileDialogs.cpp
+        src/FileSystem/include/FileDialogs.h
+        src/Displays/FileDisplay.cpp
+        src/Displays/FileDisplay.h
 
 )
 
@@ -43,7 +47,7 @@ include_directories(
         libs/imgui_docking/
         libs/imgui_docking/backends/
         libs/nativefiledialog-extended/
-        src/displays/
+        src/Displays/
 )
 
 find_package( SDL2 REQUIRED )

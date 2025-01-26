@@ -32,7 +32,7 @@ namespace EDITOR
         // Setup true type fonts
         if (TTF_Init() != 0)
         {
-            LOGGER::TerminalLogger::Error("Error initializing SDL TTF");
+            LOGGER::TerminalLogger::Error("Error initializing SDL TTF", 0);
             exit(1);
         }
 
@@ -60,7 +60,7 @@ namespace EDITOR
 
         if (!editorWindow)
         {
-            LOGGER::TerminalLogger::Error("Window init failed");
+            LOGGER::TerminalLogger::Error("Window init failed", 0);
             SDL_Quit();
             exit(1);
         }
@@ -69,7 +69,7 @@ namespace EDITOR
 
         if (!editorRenderer)
         {
-            LOGGER::TerminalLogger::Error("Window renderer init failed");
+            LOGGER::TerminalLogger::Error("Window renderer init failed", 0);
             SDL_DestroyRenderer(editorRenderer);
             SDL_Quit();
             exit(1);
@@ -155,7 +155,7 @@ namespace EDITOR
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
         // DisplayHolder is a struct in IDisplay.
-        // std::vector< std::unique_ptr<IDisplay> > displays;
+        // std::vector< std::unique_ptr<IDisplay> > Displays;
         auto pDisplayHolder = std::make_shared<DisplayHolder>();
 
         // Instantiate the display windows via magic pointers
@@ -164,6 +164,7 @@ namespace EDITOR
         auto pTestDisplayB = std::make_unique<TestDisplayB>();
         auto pSceneDisplay = std::make_unique<SceneDisplay>();
         auto pLogDisplay = std::make_unique<LogDisplay>();
+        auto pFileDisplay = std::make_unique<FileDisplay>();
 
         // Add display class's to the vector array in IDisplay
         pDisplayHolder->displays.push_back( std::move(pMainMenuBar) );
@@ -171,6 +172,11 @@ namespace EDITOR
         pDisplayHolder->displays.push_back( std::move(pTestDisplayB) );
         pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
         pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
+        pDisplayHolder->displays.push_back( std::move(pFileDisplay) );
+
+        auto logger = EDITOR_LOGGER::Logger::GetInstance();
+        logger->Clear();
+        logger->AddLog("All systems should be up and running...\n");
 
         // Main render loop
         bool isRunning = true;
@@ -182,14 +188,14 @@ namespace EDITOR
                 ImGui_ImplSDL2_ProcessEvent(&event);
                 if (event.key.keysym.sym == SDLK_d)
                 {
-                    LOGGER::TerminalLogger::Error("debug");
-
+                    LOGGER::TerminalLogger::Error("debug", 0);
                 }
                 if (event.key.keysym.sym == SDLK_ESCAPE) isRunning = false;
                 if (event.type == SDL_QUIT) isRunning = false;
                 if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE &&
                     event.window.windowID == SDL_GetWindowID(editorWindow))
                     isRunning = false;
+
             }
 
             if (SDL_GetWindowFlags(editorWindow) & SDL_WINDOW_MINIMIZED)

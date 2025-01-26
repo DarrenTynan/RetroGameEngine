@@ -13,7 +13,7 @@ namespace LOGGER
     {
     public:
         static void Log(const std::string &message);
-        static void Error(const std::string& message);
+        static void Error(const std::string &message, int i);
         static void Error2Arg(const std::string& message, const std::string& message2 );
     };
 }

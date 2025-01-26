@@ -7,7 +7,6 @@
 
 #include <iostream>
 #include <imgui.h>
-#include "../src/displays/LogDisplay.h"
 
 #define EDITOR_LOG() EDITOR_LOGGER::Logger::GetInstance();
 

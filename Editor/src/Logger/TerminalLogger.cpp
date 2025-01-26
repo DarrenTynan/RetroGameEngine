@@ -12,7 +12,7 @@ void TerminalLogger::Log(const std::string &message)
     std::cout << "\x1B[32m" << message << "\033[0m" << std::endl;
 }
 
-void TerminalLogger::Error(const std::string &message)
+void TerminalLogger::Error(const std::string &message, int i)
 {
     std::cout << "\x1B[91m" << message << "\033[0m" << std::endl;
 }
