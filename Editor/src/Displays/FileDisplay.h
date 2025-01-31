@@ -18,6 +18,11 @@ namespace EDITOR
         ~FileDisplay() = default;
 
         virtual void Render() override;
+
+        std::vector<std::string> nodes;
+
+        void GetFolderTree();
+        void NodeTree();
     };
 } // namespace EDITOR
 

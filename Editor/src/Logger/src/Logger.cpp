@@ -2,7 +2,7 @@
 // Created by Darren Tynan on 19/01/2025.
 //
 
-#include "Logger.h"
+#include "include/Logger.h"
 
 namespace EDITOR_LOGGER
 {

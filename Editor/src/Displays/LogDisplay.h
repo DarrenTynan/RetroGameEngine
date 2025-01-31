@@ -8,7 +8,7 @@
 #include "IDisplay.h"
 #include <imgui.h>
 #include <iostream>
-#include "../src/Logger/Logger.h"
+#include "../src/Logger/include/Logger.h"
 
 namespace EDITOR
 {

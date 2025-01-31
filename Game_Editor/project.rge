@@ -1,0 +1,18 @@
+{
+    "configuration": {
+        "project_name": "Game_Editor",
+        "file_path": "/Users/darren/Development/C++_Projects/RetroGameEngine/Game_Editor/"
+    },
+    "hello": "world",
+    "t": true,
+    "f": false,
+    "n": null,
+    "i": 123,
+    "pi": 3.1416,
+    "a": [
+        1,
+        2,
+        3,
+        4
+    ]
+}

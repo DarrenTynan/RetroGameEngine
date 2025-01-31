@@ -46,7 +46,7 @@ namespace EDITOR_FILEDIALOG
         std::string OpenFileDialog2( const std::string& sTitle, const std::string& sDefaultPath, const std::vector<const char*>& filters, const std::string& sFilterDesc );
         std::string SaveFileDialog2( const std::string& sTitle, const std::string& sDefaultPath, const std::vector<const char*>& filters, const std::string& sFilterDesc );
         std::string SelectFolderDialog2( const std::string& sTitle, const std::string& sDefaultPath );
-        std::string GetFolderTree();
+        std::vector<std::string> GetFolderTree();
     };
 
 }  // end namespace

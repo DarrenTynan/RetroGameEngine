@@ -2,7 +2,7 @@
 // Created by Darren Tynan on 27/12/2022.
 //
 
-#include "TerminalLogger.h"
+#include "include/TerminalLogger.h"
 
 namespace LOGGER
 {

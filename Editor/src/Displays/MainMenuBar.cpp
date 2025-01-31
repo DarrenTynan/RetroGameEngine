@@ -25,6 +25,7 @@ void EDITOR::MainMenuBar::Render()
                 auto folderPtr = fileDialogs->SelectFolderDialog2( "New Project", SDL_GetBasePath() );
                 // /users/darren/desktop
                 logger->AddLog("New project... %s", folderPtr.c_str());
+                std::cout << folderPtr.c_str() << std::endl;
 
             }
             if (ImGui::MenuItem("Open", "Ctrl+O"))

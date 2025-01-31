@@ -16,7 +16,7 @@
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
 
-#include "../src/Logger/TerminalLogger.h"
+#include "../src/Logger/include/TerminalLogger.h"
 
 #include "../src/Displays/TestDisplayA.h"
 #include "../src/Displays/TestDisplayB.h"
@@ -25,8 +25,10 @@
 #include "../src/Displays/LogDisplay.h"
 #include "../src/Displays/DebugDisplay.h"
 #include "../src/Displays/FileDisplay.h"
+#include "../src/Displays/ProjectMenuDisplay.h"
 
-#include "../src/Logger/Logger.h"
+
+#include "../src/Logger/include/Logger.h"
 
 namespace EDITOR
 {

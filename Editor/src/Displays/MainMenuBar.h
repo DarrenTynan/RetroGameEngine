@@ -7,7 +7,7 @@
 
 #include "IDisplay.h"
 #include <imgui.h>
-#include "../src/Logger/Logger.h"
+#include "../src/Logger/include/Logger.h"
 #include "../src/FileSystem/include/FileDialogs.h"
 
 namespace EDITOR

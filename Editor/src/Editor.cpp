@@ -4,6 +4,13 @@
 
 #include "../include/Editor.h"
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+
+#include "../libs/rapidjson/document.h"
+#include "../libs/rapidjson/prettywriter.h"
+#include <cstdio>
+
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
@@ -21,6 +28,36 @@ namespace EDITOR
      */
     void Editor::SetupSDL()
     {
+        using namespace rapidjson;
+        const char json[] = " { \"hello\" : \"world\", \"t\" : true , \"f\" : false, \"n\": null, \"i\":123, \"pi\": 3.1416, \"a\":[1, 2, 3, 4] } ";
+        printf("Original JSON:\n %s\n", json);
+        Document document;
+        document.Parse(json);
+        assert(document.IsObject());
+        assert(document.HasMember("hello"));
+        assert(document["hello"].IsString());
+        printf("hello = %s\n", document["hello"].GetString());
+        assert(document["t"].IsBool());
+        printf("t = %s\n", document["t"].GetBool() ? "true" : "false");
+        printf("n = %s\n", document["n"].IsNull() ? "null" : "?");
+        assert(document["i"].IsNumber());
+
+// In this case, IsUint()/IsInt64()/IsUint64() also return true.
+        assert(document["i"].IsInt());
+        printf("i = %d\n", document["i"].GetInt());
+// Alternatively (int)document["i"]
+
+        assert(document["pi"].IsNumber());
+        assert(document["pi"].IsDouble());
+        printf("pi = %g\n", document["pi"].GetDouble());
+        // Using a reference for consecutive access is handy and faster.
+        const Value& a = document["a"];
+        assert(a.IsArray());
+        for (SizeType i = 0; i < a.Size(); i++) // Uses SizeType instead of size_t
+            printf("a[%d] = %d\n", i, a[i].GetInt());
+
+
+
         // Setup SDL
         if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         {
@@ -94,7 +131,6 @@ namespace EDITOR
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
-//    ImGui::StyleColorsLight();
 
         ImGuiStyle &style = ImGui::GetStyle();
         style.WindowRounding = 5.3f;
@@ -108,7 +144,6 @@ namespace EDITOR
         style.Colors[ImGuiCol_Text] = ImVec4(0.90f, 0.90f, 0.90f, 0.90f);
         style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
         style.Colors[ImGuiCol_WindowBg] = ImVec4(0.09f, 0.09f, 0.15f, 0.50f);
-//    style.Colors[ImGuiCol_WindowBg]              = ImVec4(0.09f, 0.09f, 0.15f, 1.00f);
         style.Colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
         style.Colors[ImGuiCol_PopupBg] = ImVec4(0.05f, 0.05f, 0.10f, 0.85f);
         style.Colors[ImGuiCol_Border] = ImVec4(0.70f, 0.70f, 0.70f, 0.65f);
@@ -165,6 +200,7 @@ namespace EDITOR
         auto pSceneDisplay = std::make_unique<SceneDisplay>();
         auto pLogDisplay = std::make_unique<LogDisplay>();
         auto pFileDisplay = std::make_unique<FileDisplay>();
+        auto pProjectMenuDisplay = std::make_unique<ProjectMenuDisplay>();
 
         // Add display class's to the vector array in IDisplay
         pDisplayHolder->displays.push_back( std::move(pMainMenuBar) );
@@ -173,6 +209,7 @@ namespace EDITOR
         pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
         pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
         pDisplayHolder->displays.push_back( std::move(pFileDisplay) );
+        pDisplayHolder->displays.push_back( std::move(pProjectMenuDisplay) );
 
         auto logger = EDITOR_LOGGER::Logger::GetInstance();
         logger->Clear();
@@ -182,28 +219,6 @@ namespace EDITOR
         bool isRunning = true;
         while (isRunning)
         {
-            SDL_Event event;
-            while (SDL_PollEvent(&event))
-            {
-                ImGui_ImplSDL2_ProcessEvent(&event);
-                if (event.key.keysym.sym == SDLK_d)
-                {
-                    LOGGER::TerminalLogger::Error("debug", 0);
-                }
-                if (event.key.keysym.sym == SDLK_ESCAPE) isRunning = false;
-                if (event.type == SDL_QUIT) isRunning = false;
-                if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE &&
-                    event.window.windowID == SDL_GetWindowID(editorWindow))
-                    isRunning = false;
-
-            }
-
-            if (SDL_GetWindowFlags(editorWindow) & SDL_WINDOW_MINIMIZED)
-            {
-                SDL_Delay(10);
-                continue;
-            }
-
             // Start the Dear ImGui frame
             ImGui_ImplSDLRenderer2_NewFrame();
             ImGui_ImplSDL2_NewFrame();
@@ -228,6 +243,33 @@ namespace EDITOR
             SDL_RenderClear(editorRenderer);
             ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), editorRenderer);
             SDL_RenderPresent(editorRenderer);
+
+            SDL_Event event;
+            while (SDL_PollEvent(&event))
+            {
+                ImGui_ImplSDL2_ProcessEvent(&event);
+                if (event.key.keysym.sym == SDLK_d)
+                {
+                    LOGGER::TerminalLogger::Error("EDITOR.cpp - event.SDLK_d - debug", 0);
+                }
+                if (event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    LOGGER::TerminalLogger::Error("EDITOR.cpp - event.SDLK_ESCAPE - debug", 0);
+                    isRunning = false;
+                }
+                if (event.type == SDL_QUIT)
+                {
+                    LOGGER::TerminalLogger::Error("EDITOR.cpp - event.SDL_QUIT - debug", 0);
+                    isRunning = false;
+                }
+                if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE &&
+                    event.window.windowID == SDL_GetWindowID(editorWindow))
+                {
+                    LOGGER::TerminalLogger::Error("EDITOR.cpp - event.SDL_WINDOW_CLOSE - debug", 0);
+                    isRunning = false;
+                }
+
+            }
         }
     }
 

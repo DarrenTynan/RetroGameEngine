@@ -5,7 +5,7 @@
 #include "../FileSystem/include/FileDialogs.h"
 #include "../libs/tinyfiledialogs/tinyfiledialogs.h"
 #include "../libs/tinyfiledialogs/tinyfiledialogs.c"
-#include "../../Logger/Logger.h"
+#include "../Logger/include/Logger.h"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -26,7 +26,8 @@ namespace EDITOR_FILEDIALOG
                                             const std::vector<const char*>& filters, const std::string& sFilterDesc )
     {
         const char* file = tinyfd_openFileDialog(
-                sTitle.c_str(), sDefaultPath.c_str(), filters.size(), filters.data(), sFilterDesc.c_str(), 1 );
+                sTitle.c_str(), sDefaultPath.c_str(), filters.size(),
+                filters.data(), sFilterDesc.c_str(), 0 );
 
         if ( !file )
             return std::string{};
@@ -55,15 +56,20 @@ namespace EDITOR_FILEDIALOG
 
         try
         {
+            std::string folderName = "Game_Editor";
             // Create folder New Game
-            if (std::filesystem::create_directories(std::string{folder} + "New Game")) std::cout << "Folder created" << std::endl;
+            std::filesystem::create_directories(std::string{folder} + folderName );
+            std::filesystem::create_directories(std::string{folder} + folderName + "/assets" );
+            std::filesystem::create_directories(std::string{folder} + folderName + "/include" );
+            std::filesystem::create_directories(std::string{folder} + folderName + "/src" );
+            std::filesystem::create_directories(std::string{folder} + folderName + "/scripts" );
         }
         catch (const std::exception& e)
         {
             std::cerr << e.what() << std::endl;
         }
 
-        return std::string{ folder } + "New Game";
+        return std::string{ folder } + "Game_Editor";
     }
 
 
@@ -117,27 +123,34 @@ namespace EDITOR_FILEDIALOG
         // TODO
     }
 
-    std::string FileDialogs::GetFolderTree()
+    std::vector<std::string> FileDialogs::GetFolderTree()
     {
         auto logger = EDITOR_LOGGER::Logger::GetInstance();
 
-        std::string path = "../../Game";
+        std::string folderPtr = "../../Game_Editor";
 
-        for (const auto & entry : std::filesystem::directory_iterator(path)) {
+//        for (const auto & entry : std::filesystem::directory_iterator(folderPtr))
+//        {
+//            std::cout << entry.path() << std::endl;
+//        }
+
+        // Create nodes folder ptr
+        std::vector<std::string> nodes = {};
+        // Add the root node
+        nodes.push_back(folderPtr);
+
+        for (const auto & entry : std::filesystem::recursive_directory_iterator(folderPtr))
+        {
             std::cout << entry.path() << std::endl;
-        }
 
-        for (const auto & entry : std::filesystem::recursive_directory_iterator(path)) {
-            std::cout << entry.path() << std::endl;
 
-//            std::string newLine = "\n";
             std::string path = entry.path();
             std::string fullPath = path + '\n';
             logger->AddLog(fullPath.c_str());
-//            logger->AddLog( entry.path().c_str());
+            nodes.push_back(fullPath.c_str());
         }
 
-        return std::string();
+        return nodes;
     }
 
 
