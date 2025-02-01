@@ -17,6 +17,9 @@ namespace EDITOR
     public:
         std::string project_name;
         std::string file_path;
+        int window_width;
+        int window_height;
+        std::string window_title;
 
         ProjectMenuDisplay();
         ~ProjectMenuDisplay() override = default;

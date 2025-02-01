@@ -20,14 +20,128 @@ namespace EDITOR
     SDL_Window *editorWindow;
     SDL_Renderer *editorRenderer;
 
-    SDL_Window *gameWindow;
-    SDL_Renderer *gameRenderer;
+    SDL_Window *sceneWindow;
+    SDL_Renderer *sceneRenderer;
+
+    /**
+     * @brief Display the initial project window
+     */
+    void Editor::ProjectWindow()
+    {
+        // Setup SDL
+        if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+        {
+            std::cout << "Project SDL could not be initialised\n" << SDL_GetError();
+            exit(1);
+        }
+
+        LOGGER::TerminalLogger::Log("Project SDL is ready to go!");
+
+        // Setup true type fonts
+        if (TTF_Init() != 0)
+        {
+            LOGGER::TerminalLogger::Error("Error initializing SDL TTF", 0);
+            exit(1);
+        }
+
+        TTF_Font *font = TTF_OpenFont("/Users/darren/Development/C++_Projects/RetroGameEngine/Editor/fonts/Pixellettersfull.ttf", 64);
+
+        if ( !font )
+        {
+            std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
+        }
+
+        // Create window with SDL_Renderer graphics context
+        auto windowFlags = (SDL_WindowFlags)(
+                                                SDL_WINDOW_MOUSE_CAPTURE |
+                                                SDL_WINDOW_ALLOW_HIGHDPI
+                                                );
+        SDL_DisplayMode displayMode;
+        SDL_GetCurrentDisplayMode(0, &displayMode);
+
+        sceneWindow = SDL_CreateWindow(
+                "Project Select",
+                (displayMode.w / 2) - 600 / 2,
+                (displayMode.h / 2) - 400 / 2,
+                600,
+                400,
+                windowFlags
+        );
+
+        if (!sceneWindow)
+        {
+            LOGGER::TerminalLogger::Error("Project Window init failed", 0);
+            SDL_Quit();
+            exit(1);
+        }
+
+        sceneRenderer = SDL_CreateRenderer(sceneWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+        if (!sceneRenderer)
+        {
+            LOGGER::TerminalLogger::Error("Project Window renderer init failed", 0);
+            SDL_DestroyRenderer(sceneRenderer);
+            SDL_Quit();
+            exit(1);
+        }
+
+        // Background color
+        SDL_SetRenderDrawColor(sceneRenderer, 0,0,0,255);
+        SDL_RenderClear(sceneRenderer);
+
+
+        // Create surface with rendered text and set color
+        SDL_Color textColor = {255, 255, 255, 255};
+        SDL_Surface *textSurface = TTF_RenderText_Solid(font, "Hello World!", textColor);
+
+        if (!textSurface)
+        {
+            printf("Failed to create text surface: %s\n", TTF_GetError());
+        }
+
+        // Create texture from surface
+        SDL_Texture *textTexture = SDL_CreateTextureFromSurface(sceneRenderer, textSurface);
+
+        if (!textTexture)
+        {
+            printf("Failed to create text texture: %s\n", SDL_GetError());
+            exit(1);
+        }
+
+        // Render text
+        SDL_Rect textRect = {50, 50, textSurface->w, textSurface->h}; // rectangle where the text is drawn
+        SDL_RenderCopy(sceneRenderer, textTexture, nullptr, &textRect);
+
+        SDL_RenderPresent(sceneRenderer);
+
+        bool run = true;
+        while (run)
+        {
+            SDL_Event e;
+            while (SDL_PollEvent(&e))
+            {
+                switch (e.type)
+                {
+                    case SDL_QUIT:
+                        SDL_Log("Quit event detected");
+                        run = false;
+                        break;
+                }
+            }
+        }
+
+        SDL_DestroyRenderer(sceneRenderer);
+        SDL_DestroyWindow(sceneWindow);
+        SDL_Quit();
+    }
 
     /**
      * @brief Setup the main sdl window.
      */
     void Editor::SetupSDL()
     {
+        ///////////////////////////////////////////////
+        // RapidJson example
         using namespace rapidjson;
         const char json[] = " { \"hello\" : \"world\", \"t\" : true , \"f\" : false, \"n\": null, \"i\":123, \"pi\": 3.1416, \"a\":[1, 2, 3, 4] } ";
         printf("Original JSON:\n %s\n", json);
@@ -42,10 +156,10 @@ namespace EDITOR
         printf("n = %s\n", document["n"].IsNull() ? "null" : "?");
         assert(document["i"].IsNumber());
 
-// In this case, IsUint()/IsInt64()/IsUint64() also return true.
+        // In this case, IsUint()/IsInt64()/IsUint64() also return true.
         assert(document["i"].IsInt());
         printf("i = %d\n", document["i"].GetInt());
-// Alternatively (int)document["i"]
+        // Alternatively (int)document["i"]
 
         assert(document["pi"].IsNumber());
         assert(document["pi"].IsDouble());
@@ -56,7 +170,8 @@ namespace EDITOR
         for (SizeType i = 0; i < a.Size(); i++) // Uses SizeType instead of size_t
             printf("a[%d] = %d\n", i, a[i].GetInt());
 
-
+        // RapidJson example end
+        ///////////////////////////////////////////////
 
         // Setup SDL
         if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -282,6 +397,17 @@ namespace EDITOR
         // Instantiate instance
         auto logger = EDITOR_LOGGER::Logger::GetInstance();
         EDITOR_LOGGER::Logger::TestLog();
+
+        // Load the config file
+        auto fh = EDITOR_FILEHANDLER::FileHandler::GetInstance();
+        fh->LoadConfigFile();
+        this->project_name = fh->doc["configuration"]["project_name"].GetString();
+        this->file_path = fh->doc["configuration"]["file_path"].GetString();
+        this->window_width = fh->doc["configuration"]["window_width"].GetInt();
+        this->window_height = fh->doc["configuration"]["window_height"].GetInt();
+        this->window_title = fh->doc["configuration"]["window_title"].GetString();
+
+        Editor::ProjectWindow();
 
         Editor::SetupSDL();
         Editor::SetupImGui();

@@ -27,6 +27,7 @@
 #include "../src/Displays/FileDisplay.h"
 #include "../src/Displays/ProjectMenuDisplay.h"
 
+#include "../FileSystem/include/FileHandler.h"
 
 #include "../src/Logger/include/Logger.h"
 
@@ -38,7 +39,13 @@ namespace EDITOR
         void Setup();
         void Run();
         void Destroy();
+        std::string project_name;
+        std::string file_path;
+        int window_width;
+        int window_height;
+        std::string window_title;
     private:
+        void ProjectWindow();
         void SetupSDL();
         void SetupImGui();
     };

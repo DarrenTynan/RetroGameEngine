@@ -11,6 +11,9 @@ EDITOR::ProjectMenuDisplay::ProjectMenuDisplay()
     fh->LoadConfigFile();
     this->project_name = fh->doc["configuration"]["project_name"].GetString();
     this->file_path = fh->doc["configuration"]["file_path"].GetString();
+    this->window_width = fh->doc["configuration"]["window_width"].GetInt();
+    this->window_height = fh->doc["configuration"]["window_height"].GetInt();
+    this->window_title = fh->doc["configuration"]["window_title"].GetString();
 }
 
 void EDITOR::ProjectMenuDisplay::Render()
