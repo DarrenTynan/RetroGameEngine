@@ -44,7 +44,7 @@ namespace EDITOR
             exit(1);
         }
 
-        TTF_Font *font = TTF_OpenFont("/Users/darren/Development/C++_Projects/RetroGameEngine/Editor/fonts/Pixellettersfull.ttf", 64);
+        TTF_Font *font = TTF_OpenFont("/Users/darren/Development/C++_Projects/RetroGameEngine/Editor/fonts/Pixellettersfull.ttf", 32);
 
         if ( !font )
         {
@@ -89,10 +89,11 @@ namespace EDITOR
         SDL_SetRenderDrawColor(sceneRenderer, 0,0,0,255);
         SDL_RenderClear(sceneRenderer);
 
-
         // Create surface with rendered text and set color
         SDL_Color textColor = {255, 255, 255, 255};
-        SDL_Surface *textSurface = TTF_RenderText_Solid(font, "Hello World!", textColor);
+
+        // Project name
+        SDL_Surface *textSurface = TTF_RenderText_Solid(font, project_name.c_str(), textColor);
 
         if (!textSurface)
         {
@@ -109,9 +110,75 @@ namespace EDITOR
         }
 
         // Render text
-        SDL_Rect textRect = {50, 50, textSurface->w, textSurface->h}; // rectangle where the text is drawn
+        SDL_Rect textRect = {150, 50, textSurface->w, textSurface->h}; // rectangle where the text is drawn
         SDL_RenderCopy(sceneRenderer, textTexture, nullptr, &textRect);
 
+
+        // File path
+        SDL_Surface *textSurface1 = TTF_RenderText_Solid(font, file_path.c_str(), textColor);
+
+        if (!textSurface1)
+        {
+            printf("Failed to create text surface: %s\n", TTF_GetError());
+        }
+
+        // Create texture from surface
+        SDL_Texture *textTexture1 = SDL_CreateTextureFromSurface(sceneRenderer, textSurface1);
+
+        if (!textTexture1)
+        {
+            printf("Failed to create text texture: %s\n", SDL_GetError());
+            exit(1);
+        }
+
+        // Render text
+        SDL_Rect textRect1 = {150, 100, textSurface1->w, textSurface1->h}; // rectangle where the text is drawn
+        SDL_RenderCopy(sceneRenderer, textTexture1, nullptr, &textRect1);
+        // End
+
+
+
+
+        if (IMG_Init(IMG_INIT_PNG) == 0) {
+            std::cout << "Error SDL2_image Initialization";
+            exit(1);
+        }
+
+        SDL_Surface* lettuce_sur = IMG_Load("/Users/darren/Development/C++_Projects/RetroGameEngine/Game_Editor/icon.png");
+        if (lettuce_sur == nullptr) {
+            std::cout << "Error loading image: " << IMG_GetError();
+            exit(1);
+        }
+
+        SDL_Texture* lettuce_tex = SDL_CreateTextureFromSurface(sceneRenderer, lettuce_sur);
+        if (lettuce_tex == nullptr) {
+            std::cout << "Error creating texture";
+            exit(1);
+        }
+
+        SDL_FreeSurface(lettuce_sur);
+
+        SDL_Rect srcRect = { 0, 0, 80, 80 };
+        SDL_Rect dstRect = { 50, 50, 80, 80 };
+
+        SDL_RenderCopy(sceneRenderer, lettuce_tex, &srcRect, &dstRect);
+
+
+        ////
+        // Creat a rect at pos ( 50, 50 ) that's 50 pixels wide and 50 pixels high.
+        SDL_Rect r;
+        r.x = 25;
+        r.y = 25;
+        r.w = 1150;
+        r.h = 150;
+
+        // Set render color to blue ( rect will be rendered in this color )
+        SDL_SetRenderDrawColor( sceneRenderer, 128, 128, 128, 255 );
+
+        // Render rect
+        SDL_RenderDrawRect( sceneRenderer, &r );
+
+        // Render the images to the screen
         SDL_RenderPresent(sceneRenderer);
 
         bool run = true;
@@ -126,6 +193,10 @@ namespace EDITOR
                         SDL_Log("Quit event detected");
                         run = false;
                         break;
+                    case SDL_MOUSEBUTTONDOWN:
+                        mousePress(e.button);
+                        break;
+
                 }
             }
         }
@@ -135,6 +206,26 @@ namespace EDITOR
         SDL_Quit();
     }
 
+
+    /**
+     * @brief Handle mouse button down events.
+     *
+     * @param b
+     */
+    void Editor::mousePress(SDL_MouseButtonEvent& b){
+        if(b.button == SDL_BUTTON_LEFT)
+        {
+            int xMouse = 0;
+            int yMouse = 0;
+            SDL_GetMouseState(&xMouse, &yMouse);
+            if (yMouse >= 18 & yMouse <= 90 )
+            {
+                std::cout << "LMB" << std::endl;
+                std::cout << yMouse << std::endl;
+            }
+
+        }
+    }
     /**
      * @brief Setup the main sdl window.
      */
@@ -315,7 +406,7 @@ namespace EDITOR
         auto pSceneDisplay = std::make_unique<SceneDisplay>();
         auto pLogDisplay = std::make_unique<LogDisplay>();
         auto pFileDisplay = std::make_unique<FileDisplay>();
-        auto pProjectMenuDisplay = std::make_unique<ProjectMenuDisplay>();
+//        auto pProjectMenuDisplay = std::make_unique<ProjectMenuDisplay>();
 
         // Add display class's to the vector array in IDisplay
         pDisplayHolder->displays.push_back( std::move(pMainMenuBar) );
@@ -324,7 +415,7 @@ namespace EDITOR
         pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
         pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
         pDisplayHolder->displays.push_back( std::move(pFileDisplay) );
-        pDisplayHolder->displays.push_back( std::move(pProjectMenuDisplay) );
+//        pDisplayHolder->displays.push_back( std::move(pProjectMenuDisplay) );
 
         auto logger = EDITOR_LOGGER::Logger::GetInstance();
         logger->Clear();

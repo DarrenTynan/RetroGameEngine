@@ -25,7 +25,7 @@
 #include "../src/Displays/LogDisplay.h"
 #include "../src/Displays/DebugDisplay.h"
 #include "../src/Displays/FileDisplay.h"
-#include "../src/Displays/ProjectMenuDisplay.h"
+//#include "../src/Displays/ProjectMenuDisplay.h"
 
 #include "../FileSystem/include/FileHandler.h"
 
@@ -48,6 +48,8 @@ namespace EDITOR
         void ProjectWindow();
         void SetupSDL();
         void SetupImGui();
+
+        static void mousePress(SDL_MouseButtonEvent &b);
     };
 
 }
