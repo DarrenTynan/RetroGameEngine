@@ -75,6 +75,7 @@ namespace EDITOR
             exit(1);
         }
 
+        // Create the scene renderer.
         sceneRenderer = SDL_CreateRenderer(sceneWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
         if (!sceneRenderer)
@@ -85,7 +86,7 @@ namespace EDITOR
             exit(1);
         }
 
-        // Background color
+        // Background color and clear screen
         SDL_SetRenderDrawColor(sceneRenderer, 0,0,0,255);
         SDL_RenderClear(sceneRenderer);
 
@@ -134,49 +135,46 @@ namespace EDITOR
         // Render text
         SDL_Rect textRect1 = {150, 100, textSurface1->w, textSurface1->h}; // rectangle where the text is drawn
         SDL_RenderCopy(sceneRenderer, textTexture1, nullptr, &textRect1);
-        // End
 
 
-
-
+        // Setup the image
         if (IMG_Init(IMG_INIT_PNG) == 0) {
             std::cout << "Error SDL2_image Initialization";
             exit(1);
         }
 
-        SDL_Surface* lettuce_sur = IMG_Load("/Users/darren/Development/C++_Projects/RetroGameEngine/Game_Editor/icon.png");
-        if (lettuce_sur == nullptr) {
+        // Load the logo.png
+        SDL_Surface* logoSurface = IMG_Load("/Users/darren/Development/C++_Projects/RetroGameEngine/Game_Editor/icon.png");
+        if (logoSurface == nullptr) {
             std::cout << "Error loading image: " << IMG_GetError();
             exit(1);
         }
 
-        SDL_Texture* lettuce_tex = SDL_CreateTextureFromSurface(sceneRenderer, lettuce_sur);
-        if (lettuce_tex == nullptr) {
+        SDL_Texture* logoTexture = SDL_CreateTextureFromSurface(sceneRenderer, logoSurface);
+        if (logoTexture == nullptr) {
             std::cout << "Error creating texture";
             exit(1);
         }
 
-        SDL_FreeSurface(lettuce_sur);
+        SDL_FreeSurface(logoSurface);
 
         SDL_Rect srcRect = { 0, 0, 80, 80 };
         SDL_Rect dstRect = { 50, 50, 80, 80 };
 
-        SDL_RenderCopy(sceneRenderer, lettuce_tex, &srcRect, &dstRect);
+        SDL_RenderCopy(sceneRenderer, logoTexture, &srcRect, &dstRect);
 
-
-        ////
-        // Creat a rect at pos ( 50, 50 ) that's 50 pixels wide and 50 pixels high.
-        SDL_Rect r;
-        r.x = 25;
-        r.y = 25;
-        r.w = 1150;
-        r.h = 150;
+        // Set the project box rect
+        SDL_Rect boxRect;
+        boxRect.x = 25;
+        boxRect.y = 25;
+        boxRect.w = 1150;
+        boxRect.h = 150;
 
         // Set render color to blue ( rect will be rendered in this color )
         SDL_SetRenderDrawColor( sceneRenderer, 128, 128, 128, 255 );
 
         // Render rect
-        SDL_RenderDrawRect( sceneRenderer, &r );
+        SDL_RenderDrawRect( sceneRenderer, &boxRect );
 
         // Render the images to the screen
         SDL_RenderPresent(sceneRenderer);
@@ -194,9 +192,8 @@ namespace EDITOR
                         run = false;
                         break;
                     case SDL_MOUSEBUTTONDOWN:
-                        mousePress(e.button);
+                        run = mousePress(e.button);
                         break;
-
                 }
             }
         }
@@ -212,7 +209,7 @@ namespace EDITOR
      *
      * @param b
      */
-    void Editor::mousePress(SDL_MouseButtonEvent& b){
+    bool Editor::mousePress(SDL_MouseButtonEvent& b){
         if(b.button == SDL_BUTTON_LEFT)
         {
             int xMouse = 0;
@@ -222,10 +219,13 @@ namespace EDITOR
             {
                 std::cout << "LMB" << std::endl;
                 std::cout << yMouse << std::endl;
+                return false;
             }
-
         }
+        return true;
     }
+
+
     /**
      * @brief Setup the main sdl window.
      */

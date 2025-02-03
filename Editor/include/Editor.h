@@ -49,7 +49,7 @@ namespace EDITOR
         void SetupSDL();
         void SetupImGui();
 
-        static void mousePress(SDL_MouseButtonEvent &b);
+        static bool mousePress(SDL_MouseButtonEvent &b);
     };
 
 }
