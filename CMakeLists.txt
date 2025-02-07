@@ -74,14 +74,6 @@ set(SOURCE_FILES_ENGINE
         Engine/include/RGE.h
         Engine/src/RGE.cpp
 
-        Engine/libs/imgui_basic/imgui.cpp
-        Engine/libs/imgui_basic/imgui_demo.cpp
-        Engine/libs/imgui_basic/imgui_draw.cpp
-        Engine/libs/imgui_basic/imgui_tables.cpp
-        Engine/libs/imgui_basic/imgui_widgets.cpp
-        Engine/libs/imgui_basic/backends/imgui_impl_sdl2.cpp
-        Engine/libs/imgui_basic/backends/imgui_impl_sdlrenderer2.cpp
-
         Engine/libs/sol/sol.hpp
 
         Engine/src/AssetStore/AssetStore.cpp
@@ -125,8 +117,6 @@ include_directories(
         Game/src/
 
         Engine/include/
-        Engine/libs/imgui_basic/
-        Engine/libs/imgui_basic/backends/
         Engine/libs/lua/
         Engine/libs/sol/
 )

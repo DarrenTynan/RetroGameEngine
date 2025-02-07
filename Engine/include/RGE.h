@@ -16,10 +16,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
-#include <imgui.h>
-#include <imgui_impl_sdl2.h>
-#include <imgui_impl_sdlrenderer2.h>
-
 //#include "../../Engine/src/Logger/Logger.h"
 #include "../../Engine/src/ECS/include/ECS.h"
 #include "../../Engine/src/AssetStore/AssetStore.h"
@@ -49,8 +45,6 @@
 #include "../../Engine/src/Systems/RenderColliderSystem.h"
 #include "../../Engine/src/Systems/AnimationSystem.h"
 #include "../../Engine/src/Systems/CollisionSystem.h"
-//#############################################################
-#include "../../Engine/src/Systems/RenderImGuiSystem.h"
 
 #include "../../Engine/src/Systems/ProjectileEmitSystem.h"
 #include "../../Engine/src/Systems/ProjectileLifecycleSystem.h"
@@ -72,12 +66,10 @@ class RGE
 {
 public:
     static void InitialSetup();
-    static void SetupRgeSDL();
     static void SetupGameSDL();
     static void UpdateRenderer();
     static bool ProcessDebugInputEvents();
     static void UpdateSystems();
-    static void SetupImGui();
     static void LoadLevel();
     static void SetupTMX();
     static void destroy();
