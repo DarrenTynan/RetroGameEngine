@@ -5,6 +5,9 @@
 #ifndef RETROGAMEENGINE_SYSTEM_H
 #define RETROGAMEENGINE_SYSTEM_H
 
+namespace RGE_ECS
+{
+
 /**
  *  @brief The system processes entities that contain a specific signature.
  */
@@ -39,4 +42,5 @@ void System::RequireComponent()
     componentSignature.set(componentId);
 }
 
+} // end namespace
 #endif //RETROGAMEENGINE_SYSTEM_H

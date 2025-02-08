@@ -5,6 +5,9 @@
 #ifndef RETROGAMEENGINE_ENTITY_H
 #define RETROGAMEENGINE_ENTITY_H
 
+namespace RGE_ECS
+{
+
 /**
  * @brief A small class to hold data for entity.
  */
@@ -43,4 +46,5 @@ public:
 };
 
 
+} // end namespace
 #endif //RETROGAMEENGINE_ENTITY_H

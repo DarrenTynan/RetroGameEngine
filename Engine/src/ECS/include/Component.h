@@ -5,6 +5,9 @@
 #ifndef RETROGAMEENGINE_COMPONENT_H
 #define RETROGAMEENGINE_COMPONENT_H
 
+namespace RGE_ECS
+{
+
 /**
  * We use a bitset (1s and 0s) to keep track of which components an entity has,
  * and also helps keep track of which entities a system is interested in.
@@ -33,4 +36,5 @@ public:
     }
 };
 
+} // end namespace
 #endif //RETROGAMEENGINE_COMPONENT_H

@@ -6,6 +6,8 @@
 #include <string>
 #include <algorithm>
 
+using namespace RGE_ECS;
+
 int IComponent::nextId = 0;
 
 /**

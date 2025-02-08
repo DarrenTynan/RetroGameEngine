@@ -1,20 +1,22 @@
-#include "LevelLoader.h"
-#include "../Components/TransformComponent.h"
-#include "../Components/RigidBodyComponent.h"
-#include "../Components/SpriteComponent.h"
-#include "../Components/AnimationComponent.h"
-#include "../Components/BoxColliderComponent.h"
-#include "../Components/CameraFollowComponent.h"
-#include "../Components/ProjectileEmitterComponent.h"
-#include "../Components/HealthComponent.h"
-#include "../Components/TextLabelComponent.h"
-#include "../Components/ScriptComponent.h"
-#include "../Components/CameraFollowComponent.h"
+#include "include/LevelLoader.h"
+#include "../Components/include/TransformComponent.h"
+#include "../Components/include/RigidBodyComponent.h"
+#include "../Components/include/SpriteComponent.h"
+#include "../Components/include/AnimationComponent.h"
+#include "../Components/include/BoxColliderComponent.h"
+#include "../Components/include/CameraFollowComponent.h"
+#include "../Components/include/ProjectileEmitterComponent.h"
+#include "../Components/include/HealthComponent.h"
+#include "../Components/include/TextLabelComponent.h"
+#include "../Components/include/ScriptComponent.h"
+#include "../Components/include/CameraFollowComponent.h"
 
 #include "Config.h"
 
 #include <string>
 #include <sol/sol.hpp>
+
+using namespace RGE_Component;
 
 void LevelLoader::LoadConfig(sol::state& lua)
 {

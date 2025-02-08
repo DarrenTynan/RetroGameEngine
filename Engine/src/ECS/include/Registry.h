@@ -5,6 +5,9 @@
 #ifndef RETROGAMEENGINE_REGISTRY_H
 #define RETROGAMEENGINE_REGISTRY_H
 
+namespace RGE_ECS
+{
+
 /**
  * @brief The registry manages the creation and destruction of entities,
  * add systems, and components.
@@ -91,4 +94,5 @@ public:
 
 };
 
+} // end namespace
 #endif //RETROGAMEENGINE_REGISTRY_H

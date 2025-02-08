@@ -23,6 +23,9 @@
 #include "System.h"
 #include "Registry.h"
 
+namespace RGE_ECS
+{
+
 /**
  * @brief Registry templates
  *
@@ -196,4 +199,5 @@ TComponent& Entity::GetComponent() const {
 }
 
 
+} // end namespace
 #endif //RETRO_ENGINE_ECS_H

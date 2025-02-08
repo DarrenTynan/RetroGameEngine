@@ -5,6 +5,9 @@
 #ifndef RETROGAMEENGINE_POOL_H
 #define RETROGAMEENGINE_POOL_H
 
+namespace RGE_ECS
+{
+
 /**
  * @brief Interface for the Pool class.
  */
@@ -40,4 +43,5 @@ public:
     T& operator [](unsigned int index) { return data[index]; }
 };
 
+} // end namespace
 #endif //RETROGAMEENGINE_POOL_H

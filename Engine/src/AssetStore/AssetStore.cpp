@@ -1,4 +1,6 @@
-#include "./AssetStore.h"
+#include "include/AssetStore.h"
+
+using namespace RGE_AssetStore;
 
 AssetStore::AssetStore() {
 //    Logger::Log("AssetStore constructor called!");

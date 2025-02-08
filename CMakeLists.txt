@@ -3,11 +3,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(RetroGameEngine)
 
-# Make my library fie.
-#add_library(RGE STATIC
-#        Engine/src/RGE.cpp
-#)
-
 SET( LIBS_DIR       "${PROJECT_SOURCE_DIR}/Engine/libs")
 SET( LUA_DIR        "${LIBS_DIR}/lua" )
 SET( SOL2_DIR       "${LIBS_DIR}/sol" )
@@ -50,65 +45,83 @@ add_library(
         ${LUA_DIR}/lzio.c
 )
 
-
-# Editor
-#set(SOURCE_FILES_EDITOR
-#        Editor/main.cpp
-#        Editor/src/Editor.cpp
-#
-#        Editor/libs/imgui_docking/imgui.cpp
-#        Editor/libs/imgui_docking/imgui_demo.cpp
-#        Editor/libs/imgui_docking/imgui_draw.cpp
-#        Editor/libs/imgui_docking/imgui_tables.cpp
-#        Editor/libs/imgui_docking/imgui_widgets.cpp
-#        Editor/libs/imgui_docking/backends/imgui_impl_sdl2.cpp
-#        Editor/libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
-#        Editor/src/Logger/Logger.cpp
-#)
-
 # Engine
-set(SOURCE_FILES_ENGINE
+set(SOURCE_FILES
         main.cpp
 
         Engine/include/Config.h
         Engine/include/RGE.h
         Engine/src/RGE.cpp
-
         Engine/libs/sol/sol.hpp
 
+        Engine/src/AssetStore/include/AssetStore.h
         Engine/src/AssetStore/AssetStore.cpp
-        Engine/src/ECS/ECS.cpp
-        Engine/src/ECS/include/Pool.h
-        Engine/src/ECS/include/Component.h
-        Engine/src/ECS/include/Entity.h
-        Engine/src/ECS/include/System.h
-        Engine/src/ECS/include/Registry.h
-        Engine/src/LevelLoader/LevelLoader.h
-        Engine/src/LevelLoader/LevelLoader.cpp
 
-        Engine/src/FSM/include/FSM.h
-        Engine/src/FSM/FSM.cpp
+        Engine/src/Components/include/AnimationComponent.h
+        Engine/src/Components/include/BoxColliderComponent.h
+        Engine/src/Components/include/CameraFollowComponent.h
+        Engine/src/Components/include/HealthComponent.h
+        Engine/src/Components/include/ProjectileComponent.h
+        Engine/src/Components/include/ProjectileEmitterComponent.h
+        Engine/src/Components/include/RaycastComponent.h
+        Engine/src/Components/include/RigidBodyComponent.h
+        Engine/src/Components/include/ScriptComponent.h
+        Engine/src/Components/include/SpriteComponent.h
+        Engine/src/Components/include/TextLabelComponent.h
+        Engine/src/Components/include/TransformComponent.h
+
+        Engine/src/ECS/include/Component.h
+        Engine/src/ECS/include/ECS.h
+        Engine/src/ECS/include/Entity.h
+        Engine/src/ECS/include/Pool.h
+        Engine/src/ECS/include/Registry.h
+        Engine/src/ECS/include/System.h
+        Engine/src/ECS/ECS.cpp
+
+        Engine/src/EventBus/include/Event.h
+        Engine/src/EventBus/include/EventBus.h
+
+        Engine/src/Events/include/CollisionEvent.h
+        Engine/src/Events/include/KeyPressedEvent.h
+        Engine/src/Events/include/KeyReleasedEvent.h
+
         Engine/src/FSM/include/BaseState.h
+        Engine/src/FSM/include/FSM.h
         Engine/src/FSM/include/States.h
+        Engine/src/FSM/FSM.cpp
         Engine/src/FSM/StateTransitions.cpp
 
+        Engine/src/LevelLoader/include/LevelLoader.h
+        Engine/src/LevelLoader/LevelLoader.cpp
+
+        Engine/src/Systems/include/AnimationSystem.h
+        Engine/src/Systems/include/CameraMovementSystem.h
+        Engine/src/Systems/include/CollisionSystem.h
+        Engine/src/Systems/include/DamageSystem.h
+        Engine/src/Systems/include/MovementSystem.h
+        Engine/src/Systems/include/PlayerControllerSystem.h
+        Engine/src/Systems/include/PlayerMovementSystem.h
+        Engine/src/Systems/include/ProjectileEmitSystem.h
+        Engine/src/Systems/include/ProjectileLifecycleSystem.h
+        Engine/src/Systems/include/RenderColliderSystem.h
+        Engine/src/Systems/include/RenderHealthBarSystem.h
+        Engine/src/Systems/include/RenderRaycastSystem.h
+        Engine/src/Systems/include/RenderRaycastSystem.h
+        Engine/src/Systems/include/RenderSystem.h
+        Engine/src/Systems/include/RenderTextSystem.h
+
         Game/src/Game.cpp
-
 )
-
-add_subdirectory(Editor)
 
 link_directories( /usr/local/lib )
 
-# Add executable target with source files listed in SOURCE_FILES variable
-#add_executable( ${PROJECT_NAME} ${SOURCE_FILES_EDITOR} ${SOURCE_FILES_ENGINE} )
-add_executable( ${PROJECT_NAME} ${SOURCE_FILES_ENGINE} )
+# To build a library use add_library() instead of add_executable()
+# Make my library fie.
+#add_library( RGE STATIC ${SOURCE_FILES} )
 
-#include_directories(
-#        Editor/include/
-#        Editor/libs/imgui_docking/
-#        Editor/libs/imgui_docking/backends
-#)
+# Add executable target with source files listed in SOURCE_FILES variable
+#add_executable( ${PROJECT_NAME} ${SOURCE_FILES_EDITOR} ${SOURCE_FILES} )
+add_executable( ${PROJECT_NAME} ${SOURCE_FILES} )
 
 include_directories(
         Game/assets/
