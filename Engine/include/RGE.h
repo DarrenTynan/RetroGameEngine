@@ -15,8 +15,6 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-
-//#include "../../Engine/src/Logger/Logger.h"
 #include "../../Engine/src/ECS/include/ECS.h"
 #include "../src/AssetStore/include/AssetStore.h"
 #include "../src/EventBus/include/EventBus.h"
@@ -34,11 +32,11 @@
 #include "../src/Components/include/ProjectileEmitterComponent.h"
 #include "../src/Components/include/HealthComponent.h"
 #include "../src/Components/include/RaycastComponent.h"
-#include "../src/Systems/include/PlayerControllerSystem.h"
+#include "../src/Systems/include/KeyPressedReleasedSystem.h"
 #include "../src/Components/include/CameraFollowComponent.h"
                 
 #include "../src/Systems/include/CameraMovementSystem.h"
-#include "../src/Systems/include/PlayerMovementSystem.h"
+#include "../src/Systems/include/PlayerControllerSystem.h"
 #include "../src/Systems/include/MovementSystem.h"
 #include "../src/Systems/include/RenderSystem.h"
 #include "../src/Systems/include/RenderTextSystem.h"

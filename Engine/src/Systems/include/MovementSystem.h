@@ -40,9 +40,9 @@ public:
             auto& transform = entity.GetComponent<TransformComponent>();
             auto rigidBody = entity.GetComponent<RigidBodyComponent>();
 
-            // Apply the velocity
-            transform.position.x += (rigidBody.velocity.x * deltaTime);
-            transform.position.y += (rigidBody.velocity.y * deltaTime);
+            // Apply the velocityDelta
+            transform.position.x += (rigidBody.velocityDelta.x * deltaTime);
+            transform.position.y += (rigidBody.velocityDelta.y * deltaTime);
 
         }
     }

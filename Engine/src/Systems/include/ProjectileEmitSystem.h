@@ -47,10 +47,10 @@ class ProjectileEmitSystem: public System {
                         glm::vec2 projectileVelocity = projectileEmitter.projectileVelocity;
                         int directionX = 0;
                         int directionY = 0;
-                        if (rigidbody.velocity.x > 0) directionX = +1;
-                        if (rigidbody.velocity.x < 0) directionX = -1;
-                        if (rigidbody.velocity.y > 0) directionY = +1;
-                        if (rigidbody.velocity.y < 0) directionY = -1;
+                        if (rigidbody.velocityDelta.x > 0) directionX = +1;
+                        if (rigidbody.velocityDelta.x < 0) directionX = -1;
+                        if (rigidbody.velocityDelta.y > 0) directionY = +1;
+                        if (rigidbody.velocityDelta.y < 0) directionY = -1;
                         projectileVelocity.x = projectileEmitter.projectileVelocity.x * directionX;
                         projectileVelocity.y = projectileEmitter.projectileVelocity.y * directionY;
                     

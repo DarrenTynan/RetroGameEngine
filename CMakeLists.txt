@@ -99,8 +99,8 @@ set(SOURCE_FILES
         Engine/src/Systems/include/CollisionSystem.h
         Engine/src/Systems/include/DamageSystem.h
         Engine/src/Systems/include/MovementSystem.h
+        Engine/src/Systems/include/KeyPressedReleasedSystem.h
         Engine/src/Systems/include/PlayerControllerSystem.h
-        Engine/src/Systems/include/PlayerMovementSystem.h
         Engine/src/Systems/include/ProjectileEmitSystem.h
         Engine/src/Systems/include/ProjectileLifecycleSystem.h
         Engine/src/Systems/include/RenderColliderSystem.h

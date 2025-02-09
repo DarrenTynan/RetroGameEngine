@@ -196,8 +196,8 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
             {
                 newEntity.AddComponent<RigidBodyComponent>(
                         glm::vec2(
-                                entity["components"]["rigidbody"]["velocity"]["x"].get_or(0.0),
-                                entity["components"]["rigidbody"]["velocity"]["y"].get_or(0.0)
+                                entity["components"]["rigidbody"]["velocityDelta"]["x"].get_or(0.0),
+                                entity["components"]["rigidbody"]["velocityDelta"]["y"].get_or(0.0)
                         )
                 );
             }

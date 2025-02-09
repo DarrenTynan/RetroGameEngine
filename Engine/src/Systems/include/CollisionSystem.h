@@ -83,7 +83,7 @@ public:
                             aRB.fsm->isGrounded = true;
 
                             aRB.fsm->direction.y = 0.0;
-                            aRB.velocity.y = 0.0f;
+                            aRB.velocityDelta.y = 0.0f;
                         }
 
                         // Up
@@ -93,7 +93,7 @@ public:
                             aTransform.position.y = (bb.y + bb.h) + 1.0;
 
                             aRB.fsm->direction.y = 0.0;
-                            aRB.velocity.y = 0.0f;
+                            aRB.velocityDelta.y = 0.0f;
                         }
 
                         // Right
@@ -102,7 +102,7 @@ public:
                             aTransform.position.x = (bb.x - aa.w) - 1;
 
                             aRB.fsm->direction.y = 0.0;
-                            aRB.velocity.y = 0.0f;
+                            aRB.velocityDelta.y = 0.0f;
                         }
 
                         // Left
@@ -111,7 +111,7 @@ public:
                             aTransform.position.x = bb.w + 1;
 
                             aRB.fsm->direction.y = 0.0;
-                            aRB.velocity.y = 0.0f;
+                            aRB.velocityDelta.y = 0.0f;
                         }
                     }
 

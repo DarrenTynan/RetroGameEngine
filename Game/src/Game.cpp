@@ -3,7 +3,6 @@
 //
 
 #include "../include/Game.h"
-//#include "../../Engine/src/Logger/Logger.h"
 #include "RGE.h"
 
 Game::Game() {}

@@ -32,11 +32,11 @@ std::tuple<double, double> GetEntityVelocity(Entity entity)
     if (entity.HasComponent<RigidBodyComponent>())
     {
         const auto rigidbody = entity.GetComponent<RigidBodyComponent>();
-        return std::make_tuple(rigidbody.velocity.x, rigidbody.velocity.y);
+        return std::make_tuple(rigidbody.velocityDelta.x, rigidbody.velocityDelta.y);
     }
     else
     {
-//        Logger::Error("Trying to get the velocity of an entity that has no rigidbody component");
+//        Logger::Error("Trying to get the velocityDelta of an entity that has no rigidbody component");
         return std::make_tuple(0.0, 0.0);
     }
 }
@@ -60,12 +60,12 @@ void SetEntityVelocity(Entity entity, double x, double y)
     if (entity.HasComponent<RigidBodyComponent>())
     {
         auto& rigidbody = entity.GetComponent<RigidBodyComponent>();
-        rigidbody.velocity.x = x;
-        rigidbody.velocity.y = y;
+        rigidbody.velocityDelta.x = x;
+        rigidbody.velocityDelta.y = y;
     }
     else
     {
-//        Logger::Error("Trying to set the velocity of an entity that has no rigidbody component");
+//        Logger::Error("Trying to set the velocityDelta of an entity that has no rigidbody component");
     }
 }
 
@@ -103,7 +103,7 @@ void SetProjectileVelocity(Entity entity, double x, double y)
     }
     else
     {
-//        Logger::Error("Trying to set the projectile velocity of an entity that has no projectile emitter component");
+//        Logger::Error("Trying to set the projectile velocityDelta of an entity that has no projectile emitter component");
     }
 }
 

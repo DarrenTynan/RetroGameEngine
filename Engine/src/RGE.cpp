@@ -18,7 +18,7 @@ SDL_Window* gameWindow;
 SDL_Rect gameCamera;
 SDL_Renderer* gameRenderer;
 
-std::unique_ptr<Registry> registry  = std::make_unique<Registry>();
+std::unique_ptr<Registry> registry = std::make_unique<Registry>();
 std::unique_ptr<AssetStore> assetStore = std::make_unique<AssetStore>();
 std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
 
@@ -48,9 +48,9 @@ sol::state lua;
 void RGE::InitialSetup()
 {
     // Add the systems that need to be processed in our game
-//    registry->AddSystem<PlayerControllerSystem>();        // Read keys and control player movements.
+    registry->AddSystem<KeyPressedReleasedSystem>();      // Read keys and control player movements.
     registry->AddSystem<MovementSystem>();                // Move all entities
-    registry->AddSystem<PlayerMovementSystem>();          // Move the player & apply forces
+    registry->AddSystem<PlayerControllerSystem>();        // Move the player & apply forces
     registry->AddSystem<AnimationSystem>();               // Animate all entities
     registry->AddSystem<CollisionSystem>();               // Check all entity collisions AABB
     registry->AddSystem<DamageSystem>();                  // Check all damage systems
@@ -76,14 +76,12 @@ void RGE::InitialSetup()
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         std::cout << "SDL could not be initialised\n" << SDL_GetError();
-//        Logger::Error2Arg("SDL could not be initialised ", SDL_GetError());
         exit(1);
     }
 
     // Setup true type fonts
     if (TTF_Init() != 0)
     {
-//        Logger::Error("Error initializing SDL TTF");
         exit(1);
     }
 
@@ -91,8 +89,6 @@ void RGE::InitialSetup()
     #ifdef SDL_HINT_IME_SHOW_UI
         SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
     #endif
-
-//    Logger::Log("SDL is ready to go!");
 
 }
 
@@ -300,11 +296,12 @@ void RGE::SetupTMX()
 bool RGE::ProcessDebugInputEvents()
 {
     bool isQuit = true;
-    Entity player = registry->GetEntityByTag("player");
 
+    Entity player = registry->GetEntityByTag("player");
     auto &sprite = player.GetComponent<SpriteComponent>();
-    auto &rb = player.GetComponent<RigidBodyComponent>();
-    auto fsm= rb.fsm;
+    auto &rigidBody = player.GetComponent<RigidBodyComponent>();
+    auto &transform = player.GetComponent<TransformComponent>();
+    auto fsm= rigidBody.fsm;
 
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
@@ -314,152 +311,17 @@ bool RGE::ProcessDebugInputEvents()
             eventBus->EmitEvent<KeyReleasedEvent>(sdlEvent.key.keysym.sym);
         }
 
+        if (sdlEvent.type == SDL_KEYDOWN)
+        {
+            eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
+        }
+
         // Core sdl events.
         switch (sdlEvent.type)
         {
             // Window close
             case SDL_QUIT:
                 isQuit = false;
-                break;
-
-            case SDL_KEYUP:
-                if (sdlEvent.key.keysym.sym == SDLK_UP)
-                {
-                    std::cout << "UP OFF" << std::endl;
-                    fsm->toggle();
-                    fsm->direction.y = 0.0;
-
-                    rb.velocity.y -= (rb.speed + rb.acceleration);
-                    if (rb.velocity.y <= 0.0f)
-                    {
-                        rb.velocity.y = 0.0f;
-                    }
-                }
-
-                if (sdlEvent.key.keysym.sym == SDLK_DOWN)
-                {
-                    std::cout << "DOWN OFF" << std::endl;
-                    fsm->toggle();
-                    fsm->direction.y = 0.0;
-
-                    if (!rb.fsm->isGrounded)
-                    {
-                        rb.velocity.y -= (rb.speed + rb.acceleration);
-                        if (rb.velocity.y >= 0.0f)
-                        {
-                            rb.velocity.y = 0.0f;
-                        }
-                    }
-                }
-
-                if (sdlEvent.key.keysym.sym == SDLK_LEFT)
-                {
-                    std::cout << "LEFT OFF" << std::endl;
-                    fsm->toggle();
-                    fsm->direction.x = 0.0;
-
-                    rb.velocity.x -= (rb.speed + rb.acceleration);
-                    if (rb.velocity.x <= 0.0f)
-                    {
-                        rb.velocity.x = 0.0f;
-                    }
-                }
-
-                if (sdlEvent.key.keysym.sym == SDLK_RIGHT)
-                {
-                    std::cout << "RIGHT  OFF" << std::endl;
-                    fsm->toggle();
-                    fsm->direction.x = 0.0;
-
-                    rb.velocity.x -= (rb.speed + rb.acceleration);
-                    if (rb.velocity.x >= 0.0f)
-                    {
-                        rb.velocity.x = 0.0f;
-                    }
-                }
-
-            case SDL_KEYDOWN:
-                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isQuit = false; }
-                if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
-                if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
-
-
-                if (sdlEvent.key.keysym.sym == SDLK_UP)
-                {
-                    std::cout << "UP" << std::endl;
-                    fsm->toggle();
-                    fsm->direction.y = -1.0;
-                    fsm->isGrounded = false;
-
-                    // Add acceleration force on the x axis.
-                    rb.velocity.y -= (rb.speed + rb.acceleration);
-                    if (rb.velocity.y < -(rb.speed + rb.maxAcceleration)) {
-                        rb.velocity.y = -(rb.speed + rb.maxAcceleration);
-                    }
-                }
-
-                if (sdlEvent.key.keysym.sym == SDLK_DOWN)
-                {
-                    std::cout << "DOWN" << std::endl;
-                    fsm->toggle();
-                    fsm->direction.y = 1.0;
-
-                    // Add acceleration force on the x axis.
-                    rb.velocity.y += (rb.speed + rb.acceleration);
-                    if (rb.velocity.y > (rb.speed + rb.maxAcceleration))
-                    {
-                        rb.velocity.y = (rb.speed + rb.maxAcceleration);
-                    }
-                }
-
-                if (sdlEvent.key.keysym.sym == SDLK_LEFT)
-                {
-                    std::cout << "LEFT" << std::endl;
-                    sprite.flipH = true;
-                    fsm->toggle();
-                    fsm->direction.x = -1.0;
-
-                    // Add acceleration force on the x axis.
-                    rb.velocity.x -= (rb.speed + rb.acceleration);
-                    if (rb.velocity.x < -(rb.speed + rb.maxAcceleration)) {
-                        rb.velocity.x = -(rb.speed + rb.maxAcceleration);
-                    }
-                }
-
-                if (sdlEvent.key.keysym.sym == SDLK_RIGHT)
-                {
-                    std::cout << "RIGHT" << std::endl;
-                        sprite.flipH = false;
-                        fsm->toggle();
-                        fsm->direction.x = 1.0;
-
-                        // Add acceleration force on the x-axis.
-                        rb.velocity.x += (rb.speed + rb.acceleration);
-                        if (rb.velocity.x > (rb.speed + rb.maxAcceleration)) {
-                            rb.velocity.x = (rb.speed + rb.maxAcceleration);
-                        }
-                }
-
-                if (sdlEvent.key.keysym.sym == SDLK_SPACE)
-                {
-                    if (fsm->isGrounded)
-                    {
-                        rb.velocity.y += rb.jumpForce * 2;
-                        rb.jumpCounter = rb.jumpFrames;
-                        rb.fsm->isGrounded = false;
-                    }
-                    else if (rb.velocity.y > rb.jumpHeight)
-                    {
-                        rb.velocity.y = 0.0;
-                        fsm->direction.y = 1.0;
-                    }
-
-                    fsm->toggle();
-                    fsm->direction.y = -1.0;
-
-                }
-
-                eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
                 break;
 
             // Check for window event
@@ -472,6 +334,98 @@ bool RGE::ProcessDebugInputEvents()
                         break;
                 }
                 break;
+
+            case SDL_KEYDOWN:
+                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isQuit = false; }
+                if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
+                if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
+
+                // Up
+//                if (sdlEvent.key.keysym.sym == SDLK_UP)
+//                {
+//                    fsm->toggle();
+//                    fsm->direction.y = -1.0;
+//                    fsm->isGrounded = false;
+//
+//                    // Add acceleration force on the x axis.
+//                    rb.velocityDelta.y -= rb.acceleration;
+//                }
+//
+//                // Down
+//                if (sdlEvent.key.keysym.sym == SDLK_DOWN)
+//                {
+//                    fsm->toggle();
+//                    fsm->direction.y = 1.0;
+//
+//                    // Add acceleration force on the x axis.
+//                    rb.velocityDelta.y += rb.acceleration;
+//                }
+//
+//                // Left
+//                if (sdlEvent.key.keysym.sym == SDLK_LEFT)
+//                {
+//                    sprite.flipH = true;
+//                    fsm->toggle();
+//                    fsm->direction.x = -1.0;
+//
+//                    // Add acceleration force on the x axis.
+//                    rb.velocityDelta.x -= rb.acceleration;
+//                    trs.position.x += rb.velocityDelta.x;
+//                }
+//
+//                // Right
+//                if (sdlEvent.key.keysym.sym == SDLK_RIGHT)
+//                {
+//                    sprite.flipH = false;
+//                    fsm->toggle();
+//                    fsm->direction.x = 1.0;
+//
+//                    // Add acceleration force on the x-axis.
+//                    rb.velocityDelta.x += rb.acceleration;
+//                    trs.position.x += rb.velocityDelta.x;
+//                }
+//
+//                if (sdlEvent.key.keysym.sym == SDLK_SPACE)
+//                {
+//                    if (fsm->isGrounded)
+//                    {
+//                        rb.velocityDelta.y += rb.jumpForce * 2;
+//                        rb.fsm->isGrounded = false;
+//                    }
+//
+//                    fsm->toggle();
+//                    fsm->direction.y = -1.0;
+//                }
+
+//                // Up
+//                if (sdlEvent.key.keysym.sym == SDLK_UP)
+//                {
+//                    std::cout << "UP" << std::endl;
+//                    rigidBody.velocityDelta.y -= rigidBody.acceleration;
+//                }
+//
+//                // Down
+//                if (sdlEvent.key.keysym.sym == SDLK_DOWN)
+//                {
+//                    std::cout << "DOWN" << std::endl;
+//                    rigidBody.velocityDelta.y += rigidBody.acceleration;
+//                }
+//
+//                // Left
+//                if (sdlEvent.key.keysym.sym == SDLK_LEFT)
+//                {
+//                    std::cout << "LEFT" << std::endl;
+//                    rigidBody.velocityDelta.x -= rigidBody.acceleration;
+//                }
+//
+//                // Right
+//                if (sdlEvent.key.keysym.sym == SDLK_RIGHT)
+//                {
+//                    std::cout << "RIGHT" << std::endl;
+//                    rigidBody.velocityDelta.x += rigidBody.acceleration;
+//                }
+//
+//            break;
         }
     };
     return isQuit;
@@ -494,14 +448,15 @@ void RGE::UpdateSystems()
 
     // Perform the subscription of the events for all systems
     registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
-//    registry->GetSystem<PlayerControllerSystem>().SubscribeToEvents(eventBus);
+
+    registry->GetSystem<KeyPressedReleasedSystem>().SubscribeToEvents(eventBus);
     registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
 
     // UpdateSystems the registry to process the entities that are waiting to be created/deleted
     registry->Update();
 
-    registry->GetSystem<MovementSystem>().Update(deltaTime);                            // apply velocity and check out of bounds.
-    registry->GetSystem<PlayerMovementSystem>().Update(registry, deltaTime);        // apply velocity and check out of bounds.
+    registry->GetSystem<MovementSystem>().Update(deltaTime);                            // apply velocityDelta and check out of bounds.
+    registry->GetSystem<PlayerControllerSystem>().Update(registry, deltaTime);        // apply velocityDelta and check out of bounds.
     registry->GetSystem<AnimationSystem>().Update();
     registry->GetSystem<CollisionSystem>().Update(eventBus);
 
