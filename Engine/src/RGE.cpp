@@ -18,7 +18,7 @@ SDL_Window* gameWindow;
 SDL_Rect gameCamera;
 SDL_Renderer* gameRenderer;
 
-std::unique_ptr<Registry> registry = std::make_unique<Registry>();
+std::shared_ptr<Registry> registry = std::make_shared<Registry>();
 std::unique_ptr<AssetStore> assetStore = std::make_unique<AssetStore>();
 std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
 
@@ -48,7 +48,7 @@ sol::state lua;
 void RGE::InitialSetup()
 {
     // Add the systems that need to be processed in our game
-    registry->AddSystem<KeyPressedReleasedSystem>();      // Read keys and control player movements.
+    registry->AddSystem<InputControlSystem>();      // Read keys and control player movements.
     registry->AddSystem<MovementSystem>();                // Move all entities
     registry->AddSystem<PlayerControllerSystem>();        // Move the player & apply forces
     registry->AddSystem<AnimationSystem>();               // Animate all entities
@@ -297,12 +297,6 @@ bool RGE::ProcessDebugInputEvents()
 {
     bool isQuit = true;
 
-    Entity player = registry->GetEntityByTag("player");
-    auto &sprite = player.GetComponent<SpriteComponent>();
-    auto &rigidBody = player.GetComponent<RigidBodyComponent>();
-    auto &transform = player.GetComponent<TransformComponent>();
-    auto fsm= rigidBody.fsm;
-
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
     {
@@ -341,91 +335,34 @@ bool RGE::ProcessDebugInputEvents()
                 if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
 
                 // Up
-//                if (sdlEvent.key.keysym.sym == SDLK_UP)
-//                {
-//                    fsm->toggle();
-//                    fsm->direction.y = -1.0;
-//                    fsm->isGrounded = false;
-//
-//                    // Add acceleration force on the x axis.
-//                    rb.velocityDelta.y -= rb.acceleration;
-//                }
-//
-//                // Down
-//                if (sdlEvent.key.keysym.sym == SDLK_DOWN)
-//                {
-//                    fsm->toggle();
-//                    fsm->direction.y = 1.0;
-//
-//                    // Add acceleration force on the x axis.
-//                    rb.velocityDelta.y += rb.acceleration;
-//                }
-//
-//                // Left
-//                if (sdlEvent.key.keysym.sym == SDLK_LEFT)
-//                {
-//                    sprite.flipH = true;
-//                    fsm->toggle();
-//                    fsm->direction.x = -1.0;
-//
-//                    // Add acceleration force on the x axis.
-//                    rb.velocityDelta.x -= rb.acceleration;
-//                    trs.position.x += rb.velocityDelta.x;
-//                }
-//
-//                // Right
-//                if (sdlEvent.key.keysym.sym == SDLK_RIGHT)
-//                {
-//                    sprite.flipH = false;
-//                    fsm->toggle();
-//                    fsm->direction.x = 1.0;
-//
-//                    // Add acceleration force on the x-axis.
-//                    rb.velocityDelta.x += rb.acceleration;
-//                    trs.position.x += rb.velocityDelta.x;
-//                }
-//
-//                if (sdlEvent.key.keysym.sym == SDLK_SPACE)
-//                {
-//                    if (fsm->isGrounded)
-//                    {
-//                        rb.velocityDelta.y += rb.jumpForce * 2;
-//                        rb.fsm->isGrounded = false;
-//                    }
-//
-//                    fsm->toggle();
-//                    fsm->direction.y = -1.0;
-//                }
+                if (sdlEvent.key.keysym.sym == SDLK_UP)
+                {
+                    eventBus->EmitEvent<WalkUpEvent>(sdlEvent.key.keysym.sym);
+                }
 
-//                // Up
-//                if (sdlEvent.key.keysym.sym == SDLK_UP)
-//                {
-//                    std::cout << "UP" << std::endl;
-//                    rigidBody.velocityDelta.y -= rigidBody.acceleration;
-//                }
-//
-//                // Down
-//                if (sdlEvent.key.keysym.sym == SDLK_DOWN)
-//                {
-//                    std::cout << "DOWN" << std::endl;
-//                    rigidBody.velocityDelta.y += rigidBody.acceleration;
-//                }
-//
-//                // Left
-//                if (sdlEvent.key.keysym.sym == SDLK_LEFT)
-//                {
-//                    std::cout << "LEFT" << std::endl;
-//                    rigidBody.velocityDelta.x -= rigidBody.acceleration;
-//                }
-//
-//                // Right
-//                if (sdlEvent.key.keysym.sym == SDLK_RIGHT)
-//                {
-//                    std::cout << "RIGHT" << std::endl;
-//                    rigidBody.velocityDelta.x += rigidBody.acceleration;
-//                }
-//
-//            break;
+                // Down
+                if (sdlEvent.key.keysym.sym == SDLK_DOWN)
+                {
+                    eventBus->EmitEvent<WalkDownEvent>(sdlEvent.key.keysym.sym);
+                }
+
+                // Left
+                if (sdlEvent.key.keysym.sym == SDLK_LEFT)
+                {
+                    eventBus->EmitEvent<WalkLeftEvent>(sdlEvent.key.keysym.sym);
+                }
+
+                // Right
+                if (sdlEvent.key.keysym.sym == SDLK_RIGHT)
+                {
+                    eventBus->EmitEvent<WalkRightEvent>(sdlEvent.key.keysym.sym);
+                }
+
+                if (sdlEvent.key.keysym.sym == SDLK_SPACE)
+                {
+                    eventBus->EmitEvent<JumpEvent>(sdlEvent.key.keysym.sym);
+                }
+
         }
     };
     return isQuit;
@@ -449,8 +386,7 @@ void RGE::UpdateSystems()
     // Perform the subscription of the events for all systems
     registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
 
-    auto player = registry->GetEntityByTag("player");
-    registry->GetSystem<KeyPressedReleasedSystem>().SubscribeToEvents(eventBus, player);
+    registry->GetSystem<InputControlSystem>().SubscribeToEvents(eventBus, registry);
     registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
 
     // UpdateSystems the registry to process the entities that are waiting to be created/deleted

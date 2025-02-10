@@ -54,7 +54,7 @@ void LevelLoader::LoadConfig(sol::state& lua)
  * @param renderer      Pointer
  * @param levelNumber   int
  */
-void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& registry, const std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer, int levelNumber)
+void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& registry, const std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer, int levelNumber)
 {
     // This checks the syntax of our script, but it does not execute the script
     sol::load_result script = lua.load_file("../Game/scripts/Level" + std::to_string(levelNumber) + ".lua");

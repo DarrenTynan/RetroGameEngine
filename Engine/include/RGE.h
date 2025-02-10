@@ -32,7 +32,7 @@
 #include "../src/Components/include/ProjectileEmitterComponent.h"
 #include "../src/Components/include/HealthComponent.h"
 #include "../src/Components/include/RaycastComponent.h"
-#include "../src/Systems/include/KeyPressedReleasedSystem.h"
+#include "../src/Systems/include/InputControlSystem.h"
 #include "../src/Components/include/CameraFollowComponent.h"
                 
 #include "../src/Systems/include/CameraMovementSystem.h"
