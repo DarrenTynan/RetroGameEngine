@@ -449,7 +449,8 @@ void RGE::UpdateSystems()
     // Perform the subscription of the events for all systems
     registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
 
-    registry->GetSystem<KeyPressedReleasedSystem>().SubscribeToEvents(eventBus);
+    auto player = registry->GetEntityByTag("player");
+    registry->GetSystem<KeyPressedReleasedSystem>().SubscribeToEvents(eventBus, player);
     registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
 
     // UpdateSystems the registry to process the entities that are waiting to be created/deleted

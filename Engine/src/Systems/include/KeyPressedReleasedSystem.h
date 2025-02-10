@@ -22,6 +22,13 @@ namespace RGE_System
 /**
  * @brief Detects key presses and changes the velocityDelta.
  */
+//    class B
+//    {
+//        A& a;
+//        B( A& a_ )
+//                : a( a_ )
+//        {}
+//    };
 class KeyPressedReleasedSystem : public System
 {
     public:
@@ -32,7 +39,7 @@ class KeyPressedReleasedSystem : public System
         }
 
         // Subscribe to key pressed and key release event.
-        void SubscribeToEvents( std::unique_ptr<EventBus>& eventBus )
+        void SubscribeToEvents( std::unique_ptr<EventBus>& eventBus, Entity _player )
         {
             eventBus->SubscribeToEvent<KeyPressedEvent>(this, &KeyPressedReleasedSystem::OnKeyPressed);
             eventBus->SubscribeToEvent<KeyReleasedEvent>(this, &KeyPressedReleasedSystem::OnKeyReleased);
@@ -41,6 +48,9 @@ class KeyPressedReleasedSystem : public System
         // Key pressed actions.
         void OnKeyPressed(KeyPressedEvent& event)
         {
+//            auto px = player.GetComponent<TransformComponent>().position.x;
+//            std::cout << px << std::endl;
+
             std::cout << "Key pressed event: " << SDL_GetKeyName(event.symbol) << std::endl;
         }
 
