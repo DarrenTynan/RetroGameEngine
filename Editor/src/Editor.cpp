@@ -294,7 +294,7 @@ namespace EDITOR
         auto windowFlags = (SDL_WindowFlags)(
                 SDL_WINDOW_RESIZABLE | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_ALLOW_HIGHDPI);
         editorWindow = SDL_CreateWindow(
-                "Retro Game Engine v1",
+                "Retro Game_Engine Engine v1",
                 0,
                 0,
                 displayMode.w,
@@ -507,7 +507,7 @@ namespace EDITOR
 
 
     /**
-     * @brief Game Loop
+     * @brief Game_Engine Loop
      */
     void Editor::Run()
     {

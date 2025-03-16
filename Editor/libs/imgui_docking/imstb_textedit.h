@@ -9,7 +9,7 @@
 // - Also renamed macros used or defined outside of IMSTB_TEXTEDIT_IMPLEMENTATION block from STB_TEXTEDIT_* to IMSTB_TEXTEDIT_*
 
 // stb_textedit.h - v1.14  - public domain - Sean Barrett
-// Development of this library was sponsored by RAD Game Tools
+// Development of this library was sponsored by RAD Game_Engine Tools
 //
 // This C header file implements the guts of a multi-line text-editing
 // widget; you implement display, word-wrapping, and low-level string

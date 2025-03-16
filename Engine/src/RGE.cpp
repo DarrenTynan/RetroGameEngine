@@ -68,7 +68,7 @@ std::shared_ptr<Registry> registry = std::make_shared<Registry>();
 std::unique_ptr<AssetStore> assetStore = std::make_unique<AssetStore>();
 std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
 
-std::string gameWindowTitle = "Default Game Title";
+std::string gameWindowTitle = "Default Game_Engine Title";
 const int gameWindowWidth = 800;
 const int gameWindowHeight = 600;
 
@@ -151,7 +151,7 @@ void RGE::SetupGameSDL()
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
     gameWindow = SDL_CreateWindow(
-            "Game",
+            "Game_Engine",
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
             gameWindowWidth,
@@ -255,7 +255,7 @@ void RGE::UpdateRenderer()
 void RGE::SetupTMX()
 {
     tmx::Map map;
-    const auto MAP_PATH = "../Game/assets/tilemaps/TestLevel/TestLevel.tmx";
+    const auto MAP_PATH = "../Game_Engine/assets/tilemaps/TestLevel/TestLevel.tmx";
     std::string mapImagePath;
     int mapWidth;
     int mapHeight;

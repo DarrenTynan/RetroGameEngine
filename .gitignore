@@ -5,9 +5,9 @@
 /assets/**
 /Engine/libs/**
 /Editor/libs/**
-/Game/libs/**
-/Game/assets/**
-/Game/scripts/**
+/Game_Engine/libs/**
+/Game_Engine/assets/**
+/Game_Engine/scripts/**
 /Editor/cmake-build-debug/**
 
 # Project specific
@@ -81,5 +81,5 @@ Editor/src/Logger
 Engine/cmake-build-debug
 RGE.h
 liblua.a
-Game_Test/lib
-Game_Test/cmake-build-debug
+Game_Library_Test/lib
+Game_Library_Test/cmake-build-debug

@@ -44,7 +44,7 @@ add_library(
         ${LUA_DIR}/lutf8lib.c
         ${LUA_DIR}/lvm.c
         ${LUA_DIR}/lzio.c
-        ../Game_Test/main.cpp
+        ../Game_Library_Test/main.cpp
 )
 
 add_library(RGE STATIC

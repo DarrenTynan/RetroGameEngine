@@ -18,7 +18,7 @@ EDITOR::ProjectMenuDisplay::ProjectMenuDisplay()
 
 void EDITOR::ProjectMenuDisplay::Render()
 {
-    if ( ImGui::Begin( "Retro Game Engine" ) )
+    if ( ImGui::Begin( "Retro Game_Engine Engine" ) )
     {
         if ( ImGui::Button( "Create" ) )
         {

@@ -22,7 +22,7 @@ using namespace RGE_Component;
 void LevelLoader::LoadConfig(sol::state& lua)
 {
     // This checks the syntax of our script, but it does not execute the script
-    sol::load_result script = lua.load_file("../Game/scripts/Config.lua");
+    sol::load_result script = lua.load_file("../Game_Engine/scripts/Config.lua");
     if (!script.valid())
     {
         sol::error error = script;
@@ -32,7 +32,7 @@ void LevelLoader::LoadConfig(sol::state& lua)
     }
 
     // Executes the script using the Sol state
-    lua.script_file("../Game/scripts/Config.lua");
+    lua.script_file("../Game_Engine/scripts/Config.lua");
 
     // Read the big table for the current level
     sol::table config = lua["Config"];
@@ -58,7 +58,7 @@ void LevelLoader::LoadConfig(sol::state& lua)
 void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& registry, const std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer, int levelNumber)
 {
     // This checks the syntax of our script, but it does not execute the script
-    sol::load_result script = lua.load_file("../Game/scripts/Level" + std::to_string(levelNumber) + ".lua");
+    sol::load_result script = lua.load_file("../Game_Engine/scripts/Level" + std::to_string(levelNumber) + ".lua");
     if (!script.valid())
     {
         sol::error error = script;
@@ -68,7 +68,7 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
     }
 
     // Executes the script using the Sol state
-    lua.script_file("../Game/scripts/Level" + std::to_string(levelNumber) + ".lua");
+    lua.script_file("../Game_Engine/scripts/Level" + std::to_string(levelNumber) + ".lua");
 
     // Read the big table for the current level
     sol::table level = lua["Level"];
