@@ -77,3 +77,9 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+Editor/src/Logger
+Engine/cmake-build-debug
+RGE.h
+liblua.a
+Game_Test/lib
+Game_Test/cmake-build-debug
