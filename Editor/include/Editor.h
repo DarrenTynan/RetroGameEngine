@@ -17,6 +17,7 @@
 #include <imgui_impl_sdlrenderer2.h>
 
 #include "../src/Logger/include/TerminalLogger.h"
+//#include "../src/Logger/include/Logger.h" // NOT working yet
 
 #include "../src/Displays/TestDisplayA.h"
 #include "../src/Displays/TestDisplayB.h"
@@ -27,9 +28,8 @@
 #include "../src/Displays/FileDisplay.h"
 //#include "../src/Displays/ProjectMenuDisplay.h"
 
-#include "../FileSystem/include/FileHandler.h"
+//#include "../FileSystem/include/FileHandler.h"
 
-#include "../src/Logger/include/Logger.h"
 
 namespace EDITOR
 {

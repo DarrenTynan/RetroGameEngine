@@ -6,34 +6,34 @@
 
 EDITOR::FileDisplay::FileDisplay()
 {
-    nodes = EDITOR_FILEDIALOG::FileDialogs::GetInstance()->GetFolderTree();
+//    nodes = EDITOR_FILEDIALOG::FileDialogs::GetInstance()->GetFolderTree();
 }
 
 void EDITOR::FileDisplay::Render()
 {
-    if ( ImGui::Begin( "File System" ) )
-    {
-        ImGuiTreeNodeFlags flag = ImGuiTreeNodeFlags_DefaultOpen;
-        auto rootName = nodes[0];
-        rootName = rootName.substr(6);
-
-        if (ImGui::TreeNodeEx(rootName.c_str(), flag))
-        {
-            for (auto i : nodes)
-            {
-                i = i.substr(6);
-                ImGui::Text("%s", i.c_str());
-            }
-
-            ImGui::TreePop();  // This is required at the end of the if block
-        }
-    }
-    // ***********
-    NodeTree();
-    // ***********
-
-    ImGui::End();
-
+//    if ( ImGui::Begin( "File System" ) )
+//    {
+//        ImGuiTreeNodeFlags flag = ImGuiTreeNodeFlags_DefaultOpen;
+//        auto rootName = nodes[0];
+//        rootName = rootName.substr(6);
+//
+//        if (ImGui::TreeNodeEx(rootName.c_str(), flag))
+//        {
+//            for (auto i : nodes)
+//            {
+//                i = i.substr(6);
+//                ImGui::Text("%s", i.c_str());
+//            }
+//
+//            ImGui::TreePop();  // This is required at the end of the if block
+//        }
+//    }
+//    // ***********
+//    NodeTree();
+//    // ***********
+//
+//    ImGui::End();
+//
 }
 
 void EDITOR::FileDisplay::GetFolderTree()

@@ -13,7 +13,7 @@ EDITOR::MainMenuBar::MainMenuBar() {}
 void EDITOR::MainMenuBar::Render()
 {
     auto logger = EDITOR_LOGGER::Logger::GetInstance();
-    auto fileDialogs = EDITOR_FILEDIALOG::FileDialogs::GetInstance();
+//    auto fileDialogs = EDITOR_FILEDIALOG::FileDialogs::GetInstance();
 
     if (ImGui::BeginMainMenuBar())
     {
@@ -22,16 +22,16 @@ void EDITOR::MainMenuBar::Render()
             if (ImGui::MenuItem("New"))
             {
                 // TinyFileDialog
-                auto folderPtr = fileDialogs->SelectFolderDialog2( "New Project", SDL_GetBasePath() );
+//                auto folderPtr = fileDialogs->SelectFolderDialog2( "New Project", SDL_GetBasePath() );
                 // /users/darren/desktop
-                logger->AddLog("New project... %s", folderPtr.c_str());
-                std::cout << folderPtr.c_str() << std::endl;
+//                logger->AddLog("New project... %s", folderPtr.c_str());
+//                std::cout << folderPtr.c_str() << std::endl;
 
             }
             if (ImGui::MenuItem("Open", "Ctrl+O"))
             {
                 logger->AddLog("File open...");
-                fileDialogs->OpenFileDialog();
+//                fileDialogs->OpenFileDialog();
             }
             if (ImGui::MenuItem("Open Recent")) {}
             if (ImGui::MenuItem("Save", "Ctrl+S")) {}

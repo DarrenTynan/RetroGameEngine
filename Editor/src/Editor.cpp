@@ -9,6 +9,7 @@
 
 #include "../libs/rapidjson/document.h"
 #include "../libs/rapidjson/prettywriter.h"
+#include "FileSystem/include/FileHandler.h"
 #include <cstdio>
 
 #if !SDL_VERSION_ATLEAST(2,0,17)

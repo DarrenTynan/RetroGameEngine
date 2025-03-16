@@ -10,7 +10,6 @@
 #include <filesystem>
 #include <iostream>
 #include "../libs/nativefiledialog-extended/src/include/nfd.h"
-#include "../libs/tinyfiledialogs/tinyfiledialogs.h"
 
 namespace EDITOR_FILEDIALOG
 {
