@@ -46,7 +46,7 @@ void Registry::AddSystem(TArgs&& ...args)
  * @tparam TSystem
  */
 template <typename TSystem>
-void Registry::RemoveSystem()
+    [[maybe_unused]] void Registry::RemoveSystem()
 {
     auto system = systems.find(std::type_index(typeid(TSystem)));
     systems.erase(system);
@@ -59,7 +59,7 @@ void Registry::RemoveSystem()
  * @return
  */
 template <typename TSystem>
-bool Registry::HasSystem() const {
+    [[maybe_unused]] bool Registry::HasSystem() const {
     return systems.find(std::type_index(typeid(TSystem))) != systems.end();
 }
 
@@ -164,7 +164,7 @@ TComponent& Registry::GetComponent(Entity entity) const {
  * @brief Entity template.
  */
 template <typename TComponent>
-void Entity::RemoveComponent() { registry->RemoveComponent<TComponent>(*this); }
+    [[maybe_unused]] void Entity::RemoveComponent() { registry->RemoveComponent<TComponent>(*this); }
 
 /**
  * @brief Has the given entity got a component?

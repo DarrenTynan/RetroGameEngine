@@ -4,7 +4,8 @@
 #include "../../ECS/include/ECS.h"
 #include "../../AssetStore/include/AssetStore.h"
 #include <SDL2/SDL.h>
-#include <sol/sol.hpp>
+//#include <sol/sol.hpp>
+#include "../libs/sol/sol.hpp"
 #include <memory>
 
 using namespace RGE_AssetStore;

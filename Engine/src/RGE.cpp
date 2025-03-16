@@ -3,10 +3,56 @@
 //
 
 #include "../include/RGE.h"
+
 #include "Systems/include/ScriptSystem.h"
 #include "LevelLoader/include/LevelLoader.h"
 
-#include "Config.h"
+#include <glm/glm.hpp>
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+#include "../../Engine/src/ECS/include/ECS.h"
+#include "../src/AssetStore/include/AssetStore.h"
+#include "../src/EventBus/include/EventBus.h"
+//#include "../../Engine/src/LevelLoader/LevelLoader.h"
+#include "../../Engine/src/FSM/include/FSM.h"
+
+#include "../src/Components/include/TransformComponent.h"
+#include "../src/Components/include/RigidBodyComponent.h"
+#include "../src/Components/include/SpriteComponent.h"
+#include "../src/Components/include/CameraFollowComponent.h"
+#include "../src/Components/include/TextLabelComponent.h"
+#include "../src/Components/include/AnimationComponent.h"
+#include "../src/Components/include/BoxColliderComponent.h"
+#include "../src/Components/include/ProjectileComponent.h"
+#include "../src/Components/include/ProjectileEmitterComponent.h"
+#include "../src/Components/include/HealthComponent.h"
+#include "../src/Components/include/RaycastComponent.h"
+#include "../src/Systems/include/InputControlSystem.h"
+#include "../src/Components/include/CameraFollowComponent.h"
+
+#include "../src/Systems/include/CameraMovementSystem.h"
+#include "../src/Systems/include/PlayerControllerSystem.h"
+#include "../src/Systems/include/MovementSystem.h"
+#include "../src/Systems/include/RenderSystem.h"
+#include "../src/Systems/include/RenderTextSystem.h"
+#include "../src/Systems/include/RenderColliderSystem.h"
+#include "../src/Systems/include/AnimationSystem.h"
+#include "../src/Systems/include/CollisionSystem.h"
+
+#include "../src/Systems/include/ProjectileEmitSystem.h"
+#include "../src/Systems/include/ProjectileLifecycleSystem.h"
+#include "../src/Systems/include/DamageSystem.h"
+#include "../src/Systems/include/RenderRaycastSystem.h"
+
+#include <tmxlite/Map.hpp>
+#include <tmxlite/Layer.hpp>
+#include <tmxlite/TileLayer.hpp>
+#include <tmxlite/Tileset.hpp>
+#include <tmxlite/ObjectGroup.hpp>
+#include <tmxlite/Property.hpp>
 
 using namespace RGE_ECS;
 using namespace RGE_Component;
@@ -47,8 +93,10 @@ sol::state lua;
  */
 void RGE::InitialSetup()
 {
+    std::cout << "Library Test Call From InitialSetup\n";
+
     // Add the systems that need to be processed in our game
-    registry->AddSystem<InputControlSystem>();      // Read keys and control player movements.
+    registry->AddSystem<InputControlSystem>();            // Read keys and control player movements.
     registry->AddSystem<MovementSystem>();                // Move all entities
     registry->AddSystem<PlayerControllerSystem>();        // Move the player & apply forces
     registry->AddSystem<AnimationSystem>();               // Animate all entities
@@ -143,6 +191,7 @@ void RGE::LoadLevel()
     LevelLoader::LoadLevel(lua, registry, assetStore, gameRenderer, 1);
 
 }
+
 
 void RGE::DrawGrid()
 {

@@ -1,7 +1,8 @@
 #ifndef SCRIPTCOMPONENT_H
 #define SCRIPTCOMPONENT_H
 
-#include <sol/sol.hpp>
+//#include <sol/sol.hpp>
+#include "../libs/sol/sol.hpp"
 
 namespace RGE_Component
 {

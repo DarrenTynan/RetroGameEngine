@@ -36,12 +36,13 @@ public:
 
     // Manage entity components
     template <typename TComponent, typename ...TArgs> void AddComponent(TArgs&& ...args);
-    template <typename TComponent> void RemoveComponent();
+    template <typename TComponent>
+    [[maybe_unused]] void RemoveComponent();
     template <typename TComponent> [[nodiscard]] bool HasComponent() const;
     template <typename TComponent> TComponent& GetComponent() const;
 
     // Hold a pointer to the entity's owner registry
-    class Registry* registry;
+    class Registry* registry{};
 
 };
 

@@ -47,7 +47,7 @@ bool Entity::HasTag(const std::string &tag) const { return registry->EntityHasTa
  * @param _id
  * @return string tag name
  */
-std::string Registry::GetTagById(int _id)
+[[maybe_unused]] std::string Registry::GetTagById(int _id)
 {
     auto taggedEntity = tagPerEntity.find(_id);
     auto tag = taggedEntity->second;
@@ -210,10 +210,10 @@ bool Registry::EntityBelongsToGroup(Entity entity, const std::string &group) con
  * @param group
  * @return
  */
-std::vector<Entity> Registry::GetEntitiesByGroup(const std::string& group) const
+[[maybe_unused]] std::vector<Entity> Registry::GetEntitiesByGroup(const std::string& group) const
 {
     auto& setOfEntities = namePerEntity.at(group);
-    return std::vector<Entity>(setOfEntities.begin(), setOfEntities.end());
+    return {setOfEntities.begin(), setOfEntities.end()};
 }
 
 

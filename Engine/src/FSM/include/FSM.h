@@ -2,11 +2,14 @@
 // Created by Darren Tynan on 14/12/2024.
 //
 
-#ifndef RETROGAMEENGINE_FSM_H
-#define RETROGAMEENGINE_FSM_H
+#ifndef FSM_H
+#define FSM_H
 
 #include "BaseState.h"
 #include <glm/glm.hpp>
+
+//namespace RGE_FSM
+//{
 
 class BaseState;
 
@@ -30,4 +33,5 @@ private:
     BaseState* currentState;
 };
 
-#endif //RETROGAMEENGINE_FSM_H
+//} // end namespace
+#endif //FSM_H

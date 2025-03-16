@@ -49,13 +49,12 @@ add_library(
 set(SOURCE_FILES
         main.cpp
 
-        Engine/include/Config.h
         Engine/include/RGE.h
         Engine/src/RGE.cpp
         Engine/libs/sol/sol.hpp
 
         Engine/src/AssetStore/include/AssetStore.h
-        Engine/src/AssetStore/AssetStore.cpp
+        Engine/src/AssetStore/src/AssetStore.cpp
 
         Engine/src/Components/include/AnimationComponent.h
         Engine/src/Components/include/BoxColliderComponent.h
@@ -115,12 +114,7 @@ set(SOURCE_FILES
 
 link_directories( /usr/local/lib )
 
-# To build a library use add_library() instead of add_executable()
-# Make my library fie.
-#add_library( RGE STATIC ${SOURCE_FILES} )
-
 # Add executable target with source files listed in SOURCE_FILES variable
-#add_executable( ${PROJECT_NAME} ${SOURCE_FILES_EDITOR} ${SOURCE_FILES} )
 add_executable( ${PROJECT_NAME} ${SOURCE_FILES} )
 
 include_directories(

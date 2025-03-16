@@ -11,10 +11,11 @@
 #include "../Components/include/ScriptComponent.h"
 #include "../Components/include/CameraFollowComponent.h"
 
-#include "Config.h"
+//#include "Config.h"
 
 #include <string>
-#include <sol/sol.hpp>
+//#include <sol/sol.hpp>
+#include "../libs/sol/sol.hpp"
 
 using namespace RGE_Component;
 
@@ -42,7 +43,7 @@ void LevelLoader::LoadConfig(sol::state& lua)
     std::string str = config["title"];
     const char * c = str.c_str();
 
-    c_testTitle = c;
+//    c_testTitle = c;
 }
 
 /**

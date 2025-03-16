@@ -112,7 +112,7 @@ class InputControlSystem : public System
             std::cout << "Walk Up Event" << std::endl;
         }
 
-        
+
         // Player direction event
         void WalkDown(WalkDownEvent& event)
         {

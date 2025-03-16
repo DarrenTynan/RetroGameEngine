@@ -49,12 +49,12 @@ private:
     std::deque<int> freeIds;
 
 public:
-    Registry() {};      // { Logger::Log("Registry constructor called"); }
+    Registry() = default;      // { Logger::Log("Registry constructor called"); }
 
-    ~Registry() {};     //{ Logger::Log("Registry destructor called"); }
+    ~Registry() = default;     //{ Logger::Log("Registry destructor called"); }
 
     // Testing function
-    std::string GetTagById(int _id);
+    [[maybe_unused]] std::string GetTagById(int _id);
 
     // The registry UpdateSystems() finally processes the entities that are waiting to be added/killed to the systems
     void Update();
@@ -72,7 +72,8 @@ public:
     // AddGroupTag management
     void GroupTheEntity(Entity entity, const std::string &group);
     [[nodiscard]] bool EntityBelongsToGroup(Entity entity, const std::string &group) const;
-    [[nodiscard]] std::vector<Entity> GetEntitiesByGroup(const std::string &group) const;
+
+    [[maybe_unused]] [[nodiscard]] std::vector<Entity> GetEntitiesByGroup(const std::string &group) const;
     void RemoveEntityFromGroup(Entity entity);
 
     // Component management.
@@ -83,8 +84,10 @@ public:
 
     // System management
     template <typename TSystem, typename ...TArgs> void AddSystem(TArgs&& ...args);
-    template <typename TSystem> void RemoveSystem();
-    template <typename TSystem> [[nodiscard]] bool HasSystem() const;
+    template <typename TSystem>
+    [[maybe_unused]] void RemoveSystem();
+    template <typename TSystem>
+    [[maybe_unused]] [[nodiscard]] bool HasSystem() const;
     template <typename TSystem> TSystem& GetSystem() const;
 
     // Checks the component signature of an entity and add the entity to the systems

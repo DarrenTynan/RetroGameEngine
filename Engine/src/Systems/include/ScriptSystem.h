@@ -1,14 +1,17 @@
 #ifndef SCRIPTSYSTEM_H
 #define SCRIPTSYSTEM_H
 
-//#include "../ECS/include/ECS.h"
-
-//#include "../Components/TransformComponent.h"
-//#include "../Components/RigidBodyComponent.h"
-//#include "../Components/AnimationComponent.h"
-//#include "../Components/ProjectileEmitterComponent.h"
-#include "../../Components/include/ScriptComponent.h"
+//#include "ECS/include/ECS.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/ECS/include/ECS.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/TransformComponent.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/RigidBodyComponent.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/AnimationComponent.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/ProjectileEmitterComponent.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/ScriptComponent.h"
 #include <tuple>
+
+using namespace RGE_ECS;
+using namespace RGE_Component;
 
 namespace RGE_System
 {
@@ -115,7 +118,7 @@ class ScriptSystem: public System
             RequireComponent<ScriptComponent>();
         }
 
-        void CreateLuaBindings(sol::state& lua)
+        static void CreateLuaBindings(sol::state& lua)
         {
             // Create the "entity" usertype so Lua knows what an entity is
             lua.new_usertype<Entity>(
@@ -136,13 +139,13 @@ class ScriptSystem: public System
             lua.set_function("set_animation_frame", SetEntityAnimationFrame);
         }
 
-        void Update(double deltaTime, int ellapsedTime)
+        void Update(double deltaTime, int elapsedTime)
         {
             // Loop all entities that have a script component and invoke their Lua function
             for (auto entity: GetSystemEntities())
             {
                 const auto script = entity.GetComponent<ScriptComponent>();
-                script.func(entity, deltaTime, ellapsedTime);
+                script.func(entity, deltaTime, elapsedTime);
                 // here is where we invoke a sol::function
             }
         }

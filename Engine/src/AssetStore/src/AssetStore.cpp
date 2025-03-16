@@ -1,4 +1,4 @@
-#include "include/AssetStore.h"
+#include "../include/AssetStore.h"
 
 using namespace RGE_AssetStore;
 
