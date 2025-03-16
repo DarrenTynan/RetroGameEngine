@@ -10,6 +10,7 @@
 /Game_Engine/scripts/**
 /Editor/cmake-build-debug/**
 /Game_Library_Test/**
+
 # Project specific
 .DS_Store
 

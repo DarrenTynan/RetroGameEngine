@@ -21,7 +21,7 @@ class LevelLoader
                        int level
         );
 
-        static void LoadConfig(sol::state& lua);
+        static std::string LoadConfig(sol::state& lua);
 };
 
 #endif
