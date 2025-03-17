@@ -12,29 +12,13 @@
 #include <glm/glm.hpp>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-#include "../../Engine/src/ECS/include/ECS.h"
-#include "../src/AssetStore/include/AssetStore.h"
+
 #include "../src/EventBus/include/EventBus.h"
-//#include "../../Engine/src/LevelLoader/LevelLoader.h"
-#include "../../Engine/src/FSM/include/FSM.h"
-
-#include "../src/Components/include/TransformComponent.h"
-#include "../src/Components/include/RigidBodyComponent.h"
 #include "../src/Components/include/SpriteComponent.h"
-#include "../src/Components/include/CameraFollowComponent.h"
-#include "../src/Components/include/TextLabelComponent.h"
-#include "../src/Components/include/AnimationComponent.h"
 #include "../src/Components/include/BoxColliderComponent.h"
-#include "../src/Components/include/ProjectileComponent.h"
-#include "../src/Components/include/ProjectileEmitterComponent.h"
-#include "../src/Components/include/HealthComponent.h"
-#include "../src/Components/include/RaycastComponent.h"
 #include "../src/Systems/include/InputControlSystem.h"
-#include "../src/Components/include/CameraFollowComponent.h"
-
 #include "../src/Systems/include/CameraMovementSystem.h"
 #include "../src/Systems/include/PlayerControllerSystem.h"
 #include "../src/Systems/include/MovementSystem.h"
@@ -43,12 +27,10 @@
 #include "../src/Systems/include/RenderColliderSystem.h"
 #include "../src/Systems/include/AnimationSystem.h"
 #include "../src/Systems/include/CollisionSystem.h"
-
 #include "../src/Systems/include/ProjectileEmitSystem.h"
 #include "../src/Systems/include/ProjectileLifecycleSystem.h"
 #include "../src/Systems/include/DamageSystem.h"
 #include "../src/Systems/include/RenderRaycastSystem.h"
-#include "../src/GlobalConfig/GlobalConfig.h"
 #include "FileHandler/include/FileHandler.h"
 
 #include <tmxlite/Map.hpp>
@@ -74,10 +56,6 @@ std::shared_ptr<Registry> registry = std::make_shared<Registry>();
 std::unique_ptr<AssetStore> assetStore = std::make_unique<AssetStore>();
 std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
 
-const char * gameWindowTitle;    // = "Default Game_Engine Title";
-const int gameWindowWidth = 800;
-const int gameWindowHeight = 600;
-
 // Debug keyboard toggles
 bool isCollider = false;
 bool isRayCast = false;
@@ -93,13 +71,45 @@ sol::state lua;
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 
-
 /**
- * @brief Initialise the registry with systems. Set up the Lua level loader system.
+ * @brief Load the config.json file so we can set the game window title and size.
+ * Initialise the registry with systems. Set up the Lua level loader system.
  */
-void RGE::InitialSetup()
+void RGE::Setup()
 {
-    std::cout << "Library Test Call From InitialSetup\n";
+    // Are we being called?
+    std::cout << "Library Test Call From Setup\n";
+
+    // Get the current working dir and concatenate the filename.
+    std::string rootDir = std::filesystem::current_path();
+    std::string filePath = rootDir  + "/GameConfig.json";
+    std::cout << "Current path is " << filePath << '\n';
+
+    std::string window_title_test;
+    int window_width_test;
+    int window_height_test;
+
+    // Load the config file
+    std::ifstream file(filePath);
+
+    // Check if the file is open.
+    if ( !file.is_open()) exit(1);
+
+    // Read the entire file into a string
+    std::string json((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+
+    // Create a Document object to hold the JSON data
+    rapidjson::Document doc;
+
+    // Parse the JSON data
+    doc.Parse(json.c_str());
+
+    // Check for parse errors
+    if (doc.HasParseError())
+    {
+        std::cerr << "Error parsing JSON: " << doc.GetParseError() << std::endl;
+        exit(1);
+    }
 
     // Add the systems that need to be processed in our game
     registry->AddSystem<InputControlSystem>();            // Read keys and control player movements.
@@ -124,30 +134,10 @@ void RGE::InitialSetup()
     lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
 
     // Load config file
-    LevelLoader::LoadConfig(lua);
-
+//    LevelLoader::LoadConfig(lua);
 
 //    RGE_GlobalConfig::load_config_file(lua);
 //    std::cout << RGE_GlobalConfig::window_title << std::endl;
-
-    // Get the current working dir. ie. where the app was called from.
-    std::cout << "Current path is " << std::filesystem::current_path() << '\n';
-
-    std::string rootDir = std::filesystem::current_path();
-    std::string filePath = rootDir  + "/GameConfig.json";
-    std::cout << "Current path is " << filePath << '\n';
-
-    std::string window_title_test;
-    int window_width_test;
-    int window_height_test;
-
-    // Load the config file
-    auto fh = RGE_FILEHANDLER::FileHandler::GetInstance();
-    fh->LoadConfigFile(filePath);
-    window_title_test = fh->doc["configuration"]["window_title"].GetString();
-    window_width_test = fh->doc["configuration"]["window_width"].GetInt();
-    window_height_test = fh->doc["configuration"]["window_height"].GetInt();
-
 
     // Setup SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -159,6 +149,7 @@ void RGE::InitialSetup()
     // Setup true type fonts
     if (TTF_Init() != 0)
     {
+        std::cout << "SDL TTF's could not be initialised\n" << SDL_GetError();
         exit(1);
     }
 
@@ -167,24 +158,14 @@ void RGE::InitialSetup()
         SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
     #endif
 
-}
-
-
-/**
- * @brief Setup game SDL window, renderer and camera
- *
- * @return -1 for errors
- */
-void RGE::SetupGameSDL()
-{
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
     gameWindow = SDL_CreateWindow(
-            gameWindowTitle,
+            doc["configuration"]["window_title"].GetString(),
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
-            gameWindowWidth,
-            gameWindowHeight,
+            doc["configuration"]["window_width"].GetInt(),
+            doc["configuration"]["window_height"].GetInt(),
             windowFlags
     );
 
@@ -206,7 +187,7 @@ void RGE::SetupGameSDL()
     }
 
     // SetupSDL the camera view with the entire screen area
-    gameCamera = {0, 0, gameWindowWidth, gameWindowHeight };
+    gameCamera = {0, 0, doc["configuration"]["window_width"].GetInt(), doc["configuration"]["window_height"].GetInt() };
 
 }
 
@@ -219,21 +200,6 @@ void RGE::LoadLevel()
     // Load the entity data for level 1
     LevelLoader::LoadLevel(lua, registry, assetStore, gameRenderer, 1);
 
-}
-
-
-void RGE::DrawGrid()
-{
-    SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 255);
-    for (int i = 0; i < gameWindowHeight; ++i)
-    {
-        SDL_RenderDrawLine(gameRenderer, 0, i * 32, gameWindowWidth, i * 32);
-    }
-    for (int i = 0; i < gameWindowWidth; ++i)
-    {
-        SDL_RenderDrawLine(gameRenderer, i * 32, 0, i * 32, gameWindowWidth);
-    }
-    SDL_RenderPresent(gameRenderer);
 }
 
 

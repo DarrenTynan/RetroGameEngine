@@ -16,7 +16,7 @@
 class RGE
 {
 public:
-    static void InitialSetup();
+    static void Setup();
     static void SetupGameSDL();
     static void UpdateRenderer();
     static bool ProcessDebugInputEvents();

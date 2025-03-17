@@ -32,9 +32,11 @@ namespace RGE_FILEHANDLER
         // Open the file
         std::ifstream file(path);
 
+        // Check if the file is open.
+        if ( !file.is_open()) return false;
+
         // Read the entire file into a string
-        std::string json((std::istreambuf_iterator<char>(file)),
-                    std::istreambuf_iterator<char>());
+        std::string json((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
         // Create a Document object
         // to hold the JSON data
@@ -44,10 +46,10 @@ namespace RGE_FILEHANDLER
         doc.Parse(json.c_str());
 
         // Check for parse errors
-        if (doc.HasParseError()) {
-            std::cerr << "Error parsing JSON: "
-                 << doc.GetParseError() << std::endl;
-            return 1;
+        if (doc.HasParseError())
+        {
+            std::cerr << "Error parsing JSON: " << doc.GetParseError() << std::endl;
+            return false;
         }
 
         // Access the data in the JSON document
@@ -57,7 +59,7 @@ namespace RGE_FILEHANDLER
 //        std::cout << doc["age"].GetInt() << std::endl;
         // Now you can use the Document object to access the
         // JSON data
-        return 0;
+        return true;
     }
 
 } // end namespace

@@ -5,16 +5,15 @@
 #include "../include/Game.h"
 #include "RGE.h"
 
-Game::Game() {}
-Game::~Game() {}
+Game::Game() = default;
+Game::~Game() = default;
 
 /**
- * Function calls to setup: setupVars, setupSDL, SetupRgeSDL, SetupGameSDL, InitialSetup, LoadLevel.
+ * Function calls to setup: setupVars, setupSDL, SetupRgeSDL, SetupGameSDL, Setup, LoadLevel.
  */
 void Game::Setup()
 {
-    RGE::InitialSetup();
-    RGE::SetupGameSDL();
+    RGE::Setup();
     RGE::LoadLevel();
     RGE::SetupTMX();
 }
