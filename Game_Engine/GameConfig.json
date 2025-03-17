@@ -1,0 +1,7 @@
+{
+  "configuration": {
+    "window_title" : "Window_Title from GameConfig.json file",
+    "window_width" : 800,
+    "window_height" : 600
+  }
+}

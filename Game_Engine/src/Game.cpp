@@ -15,7 +15,6 @@ void Game::Setup()
 {
     RGE::Setup();
     RGE::LoadLevel();
-    RGE::SetupTMX();
 }
 
 

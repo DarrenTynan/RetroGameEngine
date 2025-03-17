@@ -11,46 +11,21 @@
 #include "../Components/include/ScriptComponent.h"
 #include "../Components/include/CameraFollowComponent.h"
 
-//#include "Config.h"
-
 #include <string>
+#include <fstream>
+
+#include <tmxlite/Map.hpp>
+#include <tmxlite/Layer.hpp>
+#include <tmxlite/TileLayer.hpp>
+#include <tmxlite/Tileset.hpp>
+#include <tmxlite/ObjectGroup.hpp>
+#include <tmxlite/Property.hpp>
+
 //#include <sol/sol.hpp>
 #include "../libs/sol/sol.hpp"
 
 using namespace RGE_GlobalConfig;
 using namespace RGE_Component;
-
-void LevelLoader::LoadConfig(sol::state& lua)
-{
-    // This checks the syntax of our script, but it does not execute the script
-    sol::load_result script = lua.load_file("../Game_Engine/scripts/Config.lua");
-    if (!script.valid())
-    {
-        sol::error error = script;
-        std::string errorMessage = error.what();
-//        Logger::Error("Error loading the lua script: " + errorMessage);
-        return;
-    }
-
-    // Executes the script using the Sol state
-    lua.script_file("../Game_Engine/scripts/Config.lua");
-
-    // Read the big table for the current level
-    sol::table config = lua["Config"];
-
-    std::string title = config["title"];
-    std::cout << title << std::endl;
-
-    int window_width = config["window_width"];
-    std::cout << window_width << std::endl;
-
-    int window_height = config["window_height"];
-    std::cout << window_height << std::endl;
-
-//    RGE_GlobalConfig::window_title = window_title;
-//    RGE_GlobalConfig::window_width = window_width;
-//    RGE_GlobalConfig::window_height = window_height;
-}
 
 /**
  * @brief Load the Lua script describing level entities and tmx map
@@ -70,7 +45,7 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
         sol::error error = script;
         std::string errorMessage = error.what();
 //        Logger::Error("Error loading the lua script: " + errorMessage);
-        return;
+        exit(1);
     }
 
     // Executes the script using the Sol state
@@ -87,9 +62,7 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
     {
         sol::optional<sol::table> hasAsset = assets[i];
         if (hasAsset == sol::nullopt)
-        {
             break;
-        }
 
         sol::table asset = assets[i];
         std::string assetType = asset["type"];
@@ -109,11 +82,14 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
         i++;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // Read the level tilemap information
-    ////////////////////////////////////////////////////////////////////////////
-//    sol::table map = level["tilemap"];
-//    std::string mapFilePath = map["map_file"];
+    /**
+     * @brief Read the level tilemap information
+     */
+    sol::table map = level["tilemap"];
+    std::string mapFilePath = map["map_file"];
+
+    LoadTMX(registry, mapFilePath.c_str());
+
 //    std::string mapTextureAssetId = map["texture_asset_id"];
 //    int mapNumRows = map["num_rows"];
 //    int mapNumCols = map["num_cols"];
@@ -131,7 +107,7 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
 //            mapFile.get(ch);
 //            int srcRectX = std::atoi(&ch) * tileSize;
 //            mapFile.ignore();
-
+//
 //            Entity tile = registry->CreateEntity();
 //            tile.AddComponent<TransformComponent>(glm::vec2(x * (mapScale * tileSize), y * (mapScale * tileSize)), glm::vec2(mapScale, mapScale), 0.0);
 //            tile.AddComponent<SpriteComponent>(mapTextureAssetId, tileSize, tileSize, 0, false, srcRectX, srcRectY);
@@ -143,18 +119,17 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
 //    extern unsigned int g_mapWidth = mapNumCols * tileSize * mapScale;
 //    extern unsigned int g_mapHeight = mapNumRows * tileSize * mapScale;
 
-    ////////////////////////////////////////////////////////////////////////////
-    // Read the level entities and their components
-    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * @brief Read the level entities and their components
+     */
     sol::table entities = level["entities"];
+
     i = 0;
     while (true)
     {
         sol::optional<sol::table> hasEntity = entities[i];
         if (hasEntity == sol::nullopt)
-        {
             break;
-        }
 
         sol::table entity = entities[i];
 
@@ -163,22 +138,17 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
         // Tag
         sol::optional<std::string> tag = entity["tag"];
         if (tag != sol::nullopt)
-        {
             newEntity.AddTag(entity["tag"]);
-        }
 
         // Group
         sol::optional<std::string> group = entity["group"];
         if (group != sol::nullopt)
-        {
             newEntity.AddGroupTag(entity["group"]);
-        }
 
         // Components
         sol::optional<sol::table> hasComponents = entity["components"];
         if (hasComponents != sol::nullopt)
         {
-
             // Transform
             sol::optional<sol::table> transform = entity["components"]["transform"];
 
@@ -295,3 +265,83 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
     }
 }
 
+/**
+ * Load the tmx map files and iterate over.
+ *
+ * @return
+ */
+void LevelLoader::LoadTMX(const std::shared_ptr<Registry>& registry, const char * mapFile)
+{
+    tmx::Map map;
+    const auto MAP_PATH = mapFile;
+    std::string mapImagePath;
+    int mapWidth;
+    int mapHeight;
+
+    if(map.load(MAP_PATH))
+    {
+        const auto& layers = map.getLayers();
+        for(const auto& layer : layers)
+        {
+            // Get Object layer
+            if(layer->getType() == tmx::Layer::Type::Object)
+            {
+                const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
+                const auto& objects = objectLayer.getObjects();
+                for(const auto& object : objects)
+                {
+                    //do stuff with object properties
+                    Entity tile = registry->CreateEntity();
+                    tile.AddComponent<BoxColliderComponent>(object.getAABB().width, object.getAABB().height);
+                    tile.AddComponent<TransformComponent>(glm::vec2(object.getAABB().left,  object.getAABB().top));
+                    tile.AddTag("object");
+
+                }
+            }
+                // Get Tile layer
+            else if(layer->getType() == tmx::Layer::Type::Tile)
+            {
+                const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+                //read out tile layer properties etc...
+
+                const auto& tiles = layer->getLayerAs<tmx::TileLayer>().getTiles();
+
+                const auto& imagePath = map.getTilesets();
+                mapImagePath = imagePath[0].getImagePath();
+
+                // Tile width in pixels (32)
+                unsigned int tileWidth = map.getTileSize().x;
+                // Tile height in pixels (32)
+                unsigned int tileHeight = map.getTileSize().x;
+                // Image width
+                unsigned int imageWidth = map.getTilesets().size();
+
+                // How many tiles per row (25)
+                unsigned int tileCountX = map.getTileCount().x;
+                mapWidth = map.getTileCount().x * tileWidth;
+                // How many tiles per column (20)
+                unsigned int tileCountY = map.getTileCount().y;
+                mapHeight = map.getTileCount().y * tileHeight;
+
+                int index = 0;
+                for (int y = 0; y < tileCountY; y++) {
+                    for (int x = 0; x < tileCountX; x++) {
+                        // Get the source rect pixel x,y position.
+                        int tilesPerRow = imagePath[0].getImageSize().x / tileWidth;
+                        int firstgid = 1;
+                        int srcRectX = ( (tiles[index].ID - firstgid) % tilesPerRow )  * tileWidth;
+                        int srcRectY = ( (tiles[index].ID - firstgid) / tilesPerRow ) * tileHeight;
+
+                        Entity tile = registry->CreateEntity();
+                        tile.AddTag("tile");
+
+                        tile.AddComponent<TransformComponent>(glm::vec2(x * tileWidth, y * tileHeight), glm::vec2(1, 1), 0.0);
+                        tile.AddComponent<SpriteComponent>("tilemap-image", tileWidth, tileHeight, 0, true, false, srcRectX, srcRectY);
+                        index++;
+                    }
+                }
+            }
+        }
+    }
+
+}

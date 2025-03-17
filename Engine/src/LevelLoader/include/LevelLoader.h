@@ -15,15 +15,15 @@ using namespace RGE_ECS;
 
 class LevelLoader
 {
-    public:
-        static void LoadLevel(sol::state& lua,
-                       const std::shared_ptr<Registry>& registry,
-                       const std::unique_ptr<AssetStore>& assetStore,
-                       SDL_Renderer* renderer,
-                       int level
-        );
+public:
+    static void LoadLevel(sol::state& lua,
+                   const std::shared_ptr<Registry>& registry,
+                   const std::unique_ptr<AssetStore>& assetStore,
+                   SDL_Renderer* renderer,
+                   int level
+    );
 
-        static void LoadConfig(sol::state& lua);
+    static void LoadTMX(const std::shared_ptr<Registry>& registry, const char * mapFile);
 };
 
 #endif
