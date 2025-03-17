@@ -45,7 +45,6 @@ using namespace RGE_Component;
 using namespace RGE_AssetStore;
 using namespace RGE_EventBus;
 using namespace RGE_Events;
-using namespace RGE_GlobalConfig;
 using namespace RGE_FILEHANDLER;
 
 SDL_Window* gameWindow;

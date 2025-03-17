@@ -24,7 +24,6 @@
 //#include <sol/sol.hpp>
 #include "../libs/sol/sol.hpp"
 
-using namespace RGE_GlobalConfig;
 using namespace RGE_Component;
 
 /**

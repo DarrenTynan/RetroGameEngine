@@ -1,18 +1,18 @@
 #ifndef LEVELLOADER_H
 #define LEVELLOADER_H
 
+#include <memory>
+#include <SDL2/SDL.h>
 #include "../../ECS/include/ECS.h"
 #include "../../AssetStore/include/AssetStore.h"
-#include <SDL2/SDL.h>
-//#include <sol/sol.hpp>
 #include "../libs/sol/sol.hpp"
-#include <memory>
-#include "../../GlobalConfig/GlobalConfig.h"
 
-using namespace RGE_GlobalConfig;
 using namespace RGE_AssetStore;
 using namespace RGE_ECS;
 
+/**
+ * @brief Methods to load the level lua file and import sprite and tmx assets.
+ */
 class LevelLoader
 {
 public:
