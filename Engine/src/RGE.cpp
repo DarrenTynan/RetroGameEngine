@@ -2,6 +2,8 @@
 // Created by Darren Tynan on 17/11/2024.
 //
 
+#include <filesystem>
+
 #include "../include/RGE.h"
 
 #include "Systems/include/ScriptSystem.h"
@@ -46,6 +48,8 @@
 #include "../src/Systems/include/ProjectileLifecycleSystem.h"
 #include "../src/Systems/include/DamageSystem.h"
 #include "../src/Systems/include/RenderRaycastSystem.h"
+#include "../src/GlobalConfig/GlobalConfig.h"
+#include "FileHandler/include/FileHandler.h"
 
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Layer.hpp>
@@ -59,6 +63,8 @@ using namespace RGE_Component;
 using namespace RGE_AssetStore;
 using namespace RGE_EventBus;
 using namespace RGE_Events;
+using namespace RGE_GlobalConfig;
+using namespace RGE_FILEHANDLER;
 
 SDL_Window* gameWindow;
 SDL_Rect gameCamera;
@@ -118,8 +124,30 @@ void RGE::InitialSetup()
     lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
 
     // Load config file
-    auto tit = LevelLoader::LoadConfig(lua);
-    gameWindowTitle = tit.c_str();
+    LevelLoader::LoadConfig(lua);
+
+
+//    RGE_GlobalConfig::load_config_file(lua);
+//    std::cout << RGE_GlobalConfig::window_title << std::endl;
+
+    // Get the current working dir. ie. where the app was called from.
+    std::cout << "Current path is " << std::filesystem::current_path() << '\n';
+
+    std::string rootDir = std::filesystem::current_path();
+    std::string filePath = rootDir  + "/GameConfig.json";
+    std::cout << "Current path is " << filePath << '\n';
+
+    std::string window_title_test;
+    int window_width_test;
+    int window_height_test;
+
+    // Load the config file
+    auto fh = RGE_FILEHANDLER::FileHandler::GetInstance();
+    fh->LoadConfigFile(filePath);
+    window_title_test = fh->doc["configuration"]["window_title"].GetString();
+    window_width_test = fh->doc["configuration"]["window_width"].GetInt();
+    window_height_test = fh->doc["configuration"]["window_height"].GetInt();
+
 
     // Setup SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)

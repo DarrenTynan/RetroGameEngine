@@ -92,6 +92,8 @@ set(SOURCE_FILES
 
         Engine/src/LevelLoader/include/LevelLoader.h
         Engine/src/LevelLoader/LevelLoader.cpp
+        Engine/src/GlobalConfig/GlobalConfig.h
+        Engine/src/GlobalConfig/GlobalConfig.cpp
 
         Engine/src/Systems/include/AnimationSystem.h
         Engine/src/Systems/include/CameraMovementSystem.h
@@ -110,6 +112,12 @@ set(SOURCE_FILES
         Engine/src/Systems/include/RenderTextSystem.h
 
         Game_Engine/src/Game.cpp
+        Engine/src/GlobalConfig/GlobalConfig.cpp
+        Engine/src/GlobalConfig/GlobalConfig.h
+
+        Engine/src/FileHandler/include/FileHandler.h
+        Engine/src/FileHandler/FileHandler.cpp
+
 )
 
 link_directories( /usr/local/lib )

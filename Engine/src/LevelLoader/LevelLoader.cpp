@@ -17,9 +17,10 @@
 //#include <sol/sol.hpp>
 #include "../libs/sol/sol.hpp"
 
+using namespace RGE_GlobalConfig;
 using namespace RGE_Component;
 
-std::string LevelLoader::LoadConfig(sol::state& lua)
+void LevelLoader::LoadConfig(sol::state& lua)
 {
     // This checks the syntax of our script, but it does not execute the script
     sol::load_result script = lua.load_file("../Game_Engine/scripts/Config.lua");
@@ -28,7 +29,7 @@ std::string LevelLoader::LoadConfig(sol::state& lua)
         sol::error error = script;
         std::string errorMessage = error.what();
 //        Logger::Error("Error loading the lua script: " + errorMessage);
-        return "Error";
+        return;
     }
 
     // Executes the script using the Sol state
@@ -46,7 +47,9 @@ std::string LevelLoader::LoadConfig(sol::state& lua)
     int window_height = config["window_height"];
     std::cout << window_height << std::endl;
 
-    return title;
+//    RGE_GlobalConfig::window_title = window_title;
+//    RGE_GlobalConfig::window_width = window_width;
+//    RGE_GlobalConfig::window_height = window_height;
 }
 
 /**

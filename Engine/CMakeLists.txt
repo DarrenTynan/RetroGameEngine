@@ -44,7 +44,6 @@ add_library(
         ${LUA_DIR}/lutf8lib.c
         ${LUA_DIR}/lvm.c
         ${LUA_DIR}/lzio.c
-        ../Game_Library_Test/main.cpp
 )
 
 add_library(RGE STATIC
@@ -85,6 +84,8 @@ add_library(RGE STATIC
 
         ${SRC_DIR}/LevelLoader/include/LevelLoader.h
         ${SRC_DIR}/LevelLoader/LevelLoader.cpp
+        ${SRC_DIR}/GlobalConfig/GlobalConfig.h
+        ${SRC_DIR}/GlobalConfig/GlobalConfig.cpp
 
         ${SRC_DIR}/Systems/include/AnimationSystem.h
         ${SRC_DIR}/Systems/include/CameraMovementSystem.h
@@ -136,4 +137,3 @@ target_link_libraries(${PROJECT_NAME} SDL2_ttf::SDL2_ttf)
 target_link_libraries( RGE tmxlite )
 target_link_libraries( RGE lua )
 
-#add_subdirectory(${SRC_DIR}/AssetStore)

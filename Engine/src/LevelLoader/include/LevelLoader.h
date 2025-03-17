@@ -7,7 +7,9 @@
 //#include <sol/sol.hpp>
 #include "../libs/sol/sol.hpp"
 #include <memory>
+#include "../../GlobalConfig/GlobalConfig.h"
 
+using namespace RGE_GlobalConfig;
 using namespace RGE_AssetStore;
 using namespace RGE_ECS;
 
@@ -21,7 +23,7 @@ class LevelLoader
                        int level
         );
 
-        static std::string LoadConfig(sol::state& lua);
+        static void LoadConfig(sol::state& lua);
 };
 
 #endif
