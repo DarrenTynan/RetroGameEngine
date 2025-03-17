@@ -1,6 +1,8 @@
 #ifndef LEVELLOADER_H
 #define LEVELLOADER_H
 
+/** @file */
+
 #include <memory>
 #include <SDL2/SDL.h>
 #include "../../ECS/include/ECS.h"

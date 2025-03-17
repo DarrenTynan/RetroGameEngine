@@ -2,6 +2,8 @@
 // Created by Darren Tynan on 17/11/2024.
 //
 
+/** @file */
+
 #include <filesystem>
 
 #include "../include/RGE.h"
