@@ -76,17 +76,10 @@ sol::state lua;
  */
 void RGE::Setup()
 {
-    // Are we being called?
-    std::cout << "Library Test Call From Setup\n";
-
-    // Get the current working dir and concatenate the filename.
+    // Get the current working dir and concatenate the config filename.
     std::string rootDir = std::filesystem::current_path();
     std::string filePath = rootDir  + "/GameConfig.json";
     std::cout << "Current path is " << filePath << '\n';
-
-    std::string window_title_test;
-    int window_width_test;
-    int window_height_test;
 
     // Load the config file
     std::ifstream file(filePath);
@@ -98,15 +91,15 @@ void RGE::Setup()
     std::string json((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
     // Create a Document object to hold the JSON data
-    rapidjson::Document doc;
+    rapidjson::Document jsonDoc;
 
     // Parse the JSON data
-    doc.Parse(json.c_str());
+    jsonDoc.Parse(json.c_str());
 
     // Check for parse errors
-    if (doc.HasParseError())
+    if (jsonDoc.HasParseError())
     {
-        std::cerr << "Error parsing JSON: " << doc.GetParseError() << std::endl;
+        std::cerr << "Error parsing JSON: " << jsonDoc.GetParseError() << std::endl;
         exit(1);
     }
 
@@ -132,12 +125,6 @@ void RGE::Setup()
     // Use all the libraries
     lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
 
-    // Load config file
-//    LevelLoader::LoadConfig(lua);
-
-//    RGE_GlobalConfig::load_config_file(lua);
-//    std::cout << RGE_GlobalConfig::window_title << std::endl;
-
     // Setup SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -160,11 +147,11 @@ void RGE::Setup()
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
     gameWindow = SDL_CreateWindow(
-            doc["configuration"]["window_title"].GetString(),
+            jsonDoc["configuration"]["window_title"].GetString(),
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
-            doc["configuration"]["window_width"].GetInt(),
-            doc["configuration"]["window_height"].GetInt(),
+            jsonDoc["configuration"]["window_width"].GetInt(),
+            jsonDoc["configuration"]["window_height"].GetInt(),
             windowFlags
     );
 
@@ -186,7 +173,7 @@ void RGE::Setup()
     }
 
     // SetupSDL the camera view with the entire screen area
-    gameCamera = {0, 0, doc["configuration"]["window_width"].GetInt(), doc["configuration"]["window_height"].GetInt() };
+    gameCamera = {0, 0, jsonDoc["configuration"]["window_width"].GetInt(), jsonDoc["configuration"]["window_height"].GetInt() };
 
 }
 
@@ -324,7 +311,7 @@ bool RGE::ProcessDebugInputEvents()
 
 
 /**
- * UpdateSystems
+ * @brief Update all the systems.
  */
 void RGE::UpdateSystems()
 {
@@ -360,7 +347,7 @@ void RGE::UpdateSystems()
 
 
 /**
- * Destroy
+ * @brief Destroy the SDL renderer and window.
  */
 void RGE::destroy()
 {
