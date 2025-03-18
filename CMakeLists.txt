@@ -81,8 +81,8 @@ set(SOURCE_FILES
         Engine/src/EventBus/include/EventBus.h
 
         Engine/src/Events/include/CollisionEvent.h
-        Engine/src/Events/include/KeyPressedEvent.h
-        Engine/src/Events/include/KeyReleasedEvent.h
+#        Engine/src/Events/include/KeyPressedEvent.h
+#        Engine/src/Events/include/KeyReleasedEvent.h
 
         Engine/src/FSM/include/BaseState.h
         Engine/src/FSM/include/FSM.h
@@ -95,6 +95,7 @@ set(SOURCE_FILES
 
         Engine/src/Systems/include/AnimationSystem.h
         Engine/src/Systems/include/CameraMovementSystem.h
+        Engine/src/Systems/include/PlayerCollisionSystem.h
         Engine/src/Systems/include/CollisionSystem.h
         Engine/src/Systems/include/DamageSystem.h
         Engine/src/Systems/include/MovementSystem.h

@@ -20,4 +20,5 @@ public:
 };
 
 } // end namespace
+
 #endif
