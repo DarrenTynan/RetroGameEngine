@@ -7,10 +7,8 @@
 
 int main()
 {
-    RGE::InitialSetup();
-    RGE::SetupGameSDL();
-    RGE::LoadLevel();
-//    RGE::SetupTMX();
+    RGE::Setup();
+    RGE::Destroy();
 
     std::cout << "main.cpp exit" << std::endl;
     return 0;
