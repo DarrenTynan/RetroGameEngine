@@ -124,7 +124,7 @@ class ScriptSystem: public System
             lua.new_usertype<Entity>(
                 "entity",
                 "get_id", &Entity::GetId,
-                "destroy", &Entity::Kill,
+                "Destroy", &Entity::Kill,
                 "has_tag", &Entity::HasTag,
                 "belongs_to_group", &Entity::BelongsToGroup
             );

@@ -17,17 +17,12 @@ class RGE
 {
 public:
     static void Setup();
-    static void SetupGameSDL();
     static void UpdateRenderer();
     static bool ProcessDebugInputEvents();
     static void UpdateSystems();
     static void LoadLevel();
-    static void SetupTMX();
-    static void destroy();
+    static void Destroy();
 
-private:
-
-    static void DrawGrid();
 };
 
 #endif //RETROGAMEENGINE_RGE_H

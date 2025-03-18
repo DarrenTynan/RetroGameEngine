@@ -37,19 +37,19 @@ class CameraMovementSystem: public System {
 //                camera.position.y = transform.position.y;
 //                SDL_RenderDrawLineF(renderer, camera.position.x, camera.position.y, camera.position.x + camera.cameraWidth, camera.position.y );
 
-//                if (transform.position.x + (camera.w / 2) < Game_Engine::mapWidth) {
-//                    camera.x = transform.position.x - (Game_Engine::windowWidth / 2);
+//                if (transform.position.x + (camera.w / 2) < Engine_Test_Game::mapWidth) {
+//                    camera.x = transform.position.x - (Engine_Test_Game::windowWidth / 2);
 //                }
 //
-//                if (transform.position.y + (camera.h / 2) < Game_Engine::mapHeight) {
-//                    camera.y = transform.position.y - (Game_Engine::windowHeight / 2);
+//                if (transform.position.y + (camera.h / 2) < Engine_Test_Game::mapHeight) {
+//                    camera.y = transform.position.y - (Engine_Test_Game::windowHeight / 2);
 //                }
 //
 //                // Keep camera rectangle view inside the screen limits
 //                camera.x = camera.x < 0 ? 0 : camera.x;
 //                camera.y = camera.y < 0 ? 0 : camera.y;
-//                camera.x = (camera.x + camera.w > Game_Engine::mapWidth) ? Game_Engine::mapWidth - camera.w : camera.x;
-//                camera.y = (camera.y + camera.h > Game_Engine::mapHeight) ? Game_Engine::mapHeight - camera.h : camera.y;
+//                camera.x = (camera.x + camera.w > Engine_Test_Game::mapWidth) ? Engine_Test_Game::mapWidth - camera.w : camera.x;
+//                camera.y = (camera.y + camera.h > Engine_Test_Game::mapHeight) ? Engine_Test_Game::mapHeight - camera.h : camera.y;
             SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
             SDL_RenderDrawRect(renderer, &_camera);
 //            }

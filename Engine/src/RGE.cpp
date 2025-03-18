@@ -2,8 +2,6 @@
 // Created by Darren Tynan on 17/11/2024.
 //
 
-/** @file */
-
 #include <filesystem>
 
 #include "../include/RGE.h"
@@ -73,6 +71,8 @@ sol::state lua;
 #endif
 
 /**
+ * @file RGE.cpp
+ *
  * @brief Load the config.json file so we can set the game window title and size.
  * Initialise the registry with systems. Set up the Lua level loader system.
  */
@@ -351,7 +351,7 @@ void RGE::UpdateSystems()
 /**
  * @brief Destroy the SDL renderer and window.
  */
-void RGE::destroy()
+void RGE::Destroy()
 {
     SDL_DestroyRenderer(gameRenderer);
     SDL_DestroyWindow(gameWindow);

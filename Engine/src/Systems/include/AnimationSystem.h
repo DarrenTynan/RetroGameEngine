@@ -8,6 +8,11 @@
 
 using namespace RGE_System;
 
+/**
+ * @file AnimationSystem.h
+ *
+ * @brief Handle all the sprite animations.
+ */
 class AnimationSystem: public System
 {
     public:

@@ -1,4 +1,6 @@
-/** @file */
+//
+// Created by Darren Tynan on 17/03/2025.
+//
 
 #include "include/LevelLoader.h"
 #include "../Components/include/TransformComponent.h"
@@ -39,8 +41,10 @@ using namespace RGE_Component;
  */
 void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& registry, const std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer, int levelNumber)
 {
+    std::string levelFilePath = "../Engine_Test_Game/scripts/Level";
+
     // This checks the syntax of our script, but it does not execute the script
-    sol::load_result script = lua.load_file("../Game_Engine/scripts/Level" + std::to_string(levelNumber) + ".lua");
+    sol::load_result script = lua.load_file( levelFilePath + std::to_string(levelNumber) + ".lua");
     if (!script.valid())
     {
         sol::error error = script;
@@ -50,7 +54,7 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
     }
 
     // Executes the script using the Sol state
-    lua.script_file("../Game_Engine/scripts/Level" + std::to_string(levelNumber) + ".lua");
+    lua.script_file(levelFilePath + std::to_string(levelNumber) + ".lua");
 
     // Read the big table for the current level
     sol::table level = lua["Level"];
