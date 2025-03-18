@@ -109,7 +109,7 @@ set(SOURCE_FILES
         Engine/src/Systems/include/RenderSystem.h
         Engine/src/Systems/include/RenderTextSystem.h
 
-        Game_Engine/src/Game.cpp
+        Engine_Test_Game/src/Game.cpp
 
         Engine/src/FileHandler/include/FileHandler.h
         Engine/src/FileHandler/FileHandler.cpp
@@ -122,10 +122,10 @@ link_directories( /usr/local/lib )
 add_executable( ${PROJECT_NAME} ${SOURCE_FILES} )
 
 include_directories(
-        Game_Engine/assets/
-        Game_Engine/include/
-        Game_Engine/scripts/
-        Game_Engine/src/
+        Engine_Test_Game/assets/
+        Engine_Test_Game/include/
+        Engine_Test_Game/scripts/
+        Engine_Test_Game/src/
 
         Engine/include/
         Engine/libs/lua/
