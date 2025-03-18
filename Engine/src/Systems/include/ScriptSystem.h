@@ -118,7 +118,7 @@ class ScriptSystem: public System
             RequireComponent<ScriptComponent>();
         }
 
-        static void CreateLuaBindings(sol::state& lua)
+        void CreateLuaBindings(sol::state& lua)
         {
             // Create the "entity" usertype so Lua knows what an entity is
             lua.new_usertype<Entity>(

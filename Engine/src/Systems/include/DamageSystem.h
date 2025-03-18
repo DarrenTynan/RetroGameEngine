@@ -8,10 +8,13 @@
 #include "../../EventBus/include/EventBus.h"
 #include "../../Events/include/CollisionEvent.h"
 
+using namespace RGE_Events;
+
 namespace RGE_System
 {
 
-class DamageSystem: public System {
+class DamageSystem: public System
+{
     public:
         DamageSystem() { RequireComponent<BoxColliderComponent>(); }
 

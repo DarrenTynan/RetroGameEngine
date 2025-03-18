@@ -1,3 +1,7 @@
+//
+// Created by Darren Tynan on 18/03/2025.
+//
+
 #ifndef COLLISIONSYSTEM_H
 #define COLLISIONSYSTEM_H
 
@@ -15,113 +19,72 @@
 namespace RGE_System
 {
 
-/**
- * Bounding box collision between two box collider rect's.
- * If a collision has happened to emit a signal (CollisionEvent)
- */
-class CollisionSystem: public System
-{
-public:
-    CollisionSystem()
+    /**
+     * @brief Bounding box collision between two box collider rect's.
+     * If a collision has happened to emit a signal (CollisionEvent)
+     */
+    class CollisionSystem: public System
     {
-        RequireComponent<TransformComponent>();
-        RequireComponent<BoxColliderComponent>();
-    }
-
-    // Check entity bounding box for collision.
-    void Update(std::unique_ptr<EventBus>& eventBus)
-    {
-        auto entities = GetSystemEntities();
-
-        // Loop all the entities that the system is interested in
-        for (auto i = entities.begin(); i != entities.end(); i++)
+    public:
+        CollisionSystem()
         {
-            Entity a = *i;
-            auto &aTransform = a.GetComponent<TransformComponent>();
-            auto &aCollider = a.GetComponent<BoxColliderComponent>();
-            auto &aRB = a.GetComponent<RigidBodyComponent>();
+            RequireComponent<TransformComponent>();
+            RequireComponent<BoxColliderComponent>();
+        }
 
-            // Loop all the entities that still need to be checked (to the right of i)
-            for (auto j = i; j != entities.end(); j++)
+        // Check entity bounding box for collision.
+        void Update(std::unique_ptr<EventBus>& eventBus)
+        {
+            auto entities = GetSystemEntities();
+
+            // Loop all the entities that the system is interested in
+            for (auto i = entities.begin(); i != entities.end(); i++)
             {
-                Entity b = *j;
+                Entity a = *i;
+                auto &aTransform = a.GetComponent<TransformComponent>();
+                auto &aCollider = a.GetComponent<BoxColliderComponent>();
+                auto &aRB = a.GetComponent<RigidBodyComponent>();
 
-                // Bypass if we are trying to test the same entity
-                if (a == b)
+                // Loop all the entities that still need to be checked (to the right of i)
+                for (auto j = i; j != entities.end(); j++)
                 {
-                    continue;
-                }
+                    Entity b = *j;
 
-                auto &bTransform = b.GetComponent<TransformComponent>();
-                auto &bCollider = b.GetComponent<BoxColliderComponent>();
-                auto &bRB = a.GetComponent<RigidBodyComponent>();
+                    // Bypass if we are trying to test the same entity
+                    if (a == b)
+                        continue;
 
-                SDL_Rect aa;
-                aa.x = (int)aTransform.position.x;
-                aa.y = (int)aTransform.position.y;
-                aa.w = (int)aCollider.width * (int)aTransform.scale.x;
-                aa.h = (int)aCollider.height * (int)aTransform.scale.y;
+                    // Bypass if the entity is the player.
+                    if (a.HasTag("player") || b.HasTag("player"))
+                        continue;
 
-                SDL_Rect bb;
-                bb.x = (int)bTransform.position.x;
-                bb.y = (int)bTransform.position.y;
-                bb.w = (int)bCollider.width * (int)bTransform.scale.x;
-                bb.h = (int)bCollider.height * (int)bTransform.scale.y;
+                    auto &bTransform = b.GetComponent<TransformComponent>();
+                    auto &bCollider = b.GetComponent<BoxColliderComponent>();
+                    auto &bRB = a.GetComponent<RigidBodyComponent>();
 
-                // Perform the AABB collision check between entities a and b
-                SDL_bool isCollision = SDL_HasIntersection(&aa, &bb);
+                    SDL_Rect aa;
+                    aa.x = (int)aTransform.position.x;
+                    aa.y = (int)aTransform.position.y;
+                    aa.w = (int)aCollider.width * (int)aTransform.scale.x;
+                    aa.h = (int)aCollider.height * (int)aTransform.scale.y;
 
-                if (isCollision)
-                {
-                    if (a.HasTag("player"))
-                    {
-                        // Down
-                        if (aRB.fsm->direction.y > 0)
-                        {
-                            // Reset player to stand on top of the ground.
-                            aTransform.position.y = (bb.y - aa.h) - 1.0;
-                            aRB.fsm->isGrounded = true;
+                    SDL_Rect bb;
+                    bb.x = (int)bTransform.position.x;
+                    bb.y = (int)bTransform.position.y;
+                    bb.w = (int)bCollider.width * (int)bTransform.scale.x;
+                    bb.h = (int)bCollider.height * (int)bTransform.scale.y;
 
-                            aRB.fsm->direction.y = 0.0;
-                            aRB.velocityDelta.y = 0.0f;
-                        }
+                    // Perform the AABB collision check between entities a and b
+                    SDL_bool isCollision = SDL_HasIntersection(&aa, &bb);
 
-                        // Up
-                        else if (aRB.fsm->direction.y < 0)
-                        {
-                            // Reset player to stand on top of the ground.
-                            aTransform.position.y = (bb.y + bb.h) + 1.0;
-
-                            aRB.fsm->direction.y = 0.0;
-                            aRB.velocityDelta.y = 0.0f;
-                        }
-
-                        // Right
-                        else if (aRB.fsm->direction.x > 0)
-                        {
-                            aTransform.position.x = (bb.x - aa.w) - 1;
-
-                            aRB.fsm->direction.y = 0.0;
-                            aRB.velocityDelta.y = 0.0f;
-                        }
-
-                        // Left
-                        else if (aRB.fsm->direction.x < 0)
-                        {
-                            aTransform.position.x = bb.w + 1;
-
-                            aRB.fsm->direction.y = 0.0;
-                            aRB.velocityDelta.y = 0.0f;
-                        }
-                    }
-
-                    else eventBus->EmitEvent<CollisionEvent>(a, b);
+                    if (isCollision)
+                        eventBus->EmitEvent<CollisionEvent>(a, b);
                 }
             }
         }
-    }
 
-};
+    };
 
 } // end namespace
-#endif
+
+#endif //COLLISIONSYSTEM_H

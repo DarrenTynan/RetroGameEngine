@@ -26,6 +26,7 @@
 #include "../src/Systems/include/RenderTextSystem.h"
 #include "../src/Systems/include/RenderColliderSystem.h"
 #include "../src/Systems/include/AnimationSystem.h"
+#include "../src/Systems/include/PlayerCollisionSystem.h"
 #include "../src/Systems/include/CollisionSystem.h"
 #include "../src/Systems/include/ProjectileEmitSystem.h"
 #include "../src/Systems/include/ProjectileLifecycleSystem.h"
@@ -110,6 +111,7 @@ void RGE::Setup()
     registry->AddSystem<MovementSystem>();                // Move all entities
     registry->AddSystem<PlayerControllerSystem>();        // Move the player & apply forces
     registry->AddSystem<AnimationSystem>();               // Animate all entities
+    registry->AddSystem<PlayerCollisionSystem>();         // Check all entity collisions AABB
     registry->AddSystem<CollisionSystem>();               // Check all entity collisions AABB
     registry->AddSystem<DamageSystem>();                  // Check all damage systems
     registry->AddSystem<CameraMovementSystem>();          // Check the camera move system
@@ -338,6 +340,11 @@ void RGE::UpdateSystems()
     registry->GetSystem<MovementSystem>().Update(deltaTime);                            // apply velocityDelta and check out of bounds.
     registry->GetSystem<PlayerControllerSystem>().Update(registry, deltaTime);        // apply velocityDelta and check out of bounds.
     registry->GetSystem<AnimationSystem>().Update();
+
+    // AABB collision player to all other objects.
+    registry->GetSystem<PlayerCollisionSystem>().Update(eventBus, registry);
+
+    // AABB collision of all objects.
     registry->GetSystem<CollisionSystem>().Update(eventBus);
 
     registry->GetSystem<CameraMovementSystem>().Update(gameRenderer, gameCamera);

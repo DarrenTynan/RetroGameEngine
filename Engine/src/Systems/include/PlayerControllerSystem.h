@@ -42,7 +42,7 @@ public:
     // Ground collision
     //
     // Check screen bounds
-    static void Update(std::shared_ptr<Registry>& registry, double deltaTime)
+    void Update(std::shared_ptr<Registry>& registry, double deltaTime)
     {
         Entity player = registry->GetEntityByTag("player");
 
