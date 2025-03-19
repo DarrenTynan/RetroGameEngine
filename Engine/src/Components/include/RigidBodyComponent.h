@@ -34,8 +34,8 @@ struct RigidBodyComponent
     glm::vec2 maxVelocityDelta = glm::vec2(2.0, 3.0);
 
     float acceleration = 1.5f;
-    float jumpForce = 4.0f;
-    float gravity = 0.3f;
+//    float jumpForce = 4.0f;
+//    float gravity = 0.3f;
     float friction = 0.85f;
 
     explicit RigidBodyComponent(glm::vec2 _velocity = glm::vec2(0.0, 0.0))

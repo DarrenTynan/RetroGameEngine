@@ -71,24 +71,66 @@ namespace RGE_System
                 if (isCollision)
                 {
 //                    std::cout << "PlayerCollisionSystem: Player has collided!" << std::endl;
+                    std::cout << "Box aa.x: " << aa.x << std::endl;
+                    std::cout << "Box aa.y: " << aa.y << std::endl;
+                    std::cout << "Box aa.w: " << aa.w << std::endl;
+                    std::cout << "Box aa.h: " << aa.h << std::endl;
 
+                    std::cout << "Box bb.x: " << bb.x << std::endl;
+                    std::cout << "Box bb.y: " << bb.y << std::endl;
+                    std::cout << "Box bb.w: " << bb.w << std::endl;
+                    std::cout << "Box bb.h: " << bb.h << std::endl;
+
+                    // Horizontal
                     if (aRB.velocityDelta.x != 0)
                     {
                         // std::signbit determines if the given floating point number num is negative.
                         // true if num is negative, false otherwise.
                         if (std::signbit(aRB.velocityDelta.x))
                         {
-//                            std::cout << "Player walking left!" << std::endl;
-                            aTransform.position.x = bb.w;
+                            std::cout << "Player walking left!" << std::endl;
+                            aTransform.position.x = (float)(bb.x + bb.w);
+                            aRB.velocityDelta.x = 0.0f;
+                            break;
                         }
 
                         if (!std::signbit(aRB.velocityDelta.x))
                         {
-//                            std::cout << "Player walking right!" << std::endl;
-                            aTransform.position.x = (float)bb.x - (float)aCollider.width;
+                            std::cout << "Player walking right!" << std::endl;
+                            aTransform.position.x = (float)(bb.x - aCollider.width);
+                            aRB.velocityDelta.x = 0.0f;
+                            break;
                         }
-                        aRB.velocityDelta.x = 0.0f;
-                        break;
+                    }
+
+                    // Vertical
+                    if (aRB.velocityDelta.y != 0)
+                    {
+                        // std::signbit determines if the given floating point number num is negative.
+                        // true if num is negative, false otherwise.
+                        if (std::signbit(aRB.velocityDelta.y))
+                        {
+                            std::cout << "Player walking up!" << std::endl;
+                            std::cout << "PRE aTransform.position.x: " << aTransform.position.x << std::endl;
+                            std::cout << "PRE aTransform.position.y: " << aTransform.position.y << std::endl;
+                            aTransform.position.y = (float)(bb.y + bb.h);
+                            std::cout << "POST aTransform.position.x: " << aTransform.position.x << std::endl;
+                            std::cout << "POST aTransform.position.y: " << aTransform.position.y << std::endl;
+                            aRB.velocityDelta.y = 0.0f;
+                            break;
+                        }
+
+                        if (!std::signbit(aRB.velocityDelta.y))
+                        {
+                            std::cout << "Player walking down!" << std::endl;
+                            std::cout << "PRE aTransform.position.x: " << aTransform.position.x << std::endl;
+                            std::cout << "PRE aTransform.position.y: " << aTransform.position.y << std::endl;
+                            aTransform.position.y = (float)(bb.y - bb.h)-1;
+                            std::cout << "POST aTransform.position.x: " << aTransform.position.x << std::endl;
+                            std::cout << "POST aTransform.position.y: " << aTransform.position.y << std::endl;
+                            aRB.velocityDelta.y = 0.0f;
+                            break;
+                        }
                     }
                 }
 

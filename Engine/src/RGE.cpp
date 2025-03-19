@@ -18,9 +18,8 @@
 #include "../src/EventBus/include/EventBus.h"
 #include "../src/Components/include/SpriteComponent.h"
 #include "../src/Components/include/BoxColliderComponent.h"
-#include "../src/Systems/include/PlayerControlSystem.h"
-#include "../src/Systems/include/CameraMovementSystem.h"
 #include "../src/Systems/include/PlayerControllerSystem.h"
+#include "../src/Systems/include/CameraMovementSystem.h"
 #include "../src/Systems/include/MovementSystem.h"
 #include "../src/Systems/include/RenderSystem.h"
 #include "../src/Systems/include/RenderTextSystem.h"
@@ -107,7 +106,6 @@ void RGE::Setup()
     }
 
     // Add the systems that need to be processed in our game
-    registry->AddSystem<PlayerControlSystem>();            // Read keys and control player movements.
     registry->AddSystem<MovementSystem>();                // Move all entities
     registry->AddSystem<PlayerControllerSystem>();        // Move the player & apply forces
     registry->AddSystem<AnimationSystem>();               // Animate all entities
@@ -321,7 +319,7 @@ void RGE::UpdateSystems()
     // Perform the subscription of the events for all systems
     registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
 
-    registry->GetSystem<PlayerControlSystem>().SubscribeToEvents(eventBus, registry);
+    registry->GetSystem<PlayerControllerSystem>().SubscribeToEvents(eventBus, registry);
     registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
 
     // UpdateSystems the registry to process the entities that are waiting to be created/deleted
@@ -331,7 +329,7 @@ void RGE::UpdateSystems()
     registry->GetSystem<MovementSystem>().Update(deltaTime);
 
     // apply velocityDelta and check out of bounds.
-    registry->GetSystem<PlayerControllerSystem>().Update(registry, deltaTime);
+    registry->GetSystem<PlayerControllerSystem>().Update(deltaTime);
     registry->GetSystem<AnimationSystem>().Update();
 
     // AABB collision player to all other objects.
