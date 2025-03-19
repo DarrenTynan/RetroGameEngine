@@ -14,12 +14,6 @@ void Idle::toggle(FSM* fsm)
      fsm->setState(Walk::getInstance());
 }
 
-void Idle::toggleTest(FSM* fsm)
-{
-    std::cout << "toggleTest()" << std::endl;
-    fsm->setState(Walk::getInstance());
-}
-
 BaseState& Idle::getInstance()
 {
     static Idle singleton;
@@ -44,6 +38,8 @@ void Idle::exit(FSM *fsm)
 }
 
 
+
+
 /**
  * @brief Walk -> Idle transitions
  *
@@ -52,12 +48,6 @@ void Idle::exit(FSM *fsm)
 void Walk::toggle(FSM* fsm)
 {
     fsm->setState(Idle::getInstance());
-}
-
-void Walk::toggleTest(FSM* fsm)
-{
-    std::cout << "toggleTest()" << std::endl;
-    fsm->setState(Walk::getInstance());
 }
 
 BaseState& Walk::getInstance()
@@ -84,6 +74,8 @@ void Walk::exit(FSM *fsm)
 }
 
 
+
+
 /**
  * @brief Run -> Walk transitions
  *
@@ -91,12 +83,6 @@ void Walk::exit(FSM *fsm)
  */
 void Run::toggle(FSM *fsm)
 {
-    fsm->setState(Walk::getInstance());
-}
-
-void Run::toggleTest(FSM* fsm)
-{
-    std::cout << "toggleTest()" << std::endl;
     fsm->setState(Walk::getInstance());
 }
 
@@ -113,13 +99,11 @@ std::string Run::getName()
     return "Run";
 }
 
-void Run::enter(FSM *fsm)
-{
-}
+void Run::enter(FSM *fsm) {}
 
-void Run::exit(FSM *fsm)
-{
-}
+void Run::exit(FSM *fsm) {}
+
+
 
 
 /**
@@ -130,12 +114,6 @@ void Run::exit(FSM *fsm)
 void Jump::toggle(FSM* fsm)
 {
     fsm->setState(Fall::getInstance());
-}
-
-void Jump::toggleTest(FSM* fsm)
-{
-    std::cout << "toggleTest()" << std::endl;
-    fsm->setState(Walk::getInstance());
 }
 
 BaseState& Jump::getInstance()
@@ -151,13 +129,11 @@ std::string Jump::getName()
     return "Jump";
 }
 
-void Jump::enter(FSM *fsm)
-{
-}
+void Jump::enter(FSM *fsm) {}
 
-void Jump::exit(FSM *fsm)
-{
-}
+void Jump::exit(FSM *fsm) {}
+
+
 
 
 /**
@@ -168,12 +144,6 @@ void Jump::exit(FSM *fsm)
 void Fall::toggle(FSM* fsm)
 {
     fsm->setState(Idle::getInstance());
-}
-
-void Fall::toggleTest(FSM* fsm)
-{
-    std::cout << "toggleTest()" << std::endl;
-    fsm->setState(Walk::getInstance());
 }
 
 BaseState& Fall::getInstance()
@@ -189,11 +159,7 @@ std::string Fall::getName()
     return "Fall";
 }
 
-void Fall::enter(FSM *fsm)
-{
-}
+void Fall::enter(FSM *fsm) {}
 
-void Fall::exit(FSM *fsm)
-{
-}
+void Fall::exit(FSM *fsm) {}
 

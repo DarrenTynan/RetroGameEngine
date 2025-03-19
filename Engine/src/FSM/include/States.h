@@ -15,12 +15,11 @@ class Idle : public BaseState
 {
 public:
     std::string name = "Name: Idle";
-    std::string getName();
-    void enter(FSM* fsm);
-    void update(FSM* fsm);
-    void toggle(FSM* fsm);
-    void toggleTest(FSM *fsm);
-    void exit(FSM* fsm);
+    std::string getName() override;
+    void enter(FSM* fsm) override;
+    void update(FSM* fsm) override;
+    void toggle(FSM* fsm) override;
+    void exit(FSM* fsm) override;
     static BaseState& getInstance();
 private:
     Idle() {}
@@ -36,12 +35,11 @@ class Walk : public BaseState
 {
 public:
     std::string name = "Name: Walk";
-    std::string getName();
-    void enter(FSM* fsm);
-    void update(FSM* fsm);
-    void toggle(FSM* fsm);
-    void toggleTest(FSM *fsm);
-    void exit(FSM* fsm);
+    std::string getName() override;
+    void enter(FSM* fsm) override;
+    void update(FSM* fsm) override;
+    void toggle(FSM* fsm) override;
+    void exit(FSM* fsm) override;
     static BaseState& getInstance();
 private:
     Walk() {};
@@ -56,13 +54,12 @@ private:
 class Run : public BaseState
 {
 public:
-    std::string name = "Run";
-    std::string getName();
-    void enter(FSM* fsm);
-    void update(FSM* fsm);
-    void toggle(FSM* fsm);
-    void toggleTest(FSM *fsm);
-    void exit(FSM* fsm);
+    std::string name = "Name: Run";
+    std::string getName() override;
+    void enter(FSM* fsm) override;
+    void update(FSM* fsm) override;
+    void toggle(FSM* fsm) override;
+    void exit(FSM* fsm) override;
     static BaseState& getInstance();
 private:
     Run() {};
@@ -74,13 +71,12 @@ private:
 class Jump : public BaseState
 {
 public:
-    std::string name = "Jump";
-    std::string getName();
-    void enter(FSM* fsm);
-    void update(FSM* fsm);
-    void toggle(FSM* fsm);
-    void toggleTest(FSM *fsm);
-    void exit(FSM* fsm);
+    std::string name = "Name: Jump";
+    std::string getName() override;
+    void enter(FSM* fsm) override;
+    void update(FSM* fsm) override;
+    void toggle(FSM* fsm) override;
+    void exit(FSM* fsm) override;
     static BaseState& getInstance();
 private:
     Jump() {};
@@ -92,13 +88,12 @@ private:
 class Fall : public BaseState
 {
 public:
-    std::string name = "Fall";
-    std::string getName();
-    void enter(FSM* fsm);
-    void update(FSM* fsm);
-    void toggle(FSM* fsm);
-    void toggleTest(FSM *fsm);
-    void exit(FSM* fsm);
+    std::string name = "Name: Fall";
+    std::string getName() override;
+    void enter(FSM* fsm) override;
+    void update(FSM* fsm) override;
+    void toggle(FSM* fsm) override;
+    void exit(FSM* fsm) override;
     static BaseState& getInstance();
 private:
     Fall() {};

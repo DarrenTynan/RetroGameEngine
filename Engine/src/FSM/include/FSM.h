@@ -25,9 +25,6 @@ public:
     FSM();
     [[nodiscard]] inline BaseState* getCurrentState() const { return currentState; }
     void toggle();
-    // Not need, if not declared in the BaseState
-    void toggleTest();
-    // end
     void setState(BaseState& newState);
 private:
     BaseState* currentState;

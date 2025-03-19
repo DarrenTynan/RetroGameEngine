@@ -15,8 +15,7 @@ class KeyPressedEvent : public Event
 public:
     SDL_Keycode symbol;
 
-    explicit KeyPressedEvent(SDL_Keycode symbol): symbol(symbol)
-    {}
+    explicit KeyPressedEvent(SDL_Keycode symbol): symbol(symbol) {}
 };
 
 } // end namespace

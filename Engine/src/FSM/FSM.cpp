@@ -36,7 +36,3 @@ FSM::FSM()
     currentState->update(nullptr);
 }
 
-void FSM::toggleTest()
-{
-    std::cout << "FSM.cpp - toggleTest()" << std::endl;
-}

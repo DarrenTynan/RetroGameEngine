@@ -20,8 +20,7 @@ namespace RGE_System
 {
 
     /**
-     * @brief Bounding box collision between two box collider rect's.
-     * If a collision has happened to emit a signal (CollisionEvent)
+     * @brief Bounding box collision between the player box collider and other box colliders. ie. ground
      */
     class PlayerCollisionSystem: public System
     {
@@ -71,7 +70,7 @@ namespace RGE_System
 
                 if (isCollision)
                 {
-                    std::cout << "PlayerCollisionSystem: Player has collided!" << std::endl;
+//                    std::cout << "PlayerCollisionSystem: Player has collided!" << std::endl;
 
                     if (aRB.velocityDelta.x != 0)
                     {
@@ -79,13 +78,13 @@ namespace RGE_System
                         // true if num is negative, false otherwise.
                         if (std::signbit(aRB.velocityDelta.x))
                         {
-                            std::cout << "Player walking left!" << std::endl;
+//                            std::cout << "Player walking left!" << std::endl;
                             aTransform.position.x = bb.w;
                         }
 
                         if (!std::signbit(aRB.velocityDelta.x))
                         {
-                            std::cout << "Player walking right!" << std::endl;
+//                            std::cout << "Player walking right!" << std::endl;
                             aTransform.position.x = (float)bb.x - (float)aCollider.width;
                         }
                         aRB.velocityDelta.x = 0.0f;

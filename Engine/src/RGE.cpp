@@ -18,7 +18,7 @@
 #include "../src/EventBus/include/EventBus.h"
 #include "../src/Components/include/SpriteComponent.h"
 #include "../src/Components/include/BoxColliderComponent.h"
-#include "../src/Systems/include/InputControlSystem.h"
+#include "../src/Systems/include/PlayerControlSystem.h"
 #include "../src/Systems/include/CameraMovementSystem.h"
 #include "../src/Systems/include/PlayerControllerSystem.h"
 #include "../src/Systems/include/MovementSystem.h"
@@ -61,7 +61,7 @@ bool isCollider = false;
 bool isRayCast = false;
 bool isCamera = true;
 
-int g_millisecsPreviouseFrame = 0;
+int g_millisecsPreviousFrame = 0;
 
 // Lua
 sol::state lua;
@@ -107,7 +107,7 @@ void RGE::Setup()
     }
 
     // Add the systems that need to be processed in our game
-    registry->AddSystem<InputControlSystem>();            // Read keys and control player movements.
+    registry->AddSystem<PlayerControlSystem>();            // Read keys and control player movements.
     registry->AddSystem<MovementSystem>();                // Move all entities
     registry->AddSystem<PlayerControllerSystem>();        // Move the player & apply forces
     registry->AddSystem<AnimationSystem>();               // Animate all entities
@@ -221,12 +221,7 @@ void RGE::UpdateRenderer()
         registry->GetSystem<RenderRaycastSystem>().Update(gameRenderer, player);
     }
 
-    // Display HUD
-    SDL_Texture* hud = assetStore->GetTexture("hud2");
-    SDL_Rect source = {0,0,800, 56};
-    SDL_Rect destination = {0,600-56,800,56};
-
-    SDL_RenderCopy(gameRenderer, hud, &source, &destination);
+    // Render all graphics onto screen.
     SDL_RenderPresent(gameRenderer);
 
 }
@@ -245,15 +240,15 @@ bool RGE::ProcessDebugInputEvents()
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
     {
-        if (sdlEvent.type == SDL_KEYUP)
-        {
-            eventBus->EmitEvent<KeyReleasedEvent>(sdlEvent.key.keysym.sym);
-        }
-
-        if (sdlEvent.type == SDL_KEYDOWN)
-        {
-            eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
-        }
+//        if (sdlEvent.type == SDL_KEYUP)
+//        {
+//            eventBus->EmitEvent<KeyReleasedEvent>(sdlEvent.key.keysym.sym);
+//        }
+//
+//        if (sdlEvent.type == SDL_KEYDOWN)
+//        {
+//            eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
+//        }
 
         // Core sdl events.
         switch (sdlEvent.type)
@@ -303,11 +298,6 @@ bool RGE::ProcessDebugInputEvents()
                     eventBus->EmitEvent<WalkRightEvent>(sdlEvent.key.keysym.sym);
                 }
 
-                if (sdlEvent.key.keysym.sym == SDLK_SPACE)
-                {
-                    eventBus->EmitEvent<JumpEvent>(sdlEvent.key.keysym.sym);
-                }
-
         }
     };
     return isQuit;
@@ -320,10 +310,10 @@ bool RGE::ProcessDebugInputEvents()
 void RGE::UpdateSystems()
 {
     // The difference in ticks since the last frame, converted to seconds
-    double deltaTime = (SDL_GetTicks() - g_millisecsPreviouseFrame) / 1000.0;
+    double deltaTime = (SDL_GetTicks() - g_millisecsPreviousFrame) / 1000.0;
 
     // Store the "previous" frame time
-    g_millisecsPreviouseFrame = SDL_GetTicks();
+    g_millisecsPreviousFrame = SDL_GetTicks();
 
     // Reset all event handlers for the current frame
     eventBus->Reset();
@@ -331,14 +321,17 @@ void RGE::UpdateSystems()
     // Perform the subscription of the events for all systems
     registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
 
-    registry->GetSystem<InputControlSystem>().SubscribeToEvents(eventBus, registry);
+    registry->GetSystem<PlayerControlSystem>().SubscribeToEvents(eventBus, registry);
     registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
 
     // UpdateSystems the registry to process the entities that are waiting to be created/deleted
     registry->Update();
 
-    registry->GetSystem<MovementSystem>().Update(deltaTime);                            // apply velocityDelta and check out of bounds.
-    registry->GetSystem<PlayerControllerSystem>().Update(registry, deltaTime);        // apply velocityDelta and check out of bounds.
+    // apply velocityDelta and check out of bounds.
+    registry->GetSystem<MovementSystem>().Update(deltaTime);
+
+    // apply velocityDelta and check out of bounds.
+    registry->GetSystem<PlayerControllerSystem>().Update(registry, deltaTime);
     registry->GetSystem<AnimationSystem>().Update();
 
     // AABB collision player to all other objects.

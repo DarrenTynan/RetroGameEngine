@@ -21,27 +21,9 @@ namespace RGE_Events
 
         CollisionEvent(Entity a, Entity b): a(a), b(b)
         {
-            std::cout << "Collision Event" << std::endl;
-
-            // BoxCollider collision with another BoxCollider
-            auto& playerRigidBodyComponent = a.GetComponent<RigidBodyComponent>();
-
-            // Check only for player object. Bounce back by 2 pixels away from object.
-            if (playerRigidBodyComponent.velocityDelta.x != 0)
-            {
-                // std::signbit determines if the given floating point number num is negative.
-                // true if num is negative, false otherwise.
-                if (std::signbit(playerRigidBodyComponent.velocityDelta.x)) { a.GetComponent<TransformComponent>().position.x += 2.0f; }
-                if (!std::signbit(playerRigidBodyComponent.velocityDelta.x)) { a.GetComponent<TransformComponent>().position.x -= 2.0f; }
-                playerRigidBodyComponent.velocityDelta.x = 0.0f;
-            }
-
-            if (playerRigidBodyComponent.velocityDelta.y != 0)
-            {
-                if (std::signbit(playerRigidBodyComponent.velocityDelta.y)) { a.GetComponent<TransformComponent>().position.y += 2.0f; }
-                if (!std::signbit(playerRigidBodyComponent.velocityDelta.y)) { a.GetComponent<TransformComponent>().position.y -= 2.0f; }
-                playerRigidBodyComponent.velocityDelta.y = 0.0f;
-            }
+            // Bypass if the entity is the player.
+            if (a.HasTag("player") || b.HasTag("player"))
+                std::cout << "CollisionEvent() with player" << std::endl;
 
         }
     };

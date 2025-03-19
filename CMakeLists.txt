@@ -99,7 +99,7 @@ set(SOURCE_FILES
         Engine/src/Systems/include/CollisionSystem.h
         Engine/src/Systems/include/DamageSystem.h
         Engine/src/Systems/include/MovementSystem.h
-        Engine/src/Systems/include/InputControlSystem.h
+        Engine/src/Systems/include/PlayerControlSystem.h
         Engine/src/Systems/include/PlayerControllerSystem.h
         Engine/src/Systems/include/ProjectileEmitSystem.h
         Engine/src/Systems/include/ProjectileLifecycleSystem.h

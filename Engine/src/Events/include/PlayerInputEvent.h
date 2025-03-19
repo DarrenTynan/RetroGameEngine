@@ -77,4 +77,5 @@ public:
 
 
 } // end namespace
-#endif
+
+#endif //PLAYERINPUTEVENT_H

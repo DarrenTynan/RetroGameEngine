@@ -54,10 +54,6 @@ namespace RGE_System
                     if (a == b)
                         continue;
 
-                    // Bypass if the entity is the player.
-                    if (a.HasTag("player") || b.HasTag("player"))
-                        continue;
-
                     auto &bTransform = b.GetComponent<TransformComponent>();
                     auto &bCollider = b.GetComponent<BoxColliderComponent>();
                     auto &bRB = a.GetComponent<RigidBodyComponent>();

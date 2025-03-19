@@ -18,17 +18,7 @@ class KeyReleasedEvent : public Event
 {
 public:
     SDL_Keycode symbol;
-    explicit KeyReleasedEvent(SDL_Keycode symbol): symbol(symbol)
-    {
-//        if (symbol == SDLK_z)
-//        {
-//            std::cout << "KeyReleasedEvent z" << std::endl;
-//        }
-//        if (symbol == SDLK_x)
-//        {
-//            std::cout << "KeyReleasedEvent x" << std::endl;
-//        }
-    }
+    explicit KeyReleasedEvent(SDL_Keycode symbol): symbol(symbol) {};
 };
 
 } // end namespace
