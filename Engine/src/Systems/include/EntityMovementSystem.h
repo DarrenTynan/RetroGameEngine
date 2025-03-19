@@ -16,10 +16,10 @@ namespace RGE_System
 /**
  * @brief Movement system for all entities.
  */
-class MovementSystem: public System
+class EntityMovementSystem: public System
 {
 public:
-    MovementSystem()
+    EntityMovementSystem()
     {
         RequireComponent<TransformComponent>();
         RequireComponent<RigidBodyComponent>();

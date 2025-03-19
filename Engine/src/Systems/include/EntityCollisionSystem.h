@@ -23,10 +23,10 @@ namespace RGE_System
      * @brief Bounding box collision between two box collider rect's.
      * If a collision has happened to emit a signal (CollisionEvent)
      */
-    class CollisionSystem: public System
+    class EntityCollisionSystem: public System
     {
     public:
-        CollisionSystem()
+        EntityCollisionSystem()
         {
             RequireComponent<TransformComponent>();
             RequireComponent<BoxColliderComponent>();

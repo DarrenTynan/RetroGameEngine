@@ -56,38 +56,10 @@ class PlayerControllerSystem : public System
             auto &transform = player.GetComponent<TransformComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
 
-            // 1
-    //        rigidBody.velocityDelta.y += rigidBody.gravity;
-            rigidBody.velocityDelta.x *= rigidBody.friction;
-            rigidBody.velocityDelta.y *= rigidBody.friction;
+            // Apply the velocityDelta
+//            transform.position.x += (rigidBody.velocityDelta.x * (float)deltaTime);
+//            transform.position.y += (rigidBody.velocityDelta.y * (float)deltaTime);
 
-            // 2
-            // TODO button check
-
-            /* Poll for events. SDL_PollEvent() returns 0 when there are no  */
-            /* more events on the event queue, our while loop will exit when */
-            /* that occurs.                                                  */
-
-
-            // 3
-            // Limit speed
-
-            // 4
-            transform.position.x += rigidBody.velocityDelta.x;
-            transform.position.y += rigidBody.velocityDelta.y;
-
-    //            // Add gravity
-    //        if (!rigidBody.fsm->isGrounded)
-    //        {
-    ////            rigidBody.fsm->toggleTest();
-    //            rigidBody.fsm->isGrounded = false;
-    //            rigidBody.fsm->direction.y = 1;
-    //            rigidBody.velocityDelta.y += rigidBody.gravity * deltaTime;
-    //        }
-    //
-    //        // Change position based on the new velocityDelta + force.
-    //        transform.position.x += rigidBody.velocityDelta.x *= rigidBody.friction;
-    //        transform.position.y += rigidBody.velocityDelta.y;// * deltaTime;
         }
 
 
@@ -119,17 +91,19 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto fsm = rigidBody.fsm;
-
-            sprite.flipH = true;
-            fsm->toggle();
-            fsm->direction.x = -1.0;
+//            auto fsm = rigidBody.fsm;
+//
+//            sprite.flipH = true;
+//            fsm->toggle();
+//            fsm->direction.x = -1.0;
 
             // Add acceleration force on the x axis.
             rigidBody.velocityDelta.x -= rigidBody.acceleration;
             transform.position.x += rigidBody.velocityDelta.x;
 
-//            std::cout << "PlayerControllerSystem: Walk Left Event" << std::endl;
+            std::cout << "PlayerControllerSystem: Walk Left Event" << std::endl;
+            std::cout << "velocityDelta.x: " << rigidBody.velocityDelta.x << std::endl;
+            std::cout << "velocityDelta.y: " << rigidBody.velocityDelta.y << std::endl;
         }
 
 
@@ -144,17 +118,19 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto fsm = rigidBody.fsm;
-
-            sprite.flipH = false;
-            fsm->toggle();
-            fsm->direction.x = -1.0;
+//            auto fsm = rigidBody.fsm;
+//
+//            sprite.flipH = false;
+//            fsm->toggle();
+//            fsm->direction.x = -1.0;
 
             // Add acceleration force on the x-axis.
             rigidBody.velocityDelta.x += rigidBody.acceleration;
             transform.position.x += rigidBody.velocityDelta.x;
 
-//            std::cout << "PlayerControllerSystem: Walk Right Event" << std::endl;
+            std::cout << "PlayerControllerSystem: Walk Right Event" << std::endl;
+            std::cout << "velocityDelta.x: " << rigidBody.velocityDelta.x << std::endl;
+            std::cout << "velocityDelta.y: " << rigidBody.velocityDelta.y << std::endl;
         }
 
 
@@ -169,16 +145,18 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto fsm = rigidBody.fsm;
-
-            fsm->toggle();
-            fsm->direction.y = -1.0;
+//            auto fsm = rigidBody.fsm;
+//
+//            fsm->toggle();
+//            fsm->direction.y = -1.0;
 
             // Add acceleration force on the y-axis.
             rigidBody.velocityDelta.y -= rigidBody.acceleration;
             transform.position.y += rigidBody.velocityDelta.y;
 
-//            std::cout << "PlayerControllerSystem: Walk Up Event" << std::endl;
+            std::cout << "PlayerControllerSystem: Walk Up Event" << std::endl;
+            std::cout << "velocityDelta.x: " << rigidBody.velocityDelta.x << std::endl;
+            std::cout << "velocityDelta.y: " << rigidBody.velocityDelta.y << std::endl;
         }
 
 
@@ -193,16 +171,18 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto fsm = rigidBody.fsm;
-
-            fsm->toggle();
-            fsm->direction.y = 1.0;
+//            auto fsm = rigidBody.fsm;
+//
+//            fsm->toggle();
+//            fsm->direction.y = 1.0;
 
             // Add acceleration force on the y-axis.
             rigidBody.velocityDelta.y += rigidBody.acceleration;
             transform.position.y -= rigidBody.velocityDelta.y;
 
-//            std::cout << "PlayerControllerSystem: Walk Down Event" << std::endl;
+            std::cout << "PlayerControllerSystem: Walk Down Event" << std::endl;
+            std::cout << "velocityDelta.x: " << rigidBody.velocityDelta.x << std::endl;
+            std::cout << "velocityDelta.y: " << rigidBody.velocityDelta.y << std::endl;
         }
 
 

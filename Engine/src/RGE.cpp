@@ -20,13 +20,13 @@
 #include "../src/Components/include/BoxColliderComponent.h"
 #include "../src/Systems/include/PlayerControllerSystem.h"
 #include "../src/Systems/include/CameraMovementSystem.h"
-#include "../src/Systems/include/MovementSystem.h"
+#include "../src/Systems/include/EntityMovementSystem.h"
 #include "../src/Systems/include/RenderSystem.h"
 #include "../src/Systems/include/RenderTextSystem.h"
 #include "../src/Systems/include/RenderColliderSystem.h"
 #include "../src/Systems/include/AnimationSystem.h"
 #include "../src/Systems/include/PlayerCollisionSystem.h"
-#include "../src/Systems/include/CollisionSystem.h"
+#include "../src/Systems/include/EntityCollisionSystem.h"
 #include "../src/Systems/include/ProjectileEmitSystem.h"
 #include "../src/Systems/include/ProjectileLifecycleSystem.h"
 #include "../src/Systems/include/DamageSystem.h"
@@ -58,9 +58,10 @@ std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
 // Debug keyboard toggles
 bool isCollider = false;
 bool isRayCast = false;
-bool isCamera = true;
+bool isCamera = false;
+bool isPlayer = false;
 
-int g_millisecsPreviousFrame = 0;
+uint32_t msSincePreviousFrame = 0;
 
 // Lua
 sol::state lua;
@@ -106,11 +107,11 @@ void RGE::Setup()
     }
 
     // Add the systems that need to be processed in our game
-    registry->AddSystem<MovementSystem>();                // Move all entities
+    registry->AddSystem<EntityMovementSystem>();          // Move all entities
     registry->AddSystem<PlayerControllerSystem>();        // Move the player & apply forces
     registry->AddSystem<AnimationSystem>();               // Animate all entities
     registry->AddSystem<PlayerCollisionSystem>();         // Check all entity collisions AABB
-    registry->AddSystem<CollisionSystem>();               // Check all entity collisions AABB
+    registry->AddSystem<EntityCollisionSystem>();         // Check all entity collisions AABB
     registry->AddSystem<DamageSystem>();                  // Check all damage systems
     registry->AddSystem<CameraMovementSystem>();          // Check the camera move system
     registry->AddSystem<ProjectileEmitSystem>();          // Check entity bullets AABB
@@ -219,6 +220,14 @@ void RGE::UpdateRenderer()
         registry->GetSystem<RenderRaycastSystem>().Update(gameRenderer, player);
     }
 
+    if (isPlayer)
+    {
+        auto player = registry->GetEntityByTag("player");
+        auto transform = player.GetComponent<TransformComponent>();
+        transform.position.x = 32.0;
+        transform.position.y = 32.0;
+    }
+
     // Render all graphics onto screen.
     SDL_RenderPresent(gameRenderer);
 
@@ -226,10 +235,8 @@ void RGE::UpdateRenderer()
 
 
 /**
- * Poll window events:
- *
- * window quit
- * keyboard
+ * @brief Poll window and keyboard events
+ * @details If the cursor key's are pressed then emit a Walk<XX>Event
  */
 bool RGE::ProcessDebugInputEvents()
 {
@@ -238,16 +245,6 @@ bool RGE::ProcessDebugInputEvents()
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
     {
-//        if (sdlEvent.type == SDL_KEYUP)
-//        {
-//            eventBus->EmitEvent<KeyReleasedEvent>(sdlEvent.key.keysym.sym);
-//        }
-//
-//        if (sdlEvent.type == SDL_KEYDOWN)
-//        {
-//            eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
-//        }
-
         // Core sdl events.
         switch (sdlEvent.type)
         {
@@ -256,21 +253,11 @@ bool RGE::ProcessDebugInputEvents()
                 isQuit = false;
                 break;
 
-            // Check for window event
-            case SDL_WINDOWEVENT:
-
-                switch (sdlEvent.window.event)
-                {
-                    case SDL_WINDOWEVENT_CLOSE:
-                        isQuit = false;
-                        break;
-                }
-                break;
-
             case SDL_KEYDOWN:
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isQuit = false; }
                 if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
                 if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
+                if (sdlEvent.key.keysym.sym == SDLK_p) { isPlayer = !isPlayer; }
 
                 // Up
                 if (sdlEvent.key.keysym.sym == SDLK_UP)
@@ -308,40 +295,44 @@ bool RGE::ProcessDebugInputEvents()
 void RGE::UpdateSystems()
 {
     // The difference in ticks since the last frame, converted to seconds
-    double deltaTime = (SDL_GetTicks() - g_millisecsPreviousFrame) / 1000.0;
+    double deltaTime = (SDL_GetTicks() - msSincePreviousFrame) / 1000.0;
 
     // Store the "previous" frame time
-    g_millisecsPreviousFrame = SDL_GetTicks();
+    msSincePreviousFrame = SDL_GetTicks();
 
     // Reset all event handlers for the current frame
     eventBus->Reset();
 
-    // Perform the subscription of the events for all systems
+    /**
+     * @brief Subscribe to events
+     */
     registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
-
     registry->GetSystem<PlayerControllerSystem>().SubscribeToEvents(eventBus, registry);
     registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
 
     // UpdateSystems the registry to process the entities that are waiting to be created/deleted
     registry->Update();
 
-    // apply velocityDelta and check out of bounds.
-    registry->GetSystem<MovementSystem>().Update(deltaTime);
+    /**
+     * @brief Apply velocityDelta and check out of bounds.
+     */
+    registry->GetSystem<EntityMovementSystem>().Update(deltaTime);
+//    registry->GetSystem<PlayerControllerSystem>().Update(deltaTime);
 
-    // apply velocityDelta and check out of bounds.
-    registry->GetSystem<PlayerControllerSystem>().Update(deltaTime);
-    registry->GetSystem<AnimationSystem>().Update();
-
-    // AABB collision player to all other objects.
+    /**
+     * @brief AABB collision player to all other objects.
+     */
     registry->GetSystem<PlayerCollisionSystem>().Update(eventBus, registry);
+    registry->GetSystem<EntityCollisionSystem>().Update(eventBus);
 
-    // AABB collision of all objects.
-    registry->GetSystem<CollisionSystem>().Update(eventBus);
-
-    registry->GetSystem<CameraMovementSystem>().Update(gameRenderer, gameCamera);
-
+    /**
+     * @brief Projectile updates.
+     */
     registry->GetSystem<ProjectileEmitSystem>().Update(registry);
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
+
+    registry->GetSystem<AnimationSystem>().Update();
+    registry->GetSystem<CameraMovementSystem>().Update(gameRenderer, gameCamera);
 
 }
 

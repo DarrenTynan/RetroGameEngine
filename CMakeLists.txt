@@ -96,9 +96,9 @@ set(SOURCE_FILES
         Engine/src/Systems/include/AnimationSystem.h
         Engine/src/Systems/include/CameraMovementSystem.h
         Engine/src/Systems/include/PlayerCollisionSystem.h
-        Engine/src/Systems/include/CollisionSystem.h
+        Engine/src/Systems/include/EntityCollisionSystem.h
         Engine/src/Systems/include/DamageSystem.h
-        Engine/src/Systems/include/MovementSystem.h
+        Engine/src/Systems/include/EntityMovementSystem.h
         Engine/src/Systems/include/PlayerControllerSystem.h
         Engine/src/Systems/include/PlayerControllerSystem.h
         Engine/src/Systems/include/ProjectileEmitSystem.h

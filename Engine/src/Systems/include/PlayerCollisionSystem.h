@@ -70,16 +70,18 @@ namespace RGE_System
 
                 if (isCollision)
                 {
+                    std::cout << "velocityDelta.x: " << aRB.velocityDelta.x << std::endl;
+                    std::cout << "velocityDelta.y: " << aRB.velocityDelta.y << std::endl;
 //                    std::cout << "PlayerCollisionSystem: Player has collided!" << std::endl;
-                    std::cout << "Box aa.x: " << aa.x << std::endl;
-                    std::cout << "Box aa.y: " << aa.y << std::endl;
-                    std::cout << "Box aa.w: " << aa.w << std::endl;
-                    std::cout << "Box aa.h: " << aa.h << std::endl;
+//                    std::cout << "Box aa.x: " << aa.x << std::endl;
+//                    std::cout << "Box aa.y: " << aa.y << std::endl;
+//                    std::cout << "Box aa.w: " << aa.w << std::endl;
+//                    std::cout << "Box aa.h: " << aa.h << std::endl;
 
-                    std::cout << "Box bb.x: " << bb.x << std::endl;
-                    std::cout << "Box bb.y: " << bb.y << std::endl;
-                    std::cout << "Box bb.w: " << bb.w << std::endl;
-                    std::cout << "Box bb.h: " << bb.h << std::endl;
+//                    std::cout << "Box bb.x: " << bb.x << std::endl;
+//                    std::cout << "Box bb.y: " << bb.y << std::endl;
+//                    std::cout << "Box bb.w: " << bb.w << std::endl;
+//                    std::cout << "Box bb.h: " << bb.h << std::endl;
 
                     // Horizontal
                     if (aRB.velocityDelta.x != 0)
@@ -89,18 +91,21 @@ namespace RGE_System
                         if (std::signbit(aRB.velocityDelta.x))
                         {
                             std::cout << "Player walking left!" << std::endl;
+
                             aTransform.position.x = (float)(bb.x + bb.w);
-                            aRB.velocityDelta.x = 0.0f;
                             break;
                         }
 
                         if (!std::signbit(aRB.velocityDelta.x))
                         {
                             std::cout << "Player walking right!" << std::endl;
+
                             aTransform.position.x = (float)(bb.x - aCollider.width);
                             aRB.velocityDelta.x = 0.0f;
+                            aRB.velocityDelta.y = 0.0f;
                             break;
                         }
+                        break;
                     }
 
                     // Vertical
@@ -113,9 +118,10 @@ namespace RGE_System
                             std::cout << "Player walking up!" << std::endl;
                             std::cout << "PRE aTransform.position.x: " << aTransform.position.x << std::endl;
                             std::cout << "PRE aTransform.position.y: " << aTransform.position.y << std::endl;
-                            aTransform.position.y = (float)(bb.y + bb.h);
+                            aTransform.position.y = (float)(bb.y + bb.h) + 1;
                             std::cout << "POST aTransform.position.x: " << aTransform.position.x << std::endl;
                             std::cout << "POST aTransform.position.y: " << aTransform.position.y << std::endl;
+                            aRB.velocityDelta.x = 0.0f;
                             aRB.velocityDelta.y = 0.0f;
                             break;
                         }
@@ -128,12 +134,12 @@ namespace RGE_System
                             aTransform.position.y = (float)(bb.y - bb.h)-1;
                             std::cout << "POST aTransform.position.x: " << aTransform.position.x << std::endl;
                             std::cout << "POST aTransform.position.y: " << aTransform.position.y << std::endl;
+                            aRB.velocityDelta.x = 0.0f;
                             aRB.velocityDelta.y = 0.0f;
                             break;
                         }
                     }
                 }
-
             }
         }
     };
