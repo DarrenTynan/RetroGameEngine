@@ -180,6 +180,22 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
                         glm::vec2(
                                 entity["components"]["rigidbody"]["deltaXY"]["x"].get_or(0.0),
                                 entity["components"]["rigidbody"]["deltaXY"]["y"].get_or(0.0)
+                        ),
+                        glm::vec2(
+                                entity["components"]["rigidbody"]["maxDeltaXY"]["x"].get_or(3.0),
+                                entity["components"]["rigidbody"]["maxDeltaXY"]["y"].get_or(3.0)
+                        ),
+                        float(
+                                entity["components"]["rigidbody"]["acceleration"].get_or(0.5)
+                        ),
+                            float(
+                                    entity["components"]["rigidbody"]["boost"].get_or(4.0)
+                        ),
+                            float(
+                                    entity["components"]["rigidbody"]["gravity"].get_or(0.3)
+                        ),
+                            float(
+                                    entity["components"]["rigidbody"]["friction"].get_or(0.85)
                         )
                 );
             }

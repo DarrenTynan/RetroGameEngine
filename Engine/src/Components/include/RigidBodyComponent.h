@@ -27,22 +27,38 @@ struct RigidBodyComponent
     // Pointer to the Finite State Machine
     FSM* fsm = new FSM();
 
-    // Velocity is the rate of change. DX and DY
+    // Entity velocity subject to forces is the rate of change. DX and DY
     glm::vec2 deltaXY = glm::vec2(0.0, .0);
 
-    // maxDeltaXY is the limit of how many pixels to allow the player to move each frame.
+    // Player maxDeltaXY is the limit of how many pixels to allow the player to move each frame.
     glm::vec2 maxDeltaXY = glm::vec2(3.0, 3.0);
 
+    // Player forces
     float acceleration = 0.5f;
     float boost = 4.0f;
     float gravity = 0.3f;
     float friction = 0.85f;
 
-    explicit RigidBodyComponent(glm::vec2 _velocity = glm::vec2(0.0, 0.0))
+    /**
+     * @brief The option of passing in velocity for entities..
+     *
+     * @param _deltaXY
+     * @param _maxDeltaXY
+     * @param _acceleration
+     * @param _boost
+     * @param _gravity
+     * @param _friction
+    */
+    explicit RigidBodyComponent(glm::vec2 _deltaXY = glm::vec2(), glm::vec2 _maxDeltaXY = glm::vec2(), float _acceleration = 0.5f, float _boost = 4.0f, float _gravity = 0.3f, float _friction = 0.85f)
     {
-//        this->deltaXY = _velocity;
+        this->deltaXY = _deltaXY;
+        this->maxDeltaXY = _maxDeltaXY;
+        this->acceleration = _acceleration;
+        this->boost = _boost;
+        this->gravity = _gravity;
+        this->friction = _friction;
     }
 };
 
 } // end namespace
-#endif
+#endif //RIGIDBODYCOMPONENT_H
