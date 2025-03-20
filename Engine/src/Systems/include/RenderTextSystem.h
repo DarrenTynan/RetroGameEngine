@@ -22,8 +22,9 @@ public:
     void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, const SDL_Rect& camera) {
         for (auto entity: GetSystemEntities()) {
             const auto textLabel = entity.GetComponent<TextLabelComponent>();
+//            SDL_Surface* surface = TTF_RenderText_Blended(assetStore->GetFont(textLabel.assetId), textLabel.text.c_str(), textLabel.color);
 
-            SDL_Surface* surface = TTF_RenderText_Blended(assetStore->GetFont(textLabel.assetId), textLabel.text.c_str(), textLabel.color);
+            SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped(assetStore->GetFont(textLabel.assetId), textLabel.text.c_str(), textLabel.color, 640);
 
             SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
             SDL_FreeSurface(surface);

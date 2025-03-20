@@ -100,6 +100,7 @@ namespace RGE_System
                         aTransform.position.x = (float)(bb.x + bb.w);
                         aRB.deltaXY = glm::vec2 (0,0);
                         aRB.fsm->direction = glm::vec2 (0,0);
+                        break;
                     }
 
                     else if (aRB.fsm->direction.x > 0)
@@ -109,24 +110,27 @@ namespace RGE_System
                         aTransform.position.x = (float)(bb.x - aCollider.width);
                         aRB.deltaXY = glm::vec2 (0,0);
                         aRB.fsm->direction = glm::vec2 (0,0);
+                        break;
                     }
 
-                    if (aRB.fsm->direction.y < 0)
+                    else if (aRB.fsm->direction.y < 0)
                     {
                         std::cout << "PlayerCollisionSystem: walking up!" << std::endl;
 
                         aTransform.position.y = (float)(bb.y + bb.h);
                         aRB.deltaXY = glm::vec2 (0,0);
                         aRB.fsm->direction = glm::vec2 (0,0);
+                        break;
                     }
 
-                    if (aRB.fsm->direction.y > 0)
+                    else if (aRB.fsm->direction.y > 0)
                     {
                         std::cout << "PlayerCollisionSystem: walking down!" << std::endl;
 
-                        aTransform.position.y = (float)(bb.y - bb.h);
+                        aTransform.position.y = (float)(bb.y - aa.h);
                         aRB.deltaXY = glm::vec2 (0,0);
                         aRB.fsm->direction = glm::vec2 (0,0);
+                        break;
                     }
                 }
             }

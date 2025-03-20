@@ -132,8 +132,8 @@ class PlayerControllerSystem : public System
             rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);
             transform.position.x += rigidBody.deltaXY.x;
             text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
-                   + " mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
-                   + " dir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y) + " dir.y: " ;
+                   + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+                   + "\ndir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y);
 
         }
 
@@ -159,8 +159,8 @@ class PlayerControllerSystem : public System
             rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);
             transform.position.x += rigidBody.deltaXY.x;
             text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
-                   + " mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
-                   + " dir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y) + " dir.y: " ;
+                   + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+                   + "\ndir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y);
 
         }
 
@@ -185,8 +185,8 @@ class PlayerControllerSystem : public System
             rigidBody.deltaXY.y = MiddleOfThree(-rigidBody.maxDeltaXY.y, rigidBody.deltaXY.y, rigidBody.maxDeltaXY.y);
             transform.position.y += rigidBody.deltaXY.y;
             text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
-                   + " mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
-                   + " dir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y) + " dir.y: " ;
+                   + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+                   + "\ndir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y);
         }
 
 
@@ -210,8 +210,8 @@ class PlayerControllerSystem : public System
             rigidBody.deltaXY.y = MiddleOfThree(-rigidBody.maxDeltaXY.y, rigidBody.deltaXY.y, rigidBody.maxDeltaXY.y);
             transform.position.y += rigidBody.deltaXY.y;
             text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
-                   + " mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
-                   + " dir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y) + " dir.y: " ;
+                   + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+                   + "\ndir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y);
         }
 
 
