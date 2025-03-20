@@ -260,29 +260,31 @@ bool RGE::ProcessKeyboardInputs()
                 if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
                 if (sdlEvent.key.keysym.sym == SDLK_p) { isPlayer = !isPlayer; }
 
-                // Up
-                if (sdlEvent.key.keysym.sym == SDLK_UP)
-                {
-                    eventBus->EmitEvent<WalkUpEvent>(sdlEvent.key.keysym.sym);
-                }
 
-                // Down
-                if (sdlEvent.key.keysym.sym == SDLK_DOWN)
-                {
-                    eventBus->EmitEvent<WalkDownEvent>(sdlEvent.key.keysym.sym);
-                }
-
-                // Left
-                if (sdlEvent.key.keysym.sym == SDLK_LEFT || sdlEvent.key.keysym.sym == SDLK_z)
-                {
-                    eventBus->EmitEvent<WalkLeftEvent>(sdlEvent.key.keysym.sym);
-                }
-
-                // Right
-                if (sdlEvent.key.keysym.sym == SDLK_RIGHT || sdlEvent.key.keysym.sym == SDLK_x)
-                {
-                    eventBus->EmitEvent<WalkRightEvent>(sdlEvent.key.keysym.sym);
-                }
+//                // remove the keys events
+//                // Up
+//                if (sdlEvent.key.keysym.sym == SDLK_UP)
+//                {
+//                    eventBus->EmitEvent<WalkUpEvent>(sdlEvent.key.keysym.sym);
+//                }
+//
+//                // Down
+//                if (sdlEvent.key.keysym.sym == SDLK_DOWN)
+//                {
+//                    eventBus->EmitEvent<WalkDownEvent>(sdlEvent.key.keysym.sym);
+//                }
+//
+//                // Left
+//                if (sdlEvent.key.keysym.sym == SDLK_LEFT || sdlEvent.key.keysym.sym == SDLK_z)
+//                {
+//                    eventBus->EmitEvent<WalkLeftEvent>(sdlEvent.key.keysym.sym);
+//                }
+//
+//                // Right
+//                if (sdlEvent.key.keysym.sym == SDLK_RIGHT || sdlEvent.key.keysym.sym == SDLK_x)
+//                {
+//                    eventBus->EmitEvent<WalkRightEvent>(sdlEvent.key.keysym.sym);
+//                }
             break;
         }
     };

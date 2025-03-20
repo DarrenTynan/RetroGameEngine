@@ -45,10 +45,10 @@ class PlayerControllerSystem : public System
         {
             this->registry = _registry;
 
-            eventBus->SubscribeToEvent<WalkLeftEvent>(this, &PlayerControllerSystem::WalkLeft);
-            eventBus->SubscribeToEvent<WalkRightEvent>(this, &PlayerControllerSystem::WalkRight);
-            eventBus->SubscribeToEvent<WalkUpEvent>(this, &PlayerControllerSystem::WalkUp);
-            eventBus->SubscribeToEvent<WalkDownEvent>(this, &PlayerControllerSystem::WalkDown);
+// EXAMPLE of subscribe to event.
+//            eventBus->SubscribeToEvent<WalkLeftEvent>(this, &PlayerControllerSystem::WalkLeft);
+//            void WalkLeft(WalkLeftEvent& event) {}
+
         }
 
         /**
@@ -93,9 +93,18 @@ class PlayerControllerSystem : public System
             rigidBody.deltaXY.x *= rigidBody.friction;
             rigidBody.deltaXY.y *= rigidBody.friction;
 
+            ReadKeys();
         }
 
 
+        /**
+         * @brief Returns the middle value.
+         *
+         * @param a
+         * @param b
+         * @param c
+         * @return the middle value
+         */
         float MiddleOfThree(float a, float b, float c)
         {
             // Checking for b
@@ -116,7 +125,7 @@ class PlayerControllerSystem : public System
          *
          * @param event
          */
-        void WalkLeft(WalkLeftEvent& event)
+        void WalkLeft()
         {
             auto player = registry->GetEntityByTag("player");
             auto &sprite = player.GetComponent<SpriteComponent>();
@@ -143,7 +152,7 @@ class PlayerControllerSystem : public System
          *
          * @param event
          */
-        void WalkRight(WalkRightEvent& event)
+         void WalkRight()
         {
             auto player = registry->GetEntityByTag("player");
             auto &sprite = player.GetComponent<SpriteComponent>();
@@ -170,7 +179,7 @@ class PlayerControllerSystem : public System
          *
          * @param event
          */
-        void WalkUp(WalkUpEvent& event)
+         void WalkUp()
         {
             auto player = registry->GetEntityByTag("player");
             auto &sprite = player.GetComponent<SpriteComponent>();
@@ -195,7 +204,7 @@ class PlayerControllerSystem : public System
          *
          * @param event
          */
-        void WalkDown(WalkDownEvent& event)
+         void WalkDown()
         {
             auto player = registry->GetEntityByTag("player");
             auto &sprite = player.GetComponent<SpriteComponent>();
@@ -215,6 +224,36 @@ class PlayerControllerSystem : public System
         }
 
 
+        void ReadKeys()
+        {
+            auto player = registry->GetEntityByTag("player");
+            auto &rigidBody = player.GetComponent<RigidBodyComponent>();
+            auto fsm = rigidBody.fsm;
+            fsm->direction.x = 0.0f;
+            fsm->direction.y = 0.0f;
+            auto &text = player.GetComponent<TextLabelComponent>().text;
+            text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
+                   + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+                   + "\ndir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y);
+
+
+            SDL_PumpEvents();
+
+            // update keyboard state
+            auto keysArray = const_cast <Uint8*> (SDL_GetKeyboardState(NULL));
+
+            if (keysArray[SDL_SCANCODE_LEFT])
+                WalkLeft();
+
+            if (keysArray[SDL_SCANCODE_RIGHT])
+                WalkRight();
+
+            if (keysArray[SDL_SCANCODE_UP])
+                WalkUp();
+
+            if (keysArray[SDL_SCANCODE_DOWN])
+                WalkDown();
+        }
 };
 
 } // end namespace
