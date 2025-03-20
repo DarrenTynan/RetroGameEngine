@@ -18,15 +18,16 @@
 #include "../src/EventBus/include/EventBus.h"
 #include "../src/Components/include/SpriteComponent.h"
 #include "../src/Components/include/BoxColliderComponent.h"
+#include "../src/Components/include/TextLabelComponent.h"
 #include "../src/Systems/include/PlayerControllerSystem.h"
 #include "../src/Systems/include/CameraMovementSystem.h"
-#include "../src/Systems/include/EntityMovementSystem.h"
+//#include "../src/Systems/include/EntityMovementSystem.h"
 #include "../src/Systems/include/RenderSystem.h"
 #include "../src/Systems/include/RenderTextSystem.h"
 #include "../src/Systems/include/RenderColliderSystem.h"
 #include "../src/Systems/include/AnimationSystem.h"
 #include "../src/Systems/include/PlayerCollisionSystem.h"
-#include "../src/Systems/include/EntityCollisionSystem.h"
+//#include "../src/Systems/include/EntityCollisionSystem.h"
 #include "../src/Systems/include/ProjectileEmitSystem.h"
 #include "../src/Systems/include/ProjectileLifecycleSystem.h"
 #include "../src/Systems/include/DamageSystem.h"
@@ -56,7 +57,7 @@ std::unique_ptr<AssetStore> assetStore = std::make_unique<AssetStore>();
 std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
 
 // Debug keyboard toggles
-bool isCollider = false;
+bool isCollider = true;
 bool isRayCast = false;
 bool isCamera = false;
 bool isPlayer = false;
@@ -107,11 +108,11 @@ void RGE::Setup()
     }
 
     // Add the systems that need to be processed in our game
-    registry->AddSystem<EntityMovementSystem>();          // Move all entities
+//    registry->AddSystem<EntityMovementSystem>();          // Move all entities
     registry->AddSystem<PlayerControllerSystem>();        // Move the player & apply forces
     registry->AddSystem<AnimationSystem>();               // Animate all entities
     registry->AddSystem<PlayerCollisionSystem>();         // Check all entity collisions AABB
-    registry->AddSystem<EntityCollisionSystem>();         // Check all entity collisions AABB
+//    registry->AddSystem<EntityCollisionSystem>();         // Check all entity collisions AABB
     registry->AddSystem<DamageSystem>();                  // Check all damage systems
     registry->AddSystem<CameraMovementSystem>();          // Check the camera move system
     registry->AddSystem<ProjectileEmitSystem>();          // Check entity bullets AABB
@@ -238,7 +239,7 @@ void RGE::UpdateRenderer()
  * @brief Poll window and keyboard events
  * @details If the cursor key's are pressed then emit a Walk<XX>Event
  */
-bool RGE::ProcessDebugInputEvents()
+bool RGE::ProcessKeyboardInputs()
 {
     bool isQuit = true;
 
@@ -272,17 +273,17 @@ bool RGE::ProcessDebugInputEvents()
                 }
 
                 // Left
-                if (sdlEvent.key.keysym.sym == SDLK_LEFT)
+                if (sdlEvent.key.keysym.sym == SDLK_LEFT || sdlEvent.key.keysym.sym == SDLK_z)
                 {
                     eventBus->EmitEvent<WalkLeftEvent>(sdlEvent.key.keysym.sym);
                 }
 
                 // Right
-                if (sdlEvent.key.keysym.sym == SDLK_RIGHT)
+                if (sdlEvent.key.keysym.sym == SDLK_RIGHT || sdlEvent.key.keysym.sym == SDLK_x)
                 {
                     eventBus->EmitEvent<WalkRightEvent>(sdlEvent.key.keysym.sym);
                 }
-
+            break;
         }
     };
     return isQuit;
@@ -314,16 +315,16 @@ void RGE::UpdateSystems()
     registry->Update();
 
     /**
-     * @brief Apply velocityDelta and check out of bounds.
+     * @brief Apply deltaXY and check out of bounds.
      */
-    registry->GetSystem<EntityMovementSystem>().Update(deltaTime);
-//    registry->GetSystem<PlayerControllerSystem>().Update(deltaTime);
+//    registry->GetSystem<EntityMovementSystem>().Update(deltaTime);
+    registry->GetSystem<PlayerControllerSystem>().Update(deltaTime);
 
     /**
      * @brief AABB collision player to all other objects.
      */
     registry->GetSystem<PlayerCollisionSystem>().Update(eventBus, registry);
-    registry->GetSystem<EntityCollisionSystem>().Update(eventBus);
+//    registry->GetSystem<EntityCollisionSystem>().Update(eventBus);
 
     /**
      * @brief Projectile updates.
@@ -333,7 +334,7 @@ void RGE::UpdateSystems()
 
     registry->GetSystem<AnimationSystem>().Update();
     registry->GetSystem<CameraMovementSystem>().Update(gameRenderer, gameCamera);
-
+    registry->GetSystem<RenderTextSystem>().Update(gameRenderer, assetStore, gameCamera);
 }
 
 

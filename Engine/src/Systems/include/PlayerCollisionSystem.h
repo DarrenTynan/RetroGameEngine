@@ -5,10 +5,12 @@
 #ifndef RETROGAMEENGINE_PLAYERCOLLISIONSYSTEM_H
 #define RETROGAMEENGINE_PLAYERCOLLISIONSYSTEM_H
 
+#include <string>
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_rect.h>
 
 #include "../../ECS/include/ECS.h"
 #include "../../EventBus/include/EventBus.h"
@@ -30,6 +32,15 @@ namespace RGE_System
             RequireComponent<TransformComponent>();
             RequireComponent<BoxColliderComponent>();
         }
+
+        enum Direction {
+            UP,
+            RIGHT,
+            DOWN,
+            LEFT
+        };
+
+        enum Direction playerDirection;
 
         // Check entity bounding box for collision.
         void Update(std::unique_ptr<EventBus>& eventBus, std::shared_ptr<Registry>& registry)
@@ -70,9 +81,6 @@ namespace RGE_System
 
                 if (isCollision)
                 {
-                    std::cout << "velocityDelta.x: " << aRB.velocityDelta.x << std::endl;
-                    std::cout << "velocityDelta.y: " << aRB.velocityDelta.y << std::endl;
-//                    std::cout << "PlayerCollisionSystem: Player has collided!" << std::endl;
 //                    std::cout << "Box aa.x: " << aa.x << std::endl;
 //                    std::cout << "Box aa.y: " << aa.y << std::endl;
 //                    std::cout << "Box aa.w: " << aa.w << std::endl;
@@ -83,61 +91,42 @@ namespace RGE_System
 //                    std::cout << "Box bb.w: " << bb.w << std::endl;
 //                    std::cout << "Box bb.h: " << bb.h << std::endl;
 
-                    // Horizontal
-                    if (aRB.velocityDelta.x != 0)
+                    std::cout << "dir.x: " << std::to_string(aRB.fsm->direction.x) + " dir.y: " + std::to_string(aRB.fsm->direction.y) << std::endl;
+
+                    if (aRB.fsm->direction.x < 0)
                     {
-                        // std::signbit determines if the given floating point number num is negative.
-                        // true if num is negative, false otherwise.
-                        if (std::signbit(aRB.velocityDelta.x))
-                        {
-                            std::cout << "Player walking left!" << std::endl;
+                        std::cout << "PlayerCollisionSystem: walking left!" << std::endl;
 
-                            aTransform.position.x = (float)(bb.x + bb.w);
-                            break;
-                        }
-
-                        if (!std::signbit(aRB.velocityDelta.x))
-                        {
-                            std::cout << "Player walking right!" << std::endl;
-
-                            aTransform.position.x = (float)(bb.x - aCollider.width);
-                            aRB.velocityDelta.x = 0.0f;
-                            aRB.velocityDelta.y = 0.0f;
-                            break;
-                        }
-                        break;
+                        aTransform.position.x = (float)(bb.x + bb.w);
+                        aRB.deltaXY = glm::vec2 (0,0);
+                        aRB.fsm->direction = glm::vec2 (0,0);
                     }
 
-                    // Vertical
-                    if (aRB.velocityDelta.y != 0)
+                    else if (aRB.fsm->direction.x > 0)
                     {
-                        // std::signbit determines if the given floating point number num is negative.
-                        // true if num is negative, false otherwise.
-                        if (std::signbit(aRB.velocityDelta.y))
-                        {
-                            std::cout << "Player walking up!" << std::endl;
-                            std::cout << "PRE aTransform.position.x: " << aTransform.position.x << std::endl;
-                            std::cout << "PRE aTransform.position.y: " << aTransform.position.y << std::endl;
-                            aTransform.position.y = (float)(bb.y + bb.h) + 1;
-                            std::cout << "POST aTransform.position.x: " << aTransform.position.x << std::endl;
-                            std::cout << "POST aTransform.position.y: " << aTransform.position.y << std::endl;
-                            aRB.velocityDelta.x = 0.0f;
-                            aRB.velocityDelta.y = 0.0f;
-                            break;
-                        }
+                        std::cout << "PlayerCollisionSystem: walking right!" << std::endl;
 
-                        if (!std::signbit(aRB.velocityDelta.y))
-                        {
-                            std::cout << "Player walking down!" << std::endl;
-                            std::cout << "PRE aTransform.position.x: " << aTransform.position.x << std::endl;
-                            std::cout << "PRE aTransform.position.y: " << aTransform.position.y << std::endl;
-                            aTransform.position.y = (float)(bb.y - bb.h)-1;
-                            std::cout << "POST aTransform.position.x: " << aTransform.position.x << std::endl;
-                            std::cout << "POST aTransform.position.y: " << aTransform.position.y << std::endl;
-                            aRB.velocityDelta.x = 0.0f;
-                            aRB.velocityDelta.y = 0.0f;
-                            break;
-                        }
+                        aTransform.position.x = (float)(bb.x - aCollider.width);
+                        aRB.deltaXY = glm::vec2 (0,0);
+                        aRB.fsm->direction = glm::vec2 (0,0);
+                    }
+
+                    if (aRB.fsm->direction.y < 0)
+                    {
+                        std::cout << "PlayerCollisionSystem: walking up!" << std::endl;
+
+                        aTransform.position.y = (float)(bb.y + bb.h);
+                        aRB.deltaXY = glm::vec2 (0,0);
+                        aRB.fsm->direction = glm::vec2 (0,0);
+                    }
+
+                    if (aRB.fsm->direction.y > 0)
+                    {
+                        std::cout << "PlayerCollisionSystem: walking down!" << std::endl;
+
+                        aTransform.position.y = (float)(bb.y - bb.h);
+                        aRB.deltaXY = glm::vec2 (0,0);
+                        aRB.fsm->direction = glm::vec2 (0,0);
                     }
                 }
             }

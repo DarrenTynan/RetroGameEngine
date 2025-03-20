@@ -2,6 +2,7 @@
 #define PLAYERCONTROLSYSTEM_H
 
 #include <algorithm>
+#include <string>
 #include "../../ECS/include/ECS.h"
 #include "../../EventBus/include/EventBus.h"
 #include "../../Events/include/PlayerInputEvent.h"
@@ -21,7 +22,7 @@ namespace RGE_System
 {
 
 /**
- * @brief Detects key presses and changes the velocityDelta.
+ * @brief Detects key presses and changes the deltaXY.
  */
 class PlayerControllerSystem : public System
 {
@@ -33,35 +34,6 @@ class PlayerControllerSystem : public System
             RequireComponent<SpriteComponent>();
             RequireComponent<RigidBodyComponent>();
         }
-
-        // Update position during Delta Time
-        // player.dy += gravity
-        // player.dx *= friction
-        //
-        // Key check:
-        //  player.dx -=/+= acceleration
-        //
-        // Limit speed
-        //
-        // Apply DX:
-        //  player.x += dx, player.y += dy
-        //
-        // Ground collision
-        //
-        // Check screen bounds
-        void Update(double deltaTime)
-        {
-            Entity player = registry->GetEntityByTag("player");
-
-            auto &transform = player.GetComponent<TransformComponent>();
-            auto &rigidBody = player.GetComponent<RigidBodyComponent>();
-
-            // Apply the velocityDelta
-//            transform.position.x += (rigidBody.velocityDelta.x * (float)deltaTime);
-//            transform.position.y += (rigidBody.velocityDelta.y * (float)deltaTime);
-
-        }
-
 
         /**
          * @brief Subscribe to key pressed events.
@@ -79,6 +51,65 @@ class PlayerControllerSystem : public System
             eventBus->SubscribeToEvent<WalkDownEvent>(this, &PlayerControllerSystem::WalkDown);
         }
 
+        /**
+         * @brief
+         *
+         * function _update()
+         * player.dy+=gravity
+         * player.dx*=friction
+         *
+         * --controls
+         * if (btn(0)) then player.dx-=player.acc end -- left
+         * if (btn(1)) then player.dx+=player.acc end -- right
+         * if (btnp(5)) then player.dy-=player.boost end -- X
+         *
+         * --limit left/right speed
+         * player.dx=mid(-player.max_dx,player.dx,player.max_dx)
+         *
+         * --limit fall speed
+         * if (player.dy>0) then
+         *  player.dy=mid(-player.max_dy,player.dy,player.max_dy)
+         * end
+         *
+         * --apply dx and dy to player position
+         * player.x+=player.dx
+         * player.y+=player.dy
+         *
+         * --simple ground collision
+         * if (player.y>110) then player.y=110 player.dy=0 end
+         *
+         * --if run off screen warp to other side
+         * if (player.x>128) then player.x=-8 end
+         * if (player.x<-8) then player.x=128 end
+         * end
+        */
+        void Update(double deltaTime)
+        {
+            Entity player = registry->GetEntityByTag("player");
+            auto &transform = player.GetComponent<TransformComponent>();
+            auto &rigidBody = player.GetComponent<RigidBodyComponent>();
+
+            // Apply forces to deltaXY
+            rigidBody.deltaXY.x *= rigidBody.friction;
+            rigidBody.deltaXY.y *= rigidBody.friction;
+
+        }
+
+
+        float MiddleOfThree(float a, float b, float c)
+        {
+            // Checking for b
+            if ((a < b && b < c) || (c < b && b < a))
+                return b;
+
+            // Checking for a
+            else if ((b < a && a < c) || (c < a && a < b))
+                return a;
+
+            else
+                return c;
+        }
+
 
         /**
          * @brief Player direction event. Flip the sprite, set the FSM and add acceleration.
@@ -91,19 +122,19 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-//            auto fsm = rigidBody.fsm;
-//
-//            sprite.flipH = true;
-//            fsm->toggle();
-//            fsm->direction.x = -1.0;
+            auto &text = player.GetComponent<TextLabelComponent>().text;
+            auto fsm = rigidBody.fsm;
+            sprite.flipH = true;
+            fsm->toggle();
+            fsm->direction.x = -1.0;
 
-            // Add acceleration force on the x axis.
-            rigidBody.velocityDelta.x -= rigidBody.acceleration;
-            transform.position.x += rigidBody.velocityDelta.x;
+            rigidBody.deltaXY.x -= rigidBody.acceleration;
+            rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);
+            transform.position.x += rigidBody.deltaXY.x;
+            text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
+                   + " mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+                   + " dir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y) + " dir.y: " ;
 
-            std::cout << "PlayerControllerSystem: Walk Left Event" << std::endl;
-            std::cout << "velocityDelta.x: " << rigidBody.velocityDelta.x << std::endl;
-            std::cout << "velocityDelta.y: " << rigidBody.velocityDelta.y << std::endl;
         }
 
 
@@ -118,19 +149,19 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-//            auto fsm = rigidBody.fsm;
-//
-//            sprite.flipH = false;
-//            fsm->toggle();
-//            fsm->direction.x = -1.0;
+            auto &text = player.GetComponent<TextLabelComponent>().text;
+            auto fsm = rigidBody.fsm;
+            sprite.flipH = false;
+            fsm->toggle();
+            fsm->direction.x = 1.0;
 
-            // Add acceleration force on the x-axis.
-            rigidBody.velocityDelta.x += rigidBody.acceleration;
-            transform.position.x += rigidBody.velocityDelta.x;
+            rigidBody.deltaXY.x += rigidBody.acceleration;
+            rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);
+            transform.position.x += rigidBody.deltaXY.x;
+            text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
+                   + " mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+                   + " dir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y) + " dir.y: " ;
 
-            std::cout << "PlayerControllerSystem: Walk Right Event" << std::endl;
-            std::cout << "velocityDelta.x: " << rigidBody.velocityDelta.x << std::endl;
-            std::cout << "velocityDelta.y: " << rigidBody.velocityDelta.y << std::endl;
         }
 
 
@@ -145,18 +176,17 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-//            auto fsm = rigidBody.fsm;
-//
-//            fsm->toggle();
-//            fsm->direction.y = -1.0;
+            auto &text = player.GetComponent<TextLabelComponent>().text;
+            auto fsm = rigidBody.fsm;
+            fsm->toggle();
+            fsm->direction.y = -1.0;
 
-            // Add acceleration force on the y-axis.
-            rigidBody.velocityDelta.y -= rigidBody.acceleration;
-            transform.position.y += rigidBody.velocityDelta.y;
-
-            std::cout << "PlayerControllerSystem: Walk Up Event" << std::endl;
-            std::cout << "velocityDelta.x: " << rigidBody.velocityDelta.x << std::endl;
-            std::cout << "velocityDelta.y: " << rigidBody.velocityDelta.y << std::endl;
+            rigidBody.deltaXY.y -= rigidBody.acceleration;
+            rigidBody.deltaXY.y = MiddleOfThree(-rigidBody.maxDeltaXY.y, rigidBody.deltaXY.y, rigidBody.maxDeltaXY.y);
+            transform.position.y += rigidBody.deltaXY.y;
+            text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
+                   + " mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+                   + " dir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y) + " dir.y: " ;
         }
 
 
@@ -171,18 +201,17 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-//            auto fsm = rigidBody.fsm;
-//
-//            fsm->toggle();
-//            fsm->direction.y = 1.0;
+            auto &text = player.GetComponent<TextLabelComponent>().text;
+            auto fsm = rigidBody.fsm;
+            fsm->toggle();
+            fsm->direction.y = 1.0;
 
-            // Add acceleration force on the y-axis.
-            rigidBody.velocityDelta.y += rigidBody.acceleration;
-            transform.position.y -= rigidBody.velocityDelta.y;
-
-            std::cout << "PlayerControllerSystem: Walk Down Event" << std::endl;
-            std::cout << "velocityDelta.x: " << rigidBody.velocityDelta.x << std::endl;
-            std::cout << "velocityDelta.y: " << rigidBody.velocityDelta.y << std::endl;
+            rigidBody.deltaXY.y += rigidBody.acceleration;
+            rigidBody.deltaXY.y = MiddleOfThree(-rigidBody.maxDeltaXY.y, rigidBody.deltaXY.y, rigidBody.maxDeltaXY.y);
+            transform.position.y += rigidBody.deltaXY.y;
+            text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
+                   + " mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+                   + " dir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y) + " dir.y: " ;
         }
 
 

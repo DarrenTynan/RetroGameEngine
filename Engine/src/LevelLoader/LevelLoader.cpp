@@ -178,8 +178,8 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
             {
                 newEntity.AddComponent<RigidBodyComponent>(
                         glm::vec2(
-                                entity["components"]["rigidbody"]["velocityDelta"]["x"].get_or(0.0),
-                                entity["components"]["rigidbody"]["velocityDelta"]["y"].get_or(0.0)
+                                entity["components"]["rigidbody"]["deltaXY"]["x"].get_or(0.0),
+                                entity["components"]["rigidbody"]["deltaXY"]["y"].get_or(0.0)
                         )
                 );
             }
@@ -256,6 +256,13 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
             if (cameraFollow != sol::nullopt)
             {
                 newEntity.AddComponent<CameraFollowComponent>();
+            }
+
+            // TextLabel
+            sol::optional<sol::table> textLabel = entity["components"]["text_label"];
+            if (textLabel != sol::nullopt)
+            {
+                newEntity.AddComponent<TextLabelComponent>();
             }
 
             // Script

@@ -26,7 +26,7 @@ void Game::Run()
     bool isGameRunning = true;
     while (isGameRunning)
     {
-        isGameRunning = RGE::ProcessDebugInputEvents();
+        isGameRunning = RGE::ProcessKeyboardInputs();
         RGE::UpdateSystems();
         RGE::UpdateRenderer();
     }

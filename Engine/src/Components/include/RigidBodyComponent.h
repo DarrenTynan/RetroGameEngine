@@ -24,23 +24,33 @@ namespace RGE_Component
 */
 struct RigidBodyComponent
 {
+//    enum State {
+//        IDLE,
+//        LEFT,
+//        RIGHT,
+//        UP,
+//        DOWN
+//    };
+//
+//    enum State playerState = IDLE;
+
     // Pointer to the Finite State Machine
     FSM* fsm = new FSM();
 
     // Velocity is the rate of change. DX and DY
-    glm::vec2 velocityDelta = glm::vec2(0.0, 0.0);
+    glm::vec2 deltaXY = glm::vec2(2.0, 3.0);
 
-    // maxVelocityDelta is the limit of how many pixels to allow the player to move each frame.
-    glm::vec2 maxVelocityDelta = glm::vec2(2.0, 3.0);
+    // maxDeltaXY is the limit of how many pixels to allow the player to move each frame.
+    glm::vec2 maxDeltaXY = glm::vec2(10.0, 10.0);
 
-    float acceleration = 1.5f;
-//    float jumpForce = 4.0f;
-//    float gravity = 0.3f;
+    float acceleration = 4.0f;
+    float boost = 4.0f;
+    float gravity = 0.3f;
     float friction = 0.85f;
 
-    explicit RigidBodyComponent(glm::vec2 _velocity = glm::vec2(0.0, 0.0))
+    explicit RigidBodyComponent(glm::vec2 _velocity = glm::vec2(0.0, 2.0))
     {
-        this->velocityDelta = _velocity;
+//        this->deltaXY = _velocity;
     }
 };
 

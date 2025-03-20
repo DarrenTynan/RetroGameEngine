@@ -18,11 +18,10 @@ class RGE
 public:
     static void Setup();
     static void UpdateRenderer();
-    static bool ProcessDebugInputEvents();
+    static bool ProcessKeyboardInputs();
     static void UpdateSystems();
     static void LoadLevel();
     static void Destroy();
-
 };
 
 #endif //RETROGAMEENGINE_RGE_H
