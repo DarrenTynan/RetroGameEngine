@@ -33,15 +33,6 @@ namespace RGE_System
             RequireComponent<BoxColliderComponent>();
         }
 
-        enum Direction {
-            UP,
-            RIGHT,
-            DOWN,
-            LEFT
-        };
-
-        enum Direction playerDirection;
-
         // Check entity bounding box for collision.
         void Update(std::unique_ptr<EventBus>& eventBus, std::shared_ptr<Registry>& registry)
         {
@@ -91,12 +82,8 @@ namespace RGE_System
 //                    std::cout << "Box bb.w: " << bb.w << std::endl;
 //                    std::cout << "Box bb.h: " << bb.h << std::endl;
 
-                    std::cout << "dir.x: " << std::to_string(aRB.fsm->direction.x) + " dir.y: " + std::to_string(aRB.fsm->direction.y) << std::endl;
-
                     if (aRB.fsm->direction.x < 0)
                     {
-                        std::cout << "PlayerCollisionSystem: walking left!" << std::endl;
-
                         aTransform.position.x = (float)(bb.x + bb.w);
                         aRB.deltaXY = glm::vec2 (0,0);
                         aRB.fsm->direction = glm::vec2 (0,0);
@@ -105,8 +92,6 @@ namespace RGE_System
 
                     else if (aRB.fsm->direction.x > 0)
                     {
-                        std::cout << "PlayerCollisionSystem: walking right!" << std::endl;
-
                         aTransform.position.x = (float)(bb.x - aCollider.width);
                         aRB.deltaXY = glm::vec2 (0,0);
                         aRB.fsm->direction = glm::vec2 (0,0);
@@ -115,8 +100,6 @@ namespace RGE_System
 
                     else if (aRB.fsm->direction.y < 0)
                     {
-                        std::cout << "PlayerCollisionSystem: walking up!" << std::endl;
-
                         aTransform.position.y = (float)(bb.y + bb.h);
                         aRB.deltaXY = glm::vec2 (0,0);
                         aRB.fsm->direction = glm::vec2 (0,0);
@@ -125,8 +108,6 @@ namespace RGE_System
 
                     else if (aRB.fsm->direction.y > 0)
                     {
-                        std::cout << "PlayerCollisionSystem: walking down!" << std::endl;
-
                         aTransform.position.y = (float)(bb.y - aa.h);
                         aRB.deltaXY = glm::vec2 (0,0);
                         aRB.fsm->direction = glm::vec2 (0,0);

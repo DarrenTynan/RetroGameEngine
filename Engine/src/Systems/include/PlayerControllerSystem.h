@@ -105,7 +105,7 @@ class PlayerControllerSystem : public System
          * @param c
          * @return the middle value
          */
-        float MiddleOfThree(float a, float b, float c)
+        static float MiddleOfThree(float a, float b, float c)
         {
             // Checking for b
             if ((a < b && b < c) || (c < b && b < a))
@@ -134,15 +134,14 @@ class PlayerControllerSystem : public System
             auto &text = player.GetComponent<TextLabelComponent>().text;
             auto fsm = rigidBody.fsm;
             sprite.flipH = true;
-            fsm->toggle();
             fsm->direction.x = -1.0;
+
+            if (fsm->getCurrentState()->getName().c_str() != "Walk")
+                fsm->setWalkState();
 
             rigidBody.deltaXY.x -= rigidBody.acceleration;
             rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);
             transform.position.x += rigidBody.deltaXY.x;
-            text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
-                   + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
-                   + "\ndir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y);
 
         }
 
@@ -161,15 +160,14 @@ class PlayerControllerSystem : public System
             auto &text = player.GetComponent<TextLabelComponent>().text;
             auto fsm = rigidBody.fsm;
             sprite.flipH = false;
-            fsm->toggle();
             fsm->direction.x = 1.0;
+
+            if (fsm->getCurrentState()->getName().c_str() != "Walk")
+                fsm->setWalkState();
 
             rigidBody.deltaXY.x += rigidBody.acceleration;
             rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);
             transform.position.x += rigidBody.deltaXY.x;
-            text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
-                   + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
-                   + "\ndir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y);
 
         }
 
@@ -187,15 +185,15 @@ class PlayerControllerSystem : public System
             auto &transform = player.GetComponent<TransformComponent>();
             auto &text = player.GetComponent<TextLabelComponent>().text;
             auto fsm = rigidBody.fsm;
-            fsm->toggle();
             fsm->direction.y = -1.0;
+
+            if (fsm->getCurrentState()->getName().c_str() != "Walk")
+                fsm->setWalkState();
 
             rigidBody.deltaXY.y -= rigidBody.acceleration;
             rigidBody.deltaXY.y = MiddleOfThree(-rigidBody.maxDeltaXY.y, rigidBody.deltaXY.y, rigidBody.maxDeltaXY.y);
             transform.position.y += rigidBody.deltaXY.y;
-            text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
-                   + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
-                   + "\ndir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y);
+
         }
 
 
@@ -212,15 +210,15 @@ class PlayerControllerSystem : public System
             auto &transform = player.GetComponent<TransformComponent>();
             auto &text = player.GetComponent<TextLabelComponent>().text;
             auto fsm = rigidBody.fsm;
-            fsm->toggle();
             fsm->direction.y = 1.0;
+
+            if (fsm->getCurrentState()->getName().c_str() != "Walk")
+                fsm->setWalkState();
 
             rigidBody.deltaXY.y += rigidBody.acceleration;
             rigidBody.deltaXY.y = MiddleOfThree(-rigidBody.maxDeltaXY.y, rigidBody.deltaXY.y, rigidBody.maxDeltaXY.y);
             transform.position.y += rigidBody.deltaXY.y;
-            text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
-                   + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
-                   + "\ndir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y);
+
         }
 
 
@@ -232,27 +230,39 @@ class PlayerControllerSystem : public System
             fsm->direction.x = 0.0f;
             fsm->direction.y = 0.0f;
             auto &text = player.GetComponent<TextLabelComponent>().text;
-            text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
-                   + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
-                   + "\ndir.x: " + std::to_string(fsm->direction.x) + " dir.y: " + std::to_string(fsm->direction.y);
-
 
             SDL_PumpEvents();
 
             // update keyboard state
-            auto keysArray = const_cast <Uint8*> (SDL_GetKeyboardState(NULL));
+            auto keysArray = const_cast <Uint8*> (SDL_GetKeyboardState(nullptr));
 
+            bool walkState = false;
             if (keysArray[SDL_SCANCODE_LEFT])
+            {
                 WalkLeft();
+                walkState = true;
+            }
 
             if (keysArray[SDL_SCANCODE_RIGHT])
+            {
                 WalkRight();
+                walkState = true;
+            }
 
             if (keysArray[SDL_SCANCODE_UP])
+            {
                 WalkUp();
+                walkState = true;
+            }
 
             if (keysArray[SDL_SCANCODE_DOWN])
+            {
                 WalkDown();
+                walkState = true;
+            }
+
+            if (!walkState)
+                fsm->setIdleState();
         }
 };
 

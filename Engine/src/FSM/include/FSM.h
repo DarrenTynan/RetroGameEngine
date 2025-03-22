@@ -26,6 +26,9 @@ public:
     [[nodiscard]] inline BaseState* getCurrentState() const { return currentState; }
     void toggle();
     void setState(BaseState& newState);
+
+    void setIdleState();
+    void setWalkState();
 private:
     BaseState* currentState;
 };

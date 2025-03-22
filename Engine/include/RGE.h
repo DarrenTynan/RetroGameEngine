@@ -8,6 +8,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include <SDL_render.h>
 
 
 /**
@@ -22,6 +23,8 @@ public:
     static void UpdateSystems();
     static void LoadLevel();
     static void Destroy();
+    static void DebugWindowText();
+
 };
 
 #endif //RETROGAMEENGINE_RGE_H

@@ -2,6 +2,7 @@
 // Created by Darren Tynan on 17/11/2024.
 //
 
+#include <string>
 #include <filesystem>
 
 #include "../include/RGE.h"
@@ -21,13 +22,13 @@
 #include "../src/Components/include/TextLabelComponent.h"
 #include "../src/Systems/include/PlayerControllerSystem.h"
 #include "../src/Systems/include/CameraMovementSystem.h"
-//#include "../src/Systems/include/EntityMovementSystem.h"
+#include "../src/Systems/include/EntityMovementSystem.h"
 #include "../src/Systems/include/RenderSystem.h"
 #include "../src/Systems/include/RenderTextSystem.h"
 #include "../src/Systems/include/RenderColliderSystem.h"
 #include "../src/Systems/include/AnimationSystem.h"
 #include "../src/Systems/include/PlayerCollisionSystem.h"
-//#include "../src/Systems/include/EntityCollisionSystem.h"
+#include "../src/Systems/include/EntityCollisionSystem.h"
 #include "../src/Systems/include/ProjectileEmitSystem.h"
 #include "../src/Systems/include/ProjectileLifecycleSystem.h"
 #include "../src/Systems/include/DamageSystem.h"
@@ -61,6 +62,10 @@ bool isCollider = true;
 bool isRayCast = false;
 bool isCamera = true;
 bool isPlayer = false;
+
+bool isDebugWindow = true;
+static SDL_Window* debugWindow;
+static SDL_Renderer* debugRenderer;
 
 uint32_t msSincePreviousFrame = 0;
 
@@ -108,11 +113,11 @@ void RGE::Setup()
     }
 
     // Add the systems that need to be processed in our game
-//    registry->AddSystem<EntityMovementSystem>();          // Move all entities
+    registry->AddSystem<EntityMovementSystem>();          // Move all entities
     registry->AddSystem<PlayerControllerSystem>();        // Move the player & apply forces
     registry->AddSystem<AnimationSystem>();               // Animate all entities
     registry->AddSystem<PlayerCollisionSystem>();         // Check all entity collisions AABB
-//    registry->AddSystem<EntityCollisionSystem>();         // Check all entity collisions AABB
+    registry->AddSystem<EntityCollisionSystem>();         // Check all entity collisions AABB
     registry->AddSystem<DamageSystem>();                  // Check all damage systems
     registry->AddSystem<CameraMovementSystem>();          // Check the camera move system
     registry->AddSystem<ProjectileEmitSystem>();          // Check entity bullets AABB
@@ -153,7 +158,7 @@ void RGE::Setup()
     gameWindow = SDL_CreateWindow(
             jsonDoc["configuration"]["window_title"].GetString(),
             SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED,
+            0,          //SDL_WINDOWPOS_CENTERED,
             jsonDoc["configuration"]["window_width"].GetInt(),
             jsonDoc["configuration"]["window_height"].GetInt(),
             windowFlags
@@ -178,6 +183,42 @@ void RGE::Setup()
 
     // SetupSDL the camera view with the entire screen area
     gameCamera = {0, 0, jsonDoc["configuration"]["window_width"].GetInt(), jsonDoc["configuration"]["window_height"].GetInt() };
+
+
+    /**
+     * @brief A simple debug info window.
+     */
+    if (isDebugWindow)
+    {
+        // Create window with SDL_Renderer graphics context
+        auto windowFlags2 = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
+        debugWindow = SDL_CreateWindow(
+                "Debug Window",
+                0,
+                0,
+                400,
+                550,
+                windowFlags2
+        );
+
+        if (!debugWindow)
+        {
+            std::cout << "Window game init failed" << std::endl;
+            SDL_Quit();
+            exit(1);
+        }
+
+        debugRenderer = SDL_CreateRenderer(debugWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+        if (!debugRenderer)
+        {
+            std::cout << "Window renderer init failed" << std::endl;
+            SDL_DestroyRenderer(debugRenderer);
+            SDL_Quit();
+            exit(1);
+        }
+
+    }
 
 }
 
@@ -229,6 +270,9 @@ void RGE::UpdateRenderer()
 //        transform.position.x = 32.0;
 //        transform.position.y = 32.0;
 //    }
+
+    if (isDebugWindow)
+        DebugWindowText();
 
     // Render all graphics onto screen.
     SDL_RenderPresent(gameRenderer);
@@ -301,8 +345,8 @@ void RGE::UpdateSystems()
     /**
      * @brief AABB collision player to all other objects.
      */
-//    registry->GetSystem<PlayerCollisionSystem>().Update(eventBus, registry);
-//    registry->GetSystem<EntityCollisionSystem>().Update(eventBus);
+    registry->GetSystem<PlayerCollisionSystem>().Update(eventBus, registry);
+//    registry->GetSystem<Ent ityCollisionSystem>().Update(eventBus);
 
     /**
      * @brief Projectile updates.
@@ -313,6 +357,7 @@ void RGE::UpdateSystems()
     registry->GetSystem<AnimationSystem>().Update();
     registry->GetSystem<CameraMovementSystem>().Update(gameRenderer, gameCamera);
     registry->GetSystem<RenderTextSystem>().Update(gameRenderer, assetStore, gameCamera);
+
 }
 
 
@@ -324,6 +369,56 @@ void RGE::Destroy()
     SDL_DestroyRenderer(gameRenderer);
     SDL_DestroyWindow(gameWindow);
 
+    if (isDebugWindow)
+    {
+        SDL_DestroyRenderer(debugRenderer);
+        SDL_DestroyWindow(debugWindow);
+    }
+
     SDL_Quit();
+}
+
+
+/**
+ * @brief Debug window
+ */
+void RGE::DebugWindowText()
+{
+    SDL_SetRenderDrawColor(debugRenderer, 10, 147, 248, 255);
+    SDL_RenderClear(debugRenderer);
+
+    auto player = registry->GetEntityByTag("player");
+    auto transform = player.GetComponent<TransformComponent>();
+    auto rigidBody = player.GetComponent<RigidBodyComponent>();
+    auto fsm = rigidBody.fsm;
+
+    TTF_Font* Chariot = TTF_OpenFont("/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/fonts/arial.ttf", 18);
+    SDL_Color White = {255, 255, 255};
+
+    std::string text = "player.x: ";
+    text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
+           + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+           + "\nfsm dir.x: " + std::to_string(fsm->direction.x) + " fsm dir.y: " + std::to_string(fsm->direction.y)
+           + "\ncurrent fsm state: " + fsm->getCurrentState()->getName();
+
+    SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped(Chariot, text.c_str(), White, 400);
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(debugRenderer, surface);
+    SDL_FreeSurface(surface);
+
+    int labelWidth = 0;
+    int labelHeight = 0;
+
+    SDL_QueryTexture(texture, nullptr, nullptr, &labelWidth, &labelHeight);
+    SDL_Rect dstRect = {
+            0,
+            0,
+            labelWidth,
+            labelHeight
+    };
+
+    SDL_RenderCopy(debugRenderer, texture, nullptr, &dstRect);
+    SDL_RenderPresent(debugRenderer);
+    SDL_DestroyTexture(texture);
 }
 
