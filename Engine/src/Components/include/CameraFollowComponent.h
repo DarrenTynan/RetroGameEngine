@@ -8,19 +8,17 @@ namespace RGE_Component
 
 struct CameraFollowComponent
 {
-    float cameraWidth;
-    float cameraHeight;
-    glm::vec2 position{};
+    int tileCountX;
+    int tileCountY;
+    int tileSize;
 
-    explicit CameraFollowComponent()
+    explicit CameraFollowComponent(int _tileCountX = 0, int _tileCountY = 0, int _tileSize = 0)
     {
-        position.x = 100.0f;
-        position.y = 50.0f;
-        cameraWidth = 400.0f;   //width;
-        cameraHeight = 200.0f;  //height;
-
+        this->tileCountX = _tileCountX;
+        this->tileCountY = _tileCountY;
+        this->tileSize = _tileSize;
     }
 };
 
 } // end namespace
-#endif
+#endif //CAMERAFOLLOWCOMPONENT_H

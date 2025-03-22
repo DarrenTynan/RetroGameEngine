@@ -13,46 +13,48 @@ class CameraMovementSystem: public System {
         CameraMovementSystem()
         {
             RequireComponent<CameraFollowComponent>();
+            RequireComponent<TransformComponent>();
         }
-
-        SDL_Rect view = {0,0,800 - 100,600 - 100 };
-
 
         void Update(SDL_Renderer* renderer, SDL_Rect& _camera)
         {
-            // Center of window - 1/2 the width
-            view.x = (_camera.w / 2) - (view.w / 2);
-            view.y = (_camera.h / 2) - (view.h / 2);
+            int centerX = _camera.w / 2;
+            int centerY = _camera.h / 2;
+            int width = 400;
+            int height = 200;
+            int halfWidth = width / 2;
+            int halfHeight = height / 2;
 
-            SDL_RenderDrawLineF(renderer, view.x, view.y, view.x + view.w, view.y );    // top
-            SDL_RenderDrawLineF(renderer, view.x, view.y, view.x, view.h );    // left
-            SDL_RenderDrawLineF(renderer, view.x, view.h, view.x + view.w, view.h );    // bottom
-            SDL_RenderDrawLineF(renderer, view.x + view.w, view.y, view.x + view.w, view.h );    // right
+            SDL_Rect viewBox = {(centerX - halfWidth), (centerY - halfHeight), width, height };
+            SDL_RenderDrawRect(renderer, & viewBox);
 
+            // 32+10 and 32*5 are the starting x,y of the player. 32*6 is the extra offset of player height.
+            for (auto entity: GetSystemEntities())
+            {
+                auto transform = entity.GetComponent<TransformComponent>();
+                auto cf = entity.GetComponent<CameraFollowComponent>();
 
-//            for (auto entity: GetSystemEntities()) {
-//                auto camera = entity.GetComponent<CameraFollowComponent>();
+                if (transform.position.x < (cf.tileSize * cf.tileCountX) - 32*10)
+                    _camera.x = (int)transform.position.x - 32*10;
+                if (transform.position.x < 32*10)
+                    _camera.x = 0;
 
-//                camera.position.x = transform.position.x;
-//                camera.position.y = transform.position.y;
-//                SDL_RenderDrawLineF(renderer, camera.position.x, camera.position.y, camera.position.x + camera.cameraWidth, camera.position.y );
+                if (transform.position.y < (cf.tileSize * cf.tileCountY) - (32*6))
+                    _camera.y = (int)transform.position.y - 32*5;
+                if (transform.position.y < 32*5)
+                    _camera.y = 0;
 
-//                if (transform.position.x + (camera.w / 2) < Engine_Test_Game::mapWidth) {
-//                    camera.x = transform.position.x - (Engine_Test_Game::windowWidth / 2);
-//                }
-//
-//                if (transform.position.y + (camera.h / 2) < Engine_Test_Game::mapHeight) {
-//                    camera.y = transform.position.y - (Engine_Test_Game::windowHeight / 2);
-//                }
-//
-//                // Keep camera rectangle view inside the screen limits
-//                camera.x = camera.x < 0 ? 0 : camera.x;
-//                camera.y = camera.y < 0 ? 0 : camera.y;
-//                camera.x = (camera.x + camera.w > Engine_Test_Game::mapWidth) ? Engine_Test_Game::mapWidth - camera.w : camera.x;
-//                camera.y = (camera.y + camera.h > Engine_Test_Game::mapHeight) ? Engine_Test_Game::mapHeight - camera.h : camera.y;
-            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-            SDL_RenderDrawRect(renderer, &_camera);
-//            }
+                //Just move. Subtract the offset of the player screen starting point
+//                _camera.x = (int)transform.position.x - 32*10;
+//                _camera.y = (int)transform.position.y - 32*5;
+
+                // Keep camera rectangle view inside the screen limits
+//                _camera.x = _camera.x < 0 ? 0 : _camera.x;
+//                _camera.y = _camera.y < 0 ? 0 : _camera.y;
+//                _camera.x = (_camera.x + _camera.w > cf.tileSize * cf.tileCountX) ? cf.tileSize * cf.tileCountX - _camera.w : _camera.x;
+//                _camera.y = (_camera.y + _camera.h > cf.tileSize * cf.tileCountY) ? cf.tileSize * cf.tileCountY - _camera.h : _camera.y;
+
+            }
         }
 };
 

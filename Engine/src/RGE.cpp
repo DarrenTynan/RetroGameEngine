@@ -59,7 +59,7 @@ std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
 // Debug keyboard toggles
 bool isCollider = true;
 bool isRayCast = false;
-bool isCamera = false;
+bool isCamera = true;
 bool isPlayer = false;
 
 uint32_t msSincePreviousFrame = 0;
@@ -189,7 +189,7 @@ void RGE::LoadLevel()
 {
     // Load the entity data for level 1
     LevelLoader::LoadLevel(lua, registry, assetStore, gameRenderer, 1);
-
+//    std::cout << 'lua["level"]["tilemap"]' << std::endl;
 }
 
 
@@ -210,24 +210,25 @@ void RGE::UpdateRenderer()
         auto player = registry->GetEntityByTag("player");
         registry->GetSystem<CameraMovementSystem>().Update(gameRenderer, gameCamera);
     }
+
     if (isCollider)
     {
         registry->GetSystem<RenderColliderSystem>().Update(gameRenderer, gameCamera);
     }
 
-    if (isRayCast)
-    {
-        auto player = registry->GetEntityByTag("player");
-        registry->GetSystem<RenderRaycastSystem>().Update(gameRenderer, player);
-    }
+//    if (isRayCast)
+//    {
+//        auto player = registry->GetEntityByTag("player");
+//        registry->GetSystem<RenderRaycastSystem>().Update(gameRenderer, player);
+//    }
 
-    if (isPlayer)
-    {
-        auto player = registry->GetEntityByTag("player");
-        auto transform = player.GetComponent<TransformComponent>();
-        transform.position.x = 32.0;
-        transform.position.y = 32.0;
-    }
+//    if (isPlayer)
+//    {
+//        auto player = registry->GetEntityByTag("player");
+//        auto transform = player.GetComponent<TransformComponent>();
+//        transform.position.x = 32.0;
+//        transform.position.y = 32.0;
+//    }
 
     // Render all graphics onto screen.
     SDL_RenderPresent(gameRenderer);
@@ -260,31 +261,6 @@ bool RGE::ProcessKeyboardInputs()
                 if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
                 if (sdlEvent.key.keysym.sym == SDLK_p) { isPlayer = !isPlayer; }
 
-
-//                // remove the keys events
-//                // Up
-//                if (sdlEvent.key.keysym.sym == SDLK_UP)
-//                {
-//                    eventBus->EmitEvent<WalkUpEvent>(sdlEvent.key.keysym.sym);
-//                }
-//
-//                // Down
-//                if (sdlEvent.key.keysym.sym == SDLK_DOWN)
-//                {
-//                    eventBus->EmitEvent<WalkDownEvent>(sdlEvent.key.keysym.sym);
-//                }
-//
-//                // Left
-//                if (sdlEvent.key.keysym.sym == SDLK_LEFT || sdlEvent.key.keysym.sym == SDLK_z)
-//                {
-//                    eventBus->EmitEvent<WalkLeftEvent>(sdlEvent.key.keysym.sym);
-//                }
-//
-//                // Right
-//                if (sdlEvent.key.keysym.sym == SDLK_RIGHT || sdlEvent.key.keysym.sym == SDLK_x)
-//                {
-//                    eventBus->EmitEvent<WalkRightEvent>(sdlEvent.key.keysym.sym);
-//                }
             break;
         }
     };
@@ -325,7 +301,7 @@ void RGE::UpdateSystems()
     /**
      * @brief AABB collision player to all other objects.
      */
-    registry->GetSystem<PlayerCollisionSystem>().Update(eventBus, registry);
+//    registry->GetSystem<PlayerCollisionSystem>().Update(eventBus, registry);
 //    registry->GetSystem<EntityCollisionSystem>().Update(eventBus);
 
     /**

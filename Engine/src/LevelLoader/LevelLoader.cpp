@@ -22,6 +22,7 @@
 #include <tmxlite/Layer.hpp>
 #include <tmxlite/TileLayer.hpp>
 #include <tmxlite/Tileset.hpp>
+#include <tmxlite/Object.hpp>
 #include <tmxlite/ObjectGroup.hpp>
 #include <tmxlite/Property.hpp>
 
@@ -95,34 +96,6 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
 
     LoadTMX(registry, mapFilePath.c_str());
 
-//    std::string mapTextureAssetId = map["texture_asset_id"];
-//    int mapNumRows = map["num_rows"];
-//    int mapNumCols = map["num_cols"];
-//    int tileSize = map["tile_size"];
-//    double mapScale = map["scale"];
-//    std::fstream mapFile;
-//    mapFile.open(mapFilePath);
-//    for (int y = 0; y < mapNumRows; y++)
-//    {
-//        for (int x = 0; x < mapNumCols; x++)
-//        {
-//            char ch;
-//            mapFile.get(ch);
-//            int srcRectY = std::atoi(&ch) * tileSize;
-//            mapFile.get(ch);
-//            int srcRectX = std::atoi(&ch) * tileSize;
-//            mapFile.ignore();
-//
-//            Entity tile = registry->CreateEntity();
-//            tile.AddComponent<TransformComponent>(glm::vec2(x * (mapScale * tileSize), y * (mapScale * tileSize)), glm::vec2(mapScale, mapScale), 0.0);
-//            tile.AddComponent<SpriteComponent>(mapTextureAssetId, tileSize, tileSize, 0, false, srcRectX, srcRectY);
-//        }
-//    }
-//    mapFile.close();
-//    g_mapWidth = mapNumCols * tileSize * mapScale;
-//    g_mapHeight = mapNumRows * tileSize * mapScale;
-//    extern unsigned int g_mapWidth = mapNumCols * tileSize * mapScale;
-//    extern unsigned int g_mapHeight = mapNumRows * tileSize * mapScale;
 
     /**
      * @brief Read the level entities and their components
@@ -271,7 +244,10 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
             sol::optional<sol::table> cameraFollow = entity["components"]["camera_follow"];
             if (cameraFollow != sol::nullopt)
             {
-                newEntity.AddComponent<CameraFollowComponent>();
+                newEntity.AddComponent<CameraFollowComponent>(static_cast<int>(map["tile_count_x"]),
+                                                              static_cast<int>(map["tile_count_y"]),
+                                                              static_cast<int>(map["tile_size"])
+                );
             }
 
             // TextLabel
@@ -303,8 +279,13 @@ void LevelLoader::LoadTMX(const std::shared_ptr<Registry>& registry, const char 
     tmx::Map map;
     const auto MAP_PATH = mapFile;
     std::string mapImagePath;
-    int mapWidth;
-    int mapHeight;
+
+    unsigned int mapWidth;
+    unsigned int mapHeight;
+    unsigned int tileWidth;
+    unsigned int tileHeight;
+    unsigned int tileCountX;
+    unsigned int tileCountY;
 
     if(map.load(MAP_PATH))
     {
@@ -318,12 +299,13 @@ void LevelLoader::LoadTMX(const std::shared_ptr<Registry>& registry, const char 
                 const auto& objects = objectLayer.getObjects();
                 for(const auto& object : objects)
                 {
+//                    std::cout << object.getName() << std::endl;
+
                     //do stuff with object properties
                     Entity tile = registry->CreateEntity();
                     tile.AddComponent<BoxColliderComponent>(object.getAABB().width, object.getAABB().height);
                     tile.AddComponent<TransformComponent>(glm::vec2(object.getAABB().left,  object.getAABB().top));
-                    tile.AddTag("object");
-
+                    tile.AddTag(object.getName());
                 }
             }
                 // Get Tile layer
@@ -338,17 +320,17 @@ void LevelLoader::LoadTMX(const std::shared_ptr<Registry>& registry, const char 
                 mapImagePath = imagePath[0].getImagePath();
 
                 // Tile width in pixels (32)
-                unsigned int tileWidth = map.getTileSize().x;
+                tileWidth = map.getTileSize().x;
                 // Tile height in pixels (32)
-                unsigned int tileHeight = map.getTileSize().x;
+                tileHeight = map.getTileSize().x;
                 // Image width
                 unsigned int imageWidth = map.getTilesets().size();
 
                 // How many tiles per row (25)
-                unsigned int tileCountX = map.getTileCount().x;
+                tileCountX = map.getTileCount().x;
                 mapWidth = map.getTileCount().x * tileWidth;
                 // How many tiles per column (20)
-                unsigned int tileCountY = map.getTileCount().y;
+                tileCountY = map.getTileCount().y;
                 mapHeight = map.getTileCount().y * tileHeight;
 
                 int index = 0;

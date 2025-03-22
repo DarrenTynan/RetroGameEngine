@@ -19,11 +19,11 @@ Level = {
     ----------------------------------------------------
     tilemap = {
        map_file = "../Engine_Test_Game/assets/tile-maps/EngineTestLevel/EngineTestLevel.tmx",
---        texture_asset_id = map_texture_asset_id,
---        num_rows = 20,
---        num_cols = 25,
---        tile_size = 32,
---        scale = 2.0
+--        texture_asset_id = tilemap-image,
+       tile_count_x = 40,
+       tile_count_y = 22,
+       tile_size = 32,
+       scale = 1.0
     },
 
     ----------------------------------------------------
@@ -77,7 +77,7 @@ Level = {
                     friendly = true
                 },
                 camera_follow = {
-                    --follow = true
+                    follow = true
                 },
                 text_label = {}
             }
@@ -112,5 +112,6 @@ Level = {
 }
 
 -- Define some useful global variables
---map_width = Level.tilemap.num_cols * Level.tilemap.tile_size * Level.tilemap.scale
---map_height = Level.tilemap.num_rows * Level.tilemap.tile_size * Level.tilemap.scale
+debug_text = "DEBUG"
+-- map_width = Level.tilemap.num_cols * Level.tilemap.tile_size * Level.tilemap.scale
+-- map_height = Level.tilemap.num_rows * Level.tilemap.tile_size * Level.tilemap.scale
