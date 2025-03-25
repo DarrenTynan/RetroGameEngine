@@ -38,13 +38,25 @@ void FSM::toggle()
     currentState->toggle(this);
 }
 
+/**
+ * @brief Set states manually.
+ */
 void FSM::setWalkState()
 {
     setState(Walk::getInstance());
 }
 
-
 void FSM::setIdleState()
 {
     setState(Idle::getInstance());
+}
+
+void FSM::setJumpState()
+{
+    setState(Jump::getInstance());
+}
+
+void FSM::setFallState()
+{
+    setState(Fall::getInstance());
 }

@@ -29,6 +29,8 @@ public:
 
     void setIdleState();
     void setWalkState();
+    void setJumpState();
+    void setFallState();
 private:
     BaseState* currentState;
 };

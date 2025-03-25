@@ -82,38 +82,88 @@ namespace RGE_System
 //                    std::cout << "Box bb.w: " << bb.w << std::endl;
 //                    std::cout << "Box bb.h: " << bb.h << std::endl;
 
-                    if (aRB.fsm->direction.x < 0)
+                    // Now we know there is a collision we need to find out the value of intersection.
+                    bool collisionX = false;
+                    bool collisionY = false;
+
+                    // Down collision
+                    if ( aRB.fsm->direction.y > 0 && (aa.y + aa.h)  > bb.y )
                     {
-                        aTransform.position.x = (float)(bb.x + bb.w);
-                        aRB.deltaXY = glm::vec2 (0,0);
-                        aRB.fsm->direction = glm::vec2 (0,0);
+                        std::cout << "Down: " << (aa.y + aa.h) - bb.y << std::endl;
+                        collisionY = true;
+                    }
+
+                    // Up collision
+                    if ( aRB.fsm->direction.y < 0 && aa.y < (bb.y + bb.h) )
+                    {
+                        std::cout << "Up: " << (bb.y + bb.h) - aa.y << std::endl;
+                        collisionY = true;
+                    }
+
+                    // Right collision
+                    if ( aRB.fsm->direction.x > 0 && (aa.x + aa.w)  > bb.x )
+                    {
+                        std::cout << "Right: " << (aa.x + aa.w) - bb.x << std::endl;
+                        collisionX = true;
+                    }
+
+                    // Left collision
+                    if ( aRB.fsm->direction.x < 0 && aa.x < (bb.x + bb.w) )
+                    {
+                        std::cout << "Left: " << (bb.x + bb.w) - aa.x << std::endl;
+                        collisionX = true;
+                    }
+
+                    // TODO up left right
+                    // TODO down left right
+
+                    // Left
+                    if (collisionX && aRB.fsm->direction.x < 0)
+                    {
+                        aTransform.position.x = (float)(bb.x + bb.w) + 1;
+//                        aRB.deltaXY = glm::vec2 (0,0);
+//                        aRB.fsm->direction = glm::vec2 (0,0);
+                        aRB.fsm->direction.x = 0;
                         break;
                     }
 
-                    else if (aRB.fsm->direction.x > 0)
+                    // Right
+                    if (collisionX && aRB.fsm->direction.x > 0)
                     {
-                        aTransform.position.x = (float)(bb.x - aCollider.width);
-                        aRB.deltaXY = glm::vec2 (0,0);
-                        aRB.fsm->direction = glm::vec2 (0,0);
+                        aTransform.position.x = (float)(bb.x - aa.w) -1;
+//                        aRB.deltaXY = glm::vec2 (0,0);
+//                        aRB.fsm->direction = glm::vec2 (0,0);
+                        aRB.fsm->direction.x = 0;
                         break;
                     }
 
-                    else if (aRB.fsm->direction.y < 0)
+                    // Up
+                    if (collisionY && aRB.fsm->direction.y < 0)
                     {
-                        aTransform.position.y = (float)(bb.y + bb.h);
-                        aRB.deltaXY = glm::vec2 (0,0);
-                        aRB.fsm->direction = glm::vec2 (0,0);
+                        aTransform.position.y = (float)(bb.y + bb.h)+1;
+//                        aRB.deltaXY = glm::vec2 (0,0);
+//                        aRB.fsm->direction = glm::vec2 (0,0);
+                        aRB.fsm->direction.y = 0;
                         break;
                     }
 
-                    else if (aRB.fsm->direction.y > 0)
+                    // Down
+                    if (collisionY && aRB.fsm->direction.y > 0)
                     {
-                        aTransform.position.y = (float)(bb.y - aa.h);
-                        aRB.deltaXY = glm::vec2 (0,0);
-                        aRB.fsm->direction = glm::vec2 (0,0);
+                        aTransform.position.y = (float)(bb.y - aa.h)-1;
+//                        aRB.deltaXY = glm::vec2 (0,0);
+//                        aRB.fsm->direction = glm::vec2 (0,0);
+                        aRB.fsm->direction.y = 0;
+//                        aRB.fsm->isGrounded = true;
                         break;
                     }
+
+//                    aRB.deltaXY = glm::vec2 (0,0);
+//                    aRB.fsm->direction = glm::vec2 (0,0);
+
                 }
+//                else
+//                    aRB.fsm->isGrounded = false;
             }
         }
     };

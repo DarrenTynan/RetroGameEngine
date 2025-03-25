@@ -10,6 +10,7 @@
 #include "../../Events/include/KeyReleasedEvent.h"
 #include "../../Components/include/RigidBodyComponent.h"
 #include "../../Components/include/SpriteComponent.h"
+#include "../../Components/include/TextLabelComponent.h"
 #include "../../FSM/include/FSM.h"
 #include "RGE.h"
 
@@ -23,11 +24,15 @@ namespace RGE_System
 
 /**
  * @brief Detects key presses and changes the deltaXY.
+ *
+ * @param isGravity - set to true  if a platform game.
  */
 class PlayerControllerSystem : public System
 {
     public:
         std::shared_ptr<Registry> registry;
+
+        bool isPlatformer = false;
 
         PlayerControllerSystem()
         {
@@ -45,11 +50,12 @@ class PlayerControllerSystem : public System
         {
             this->registry = _registry;
 
-// EXAMPLE of subscribe to event.
-//            eventBus->SubscribeToEvent<WalkLeftEvent>(this, &PlayerControllerSystem::WalkLeft);
-//            void WalkLeft(WalkLeftEvent& event) {}
+            // Is it a platform game?
+            if (isPlatformer)
+                eventBus->SubscribeToEvent<JumpEvent>(this, &PlayerControllerSystem::Jump);
 
         }
+
 
         /**
          * @brief
@@ -88,17 +94,78 @@ class PlayerControllerSystem : public System
             Entity player = registry->GetEntityByTag("player");
             auto &transform = player.GetComponent<TransformComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
+            auto fsm = rigidBody.fsm;
 
             // Apply forces to deltaXY
             rigidBody.deltaXY.x *= rigidBody.friction;
-            rigidBody.deltaXY.y *= rigidBody.friction;
+
+            if (isPlatformer && !fsm->isGrounded)
+                rigidBody.deltaXY.y += rigidBody.gravity;
+            else
+                rigidBody.deltaXY.y *= rigidBody.friction;
 
             ReadKeys();
         }
 
 
         /**
-         * @brief Returns the middle value.
+         * @brief Read the keyboard for pump events NOT single click ie. jump, fire, etc.
+         */
+        void ReadKeys()
+        {
+            auto player = registry->GetEntityByTag("player");
+            auto &rigidBody = player.GetComponent<RigidBodyComponent>();
+            auto fsm = rigidBody.fsm;
+
+            SDL_PumpEvents();
+
+            // update keyboard state
+            auto keysArray = const_cast <Uint8*> (SDL_GetKeyboardState(nullptr));
+
+            bool walkState = false;
+            if (keysArray[SDL_SCANCODE_LEFT])
+            {
+                WalkLeft();
+                walkState = true;
+            }
+
+            if (keysArray[SDL_SCANCODE_RIGHT])
+            {
+                WalkRight();
+                walkState = true;
+            }
+
+            if (keysArray[SDL_SCANCODE_UP])
+            {
+                WalkUp();
+                walkState = true;
+            }
+
+            // Is it a platform game?
+            if (!isPlatformer)
+            {
+                if (keysArray[SDL_SCANCODE_DOWN])
+                {
+                    WalkDown();
+                    walkState = true;
+                }
+
+            }
+            else if (isPlatformer && !fsm->isGrounded)
+                Fall();
+
+            // No keyboard selection, so we are at idle.
+            if (!walkState)
+            {
+                fsm->setIdleState();
+                fsm->direction.x = 0;
+                fsm->direction.y = 0;
+            }
+        }
+
+
+        /**
+         * @brief Helper function that returns the middle value to dampen down the Y axis.
          *
          * @param a
          * @param b
@@ -222,48 +289,36 @@ class PlayerControllerSystem : public System
         }
 
 
-        void ReadKeys()
+        void Jump(JumpEvent& event)
         {
             auto player = registry->GetEntityByTag("player");
+            auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
+            auto &transform = player.GetComponent<TransformComponent>();
             auto fsm = rigidBody.fsm;
-            fsm->direction.x = 0.0f;
-            fsm->direction.y = 0.0f;
-            auto &text = player.GetComponent<TextLabelComponent>().text;
+            fsm->isGrounded = false;
+            fsm->setJumpState();
 
-            SDL_PumpEvents();
-
-            // update keyboard state
-            auto keysArray = const_cast <Uint8*> (SDL_GetKeyboardState(nullptr));
-
-            bool walkState = false;
-            if (keysArray[SDL_SCANCODE_LEFT])
-            {
-                WalkLeft();
-                walkState = true;
-            }
-
-            if (keysArray[SDL_SCANCODE_RIGHT])
-            {
-                WalkRight();
-                walkState = true;
-            }
-
-            if (keysArray[SDL_SCANCODE_UP])
-            {
-                WalkUp();
-                walkState = true;
-            }
-
-            if (keysArray[SDL_SCANCODE_DOWN])
-            {
-                WalkDown();
-                walkState = true;
-            }
-
-            if (!walkState)
-                fsm->setIdleState();
+            std::cout << "Jump Event" << std::endl;
+            rigidBody.deltaXY.y -= rigidBody.boost;
+            transform.position.y += rigidBody.deltaXY.y;
         }
+
+
+        void Fall()
+        {
+            auto player = registry->GetEntityByTag("player");
+            auto &sprite = player.GetComponent<SpriteComponent>();
+            auto &rigidBody = player.GetComponent<RigidBodyComponent>();
+            auto &transform = player.GetComponent<TransformComponent>();
+            auto fsm = rigidBody.fsm;
+            fsm->setFallState();
+            fsm->direction.y = 1.0;
+
+            std::cout << "Fall" << std::endl;
+            transform.position.y += rigidBody.deltaXY.y;
+        }
+
 };
 
 } // end namespace

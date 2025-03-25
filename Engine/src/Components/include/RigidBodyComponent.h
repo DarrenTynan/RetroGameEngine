@@ -35,7 +35,7 @@ struct RigidBodyComponent
 
     // Player forces
     float acceleration = 0.5f;
-    float boost = 4.0f;
+    float boost = 6.0f;
     float gravity = 0.3f;
     float friction = 0.85f;
 

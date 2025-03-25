@@ -36,7 +36,7 @@ Level = {
             tag = "player",
             components = {
                 transform = {
-                    position = { x = 32*10, y = 32*5 },
+                    start_position = { x = 32*10, y = 32*7 },
                     scale = { x = 1.0, y = 1.0 },
                     rotation = 0.0, -- degrees
                 },
@@ -45,7 +45,7 @@ Level = {
                     maxDeltaXY = { x = 3.0, y = 3.0 },
                     acceleration = 0.5,
                     boost = 4.0,
-                    gravity = 0.3,
+                    gravity = 0.2,
                     friction = 0.85,
                 },
                 sprite = {
@@ -61,10 +61,12 @@ Level = {
                     num_frames = 6,
                     speed_rate = 8 -- fps
                 },
-                boxcollider = {
+                box_collider = {
                     width = 32,
                     height = 32,
                     offset = { x = 0, y = 0 }
+                },
+                ray_cast = {
                 },
                 health = {
                     health_percentage = 100

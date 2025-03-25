@@ -21,7 +21,7 @@ struct RaycastComponent
     glm::vec2 mouseCell;
     glm::vec2 rayUnitStepSize;
 
-    RaycastComponent(glm::vec2 rayStart = glm::vec2(0))
+    RaycastComponent(glm::vec2 rayStart = glm::vec2(0, 0))
     {
         this->rayStart = rayStart;
     };

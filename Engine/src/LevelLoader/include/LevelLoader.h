@@ -12,6 +12,9 @@
 using namespace RGE_AssetStore;
 using namespace RGE_ECS;
 
+namespace RGE_LevelLoader
+{
+
 /**
  * @brief Methods to load the level lua file and import sprite and tmx assets.
  */
@@ -27,5 +30,7 @@ public:
 
     static void LoadTMX(const std::shared_ptr<Registry>& registry, const char * mapFile);
 };
+
+} // end namespace
 
 #endif

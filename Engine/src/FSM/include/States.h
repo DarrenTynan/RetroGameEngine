@@ -14,7 +14,6 @@
 class Idle : public BaseState
 {
 public:
-//    std::string name = "Name: Idle";
     std::string getName() override;
     void enter(FSM* fsm) override;
     void update(FSM* fsm) override;
@@ -34,7 +33,6 @@ private:
 class Walk : public BaseState
 {
 public:
-//    std::string name = "Name: Walk";
     std::string getName() override;
     void enter(FSM* fsm) override;
     void update(FSM* fsm) override;
@@ -54,7 +52,6 @@ private:
 class Run : public BaseState
 {
 public:
-//    std::string name = "Name: Run";
     std::string getName() override;
     void enter(FSM* fsm) override;
     void update(FSM* fsm) override;
@@ -71,7 +68,6 @@ private:
 class Jump : public BaseState
 {
 public:
-//    std::string name = "Name: Jump";
     std::string getName() override;
     void enter(FSM* fsm) override;
     void update(FSM* fsm) override;
@@ -88,7 +84,6 @@ private:
 class Fall : public BaseState
 {
 public:
-//    std::string name = "Name: Fall";
     std::string getName() override;
     void enter(FSM* fsm) override;
     void update(FSM* fsm) override;

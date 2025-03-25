@@ -60,12 +60,12 @@ class RenderSystem: public System
 
                 // Set the destination rectangle with the x,y position to be rendered
                 SDL_Rect dstRect = {
-                    static_cast<int>(transform.position.x - camera.x),
-                    static_cast<int>(transform.position.y - camera.y),
+                    static_cast<int>(transform.position.x - (float)camera.x),
+                    static_cast<int>(transform.position.y - (float)camera.y),
 //                    static_cast<int>(transform.position.x - (sprite.isFixed ? 0 : camera.x)),
 //                    static_cast<int>(transform.position.y - (sprite.isFixed ? 0 : camera.y)),
-                    static_cast<int>(sprite.width * transform.scale.x),
-                    static_cast<int>(sprite.height * transform.scale.y)
+                    static_cast<int>((float)sprite.width * transform.scale.x),
+                    static_cast<int>((float)sprite.height * transform.scale.y)
                 };
 
                 SDL_RendererFlip flip = SDL_FLIP_NONE;

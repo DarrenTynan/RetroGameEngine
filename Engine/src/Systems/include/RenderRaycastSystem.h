@@ -15,7 +15,8 @@
 namespace RGE_System
 {
 
-class RenderRaycastSystem: public System {
+class RenderRaycastSystem: public System
+{
     public:
         RenderRaycastSystem() {
             RequireComponent<TransformComponent>();
@@ -23,8 +24,10 @@ class RenderRaycastSystem: public System {
             RequireComponent<RaycastComponent>();
         }
 
-        void Update(SDL_Renderer* renderer, Entity player) {
-            for (auto entity: GetSystemEntities()) {
+        void Update(SDL_Renderer* renderer, Entity player)
+        {
+            for (auto entity: GetSystemEntities())
+            {
                 auto &trans = entity.GetComponent<TransformComponent>();
                 auto& ray = entity.GetComponent<RaycastComponent>();
                 SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);

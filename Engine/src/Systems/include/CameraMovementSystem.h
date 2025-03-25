@@ -18,30 +18,22 @@ class CameraMovementSystem: public System {
 
         void Update(SDL_Renderer* renderer, SDL_Rect& _camera)
         {
-            int centerX = _camera.w / 2;
-            int centerY = _camera.h / 2;
-            int width = 400;
-            int height = 200;
-            int halfWidth = width / 2;
-            int halfHeight = height / 2;
-
-            SDL_Rect viewBox = {(centerX - halfWidth), (centerY - halfHeight), width, height };
-            SDL_RenderDrawRect(renderer, & viewBox);
-
-            // 32+10 and 32*5 are the starting x,y of the player. 32*6 is the extra offset of player height.
             for (auto entity: GetSystemEntities())
             {
                 auto transform = entity.GetComponent<TransformComponent>();
                 auto cf = entity.GetComponent<CameraFollowComponent>();
 
-                if (transform.position.x < (cf.tileSize * cf.tileCountX) - 32*10)
-                    _camera.x = (int)transform.position.x - 32*10;
-                if (transform.position.x < 32*10)
+                SDL_Rect viewBox = cf.frustum;
+                SDL_RenderDrawRect(renderer, & viewBox);
+
+                if (transform.position.x < (float)((cf.tileSize * cf.tileCountX) - cf.cameraOffsetX))
+                    _camera.x = (int)transform.position.x - cf.cameraOffsetX;
+                if (transform.position.x < (float)cf.cameraOffsetX)
                     _camera.x = 0;
 
-                if (transform.position.y < (cf.tileSize * cf.tileCountY) - (32*6))
-                    _camera.y = (int)transform.position.y - 32*5;
-                if (transform.position.y < 32*5)
+                if (transform.position.y < (float)((cf.tileSize * cf.tileCountY) - cf.cameraOffsetY-32))
+                    _camera.y = (int)transform.position.y - cf.cameraOffsetY;
+                if (transform.position.y < (float)cf.cameraOffsetY)
                     _camera.y = 0;
 
                 //Just move. Subtract the offset of the player screen starting point

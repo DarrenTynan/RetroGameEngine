@@ -4,22 +4,13 @@
 
 #include <string>
 #include <filesystem>
-
 #include "../include/RGE.h"
-
 #include "Systems/include/ScriptSystem.h"
 #include "LevelLoader/include/LevelLoader.h"
-
-#include <glm/glm.hpp>
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-
 #include "../src/EventBus/include/EventBus.h"
-#include "../src/Components/include/SpriteComponent.h"
-#include "../src/Components/include/BoxColliderComponent.h"
-#include "../src/Components/include/TextLabelComponent.h"
 #include "../src/Systems/include/PlayerControllerSystem.h"
 #include "../src/Systems/include/CameraMovementSystem.h"
 #include "../src/Systems/include/EntityMovementSystem.h"
@@ -32,15 +23,9 @@
 #include "../src/Systems/include/ProjectileEmitSystem.h"
 #include "../src/Systems/include/ProjectileLifecycleSystem.h"
 #include "../src/Systems/include/DamageSystem.h"
-#include "../src/Systems/include/RenderRaycastSystem.h"
+#include "../src/Systems/include/RenderPlayerRaycastSystem.h"
+//#include "../src/Systems/include/RenderRaycastSystem.h"
 #include "FileHandler/include/FileHandler.h"
-
-#include <tmxlite/Map.hpp>
-#include <tmxlite/Layer.hpp>
-#include <tmxlite/TileLayer.hpp>
-#include <tmxlite/Tileset.hpp>
-#include <tmxlite/ObjectGroup.hpp>
-#include <tmxlite/Property.hpp>
 
 using namespace RGE_ECS;
 using namespace RGE_Component;
@@ -48,6 +33,8 @@ using namespace RGE_AssetStore;
 using namespace RGE_EventBus;
 using namespace RGE_Events;
 using namespace RGE_FILEHANDLER;
+using namespace RGE_LevelLoader;
+using namespace RGE_PlayerRaycast;
 
 SDL_Window* gameWindow;
 SDL_Rect gameCamera;
@@ -61,9 +48,9 @@ std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
 bool isCollider = true;
 bool isRayCast = false;
 bool isCamera = true;
-bool isPlayer = false;
 
 bool isDebugWindow = true;
+
 static SDL_Window* debugWindow;
 static SDL_Renderer* debugRenderer;
 
@@ -71,7 +58,6 @@ uint32_t msSincePreviousFrame = 0;
 
 // Lua
 sol::state lua;
-//LevelLoader levelLoader;
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
@@ -99,7 +85,7 @@ void RGE::Setup()
     // Read the entire file into a string
     std::string json((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
-    // Create a Document object to hold the JSON data
+    // Create a Document object to hold the JSON data of the config file
     rapidjson::Document jsonDoc;
 
     // Parse the JSON data
@@ -125,7 +111,8 @@ void RGE::Setup()
     registry->AddSystem<RenderColliderSystem>();          // Debug updateRender collision box's
     registry->AddSystem<RenderSystem>();                  // Render windows
     registry->AddSystem<RenderTextSystem>();              // Render any label's
-    registry->AddSystem<RenderRaycastSystem>();           // Debug updateRender the ray cast's
+//    registry->AddSystem<RenderRaycastSystem>();           // Debug updateRender the ray cast's
+    registry->AddSystem<RenderPlayerRaycastSystem>();     // Debug updateRender the ray cast's
     registry->AddSystem<ScriptSystem>();                  // Lua scripting system
 
     // Create the bindings between C++ and Lua
@@ -182,7 +169,7 @@ void RGE::Setup()
     }
 
     // SetupSDL the camera view with the entire screen area
-    gameCamera = {0, 0, jsonDoc["configuration"]["window_width"].GetInt(), jsonDoc["configuration"]["window_height"].GetInt() };
+    gameCamera = {0, 32*11, jsonDoc["configuration"]["window_width"].GetInt(), jsonDoc["configuration"]["window_height"].GetInt() };
 
 
     /**
@@ -230,7 +217,7 @@ void RGE::LoadLevel()
 {
     // Load the entity data for level 1
     LevelLoader::LoadLevel(lua, registry, assetStore, gameRenderer, 1);
-//    std::cout << 'lua["level"]["tilemap"]' << std::endl;
+
 }
 
 
@@ -248,7 +235,6 @@ void RGE::UpdateRenderer()
 
     if (isCamera)
     {
-        auto player = registry->GetEntityByTag("player");
         registry->GetSystem<CameraMovementSystem>().Update(gameRenderer, gameCamera);
     }
 
@@ -257,19 +243,11 @@ void RGE::UpdateRenderer()
         registry->GetSystem<RenderColliderSystem>().Update(gameRenderer, gameCamera);
     }
 
-//    if (isRayCast)
-//    {
-//        auto player = registry->GetEntityByTag("player");
-//        registry->GetSystem<RenderRaycastSystem>().Update(gameRenderer, player);
-//    }
-
-//    if (isPlayer)
-//    {
-//        auto player = registry->GetEntityByTag("player");
-//        auto transform = player.GetComponent<TransformComponent>();
-//        transform.position.x = 32.0;
-//        transform.position.y = 32.0;
-//    }
+    if (isRayCast)
+    {
+        auto player = registry->GetEntityByTag("player");
+        registry->GetSystem<RenderPlayerRaycastSystem>().Update(gameRenderer, player, gameCamera);
+    }
 
     if (isDebugWindow)
         DebugWindowText();
@@ -303,13 +281,18 @@ bool RGE::ProcessKeyboardInputs()
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isQuit = false; }
                 if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
                 if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
-                if (sdlEvent.key.keysym.sym == SDLK_p) { isPlayer = !isPlayer; }
 
-            break;
+                if (sdlEvent.key.keysym.sym == SDLK_SPACE)
+                {
+                    eventBus->EmitEvent<JumpEvent>(sdlEvent.key.keysym.sym);
+                }
+
+
+                break;
         }
-    };
+    }
     return isQuit;
-};
+}
 
 
 /**
@@ -395,11 +378,16 @@ void RGE::DebugWindowText()
     TTF_Font* Chariot = TTF_OpenFont("/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/fonts/arial.ttf", 18);
     SDL_Color White = {255, 255, 255};
 
-    std::string text = "player.x: ";
-    text = "dx: " + std::to_string(rigidBody.deltaXY.x) + " dy: " + std::to_string(rigidBody.deltaXY.y)
-           + "\nmdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
-           + "\nfsm dir.x: " + std::to_string(fsm->direction.x) + " fsm dir.y: " + std::to_string(fsm->direction.y)
-           + "\ncurrent fsm state: " + fsm->getCurrentState()->getName();
+    std::string text;
+    text = "pos.x: " + std::to_string(transform.position.x) + " pos.y: " +std::to_string(transform.position.y)
+           + "\nrb->dx: " + std::to_string(rigidBody.deltaXY.x) + " rb->dy: " + std::to_string(rigidBody.deltaXY.y)
+           + "\nrb->mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " rb->mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+           + "\nfsm->dir.x: " + std::to_string(fsm->direction.x) + " fsm->dir.y: " + std::to_string(fsm->direction.y)
+           + "\nfsm->current state: " + fsm->getCurrentState()->getName()
+           + "\ncamera.x: " + std::to_string(gameCamera.x) + " camera.y: " + std::to_string(gameCamera.y)
+           + "\ncamera.w: " + std::to_string(gameCamera.w) + " camera.h: " + std::to_string(gameCamera.h)
+           + "\nfsm->isGrounded: " + std::to_string(fsm->isGrounded)
+           ;
 
     SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped(Chariot, text.c_str(), White, 400);
 
@@ -411,7 +399,7 @@ void RGE::DebugWindowText()
 
     SDL_QueryTexture(texture, nullptr, nullptr, &labelWidth, &labelHeight);
     SDL_Rect dstRect = {
-            0,
+            8,
             0,
             labelWidth,
             labelHeight

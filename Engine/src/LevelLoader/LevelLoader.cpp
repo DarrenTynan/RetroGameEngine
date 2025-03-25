@@ -13,7 +13,7 @@
 #include "../Components/include/HealthComponent.h"
 #include "../Components/include/TextLabelComponent.h"
 #include "../Components/include/ScriptComponent.h"
-#include "../Components/include/CameraFollowComponent.h"
+#include "../Components/include/PlayerRaycastComponent.h"
 
 #include <string>
 #include <fstream>
@@ -30,6 +30,9 @@
 #include "../libs/sol/sol.hpp"
 
 using namespace RGE_Component;
+
+namespace RGE_LevelLoader
+{
 
 /**
  * @brief Load the Lua script describing level entities and tmx map
@@ -134,8 +137,8 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
             {
                 newEntity.AddComponent<TransformComponent>(
                         glm::vec2(
-                                entity["components"]["transform"]["position"]["x"],
-                                entity["components"]["transform"]["position"]["y"]
+                                entity["components"]["transform"]["start_position"]["x"],
+                                entity["components"]["transform"]["start_position"]["y"]
                         ),
                         glm::vec2(
                                 entity["components"]["transform"]["scale"]["x"].get_or(1.0),
@@ -199,17 +202,23 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
             }
 
             // BoxCollider
-            sol::optional<sol::table> collider = entity["components"]["boxcollider"];
+            sol::optional<sol::table> collider = entity["components"]["box_collider"];
             if (collider != sol::nullopt)
             {
                 newEntity.AddComponent<BoxColliderComponent>(
-                        entity["components"]["boxcollider"]["width"],
-                        entity["components"]["boxcollider"]["height"],
+                        entity["components"]["box_collider"]["width"],
+                        entity["components"]["box_collider"]["height"],
                         glm::vec2(
-                                entity["components"]["boxcollider"]["offset"]["x"].get_or(0),
-                                entity["components"]["boxcollider"]["offset"]["y"].get_or(0)
+                                entity["components"]["box_collider"]["offset"]["x"].get_or(0),
+                                entity["components"]["box_collider"]["offset"]["y"].get_or(0)
                         )
                 );
+            }
+
+            sol::optional<sol::table> raycast = entity["components"]["ray_cast"];
+            if (raycast != sol::nullopt)
+            {
+                newEntity.AddComponent<PlayerRaycastComponent>();
             }
 
             // Health
@@ -246,7 +255,9 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
             {
                 newEntity.AddComponent<CameraFollowComponent>(static_cast<int>(map["tile_count_x"]),
                                                               static_cast<int>(map["tile_count_y"]),
-                                                              static_cast<int>(map["tile_size"])
+                                                              static_cast<int>(map["tile_size"]),
+                                                              static_cast<int>(entity["components"]["transform"]["start_position"]["x"]),
+                                                              static_cast<int>(entity["components"]["transform"]["start_position"]["y"])
                 );
             }
 
@@ -355,3 +366,5 @@ void LevelLoader::LoadTMX(const std::shared_ptr<Registry>& registry, const char 
     }
 
 }
+
+} // end namespace
