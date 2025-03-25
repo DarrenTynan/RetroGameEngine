@@ -16,12 +16,12 @@ namespace RGE_Component
  */
 struct BoxColliderComponent
 {
-    int width;
-    int height;
+    float width;
+    float height;
     glm::vec2 position{};
     bool hasRaycast;
 
-    explicit BoxColliderComponent(int _width = 0, int _height = 0, glm::vec2 _position = glm::vec2(0,0), bool _hasRaycast = false)
+    explicit BoxColliderComponent(float _width = 0.0f, float _height = 0.0f, glm::vec2 _position = glm::vec2(0,0), bool _hasRaycast = false)
     {
         this->width = _width;
         this->height = _height;

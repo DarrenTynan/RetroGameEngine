@@ -45,7 +45,7 @@ Level = {
                     maxDeltaXY = { x = 3.0, y = 3.0 },
                     acceleration = 0.5,
                     boost = 4.0,
-                    gravity = 0.2,
+                    gravity = 0.08, -- 0.3
                     friction = 0.85,
                 },
                 sprite = {

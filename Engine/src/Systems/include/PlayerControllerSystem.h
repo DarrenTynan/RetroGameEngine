@@ -32,7 +32,7 @@ class PlayerControllerSystem : public System
     public:
         std::shared_ptr<Registry> registry;
 
-        bool isPlatformer = false;
+        bool isPlatformer = true;
 
         PlayerControllerSystem()
         {
@@ -127,18 +127,24 @@ class PlayerControllerSystem : public System
             {
                 WalkLeft();
                 walkState = true;
+                fsm->isGrounded = false;
             }
 
             if (keysArray[SDL_SCANCODE_RIGHT])
             {
                 WalkRight();
                 walkState = true;
+                fsm->isGrounded = false;
             }
 
-            if (keysArray[SDL_SCANCODE_UP])
+            if (!isPlatformer)
             {
-                WalkUp();
-                walkState = true;
+                if (keysArray[SDL_SCANCODE_UP])
+                {
+                    WalkUp();
+                    walkState = true;
+                }
+
             }
 
             // Is it a platform game?
@@ -203,7 +209,7 @@ class PlayerControllerSystem : public System
             sprite.flipH = true;
             fsm->direction.x = -1.0;
 
-            if (fsm->getCurrentState()->getName().c_str() != "Walk")
+            if (fsm->getCurrentState()->getName() != "Walk")
                 fsm->setWalkState();
 
             rigidBody.deltaXY.x -= rigidBody.acceleration;
@@ -229,7 +235,7 @@ class PlayerControllerSystem : public System
             sprite.flipH = false;
             fsm->direction.x = 1.0;
 
-            if (fsm->getCurrentState()->getName().c_str() != "Walk")
+            if (fsm->getCurrentState()->getName() != "Walk")
                 fsm->setWalkState();
 
             rigidBody.deltaXY.x += rigidBody.acceleration;
@@ -254,7 +260,7 @@ class PlayerControllerSystem : public System
             auto fsm = rigidBody.fsm;
             fsm->direction.y = -1.0;
 
-            if (fsm->getCurrentState()->getName().c_str() != "Walk")
+            if (fsm->getCurrentState()->getName() != "Walk")
                 fsm->setWalkState();
 
             rigidBody.deltaXY.y -= rigidBody.acceleration;
@@ -279,7 +285,7 @@ class PlayerControllerSystem : public System
             auto fsm = rigidBody.fsm;
             fsm->direction.y = 1.0;
 
-            if (fsm->getCurrentState()->getName().c_str() != "Walk")
+            if (fsm->getCurrentState()->getName() != "Walk")
                 fsm->setWalkState();
 
             rigidBody.deltaXY.y += rigidBody.acceleration;
@@ -296,6 +302,8 @@ class PlayerControllerSystem : public System
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
             auto fsm = rigidBody.fsm;
+            if (!fsm->isGrounded)
+                return;
             fsm->isGrounded = false;
             fsm->setJumpState();
 
@@ -312,11 +320,15 @@ class PlayerControllerSystem : public System
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
             auto fsm = rigidBody.fsm;
-            fsm->setFallState();
-            fsm->direction.y = 1.0;
+            if (!fsm->isGrounded)
+            {
+                fsm->setFallState();
+                fsm->direction.y = 1.0;
 
-            std::cout << "Fall" << std::endl;
-            transform.position.y += rigidBody.deltaXY.y;
+                std::cout << "Fall" << std::endl;
+                transform.position.y += rigidBody.deltaXY.y;
+
+            }
         }
 
 };

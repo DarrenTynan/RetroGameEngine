@@ -4,6 +4,9 @@
 
 #include <string>
 #include <filesystem>
+#include <thread>
+#include <unistd.h>
+
 #include "../include/RGE.h"
 #include "Systems/include/ScriptSystem.h"
 #include "LevelLoader/include/LevelLoader.h"
@@ -284,6 +287,7 @@ bool RGE::ProcessKeyboardInputs()
                     eventBus->EmitEvent<JumpEvent>(sdlEvent.key.keysym.sym);
                 }
 
+                if (sdlEvent.key.keysym.sym == SDLK_p) { sleep(10); }
 
                 break;
         }

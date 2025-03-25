@@ -31,7 +31,7 @@ class CameraMovementSystem: public System {
                 if (transform.position.x < (float)cf.cameraOffsetX)
                     _camera.x = 0;
 
-                if (transform.position.y < (float)((cf.tileSize * cf.tileCountY) - cf.cameraOffsetY-32))
+                if (transform.position.y < (float)((cf.tileSize * cf.tileCountY) - cf.cameraOffsetY + 96))
                     _camera.y = (int)transform.position.y - cf.cameraOffsetY;
                 if (transform.position.y < (float)cf.cameraOffsetY)
                     _camera.y = 0;

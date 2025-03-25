@@ -33,6 +33,9 @@ namespace RGE_System
             RequireComponent<BoxColliderComponent>();
         }
 
+        bool isCollisionX = false;
+        bool isCollisionY = false;
+
         // Check entity bounding box for collision.
         void Update(std::unique_ptr<EventBus>& eventBus, std::shared_ptr<Registry>& registry)
         {
@@ -55,116 +58,142 @@ namespace RGE_System
                 auto &bTransform = b.GetComponent<TransformComponent>();
                 auto &bCollider = b.GetComponent<BoxColliderComponent>();
 
-                SDL_Rect aa;
-                aa.x = (int) aTransform.position.x;
-                aa.y = (int) aTransform.position.y;
-                aa.w = (int) aCollider.width * (int) aTransform.scale.x;
-                aa.h = (int) aCollider.height * (int) aTransform.scale.y;
+                SDL_Rect aa = {
+                        (int) aTransform.position.x,
+                        (int) aTransform.position.y,
+                        (int) aCollider.width * (int) aTransform.scale.x,
+                        (int) aCollider.height * (int) aTransform.scale.y
+                };
 
-                SDL_Rect bb;
-                bb.x = (int) bTransform.position.x;
-                bb.y = (int) bTransform.position.y;
-                bb.w = (int) bCollider.width * (int) bTransform.scale.x;
-                bb.h = (int) bCollider.height * (int) bTransform.scale.y;
+                SDL_Rect bb = {
+                        (int) bTransform.position.x,
+                        (int) bTransform.position.y,
+                        (int) bCollider.width * (int) bTransform.scale.x,
+                        (int) bCollider.height * (int) bTransform.scale.y
+                };
+
+                // Down
+                SDL_Rect downCast = {
+                        (int) (aTransform.position.x + aCollider.width / 2),
+                        (int) (aTransform.position.y + aCollider.height),
+                        1,
+                        10
+                };
 
                 // Perform the AABB collision check between entities a and b
                 SDL_bool isCollision = SDL_HasIntersection(&aa, &bb);
 
                 if (isCollision)
                 {
-//                    std::cout << "Box aa.x: " << aa.x << std::endl;
-//                    std::cout << "Box aa.y: " << aa.y << std::endl;
-//                    std::cout << "Box aa.w: " << aa.w << std::endl;
-//                    std::cout << "Box aa.h: " << aa.h << std::endl;
 
-//                    std::cout << "Box bb.x: " << bb.x << std::endl;
-//                    std::cout << "Box bb.y: " << bb.y << std::endl;
-//                    std::cout << "Box bb.w: " << bb.w << std::endl;
-//                    std::cout << "Box bb.h: " << bb.h << std::endl;
+                    SDL_bool isDownCast = SDL_HasIntersection(&downCast, &bb);
+                    if (isDownCast)
+                    {
+//                        std::cout << "Cast Down Hit" << std::endl;
+                        aRB.fsm->isGrounded = true;
+                    }
+
+//                    IntersectRect(aa, bb);
 
                     // Now we know there is a collision we need to find out the value of intersection.
-                    bool collisionX = false;
-                    bool collisionY = false;
 
                     // Down collision
-                    if ( aRB.fsm->direction.y > 0 && (aa.y + aa.h)  > bb.y )
+                    if ((aRB.fsm->direction.y > 0 && (aa.y + aa.h) > bb.y) && !isCollisionX)
                     {
                         std::cout << "Down: " << (aa.y + aa.h) - bb.y << std::endl;
-                        collisionY = true;
+                        isCollisionY = true;
                     }
 
                     // Up collision
-                    if ( aRB.fsm->direction.y < 0 && aa.y < (bb.y + bb.h) )
+                    if ((aRB.fsm->direction.y < 0 && aa.y < (bb.y + bb.h)) && !isCollisionX)
                     {
                         std::cout << "Up: " << (bb.y + bb.h) - aa.y << std::endl;
-                        collisionY = true;
+                        isCollisionY = true;
                     }
 
                     // Right collision
-                    if ( aRB.fsm->direction.x > 0 && (aa.x + aa.w)  > bb.x )
+                    if ((aRB.fsm->direction.x > 0 && (aa.x + aa.w) > bb.x) && !isCollisionY)
                     {
                         std::cout << "Right: " << (aa.x + aa.w) - bb.x << std::endl;
-                        collisionX = true;
+                        isCollisionX = true;
                     }
 
                     // Left collision
-                    if ( aRB.fsm->direction.x < 0 && aa.x < (bb.x + bb.w) )
+                    if ((aRB.fsm->direction.x < 0 && aa.x < (bb.x + bb.w)) && !isCollisionY)
                     {
                         std::cout << "Left: " << (bb.x + bb.w) - aa.x << std::endl;
-                        collisionX = true;
+                        isCollisionX = true;
                     }
 
                     // TODO up left right
                     // TODO down left right
 
                     // Left
-                    if (collisionX && aRB.fsm->direction.x < 0)
+                    if (isCollisionX && aRB.fsm->direction.x < 0)
                     {
-                        aTransform.position.x = (float)(bb.x + bb.w) + 1;
-//                        aRB.deltaXY = glm::vec2 (0,0);
-//                        aRB.fsm->direction = glm::vec2 (0,0);
+                        aTransform.position.x = (float) (bb.x + bb.w) ;
+                        aRB.deltaXY.x = 0;
                         aRB.fsm->direction.x = 0;
                         break;
                     }
 
                     // Right
-                    if (collisionX && aRB.fsm->direction.x > 0)
+                    if (isCollisionX && aRB.fsm->direction.x > 0)
                     {
-                        aTransform.position.x = (float)(bb.x - aa.w) -1;
-//                        aRB.deltaXY = glm::vec2 (0,0);
-//                        aRB.fsm->direction = glm::vec2 (0,0);
+                        aTransform.position.x = (float) (bb.x - aa.w);
+                        aRB.deltaXY.x = 0;
                         aRB.fsm->direction.x = 0;
                         break;
                     }
 
                     // Up
-                    if (collisionY && aRB.fsm->direction.y < 0)
+                    if (isCollisionY && aRB.fsm->direction.y < 0)
                     {
-                        aTransform.position.y = (float)(bb.y + bb.h)+1;
-//                        aRB.deltaXY = glm::vec2 (0,0);
-//                        aRB.fsm->direction = glm::vec2 (0,0);
+                        aTransform.position.y = (float) (bb.y + bb.h);
+                        aRB.deltaXY.y = 0;
                         aRB.fsm->direction.y = 0;
                         break;
                     }
 
                     // Down
-                    if (collisionY && aRB.fsm->direction.y > 0)
+                    if (isCollisionY && aRB.fsm->direction.y > 0)
                     {
-                        aTransform.position.y = (float)(bb.y - aa.h)-1;
-//                        aRB.deltaXY = glm::vec2 (0,0);
-//                        aRB.fsm->direction = glm::vec2 (0,0);
+                        aTransform.position.y = (float) (bb.y - aa.h);
+                        aRB.deltaXY.y = 0;
                         aRB.fsm->direction.y = 0;
-//                        aRB.fsm->isGrounded = true;
                         break;
                     }
-
-//                    aRB.deltaXY = glm::vec2 (0,0);
-//                    aRB.fsm->direction = glm::vec2 (0,0);
-
                 }
-//                else
-//                    aRB.fsm->isGrounded = false;
             }
+        }
+
+        /**
+         * @brief Debug display.
+         *
+         * @param aa
+         * @param bb
+         */
+        void IntersectRect(SDL_Rect &aa, SDL_Rect &bb)
+        {
+            SDL_Rect cc;
+            SDL_IntersectRect(&aa, &bb, &cc);
+
+            std::cout << "Box aa.x: " << aa.x << std::endl;
+            std::cout << "Box aa.y: " << aa.y << std::endl;
+            std::cout << "Box aa.w: " << aa.w << std::endl;
+            std::cout << "Box aa.h: " << aa.h << std::endl;
+
+            std::cout << "Box bb.x: " << bb.x << std::endl;
+            std::cout << "Box bb.y: " << bb.y << std::endl;
+            std::cout << "Box bb.w: " << bb.w << std::endl;
+            std::cout << "Box bb.h: " << bb.h << std::endl;
+
+            std::cout << "Box cc.x: " << cc.x << std::endl;
+            std::cout << "Box cc.y: " << cc.y << std::endl;
+            std::cout << "Box cc.w: " << cc.w << std::endl;
+            std::cout << "Box cc.h: " << cc.h << std::endl;
+
+            std::cout << "**********" << std::endl;
         }
     };
 
