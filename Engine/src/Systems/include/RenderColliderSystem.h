@@ -28,8 +28,8 @@ class RenderColliderSystem: public System {
                 const auto collider = entity.GetComponent<BoxColliderComponent>();
 
                 SDL_Rect colliderRect = {
-                    static_cast<int>(transform.position.x + collider.position.x - camera.x),
-                    static_cast<int>(transform.position.y + collider.position.y - camera.y),
+                    static_cast<int>(transform.position.x + collider.position.x - (float)camera.x),
+                    static_cast<int>(transform.position.y + collider.position.y - (float)camera.y),
                     static_cast<int>(collider.width * transform.scale.x),
                     static_cast<int>(collider.height * transform.scale.y)
                 };
@@ -44,31 +44,31 @@ class RenderColliderSystem: public System {
 
                     // Up
                     SDL_RenderDrawLineF(renderer,
-                                        (transform.position.x + 32.0f/2.0f) - camera.x,
-                                        transform.position.y - camera.y,
-                                        (transform.position.x + 32.0f/2.0f) - camera.x,
-                                        (transform.position.y - length - camera.y)
+                                        (transform.position.x + collider.width/2.0f) - (float)camera.x,
+                                        transform.position.y - (float)camera.y,
+                                        (transform.position.x + collider.width/2.0f) - (float)camera.x,
+                                        (transform.position.y - length - (float)camera.y)
                     );
                     // Down
                     SDL_RenderDrawLineF(renderer,
-                                        (transform.position.x + 32/2) - camera.x,
-                                        (transform.position.y + 32) - camera.y,
-                                        (transform.position.x + 32/2) - camera.x,
-                                        (transform.position.y + 32 + length) - camera.y
+                                        (transform.position.x + collider.width/2) - (float)camera.x,
+                                        (transform.position.y + collider.height) - (float)camera.y,
+                                        (transform.position.x + collider.width/2) - (float)camera.x,
+                                        (transform.position.y + collider.height + length) - (float)camera.y
                     );
                     // Left
                     SDL_RenderDrawLineF(renderer,
-                                        transform.position.x - camera.x,
-                                        (transform.position.y + 32/2) - camera.y,
-                                        (transform.position.x - length) - camera.x,
-                                        (transform.position.y + 32/2) - camera.y
+                                        transform.position.x - (float)camera.x,
+                                        (transform.position.y + collider.height/2) - (float)camera.y,
+                                        (transform.position.x - length) - (float)camera.x,
+                                        (transform.position.y + collider.height/2) - (float)camera.y
                     );
                     // Right
                     SDL_RenderDrawLineF(renderer,
-                                        transform.position.x + 32 - camera.x,
-                                        (transform.position.y + 32/2) - camera.y,
-                                        (transform.position.x + 32 + length) - camera.x,
-                                        (transform.position.y + 32/2) - camera.y
+                                        transform.position.x + 32 - (float)camera.x,
+                                        (transform.position.y + collider.height/2) - (float)camera.y,
+                                        (transform.position.x + collider.width + length) - (float)camera.x,
+                                        (transform.position.y + collider.height/2) - (float)camera.y
                     );
 
                 }

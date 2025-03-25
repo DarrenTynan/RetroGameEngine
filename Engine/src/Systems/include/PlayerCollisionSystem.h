@@ -33,9 +33,6 @@ namespace RGE_System
             RequireComponent<BoxColliderComponent>();
         }
 
-        bool isCollisionX = false;
-        bool isCollisionY = false;
-
         // Check entity bounding box for collision.
         void Update(std::unique_ptr<EventBus>& eventBus, std::shared_ptr<Registry>& registry)
         {
@@ -72,73 +69,81 @@ namespace RGE_System
                         (int) bCollider.height * (int) bTransform.scale.y
                 };
 
-                // Down
-                SDL_Rect downCast = {
-                        (int) (aTransform.position.x + aCollider.width / 2),
-                        (int) (aTransform.position.y + aCollider.height),
-                        1,
-                        10
-                };
+//                SDL_Rect downCast = {
+//                        (int) (aTransform.position.x + aCollider.width / 2),
+//                        (int) (aTransform.position.y + aCollider.height),
+//                        1,
+//                        10
+//                };
 
                 // Perform the AABB collision check between entities a and b
                 SDL_bool isCollision = SDL_HasIntersection(&aa, &bb);
 
-                if (isCollision)
+                /**
+                 * @brief There is a collision!
+                 */
+//                if (isCollision)
+//                {
+                    float rayLength = 20.0f;
+
+                    // ray up
+                    int x1u = (int)(aTransform.position.x + aCollider.width / 2);
+                    int y1u = (int)(aTransform.position.y + aCollider.height + rayLength);
+                    int x2u = (int)(aTransform.position.x + aCollider.width / 2);
+                    int y2u = (int)(aTransform.position.y + aCollider.height);
+                    SDL_bool isUpRayCast = SDL_IntersectRectAndLine(&bb, &x1u, &y1u, &x2u, &y2u);
+
+//                    if (isUpRayCast)
+//                        std::cout << "isUpRayCast" << std::endl;
+
+                    // ray right
+                    int x1r = (int)(aTransform.position.x + aCollider.width);
+                    int y1r = (int)(aTransform.position.y + aCollider.height / 2);
+                    int x2r = (int)(aTransform.position.x + aCollider.width + rayLength);
+                    int y2r = (int)(aTransform.position.y + aCollider.height / 2);
+                    SDL_bool isRightRayCast = SDL_IntersectRectAndLine(&bb, &x1r, &y1r, &x2r, &y2r);
+
+//                    if (isRightRayCast)
+//                        std::cout << "isRightRayCast" << std::endl;
+
+                    // ray down
+                    int x1d = (int)(aTransform.position.x + aCollider.width / 2);
+                    int y1d = (int)(aTransform.position.y + aCollider.height);
+                    int x2d = (int)(aTransform.position.x + aCollider.width / 2);
+                    int y2d = (int)(aTransform.position.y + aCollider.height + rayLength);
+                    SDL_bool isDownRayCast = SDL_IntersectRectAndLine(&bb, &x1d, &y1d, &x2d, &y2d);
+
+//                    if (isDownRayCast)
+//                        std::cout << "isDownRayCast" << std::endl;
+
+                    // ray left
+                    int x1l = (int)(aTransform.position.x);
+                    int y1l = (int)(aTransform.position.y + aCollider.height / 2);
+                    int x2l = (int)(aTransform.position.x - rayLength);
+                    int y2l = (int)(aTransform.position.y + aCollider.height / 2);
+                    SDL_bool isLeftRayCast = SDL_IntersectRectAndLine(&bb, &x1l, &y1l, &x2l, &y2l);
+
+//                    if (isLeftRayCast)
+//                        std::cout << "isLeftRayCast" << std::endl;
+
+                if (isUpRayCast || isRightRayCast || isDownRayCast || isLeftRayCast)
                 {
 
-                    SDL_bool isDownCast = SDL_HasIntersection(&downCast, &bb);
-                    if (isDownCast)
-                    {
-//                        std::cout << "Cast Down Hit" << std::endl;
-                        aRB.fsm->isGrounded = true;
-                    }
+//                    SDL_bool isDownCast = SDL_HasIntersection(&downCast, &bb);
 
-//                    IntersectRect(aa, bb);
+//                    if (isDownCast)
+//                    {
+//                        std::cout << "Cast Down Hit" << std::endl;
+//                        aRB.fsm->isGrounded = true;
+//                    }
+//                    else
+//                        aRB.fsm->isGrounded = false;
 
                     // Now we know there is a collision we need to find out the value of intersection.
-
-                    // Down collision
-                    if ((aRB.fsm->direction.y > 0 && (aa.y + aa.h) > bb.y) && !isCollisionX)
-                    {
-                        std::cout << "Down: " << (aa.y + aa.h) - bb.y << std::endl;
-                        isCollisionY = true;
-                    }
-
-                    // Up collision
-                    if ((aRB.fsm->direction.y < 0 && aa.y < (bb.y + bb.h)) && !isCollisionX)
-                    {
-                        std::cout << "Up: " << (bb.y + bb.h) - aa.y << std::endl;
-                        isCollisionY = true;
-                    }
-
-                    // Right collision
-                    if ((aRB.fsm->direction.x > 0 && (aa.x + aa.w) > bb.x) && !isCollisionY)
-                    {
-                        std::cout << "Right: " << (aa.x + aa.w) - bb.x << std::endl;
-                        isCollisionX = true;
-                    }
-
-                    // Left collision
-                    if ((aRB.fsm->direction.x < 0 && aa.x < (bb.x + bb.w)) && !isCollisionY)
-                    {
-                        std::cout << "Left: " << (bb.x + bb.w) - aa.x << std::endl;
-                        isCollisionX = true;
-                    }
-
-                    // TODO up left right
-                    // TODO down left right
-
-                    // Left
-                    if (isCollisionX && aRB.fsm->direction.x < 0)
-                    {
-                        aTransform.position.x = (float) (bb.x + bb.w) ;
-                        aRB.deltaXY.x = 0;
-                        aRB.fsm->direction.x = 0;
-                        break;
-                    }
+                    SDL_Rect cc = IntersectRect(aa, bb);
 
                     // Right
-                    if (isCollisionX && aRB.fsm->direction.x > 0)
+                    if (isRightRayCast)
                     {
                         aTransform.position.x = (float) (bb.x - aa.w);
                         aRB.deltaXY.x = 0;
@@ -146,24 +151,27 @@ namespace RGE_System
                         break;
                     }
 
-                    // Up
-                    if (isCollisionY && aRB.fsm->direction.y < 0)
+                    // Down
+                    if (isDownRayCast)
                     {
-                        aTransform.position.y = (float) (bb.y + bb.h);
+                        aRB.fsm->isGrounded = true;
+
+                        aTransform.position.y -= (float)cc.h;
                         aRB.deltaXY.y = 0;
                         aRB.fsm->direction.y = 0;
                         break;
                     }
 
-                    // Down
-                    if (isCollisionY && aRB.fsm->direction.y > 0)
+                    // Left
+                    if (isLeftRayCast)
                     {
-                        aTransform.position.y = (float) (bb.y - aa.h);
-                        aRB.deltaXY.y = 0;
-                        aRB.fsm->direction.y = 0;
+                        aTransform.position.x = (float) (bb.x + bb.w) ;
+                        aRB.deltaXY.x = 0;
+                        aRB.fsm->direction.x = 0;
                         break;
                     }
-                }
+
+                } else aRB.fsm->isGrounded = false;
             }
         }
 
@@ -173,27 +181,29 @@ namespace RGE_System
          * @param aa
          * @param bb
          */
-        void IntersectRect(SDL_Rect &aa, SDL_Rect &bb)
+        SDL_Rect IntersectRect(SDL_Rect &aa, SDL_Rect &bb)
         {
             SDL_Rect cc;
             SDL_IntersectRect(&aa, &bb, &cc);
 
-            std::cout << "Box aa.x: " << aa.x << std::endl;
-            std::cout << "Box aa.y: " << aa.y << std::endl;
-            std::cout << "Box aa.w: " << aa.w << std::endl;
-            std::cout << "Box aa.h: " << aa.h << std::endl;
+//            std::cout << "Box aa.x: " << aa.x << std::endl;
+//            std::cout << "Box aa.y: " << aa.y << std::endl;
+//            std::cout << "Box aa.w: " << aa.w << std::endl;
+//            std::cout << "Box aa.h: " << aa.h << std::endl;
+//
+//            std::cout << "Box bb.x: " << bb.x << std::endl;
+//            std::cout << "Box bb.y: " << bb.y << std::endl;
+//            std::cout << "Box bb.w: " << bb.w << std::endl;
+//            std::cout << "Box bb.h: " << bb.h << std::endl;
+//
+//            std::cout << "Box cc.x: " << cc.x << std::endl;
+//            std::cout << "Box cc.y: " << cc.y << std::endl;
+//            std::cout << "Box cc.w: " << cc.w << std::endl;
+//            std::cout << "Box cc.h: " << cc.h << std::endl;
+//
+//            std::cout << "**********" << std::endl;
 
-            std::cout << "Box bb.x: " << bb.x << std::endl;
-            std::cout << "Box bb.y: " << bb.y << std::endl;
-            std::cout << "Box bb.w: " << bb.w << std::endl;
-            std::cout << "Box bb.h: " << bb.h << std::endl;
-
-            std::cout << "Box cc.x: " << cc.x << std::endl;
-            std::cout << "Box cc.y: " << cc.y << std::endl;
-            std::cout << "Box cc.w: " << cc.w << std::endl;
-            std::cout << "Box cc.h: " << cc.h << std::endl;
-
-            std::cout << "**********" << std::endl;
+            return cc;
         }
     };
 

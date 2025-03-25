@@ -127,14 +127,14 @@ class PlayerControllerSystem : public System
             {
                 WalkLeft();
                 walkState = true;
-                fsm->isGrounded = false;
+//                fsm->isGrounded = false;
             }
 
             if (keysArray[SDL_SCANCODE_RIGHT])
             {
                 WalkRight();
                 walkState = true;
-                fsm->isGrounded = false;
+//                fsm->isGrounded = false;
             }
 
             if (!isPlatformer)
@@ -302,8 +302,10 @@ class PlayerControllerSystem : public System
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
             auto fsm = rigidBody.fsm;
+            // Prevent double jump.
             if (!fsm->isGrounded)
                 return;
+
             fsm->isGrounded = false;
             fsm->setJumpState();
 
