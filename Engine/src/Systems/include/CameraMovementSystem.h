@@ -36,7 +36,7 @@ class CameraMovementSystem: public System {
                 if (transform.position.y < (float)cf.cameraOffsetY)
                     _camera.y = 0;
 
-                //Just move. Subtract the offset of the player screen starting point
+                //Just move. Subtract the position of the player screen starting point
 //                _camera.x = (int)transform.position.x - 32*10;
 //                _camera.y = (int)transform.position.y - 32*5;
 

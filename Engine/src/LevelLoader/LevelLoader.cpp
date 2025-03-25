@@ -13,7 +13,6 @@
 #include "../Components/include/HealthComponent.h"
 #include "../Components/include/TextLabelComponent.h"
 #include "../Components/include/ScriptComponent.h"
-#include "../Components/include/PlayerRaycastComponent.h"
 
 #include <string>
 #include <fstream>
@@ -209,16 +208,11 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
                         entity["components"]["box_collider"]["width"],
                         entity["components"]["box_collider"]["height"],
                         glm::vec2(
-                                entity["components"]["box_collider"]["offset"]["x"].get_or(0),
-                                entity["components"]["box_collider"]["offset"]["y"].get_or(0)
-                        )
+                                entity["components"]["box_collider"]["position"]["x"].get_or(0),
+                                entity["components"]["box_collider"]["position"]["y"].get_or(0)
+                        ),
+                        entity["components"]["box_collider"]["has_ray_cast"].get_or(false)
                 );
-            }
-
-            sol::optional<sol::table> raycast = entity["components"]["ray_cast"];
-            if (raycast != sol::nullopt)
-            {
-                newEntity.AddComponent<PlayerRaycastComponent>();
             }
 
             // Health

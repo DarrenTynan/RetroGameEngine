@@ -64,9 +64,8 @@ Level = {
                 box_collider = {
                     width = 32,
                     height = 32,
-                    offset = { x = 0, y = 0 }
-                },
-                ray_cast = {
+                    position = { x = 0, y = 0 },
+                    has_ray_cast = true
                 },
                 health = {
                     health_percentage = 100

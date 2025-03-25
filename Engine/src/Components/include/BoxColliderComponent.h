@@ -12,19 +12,21 @@ namespace RGE_Component
  *
  * @param int width
  * @param int height
- * @param vec2 offset
+ * @param vec2 position
  */
 struct BoxColliderComponent
 {
     int width;
     int height;
-    glm::vec2 offset{};
+    glm::vec2 position{};
+    bool hasRaycast;
 
-    explicit BoxColliderComponent(int width = 0, int height = 0,  glm::vec2 offset = glm::vec2(0,0))
+    explicit BoxColliderComponent(int _width = 0, int _height = 0, glm::vec2 _position = glm::vec2(0,0), bool _hasRaycast = false)
     {
-        this->width = width;
-        this->height = height;
-        this->offset = offset;
+        this->width = _width;
+        this->height = _height;
+        this->position = _position;
+        this->hasRaycast = _hasRaycast;
     }
 };
 

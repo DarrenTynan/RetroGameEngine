@@ -114,7 +114,6 @@ set(SOURCE_FILES
 
         Engine/src/FileHandler/include/FileHandler.h
         Engine/src/FileHandler/FileHandler.cpp
-        Engine/src/Components/include/PlayerRaycastComponent.h
 
 )
 

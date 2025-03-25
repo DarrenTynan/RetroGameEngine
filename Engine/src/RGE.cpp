@@ -23,8 +23,7 @@
 #include "../src/Systems/include/ProjectileEmitSystem.h"
 #include "../src/Systems/include/ProjectileLifecycleSystem.h"
 #include "../src/Systems/include/DamageSystem.h"
-#include "../src/Systems/include/RenderPlayerRaycastSystem.h"
-//#include "../src/Systems/include/RenderRaycastSystem.h"
+#include "../src/Systems/include/RenderRaycastSystem.h"
 #include "FileHandler/include/FileHandler.h"
 
 using namespace RGE_ECS;
@@ -34,7 +33,6 @@ using namespace RGE_EventBus;
 using namespace RGE_Events;
 using namespace RGE_FILEHANDLER;
 using namespace RGE_LevelLoader;
-using namespace RGE_PlayerRaycast;
 
 SDL_Window* gameWindow;
 SDL_Rect gameCamera;
@@ -112,7 +110,6 @@ void RGE::Setup()
     registry->AddSystem<RenderSystem>();                  // Render windows
     registry->AddSystem<RenderTextSystem>();              // Render any label's
 //    registry->AddSystem<RenderRaycastSystem>();           // Debug updateRender the ray cast's
-    registry->AddSystem<RenderPlayerRaycastSystem>();     // Debug updateRender the ray cast's
     registry->AddSystem<ScriptSystem>();                  // Lua scripting system
 
     // Create the bindings between C++ and Lua
@@ -246,7 +243,7 @@ void RGE::UpdateRenderer()
     if (isRayCast)
     {
         auto player = registry->GetEntityByTag("player");
-        registry->GetSystem<RenderPlayerRaycastSystem>().Update(gameRenderer, player, gameCamera);
+        registry->GetSystem<RenderRaycastSystem>().Update(gameRenderer, player);
     }
 
     if (isDebugWindow)
