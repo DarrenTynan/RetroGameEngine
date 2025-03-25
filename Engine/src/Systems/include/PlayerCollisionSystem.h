@@ -69,13 +69,6 @@ namespace RGE_System
                         (int) bCollider.height * (int) bTransform.scale.y
                 };
 
-//                SDL_Rect downCast = {
-//                        (int) (aTransform.position.x + aCollider.width / 2),
-//                        (int) (aTransform.position.y + aCollider.height),
-//                        1,
-//                        10
-//                };
-
                 // Perform the AABB collision check between entities a and b
                 SDL_bool isCollision = SDL_HasIntersection(&aa, &bb);
 
@@ -84,7 +77,7 @@ namespace RGE_System
                  */
 //                if (isCollision)
 //                {
-                    float rayLength = 20.0f;
+                    float rayLength = 5.0f;
 
                     // ray up
                     int x1u = (int)(aTransform.position.x + aCollider.width / 2);
