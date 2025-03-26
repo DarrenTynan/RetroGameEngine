@@ -28,8 +28,8 @@ class RenderColliderSystem: public System {
                 const auto collider = entity.GetComponent<BoxColliderComponent>();
 
                 SDL_Rect colliderRect = {
-                    static_cast<int>(transform.position.x + collider.position.x - (float)camera.x),
-                    static_cast<int>(transform.position.y + collider.position.y - (float)camera.y),
+                    static_cast<int>(transform.position.x + collider.center.x - (float)camera.x),
+                    static_cast<int>(transform.position.y + collider.center.y - (float)camera.y),
                     static_cast<int>(collider.width * transform.scale.x),
                     static_cast<int>(collider.height * transform.scale.y)
                 };
@@ -40,36 +40,15 @@ class RenderColliderSystem: public System {
                 if (collider.hasRaycast)
                 {
                     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-                    float length = 25.0f;
 
                     // Up
-                    SDL_RenderDrawLineF(renderer,
-                                        (transform.position.x + collider.width/2.0f) - (float)camera.x,
-                                        transform.position.y - (float)camera.y,
-                                        (transform.position.x + collider.width/2.0f) - (float)camera.x,
-                                        (transform.position.y - length - (float)camera.y)
-                    );
+                    SDL_RenderDrawLineF(renderer, collider.upCast.x, collider.upCast.y, collider.upCast.z, collider.upCast.w);
                     // Down
-                    SDL_RenderDrawLineF(renderer,
-                                        (transform.position.x + collider.width/2) - (float)camera.x,
-                                        (transform.position.y + collider.height) - (float)camera.y,
-                                        (transform.position.x + collider.width/2) - (float)camera.x,
-                                        (transform.position.y + collider.height + length) - (float)camera.y
-                    );
+                    SDL_RenderDrawLineF(renderer, collider.downCast.x, collider.downCast.y, collider.downCast.z, collider.downCast.w);
                     // Left
-                    SDL_RenderDrawLineF(renderer,
-                                        transform.position.x - (float)camera.x,
-                                        (transform.position.y + collider.height/2) - (float)camera.y,
-                                        (transform.position.x - length) - (float)camera.x,
-                                        (transform.position.y + collider.height/2) - (float)camera.y
-                    );
+                    SDL_RenderDrawLineF(renderer, collider.leftCast.x, collider.leftCast.y, collider.leftCast.z, collider.leftCast.w);
                     // Right
-                    SDL_RenderDrawLineF(renderer,
-                                        transform.position.x + 32 - (float)camera.x,
-                                        (transform.position.y + collider.height/2) - (float)camera.y,
-                                        (transform.position.x + collider.width + length) - (float)camera.x,
-                                        (transform.position.y + collider.height/2) - (float)camera.y
-                    );
+                    SDL_RenderDrawLineF(renderer, collider.rightCast.x, collider.rightCast.y, collider.rightCast.z, collider.rightCast.w);
 
                 }
             }

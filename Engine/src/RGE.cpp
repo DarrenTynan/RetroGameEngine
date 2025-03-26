@@ -324,12 +324,12 @@ void RGE::UpdateSystems()
      * @brief Apply deltaXY and check out of bounds.
      */
 //    registry->GetSystem<EntityMovementSystem>().Update(deltaTime);
-    registry->GetSystem<PlayerControllerSystem>().Update(deltaTime);
+    registry->GetSystem<PlayerControllerSystem>().Update(deltaTime, gameCamera);
 
     /**
      * @brief AABB collision player to all other objects.
      */
-    registry->GetSystem<PlayerCollisionSystem>().Update(eventBus, registry);
+    registry->GetSystem<PlayerCollisionSystem>().Update(eventBus, registry, gameCamera);
 //    registry->GetSystem<Ent ityCollisionSystem>().Update(eventBus);
 
     /**
@@ -374,13 +374,14 @@ void RGE::DebugWindowText()
     auto player = registry->GetEntityByTag("player");
     auto transform = player.GetComponent<TransformComponent>();
     auto rigidBody = player.GetComponent<RigidBodyComponent>();
+    auto boxCollider = player.GetComponent<BoxColliderComponent>();
     auto fsm = rigidBody.fsm;
 
     TTF_Font* Chariot = TTF_OpenFont("/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/fonts/arial.ttf", 18);
     SDL_Color White = {255, 255, 255};
 
     std::string text;
-    text = "pos.x: " + std::to_string(transform.position.x) + " pos.y: " +std::to_string(transform.position.y)
+    text = "pos.x: " + std::to_string(transform.position.x) + " pos.y: " + std::to_string(transform.position.y)
            + "\nrb->dx: " + std::to_string(rigidBody.deltaXY.x) + " rb->dy: " + std::to_string(rigidBody.deltaXY.y)
            + "\nrb->mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " rb->mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
            + "\nfsm->dir.x: " + std::to_string(fsm->direction.x) + " fsm->dir.y: " + std::to_string(fsm->direction.y)
@@ -388,6 +389,8 @@ void RGE::DebugWindowText()
            + "\ncamera.x: " + std::to_string(gameCamera.x) + " camera.y: " + std::to_string(gameCamera.y)
            + "\ncamera.w: " + std::to_string(gameCamera.w) + " camera.h: " + std::to_string(gameCamera.h)
            + "\nfsm->isGrounded: " + std::to_string(fsm->isGrounded)
+           + "\nbox.x: " + std::to_string(boxCollider.center.x) + " box.y: " + std::to_string(boxCollider.center.y)
+           + "\nbox.w: " + std::to_string(boxCollider.width) + " box.h: " +std::to_string(boxCollider.height)
            ;
 
     SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped(Chariot, text.c_str(), White, 400);

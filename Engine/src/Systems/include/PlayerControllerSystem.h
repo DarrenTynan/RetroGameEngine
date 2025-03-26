@@ -10,6 +10,7 @@
 #include "../../Events/include/KeyReleasedEvent.h"
 #include "../../Components/include/RigidBodyComponent.h"
 #include "../../Components/include/SpriteComponent.h"
+#include "../../Components/include/BoxColliderComponent.h"
 #include "../../Components/include/TextLabelComponent.h"
 #include "../../FSM/include/FSM.h"
 #include "RGE.h"
@@ -32,12 +33,13 @@ class PlayerControllerSystem : public System
     public:
         std::shared_ptr<Registry> registry;
 
-        bool isPlatformer = true;
+        bool isPlatformer = false;
 
         PlayerControllerSystem()
         {
             RequireComponent<SpriteComponent>();
             RequireComponent<RigidBodyComponent>();
+            RequireComponent<BoxColliderComponent>();
         }
 
         /**
@@ -89,11 +91,12 @@ class PlayerControllerSystem : public System
          * if (player.x<-8) then player.x=128 end
          * end
         */
-        void Update(double deltaTime)
+        void Update(double deltaTime, SDL_Rect& camera)
         {
             Entity player = registry->GetEntityByTag("player");
             auto &transform = player.GetComponent<TransformComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
+            auto &collider = player.GetComponent<BoxColliderComponent>();
             auto fsm = rigidBody.fsm;
 
             // Apply forces to deltaXY
@@ -105,6 +108,28 @@ class PlayerControllerSystem : public System
                 rigidBody.deltaXY.y *= rigidBody.friction;
 
             ReadKeys();
+
+            // Update the ray's of the box collider.
+            collider.upCast.x = (transform.position.x + collider.width/2.0f) - (float)camera.x;
+            collider.upCast.y = transform.position.y - (float)camera.y;
+            collider.upCast.z = (transform.position.x + collider.width/2.0f) - (float)camera.x;
+            collider.upCast.w = (transform.position.y - collider.rayLength - (float)camera.y);
+
+            collider.downCast.x = (transform.position.x + collider.width/2) - (float)camera.x;
+            collider.downCast.y = (transform.position.y + collider.height) - (float)camera.y;
+            collider.downCast.z = (transform.position.x + collider.width/2) - (float)camera.x;
+            collider.downCast.w = (transform.position.y + collider.height + collider.rayLength) - (float)camera.y;
+
+            collider.leftCast.x = transform.position.x - (float)camera.x;
+            collider.leftCast.y = (transform.position.y + collider.height/2) - (float)camera.y;
+            collider.leftCast.z = (transform.position.x - collider.rayLength) - (float)camera.x;
+            collider.leftCast.w = (transform.position.y + collider.height/2) - (float)camera.y;
+
+            collider.rightCast.x = transform.position.x + collider.width - (float)camera.x;
+            collider.rightCast.y = (transform.position.y + collider.height/2) - (float)camera.y;
+            collider.rightCast.z = (transform.position.x + collider.width + collider.rayLength) - (float)camera.x;
+            collider.rightCast.w = (transform.position.y + collider.height/2) - (float)camera.y;
+
         }
 
 
@@ -122,18 +147,20 @@ class PlayerControllerSystem : public System
             // update keyboard state
             auto keysArray = const_cast <Uint8*> (SDL_GetKeyboardState(nullptr));
 
-            bool walkState = false;
+            // Reset the key pressed switch.
+            bool wasKeyPressed = false;
+
             if (keysArray[SDL_SCANCODE_LEFT])
             {
                 WalkLeft();
-                walkState = true;
+                wasKeyPressed = true;
 //                fsm->isGrounded = false;
             }
 
             if (keysArray[SDL_SCANCODE_RIGHT])
             {
                 WalkRight();
-                walkState = true;
+                wasKeyPressed = true;
 //                fsm->isGrounded = false;
             }
 
@@ -142,7 +169,7 @@ class PlayerControllerSystem : public System
                 if (keysArray[SDL_SCANCODE_UP])
                 {
                     WalkUp();
-                    walkState = true;
+                    wasKeyPressed = true;
                 }
 
             }
@@ -153,7 +180,7 @@ class PlayerControllerSystem : public System
                 if (keysArray[SDL_SCANCODE_DOWN])
                 {
                     WalkDown();
-                    walkState = true;
+                    wasKeyPressed = true;
                 }
 
             }
@@ -161,7 +188,7 @@ class PlayerControllerSystem : public System
                 Fall();
 
             // No keyboard selection, so we are at idle.
-            if (!walkState)
+            if (!wasKeyPressed)
             {
                 fsm->setIdleState();
                 fsm->direction.x = 0;
@@ -204,7 +231,6 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto &text = player.GetComponent<TextLabelComponent>().text;
             auto fsm = rigidBody.fsm;
             sprite.flipH = true;
             fsm->direction.x = -1.0;
@@ -230,7 +256,6 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto &text = player.GetComponent<TextLabelComponent>().text;
             auto fsm = rigidBody.fsm;
             sprite.flipH = false;
             fsm->direction.x = 1.0;
@@ -256,12 +281,15 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto &text = player.GetComponent<TextLabelComponent>().text;
             auto fsm = rigidBody.fsm;
             fsm->direction.y = -1.0;
 
             if (fsm->getCurrentState()->getName() != "Walk")
                 fsm->setWalkState();
+
+            fsm->isGrounded = false;
+
+            std::cout << "PlayerControllerSystem DEBUG" << std::endl;
 
             rigidBody.deltaXY.y -= rigidBody.acceleration;
             rigidBody.deltaXY.y = MiddleOfThree(-rigidBody.maxDeltaXY.y, rigidBody.deltaXY.y, rigidBody.maxDeltaXY.y);
@@ -281,7 +309,6 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto &text = player.GetComponent<TextLabelComponent>().text;
             auto fsm = rigidBody.fsm;
             fsm->direction.y = 1.0;
 

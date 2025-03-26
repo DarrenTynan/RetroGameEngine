@@ -33,13 +33,17 @@ namespace RGE_System
             RequireComponent<BoxColliderComponent>();
         }
 
+        int x1, y1, x2, y2;
+
         // Check entity bounding box for collision.
-        void Update(std::unique_ptr<EventBus>& eventBus, std::shared_ptr<Registry>& registry)
+        void Update(std::unique_ptr<EventBus>& eventBus, std::shared_ptr<Registry>& registry, SDL_Rect camera)
         {
             auto a = registry->GetEntityByTag("player");
             auto &aTransform = a.GetComponent<TransformComponent>();
             auto &aCollider = a.GetComponent<BoxColliderComponent>();
             auto &aRB = a.GetComponent<RigidBodyComponent>();
+
+            int x1, y1, x2, y2;
 
             auto entities = GetSystemEntities();
 
@@ -77,68 +81,72 @@ namespace RGE_System
                  */
 //                if (isCollision)
 //                {
-                    float rayLength = 5.0f;
 
-                    // ray up
-                    int x1u = (int)(aTransform.position.x + aCollider.width / 2);
-                    int y1u = (int)(aTransform.position.y + aCollider.height + rayLength);
-                    int x2u = (int)(aTransform.position.x + aCollider.width / 2);
-                    int y2u = (int)(aTransform.position.y + aCollider.height);
-                    SDL_bool isUpRayCast = SDL_IntersectRectAndLine(&bb, &x1u, &y1u, &x2u, &y2u);
+                    /**
+                     * @brief Check ray-cast intersections.
+                     */
+                    x1 = (int)(aTransform.position.x + aCollider.width / 2);
+                    y1 = (int)(aTransform.position.y);
+                    x2 = (int)(aTransform.position.x + aCollider.width / 2);
+                    y2 = (int)(aTransform.position.y - aCollider.rayLength);
+                    SDL_bool isUpRayCast = SDL_IntersectRectAndLine(&bb, &x1, &y1, &x2, &y2);
+                    if (isUpRayCast)
+                        std::cout << "isUpRayCast" << std::endl;
 
-//                    if (isUpRayCast)
-//                        std::cout << "isUpRayCast" << std::endl;
+                    x1 = (int)(aTransform.position.x);
+                    y1 = (int)(aTransform.position.y + aCollider.height / 2);
+                    x2 = (int)(aTransform.position.x - aCollider.rayLength);
+                    y2 = (int)(aTransform.position.y + aCollider.height / 2);
+                    SDL_bool isLeftRayCast = SDL_IntersectRectAndLine(&bb, &x1, &y1, &x2, &y2);
+                    if (isLeftRayCast)
+                        std::cout << "isLeftRayCast" << std::endl;
 
-                    // ray right
-                    int x1r = (int)(aTransform.position.x + aCollider.width);
-                    int y1r = (int)(aTransform.position.y + aCollider.height / 2);
-                    int x2r = (int)(aTransform.position.x + aCollider.width + rayLength);
-                    int y2r = (int)(aTransform.position.y + aCollider.height / 2);
-                    SDL_bool isRightRayCast = SDL_IntersectRectAndLine(&bb, &x1r, &y1r, &x2r, &y2r);
+                    x1 = (int)(aTransform.position.x + aCollider.width / 2);
+                    y1 = (int)(aTransform.position.y + aCollider.height);
+                    x2 = (int)(aTransform.position.x + aCollider.width / 2);
+                    y2 = (int)(aTransform.position.y + aCollider.height + aCollider.rayLength);
+                    SDL_bool isDownRayCast = SDL_IntersectRectAndLine(&bb, &x1, &y1, &x2, &y2);
+                    if (isDownRayCast)
+                        std::cout << "isDownRayCast" << std::endl;
 
-//                    if (isRightRayCast)
-//                        std::cout << "isRightRayCast" << std::endl;
+                    x1 = (int)(aTransform.position.x + aCollider.width);
+                    y1 = (int)(aTransform.position.y + aCollider.height / 2);
+                    x2 = (int)((aTransform.position.x + aCollider.width) + aCollider.rayLength);
+                    y2 = (int)(aTransform.position.y + aCollider.height / 2);
+                    SDL_bool isRightRayCast = SDL_IntersectRectAndLine(&bb, &x1, &y1, &x2, &y2);
+                    if (isRightRayCast)
+                        std::cout << "isRightRayCast" << std::endl;
 
-                    // ray down
-                    int x1d = (int)(aTransform.position.x + aCollider.width / 2);
-                    int y1d = (int)(aTransform.position.y + aCollider.height);
-                    int x2d = (int)(aTransform.position.x + aCollider.width / 2);
-                    int y2d = (int)(aTransform.position.y + aCollider.height + rayLength);
-                    SDL_bool isDownRayCast = SDL_IntersectRectAndLine(&bb, &x1d, &y1d, &x2d, &y2d);
 
-//                    if (isDownRayCast)
-//                        std::cout << "isDownRayCast" << std::endl;
-
-                    // ray left
-                    int x1l = (int)(aTransform.position.x);
-                    int y1l = (int)(aTransform.position.y + aCollider.height / 2);
-                    int x2l = (int)(aTransform.position.x - rayLength);
-                    int y2l = (int)(aTransform.position.y + aCollider.height / 2);
-                    SDL_bool isLeftRayCast = SDL_IntersectRectAndLine(&bb, &x1l, &y1l, &x2l, &y2l);
-
-//                    if (isLeftRayCast)
-//                        std::cout << "isLeftRayCast" << std::endl;
-
+                /**
+                 * @brief Check the ray-cast flags.
+                 */
                 if (isUpRayCast || isRightRayCast || isDownRayCast || isLeftRayCast)
                 {
-
-//                    SDL_bool isDownCast = SDL_HasIntersection(&downCast, &bb);
-
-//                    if (isDownCast)
-//                    {
-//                        std::cout << "Cast Down Hit" << std::endl;
-//                        aRB.fsm->isGrounded = true;
-//                    }
-//                    else
-//                        aRB.fsm->isGrounded = false;
-
                     // Now we know there is a collision we need to find out the value of intersection.
                     SDL_Rect cc = IntersectRect(aa, bb);
+
+                    // Up
+                    if (isUpRayCast)
+                    {
+                        std::cout << "Box cc.w: " << cc.w << std::endl;
+                        std::cout << "Box cc.h: " << cc.h << std::endl;
+
+                        aTransform.position.y += (float)cc.h + aCollider.rayLength;
+                        aRB.deltaXY.y = 0;
+                        aRB.fsm->direction.y = 0;
+
+//                        aRB.fsm->isGrounded = true;
+                        break;
+                    }
 
                     // Right
                     if (isRightRayCast)
                     {
-                        aTransform.position.x = (float) (bb.x - aa.w);
+                        std::cout << "Box cc.w: " << cc.w << std::endl;
+                        std::cout << "Box cc.h: " << cc.h << std::endl;
+
+                        aTransform.position.x += (float)cc.w;
                         aRB.deltaXY.x = 0;
                         aRB.fsm->direction.x = 0;
                         break;
@@ -147,18 +155,24 @@ namespace RGE_System
                     // Down
                     if (isDownRayCast)
                     {
-                        aRB.fsm->isGrounded = true;
+                        std::cout << "Box cc.w: " << cc.w << std::endl;
+                        std::cout << "Box cc.h: " << cc.h << std::endl;
 
-                        aTransform.position.y -= (float)cc.h;
+                        aTransform.position.y -= (float)cc.h + aCollider.rayLength;
                         aRB.deltaXY.y = 0;
                         aRB.fsm->direction.y = 0;
+
+//                        aRB.fsm->isGrounded = true;
                         break;
                     }
 
                     // Left
                     if (isLeftRayCast)
                     {
-                        aTransform.position.x = (float) (bb.x + bb.w) ;
+                        std::cout << "Box cc.w: " << cc.w << std::endl;
+                        std::cout << "Box cc.h: " << cc.h << std::endl;
+
+                        aTransform.position.x -= (float)cc.w;
                         aRB.deltaXY.x = 0;
                         aRB.fsm->direction.x = 0;
                         break;
