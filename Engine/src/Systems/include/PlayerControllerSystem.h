@@ -33,7 +33,7 @@ class PlayerControllerSystem : public System
     public:
         std::shared_ptr<Registry> registry;
 
-        bool isPlatformer = false;
+        bool isPlatformer = true;
 
         PlayerControllerSystem()
         {

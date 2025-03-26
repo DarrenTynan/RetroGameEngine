@@ -22,7 +22,7 @@ struct BoxColliderComponent
     glm::vec2 center{};
 
     bool hasRaycast;
-    float rayLength = 5.0f;
+    float rayLength = 2.0f;
     glm::vec4 upCast{};
     glm::vec4 rightCast{};
     glm::vec4 downCast{};
