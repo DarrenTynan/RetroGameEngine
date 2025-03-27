@@ -16,6 +16,7 @@ namespace RGE_Component
  */
 struct BoxColliderComponent
 {
+    std::string name;
     float width;
     float height;
     // Center is not used atm.

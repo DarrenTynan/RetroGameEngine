@@ -311,6 +311,8 @@ void LevelLoader::LoadTMX(const std::shared_ptr<Registry>& registry, const char 
                     tile.AddComponent<BoxColliderComponent>(object.getAABB().width, object.getAABB().height);
                     tile.AddComponent<TransformComponent>(glm::vec2(object.getAABB().left,  object.getAABB().top));
                     tile.AddTag(object.getName());
+                    auto& collider = tile.GetComponent<BoxColliderComponent>();
+                    collider.name = object.getName();
                 }
             }
                 // Get Tile layer

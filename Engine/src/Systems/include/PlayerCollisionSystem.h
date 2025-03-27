@@ -125,6 +125,7 @@ namespace RGE_System
                     // Right
                     if (isRightRayCast)
                     {
+                        std::cout << bCollider.name << std::endl;
                         aTransform.position.x += (float)cc.w - aCollider.rayLength;
                         aRB.deltaXY.x = 0;
                         aRB.fsm->direction.x = 0;
@@ -134,6 +135,7 @@ namespace RGE_System
                     // Down
                     if (isDownRayCast)
                     {
+
                         aTransform.position.y -= (float)cc.h + aCollider.rayLength;
                         aRB.deltaXY.y = 0;
                         aRB.fsm->direction.y = 0;

@@ -36,7 +36,7 @@ Level = {
             tag = "player",
             components = {
                 transform = {
-                    start_position = { x = 32*10, y = 32*9 },
+                    start_position = { x = 32*10, y = 32*7 },
                     scale = { x = 1.0, y = 1.0 },
                     rotation = 0.0, -- degrees
                 },
@@ -45,7 +45,7 @@ Level = {
                     maxDeltaXY = { x = 3.0, y = 3.0 },
                     acceleration = 0.5,
                     boost = 4.0,
-                    gravity = 0.08, -- 0.3
+                    gravity = 0.12, -- 0.3
                     friction = 0.85,
                 },
                 sprite = {
