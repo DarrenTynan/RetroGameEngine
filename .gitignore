@@ -1,12 +1,12 @@
 .idea/**
 /build/**
 /cmake-build-debug/**
-/cmake-build-library/**
 /assets/**
 /Engine/libs/**
 /Editor/libs/**
-/Engine_Test_Game_Platform/libs/**
-/Engine_Test_Game_Platform/assets/**
+/Engine_Test_Game_Platform/**
+/Engine_Test_Game_RPG/**
+
 /Editor/cmake-build-debug/**
 /Game_Library_Test/**
 
