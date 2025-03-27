@@ -102,12 +102,34 @@ class PlayerControllerSystem : public System
             // Apply forces to deltaXY
             rigidBody.deltaXY.x *= rigidBody.friction;
 
+            // Apply forces to the Y axis based on the type of game.
             if (isPlatformer && !fsm->isGrounded)
                 rigidBody.deltaXY.y += rigidBody.gravity;
             else
                 rigidBody.deltaXY.y *= rigidBody.friction;
 
-            ReadKeys();
+            // Read keys for direction
+            bool wasKeyPressed = ReadKeys();
+
+            // No keyboard selection, so we are at idle. But, are we falling?
+            if (!wasKeyPressed && fsm->getCurrentState()->getName() != "Fall" && fsm->getCurrentState()->getName() != "Jump")
+            {
+                if (fsm->getCurrentState()->getName() != "Idle")
+                    fsm->setIdleState();
+
+                fsm->direction.x = 0;
+                fsm->direction.y = 0;
+            }
+
+            // It is a platform game? Are we at the top of the jump arc?(-0.5)
+            if (isPlatformer && fsm->getCurrentState()->getName() == "Jump" && rigidBody.deltaXY.y >= -0.5)
+            {
+                if (fsm->getCurrentState()->getName() != "Fall")
+                    fsm->setFallState();
+
+            }
+
+            Fall();
 
             // Update the ray's of the box collider.
             collider.upCast.x = (transform.position.x + collider.width/2.0f) - (float)camera.x;
@@ -135,8 +157,10 @@ class PlayerControllerSystem : public System
 
         /**
          * @brief Read the keyboard for pump events NOT single click ie. jump, fire, etc.
-         */
-        void ReadKeys()
+          *
+          * @return true if key pressed.
+          */
+        bool ReadKeys()
         {
             auto player = registry->GetEntityByTag("player");
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
@@ -154,14 +178,12 @@ class PlayerControllerSystem : public System
             {
                 WalkLeft();
                 wasKeyPressed = true;
-//                fsm->isGrounded = false;
             }
 
             if (keysArray[SDL_SCANCODE_RIGHT])
             {
                 WalkRight();
                 wasKeyPressed = true;
-//                fsm->isGrounded = false;
             }
 
             if (!isPlatformer)
@@ -171,7 +193,6 @@ class PlayerControllerSystem : public System
                     WalkUp();
                     wasKeyPressed = true;
                 }
-
             }
 
             // Is it a platform game?
@@ -184,16 +205,8 @@ class PlayerControllerSystem : public System
                 }
 
             }
-            else if (isPlatformer && !fsm->isGrounded)
-                Fall();
 
-            // No keyboard selection, so we are at idle.
-            if (!wasKeyPressed)
-            {
-                fsm->setIdleState();
-                fsm->direction.x = 0;
-                fsm->direction.y = 0;
-            }
+            return wasKeyPressed;
         }
 
 
@@ -288,9 +301,6 @@ class PlayerControllerSystem : public System
                 fsm->setWalkState();
 
             fsm->isGrounded = false;
-
-            std::cout << "PlayerControllerSystem DEBUG" << std::endl;
-
             rigidBody.deltaXY.y -= rigidBody.acceleration;
             rigidBody.deltaXY.y = MiddleOfThree(-rigidBody.maxDeltaXY.y, rigidBody.deltaXY.y, rigidBody.maxDeltaXY.y);
             transform.position.y += rigidBody.deltaXY.y;
@@ -329,16 +339,21 @@ class PlayerControllerSystem : public System
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
             auto fsm = rigidBody.fsm;
+
             // Prevent double jump.
             if (!fsm->isGrounded)
                 return;
 
             fsm->isGrounded = false;
-            fsm->setJumpState();
+            if (fsm->getCurrentState()->getName() != "Jump")
+            {
+                fsm->setJumpState();
+                fsm->direction.y = -1.0f;
+            }
 
-            std::cout << "Jump Event" << std::endl;
             rigidBody.deltaXY.y -= rigidBody.boost;
             transform.position.y += rigidBody.deltaXY.y;
+
         }
 
 
@@ -351,10 +366,7 @@ class PlayerControllerSystem : public System
             auto fsm = rigidBody.fsm;
             if (!fsm->isGrounded)
             {
-                fsm->setFallState();
                 fsm->direction.y = 1.0;
-
-                std::cout << "Fall" << std::endl;
                 transform.position.y += rigidBody.deltaXY.y;
 
             }

@@ -44,7 +44,7 @@ namespace RGE_LevelLoader
  */
 void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& registry, const std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer, int levelNumber)
 {
-    std::string levelFilePath = "../Engine_Test_Game/scripts/Level";
+    std::string levelFilePath = "../Engine_Test_Game_Platform/scripts/Level";
 
     // This checks the syntax of our script, but it does not execute the script
     sol::load_result script = lua.load_file( levelFilePath + std::to_string(levelNumber) + ".lua");

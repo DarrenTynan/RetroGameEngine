@@ -68,7 +68,7 @@ class EventBus
         /**
          * Subscribe to an event type <T>
          * In our implementation, a listener subscribes to an event
-         * Example: eventBus->SubscribeToEvent<CollisionEvent>(this, &Engine_Test_Game::onCollision);
+         * Example: eventBus->SubscribeToEvent<CollisionEvent>(this, &Engine_Test_Game_Platform::onCollision);
          */
         template <typename TEvent, typename TOwner>
         void SubscribeToEvent(TOwner* ownerInstance, void (TOwner::*callbackFunction)(TEvent&))

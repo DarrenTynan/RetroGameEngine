@@ -5,8 +5,8 @@
 /assets/**
 /Engine/libs/**
 /Editor/libs/**
-/Engine_Test_Game/libs/**
-/Engine_Test_Game/assets/**
+/Engine_Test_Game_Platform/libs/**
+/Engine_Test_Game_Platform/assets/**
 /Editor/cmake-build-debug/**
 /Game_Library_Test/**
 

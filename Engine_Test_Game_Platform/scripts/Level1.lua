@@ -5,20 +5,20 @@ Level = {
     ----------------------------------------------------
     assets = {
         [0] =
-        { type = "font",    id = "arial-font",                  file = "../Engine_Test_Game/assets/fonts/arial.ttf", font_size = 18 },
-        { type = "texture", id = "tilemap-image",               file = "../Engine_Test_Game/assets/tile-maps/EngineTestLevel/EngineTestLevel.png" },
-        { type = "texture", id = "player-idle-image",           file = "../Engine_Test_Game/assets/sprites/CharacterIdle.png" },
-        { type = "texture", id = "tank-image",                  file = "../Engine_Test_Game/assets/images/tank-panther-right.png" },
-        { type = "texture", id = "truck-image",                 file = "../Engine_Test_Game/assets/images/truck-ford-right.png" },
-        { type = "texture", id = "chopper-image",               file = "../Engine_Test_Game/assets/images/chopper.png" },
-        { type = "texture", id = "bullet-image",                file = "../Engine_Test_Game/assets/images/bullet.png" },
+        { type = "font",    id = "arial-font",                  file = "../Engine_Test_Game_Platform/assets/fonts/arial.ttf", font_size = 18 },
+        { type = "texture", id = "tilemap-image",               file = "../Engine_Test_Game_Platform/assets/tile-maps/EngineTestLevel/EngineTestLevel.png" },
+        { type = "texture", id = "player-idle-image",           file = "../Engine_Test_Game_Platform/assets/sprites/CharacterIdle.png" },
+        { type = "texture", id = "tank-image",                  file = "../Engine_Test_Game_Platform/assets/images/tank-panther-right.png" },
+        { type = "texture", id = "truck-image",                 file = "../Engine_Test_Game_Platform/assets/images/truck-ford-right.png" },
+        { type = "texture", id = "chopper-image",               file = "../Engine_Test_Game_Platform/assets/images/chopper.png" },
+        { type = "texture", id = "bullet-image",                file = "../Engine_Test_Game_Platform/assets/images/bullet.png" },
     },
 
     ----------------------------------------------------
     -- table to define the map config variables
     ----------------------------------------------------
     tilemap = {
-       map_file = "../Engine_Test_Game/assets/tile-maps/EngineTestLevel/EngineTestLevel.tmx",
+       map_file = "../Engine_Test_Game_Platform/assets/tile-maps/EngineTestLevel/EngineTestLevel.tmx",
 --        texture_asset_id = tilemap-image,
        tile_count_x = 40,
        tile_count_y = 22,
@@ -36,7 +36,7 @@ Level = {
             tag = "player",
             components = {
                 transform = {
-                    start_position = { x = 32*10, y = 32*7 },
+                    start_position = { x = 32*10, y = 32*9 },
                     scale = { x = 1.0, y = 1.0 },
                     rotation = 0.0, -- degrees
                 },
