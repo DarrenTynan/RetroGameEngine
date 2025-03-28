@@ -98,6 +98,7 @@ class PlayerControllerSystem : public System
             auto &transform = player.GetComponent<TransformComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &collider = player.GetComponent<BoxColliderComponent>();
+            auto &sprite = player.GetComponent<SpriteComponent>();
             auto fsm = rigidBody.fsm;
 
             // Apply forces to deltaXY
@@ -116,7 +117,7 @@ class PlayerControllerSystem : public System
             if (!wasKeyPressed && fsm->getCurrentState()->getName() != "Fall" && fsm->getCurrentState()->getName() != "Jump")
             {
                 if (fsm->getCurrentState()->getName() != "Idle")
-                    fsm->setIdleState();
+                    fsm->setIdleState(sprite);
 
                 fsm->direction.x = 0;
                 fsm->direction.y = 0;
@@ -126,7 +127,7 @@ class PlayerControllerSystem : public System
             if (isPlatformer && fsm->getCurrentState()->getName() == "Jump" && rigidBody.deltaXY.y >= -0.5)
             {
                 if (fsm->getCurrentState()->getName() != "Fall")
-                    fsm->setFallState();
+                    fsm->setFallState(sprite);
 
             }
 
@@ -250,7 +251,7 @@ class PlayerControllerSystem : public System
             fsm->direction.x = -1.0;
 
             if (fsm->getCurrentState()->getName() != "Walk")
-                fsm->setWalkState();
+                fsm->setWalkState(sprite);
 
             rigidBody.deltaXY.x -= rigidBody.acceleration;
             rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);
@@ -275,7 +276,7 @@ class PlayerControllerSystem : public System
             fsm->direction.x = 1.0;
 
             if (fsm->getCurrentState()->getName() != "Walk")
-                fsm->setWalkState();
+                fsm->setWalkState(sprite);
 
             rigidBody.deltaXY.x += rigidBody.acceleration;
             rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);
@@ -299,7 +300,7 @@ class PlayerControllerSystem : public System
             fsm->direction.y = -1.0;
 
             if (fsm->getCurrentState()->getName() != "Walk")
-                fsm->setWalkState();
+                fsm->setWalkState(sprite);
 
             fsm->isGrounded = false;
             rigidBody.deltaXY.y -= rigidBody.acceleration;
@@ -324,7 +325,7 @@ class PlayerControllerSystem : public System
             fsm->direction.y = 1.0;
 
             if (fsm->getCurrentState()->getName() != "Walk")
-                fsm->setWalkState();
+                fsm->setWalkState(sprite);
 
             rigidBody.deltaXY.y += rigidBody.acceleration;
             rigidBody.deltaXY.y = MiddleOfThree(-rigidBody.maxDeltaXY.y, rigidBody.deltaXY.y, rigidBody.maxDeltaXY.y);
@@ -354,7 +355,7 @@ class PlayerControllerSystem : public System
             fsm->isGrounded = false;
             if (fsm->getCurrentState()->getName() != "Jump")
             {
-                fsm->setJumpState();
+                fsm->setJumpState(sprite);
                 fsm->direction.y = -1.0f;
             }
 

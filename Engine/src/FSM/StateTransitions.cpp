@@ -3,6 +3,12 @@
 //
 
 #include "include/States.h"
+//#include "../Components/include/SpriteComponent.h"
+//
+//using namespace RGE_Component;
+
+namespace RGE_FSM
+{
 
 /**
  * @brief Idle -> Walk transitions.
@@ -163,3 +169,4 @@ void Fall::enter(FSM *fsm) {}
 
 void Fall::exit(FSM *fsm) {}
 
+} // end namespace

@@ -40,6 +40,7 @@ namespace RGE_System
             auto &aTransform = a.GetComponent<TransformComponent>();
             auto &aCollider = a.GetComponent<BoxColliderComponent>();
             auto &aRB = a.GetComponent<RigidBodyComponent>();
+            auto &aSprite = a.GetComponent<SpriteComponent>();
 
             int x1, y1, x2, y2;
 
@@ -139,8 +140,6 @@ namespace RGE_System
                         aRB.fsm->direction.y = 0;
 
                         aRB.fsm->isGrounded = true;
-                        if (aRB.fsm->getCurrentState()->getName() != "Idle")
-                            aRB.fsm->setIdleState();
                         break;
                     }
 

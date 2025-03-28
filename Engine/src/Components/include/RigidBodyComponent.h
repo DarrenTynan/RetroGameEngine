@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include "../../Engine/src/FSM/include/FSM.h"
 
-//using namespace RGE_FSM;
+using namespace RGE_FSM;
 
 namespace RGE_Component
 {

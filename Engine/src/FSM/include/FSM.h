@@ -2,14 +2,17 @@
 // Created by Darren Tynan on 14/12/2024.
 //
 
-#ifndef FSM_H
-#define FSM_H
+#ifndef RETROGAMEENGINE_FSM_H
+#define RETROGAMEENGINE_FSM_H
 
 #include "BaseState.h"
 #include <glm/glm.hpp>
+//#include "../Components/include/SpriteComponent.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/SpriteComponent.h"
+using namespace RGE_Component;
 
-//namespace RGE_FSM
-//{
+namespace RGE_FSM
+{
 
 class BaseState;
 
@@ -27,13 +30,13 @@ public:
     void toggle();
     void setState(BaseState& newState);
 
-    void setIdleState();
-    void setWalkState();
-    void setJumpState();
-    void setFallState();
+    void setIdleState(SpriteComponent &sprite);
+    void setWalkState(SpriteComponent &sprite);
+    void setJumpState(SpriteComponent &sprite);
+    void setFallState(SpriteComponent &sprite);
 private:
     BaseState* currentState;
 };
 
-//} // end namespace
-#endif //FSM_H
+} // end namespace
+#endif //RETROGAMEENGINE_FSM_H

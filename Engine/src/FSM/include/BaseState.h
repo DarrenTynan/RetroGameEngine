@@ -2,11 +2,17 @@
 // Created by Darren Tynan on 14/12/2024.
 //
 
-#ifndef RETROGAMEENGINE_ENTITYBASESTATE_H
-#define RETROGAMEENGINE_ENTITYBASESTATE_H
+#ifndef RETROGAMEENGINE_BASESTATE_H
+#define RETROGAMEENGINE_BASESTATE_H
 
 #include "FSM.h"
+//#include "../../Components/include/SpriteComponent.h"
 #include <string>
+
+//using namespace RGE_Component;
+
+namespace RGE_FSM
+{
 
 // Forward declaration to resolve circular dependency/include
 class FSM;
@@ -25,5 +31,5 @@ public:
     virtual ~BaseState() = default;
 };
 
-
-#endif //RETROGAMEENGINE_ENTITYBASESTATE_H
+} // end namespace
+#endif //RETROGAMEENGINE_BASESTATE_H
