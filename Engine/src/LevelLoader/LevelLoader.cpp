@@ -176,27 +176,27 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
             }
 
             // Sprite
-            sol::optional<sol::table> sprite = entity["components"]["sprite"];
+            sol::optional<sol::table> sprite = entity["components"]["sprite"]["idle"];
             if (sprite != sol::nullopt)
             {
                 newEntity.AddComponent<SpriteComponent>(
-                        entity["components"]["sprite"]["texture_asset_id"],
-                        entity["components"]["sprite"]["width"],
-                        entity["components"]["sprite"]["height"],
-                        entity["components"]["sprite"]["z_index"].get_or(1),
-                        entity["components"]["sprite"]["fixed"].get_or(false),
-                        entity["components"]["sprite"]["src_rect_x"].get_or(0),
-                        entity["components"]["sprite"]["src_rect_y"].get_or(0)
+                        entity["components"]["sprite"]["idle"]["texture_asset_id"],
+                        entity["components"]["sprite"]["idle"]["width"],
+                        entity["components"]["sprite"]["idle"]["height"],
+                        entity["components"]["sprite"]["idle"]["z_index"].get_or(1),
+                        entity["components"]["sprite"]["idle"]["fixed"].get_or(false),
+                        entity["components"]["sprite"]["idle"]["src_rect_x"].get_or(0),
+                        entity["components"]["sprite"]["idle"]["src_rect_y"].get_or(0)
                 );
             }
 
             // Animation
-            sol::optional<sol::table> animation = entity["components"]["animation"];
+            sol::optional<sol::table> animation = entity["components"]["sprite"]["idle"]["animation"];
             if (animation != sol::nullopt)
             {
                 newEntity.AddComponent<AnimationComponent>(
-                        entity["components"]["animation"]["num_frames"].get_or(1),
-                        entity["components"]["animation"]["speed_rate"].get_or(1)
+                        entity["components"]["sprite"]["idle"]["animation"]["num_frames"].get_or(1),
+                        entity["components"]["sprite"]["idle"]["animation"]["speed_rate"].get_or(1)
                 );
             }
 

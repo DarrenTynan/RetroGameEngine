@@ -33,6 +33,7 @@ class PlayerControllerSystem : public System
     public:
         std::shared_ptr<Registry> registry;
 
+        // TODO move this var into the editor
         bool isPlatformer = true;
 
         PlayerControllerSystem()
@@ -332,6 +333,12 @@ class PlayerControllerSystem : public System
         }
 
 
+        /**
+         * @brief Check for double jump and prevent. Set isGrounded to false as we are jumping
+         * and set the jump state before applying jump force to the Y axis.
+         *
+         * @param event
+         */
         void Jump(JumpEvent& event)
         {
             auto player = registry->GetEntityByTag("player");
@@ -357,6 +364,9 @@ class PlayerControllerSystem : public System
         }
 
 
+        /**
+         * @brief If we are not grounded then apply gravity forces to the Y axis.
+         */
         void Fall()
         {
             auto player = registry->GetEntityByTag("player");

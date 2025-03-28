@@ -3,6 +3,9 @@
 
 #include <glm/glm.hpp>
 
+namespace RGE_Component
+{
+
 /**
  * @brief Each entity has a transform component; position, scale and rotation.
  */
@@ -19,4 +22,5 @@ struct TransformComponent
     }
 };
 
+} // end namespace
 #endif

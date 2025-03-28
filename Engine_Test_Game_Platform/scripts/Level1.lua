@@ -49,18 +49,24 @@ Level = {
                     friction = 0.85,
                 },
                 sprite = {
-                    texture_asset_id = "player-idle-image",
-                    width = 32,
-                    height = 32,
-                    z_index = 4,
-                    fixed = false,
-                    src_rect_x = 0,
-                    src_rect_y = 0
+                    idle = {
+                        texture_asset_id = "player-idle-image",
+                        width = 32,
+                        height = 32,
+                        z_index = 4,
+                        fixed = false,
+                        src_rect_x = 0,
+                        src_rect_y = 0,
+                        animation = {
+                            num_frames = 6,
+                            speed_rate = 8 -- fps
+                        },
+                    }
                 },
-                animation = {
-                    num_frames = 6,
-                    speed_rate = 8 -- fps
-                },
+                --animation = {
+                --    num_frames = 6,
+                --    speed_rate = 8 -- fps
+                --},
                 box_collider = {
                     width = 32,
                     height = 32,

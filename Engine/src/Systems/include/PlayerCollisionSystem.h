@@ -33,8 +33,6 @@ namespace RGE_System
             RequireComponent<BoxColliderComponent>();
         }
 
-//        int x1, y1, x2, y2;
-
         // Check entity bounding box for collision.
         void Update(std::unique_ptr<EventBus>& eventBus, std::shared_ptr<Registry>& registry, SDL_Rect camera)
         {

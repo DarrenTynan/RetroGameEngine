@@ -87,15 +87,15 @@ void RGE::Setup()
     std::string json((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
     // Create a Document object to hold the JSON data of the config file
-    rapidjson::Document jsonDoc;
+    rapidjson::Document gameConfig;
 
     // Parse the JSON data
-    jsonDoc.Parse(json.c_str());
+    gameConfig.Parse(json.c_str());
 
     // Check for parse errors
-    if (jsonDoc.HasParseError())
+    if (gameConfig.HasParseError())
     {
-        std::cerr << "Error parsing JSON: " << jsonDoc.GetParseError() << std::endl;
+        std::cerr << "Error parsing JSON: " << gameConfig.GetParseError() << std::endl;
         exit(1);
     }
 
@@ -143,11 +143,11 @@ void RGE::Setup()
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
     gameWindow = SDL_CreateWindow(
-            jsonDoc["configuration"]["window_title"].GetString(),
+            gameConfig["configuration"]["window_title"].GetString(),
             SDL_WINDOWPOS_CENTERED,
             0,          //SDL_WINDOWPOS_CENTERED,
-            jsonDoc["configuration"]["window_width"].GetInt(),
-            jsonDoc["configuration"]["window_height"].GetInt(),
+            gameConfig["configuration"]["window_width"].GetInt(),
+            gameConfig["configuration"]["window_height"].GetInt(),
             windowFlags
     );
 
@@ -169,7 +169,7 @@ void RGE::Setup()
     }
 
     // SetupSDL the camera view with the entire screen area
-    gameCamera = {0, 32*11, jsonDoc["configuration"]["window_width"].GetInt(), jsonDoc["configuration"]["window_height"].GetInt() };
+    gameCamera = {0, 32*11, gameConfig["configuration"]["window_width"].GetInt(), gameConfig["configuration"]["window_height"].GetInt() };
 
 
     /**
