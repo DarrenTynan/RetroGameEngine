@@ -4,7 +4,6 @@
 
 #include "include/FSM.h"
 #include "include/States.h"
-#include "../Components/include/SpriteComponent.h"
 
 using namespace RGE_Component;
 

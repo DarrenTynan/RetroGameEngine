@@ -7,8 +7,7 @@
 
 #include "BaseState.h"
 #include <glm/glm.hpp>
-//#include "../Components/include/SpriteComponent.h"
-#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/SpriteComponent.h"
+#include "../Components/include/SpriteComponent.h"
 using namespace RGE_Component;
 
 namespace RGE_FSM
