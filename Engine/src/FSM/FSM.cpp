@@ -4,10 +4,7 @@
 
 #include "include/FSM.h"
 #include "include/States.h"
-#include "../ECS/include/ECS.h"
-#include "../Components/include/SpriteComponent.h"
 
-using namespace RGE_Component;
 using namespace RGE_ECS;
 
 namespace RGE_FSM
@@ -31,9 +28,9 @@ namespace RGE_FSM
  */
     void FSM::setState(BaseState &newState, Entity &entity)
     {
-        currentState->exit(this);       // Do something before we chane state.
-        currentState = &newState;            // Change state.
-        currentState->enter(this,entity);      // Do something after we change state.
+        currentState->exit(this, entity);       // Do something before we chane state.
+        currentState = &newState;                       // Change state.
+        currentState->enter(this,entity);       // Do something after we change state.
     }
 
 
@@ -56,7 +53,6 @@ namespace RGE_FSM
 
     void FSM::setIdleState(Entity &entity)
     {
-        entity.GetComponent<SpriteComponent>().assetId = "player-idle-image";
         setState(Idle::getInstance(),entity);
     }
 

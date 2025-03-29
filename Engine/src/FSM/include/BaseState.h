@@ -26,7 +26,7 @@ public:
     virtual void enter(FSM* fsm, Entity &entity) = 0;
     virtual void update(FSM* fsm) = 0;
     virtual void toggle(FSM* fsm, Entity &entity) = 0;
-    virtual void exit(FSM* fsm) = 0;
+    virtual void exit(FSM* fsm, Entity &entity) = 0;
     virtual std::string getName() = 0;
     virtual ~BaseState() = default;
 };

@@ -25,8 +25,8 @@
 #include <tmxlite/ObjectGroup.hpp>
 #include <tmxlite/Property.hpp>
 
-//#include <sol/sol.hpp>
-#include "../libs/sol/sol.hpp"
+#include <sol/sol.hpp>
+//#include "../libs/sol/sol.hpp"
 
 using namespace RGE_Component;
 

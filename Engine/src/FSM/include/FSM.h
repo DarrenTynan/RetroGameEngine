@@ -23,6 +23,14 @@ class FSM
 {
 public:
     bool isGrounded;
+
+    // Animation change save variables.
+    int numFrames;
+    int currentFrame;
+    int frameSpeedRate;
+    bool isLoop;
+    int startTime;
+
     glm::vec2 direction = glm::vec2(0.0, 0.0);
 
     FSM();

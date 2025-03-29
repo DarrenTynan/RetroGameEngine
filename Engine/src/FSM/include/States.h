@@ -21,7 +21,7 @@ namespace RGE_FSM
         void enter(FSM *fsm, Entity &entity) override;
         void update(FSM *fsm) override;
         void toggle(FSM *fsm, Entity &entity) override;
-        void exit(FSM *fsm) override;
+        void exit(FSM *fsm, Entity &entity) override;
         static BaseState &getInstance();
     private:
         Idle() {}
@@ -40,7 +40,7 @@ namespace RGE_FSM
         void enter(FSM *fsm, Entity &entity) override;
         void update(FSM *fsm) override;
         void toggle(FSM *fsm, Entity &entity) override;
-        void exit(FSM *fsm) override;
+        void exit(FSM *fsm, Entity &entity) override;
         static BaseState &getInstance();
     private:
         Walk() {};
@@ -59,7 +59,7 @@ namespace RGE_FSM
         void enter(FSM *fsm, Entity &entity) override;
         void update(FSM *fsm) override;
         void toggle(FSM *fsm, Entity &entity) override;
-        void exit(FSM *fsm) override;
+        void exit(FSM *fsm, Entity &entity) override;
         static BaseState &getInstance();
     private:
         Run() {};
@@ -75,7 +75,7 @@ namespace RGE_FSM
         void enter(FSM *fsm, Entity &entity) override;
         void update(FSM *fsm) override;
         void toggle(FSM *fsm, Entity &entity) override;
-        void exit(FSM *fsm) override;
+        void exit(FSM *fsm, Entity &entity) override;
         static BaseState &getInstance();
     private:
         Jump() {};
@@ -91,7 +91,7 @@ namespace RGE_FSM
         void enter(FSM *fsm, Entity &entity) override;
         void update(FSM *fsm) override;
         void toggle(FSM *fsm,Entity &entity) override;
-        void exit(FSM *fsm) override;
+        void exit(FSM *fsm, Entity &entity) override;
         static BaseState &getInstance();
     private:
         Fall() {};
