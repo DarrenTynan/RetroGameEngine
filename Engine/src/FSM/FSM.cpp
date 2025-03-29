@@ -4,8 +4,11 @@
 
 #include "include/FSM.h"
 #include "include/States.h"
+#include "../ECS/include/ECS.h"
+#include "../Components/include/SpriteComponent.h"
 
 using namespace RGE_Component;
+using namespace RGE_ECS;
 
 namespace RGE_FSM
 {
@@ -26,11 +29,11 @@ namespace RGE_FSM
  *
  * @param newState
  */
-    void FSM::setState(BaseState &newState)
+    void FSM::setState(BaseState &newState, Entity &entity)
     {
         currentState->exit(this);       // Do something before we chane state.
         currentState = &newState;            // Change state.
-        currentState->enter(this);      // Do something after we change state.
+        currentState->enter(this,entity);      // Do something after we change state.
     }
 
 
@@ -38,34 +41,33 @@ namespace RGE_FSM
  * @brief Delegate the task of determining the next state to the current state.
  * Calls the toggle method in the current state in StateTransitions.
  */
-    void FSM::toggle()
+    void FSM::toggle(Entity &entity)
     {
-        currentState->toggle(this);
+        currentState->toggle(this,entity);
     }
 
 /**
  * @brief Set states manually.
  */
-    void FSM::setWalkState(SpriteComponent &sprite)
+    void FSM::setWalkState(Entity &entity)
     {
-        sprite.assetId = "player-walk-image";
-        setState(Walk::getInstance());
+        setState(Walk::getInstance(),entity);
     }
 
-    void FSM::setIdleState(SpriteComponent &sprite)
+    void FSM::setIdleState(Entity &entity)
     {
-        sprite.assetId = "player-idle-image";
-        setState(Idle::getInstance());
+        entity.GetComponent<SpriteComponent>().assetId = "player-idle-image";
+        setState(Idle::getInstance(),entity);
     }
 
-    void FSM::setJumpState(SpriteComponent &sprite)
+    void FSM::setJumpState(Entity &entity)
     {
-        setState(Jump::getInstance());
+        setState(Jump::getInstance(),entity);
     }
 
-    void FSM::setFallState(SpriteComponent &sprite)
+    void FSM::setFallState(Entity &entity)
     {
-        setState(Fall::getInstance());
+        setState(Fall::getInstance(),entity);
     }
 
 } // end namespace

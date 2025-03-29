@@ -7,9 +7,6 @@
 
 #include <iostream>
 #include "BaseState.h"
-//#include "../../Components/include/SpriteComponent.h"
-//
-//using namespace RGE_Component;
 
 namespace RGE_FSM
 {
@@ -21,9 +18,9 @@ namespace RGE_FSM
     {
     public:
         std::string getName() override;
-        void enter(FSM *fsm) override;
+        void enter(FSM *fsm, Entity &entity) override;
         void update(FSM *fsm) override;
-        void toggle(FSM *fsm) override;
+        void toggle(FSM *fsm, Entity &entity) override;
         void exit(FSM *fsm) override;
         static BaseState &getInstance();
     private:
@@ -40,9 +37,9 @@ namespace RGE_FSM
     {
     public:
         std::string getName() override;
-        void enter(FSM *fsm) override;
+        void enter(FSM *fsm, Entity &entity) override;
         void update(FSM *fsm) override;
-        void toggle(FSM *fsm) override;
+        void toggle(FSM *fsm, Entity &entity) override;
         void exit(FSM *fsm) override;
         static BaseState &getInstance();
     private:
@@ -59,9 +56,9 @@ namespace RGE_FSM
     {
     public:
         std::string getName() override;
-        void enter(FSM *fsm) override;
+        void enter(FSM *fsm, Entity &entity) override;
         void update(FSM *fsm) override;
-        void toggle(FSM *fsm) override;
+        void toggle(FSM *fsm, Entity &entity) override;
         void exit(FSM *fsm) override;
         static BaseState &getInstance();
     private:
@@ -75,9 +72,9 @@ namespace RGE_FSM
     {
     public:
         std::string getName() override;
-        void enter(FSM *fsm) override;
+        void enter(FSM *fsm, Entity &entity) override;
         void update(FSM *fsm) override;
-        void toggle(FSM *fsm) override;
+        void toggle(FSM *fsm, Entity &entity) override;
         void exit(FSM *fsm) override;
         static BaseState &getInstance();
     private:
@@ -91,9 +88,9 @@ namespace RGE_FSM
     {
     public:
         std::string getName() override;
-        void enter(FSM *fsm) override;
+        void enter(FSM *fsm, Entity &entity) override;
         void update(FSM *fsm) override;
-        void toggle(FSM *fsm) override;
+        void toggle(FSM *fsm,Entity &entity) override;
         void exit(FSM *fsm) override;
         static BaseState &getInstance();
     private:

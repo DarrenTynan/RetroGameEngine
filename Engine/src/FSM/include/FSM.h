@@ -7,8 +7,9 @@
 
 #include "BaseState.h"
 #include <glm/glm.hpp>
-#include "../Components/include/SpriteComponent.h"
-using namespace RGE_Component;
+#include "../ECS/include/ECS.h"
+
+using namespace RGE_ECS;
 
 namespace RGE_FSM
 {
@@ -26,13 +27,13 @@ public:
 
     FSM();
     [[nodiscard]] inline BaseState* getCurrentState() const { return currentState; }
-    void toggle();
-    void setState(BaseState& newState);
+    void toggle(Entity &entity);
+    void setState(BaseState& newState, Entity &entity);
 
-    void setIdleState(SpriteComponent &sprite);
-    void setWalkState(SpriteComponent &sprite);
-    void setJumpState(SpriteComponent &sprite);
-    void setFallState(SpriteComponent &sprite);
+    void setIdleState(Entity &entity);
+    void setWalkState(Entity &entity);
+    void setJumpState(Entity &entity);
+    void setFallState(Entity &entity);
 private:
     BaseState* currentState;
 };

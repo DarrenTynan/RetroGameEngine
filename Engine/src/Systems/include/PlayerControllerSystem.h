@@ -117,7 +117,7 @@ class PlayerControllerSystem : public System
             if (!wasKeyPressed && fsm->getCurrentState()->getName() != "Fall" && fsm->getCurrentState()->getName() != "Jump")
             {
                 if (fsm->getCurrentState()->getName() != "Idle")
-                    fsm->setIdleState(sprite);
+                    fsm->setIdleState(player);
 
                 fsm->direction.x = 0;
                 fsm->direction.y = 0;
@@ -127,7 +127,7 @@ class PlayerControllerSystem : public System
             if (isPlatformer && fsm->getCurrentState()->getName() == "Jump" && rigidBody.deltaXY.y >= -0.5)
             {
                 if (fsm->getCurrentState()->getName() != "Fall")
-                    fsm->setFallState(sprite);
+                    fsm->setFallState(player);
 
             }
 
@@ -251,7 +251,7 @@ class PlayerControllerSystem : public System
             fsm->direction.x = -1.0;
 
             if (fsm->getCurrentState()->getName() != "Walk")
-                fsm->setWalkState(sprite);
+                fsm->setWalkState(player);
 
             rigidBody.deltaXY.x -= rigidBody.acceleration;
             rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);
@@ -276,7 +276,7 @@ class PlayerControllerSystem : public System
             fsm->direction.x = 1.0;
 
             if (fsm->getCurrentState()->getName() != "Walk")
-                fsm->setWalkState(sprite);
+                fsm->setWalkState(player);
 
             rigidBody.deltaXY.x += rigidBody.acceleration;
             rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);
@@ -300,7 +300,7 @@ class PlayerControllerSystem : public System
             fsm->direction.y = -1.0;
 
             if (fsm->getCurrentState()->getName() != "Walk")
-                fsm->setWalkState(sprite);
+                fsm->setWalkState(player);
 
             fsm->isGrounded = false;
             rigidBody.deltaXY.y -= rigidBody.acceleration;
@@ -325,7 +325,7 @@ class PlayerControllerSystem : public System
             fsm->direction.y = 1.0;
 
             if (fsm->getCurrentState()->getName() != "Walk")
-                fsm->setWalkState(sprite);
+                fsm->setWalkState(player);
 
             rigidBody.deltaXY.y += rigidBody.acceleration;
             rigidBody.deltaXY.y = MiddleOfThree(-rigidBody.maxDeltaXY.y, rigidBody.deltaXY.y, rigidBody.maxDeltaXY.y);
@@ -355,7 +355,7 @@ class PlayerControllerSystem : public System
             fsm->isGrounded = false;
             if (fsm->getCurrentState()->getName() != "Jump")
             {
-                fsm->setJumpState(sprite);
+                fsm->setJumpState(player);
                 fsm->direction.y = -1.0f;
             }
 

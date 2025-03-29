@@ -3,9 +3,9 @@
 //
 
 #include "include/States.h"
-//#include "../Components/include/SpriteComponent.h"
-//
-//using namespace RGE_Component;
+#include "../Components/include/SpriteComponent.h"
+
+using namespace RGE_Component;
 
 namespace RGE_FSM
 {
@@ -15,9 +15,9 @@ namespace RGE_FSM
  *
  * @param fsm
  */
-void Idle::toggle(FSM* fsm)
+void Idle::toggle(FSM* fsm, Entity &entity)
 {
-     fsm->setState(Walk::getInstance());
+    fsm->setState(Walk::getInstance(),entity);
 }
 
 BaseState& Idle::getInstance()
@@ -33,8 +33,9 @@ std::string Idle::getName()
     return "Idle";
 }
 
-void Idle::enter(FSM *fsm)
+void Idle::enter(FSM *fsm, Entity &entity)
 {
+    entity.GetComponent<SpriteComponent>().assetId = "player-idle-image";
     std::cout << "StateTransitions: idle enter" << std::endl;
 }
 
@@ -51,9 +52,9 @@ void Idle::exit(FSM *fsm)
  *
  * @param fsm
  */
-void Walk::toggle(FSM* fsm)
+void Walk::toggle(FSM* fsm, Entity &entity)
 {
-    fsm->setState(Idle::getInstance());
+    fsm->setState(Idle::getInstance(),entity);
 }
 
 BaseState& Walk::getInstance()
@@ -69,8 +70,9 @@ std::string Walk::getName()
     return "Walk";
 }
 
-void Walk::enter(FSM *fsm)
+void Walk::enter(FSM *fsm, Entity &entity)
 {
+    entity.GetComponent<SpriteComponent>().assetId = "player-walk-image";
     std::cout << "StateTransitions: walk enter" << std::endl;
 }
 
@@ -87,9 +89,9 @@ void Walk::exit(FSM *fsm)
  *
  * @param fsm
  */
-void Run::toggle(FSM *fsm)
+void Run::toggle(FSM *fsm, Entity &entity)
 {
-    fsm->setState(Walk::getInstance());
+    fsm->setState(Walk::getInstance(), entity);
 }
 
 BaseState& Run::getInstance()
@@ -105,7 +107,7 @@ std::string Run::getName()
     return "Run";
 }
 
-void Run::enter(FSM *fsm) {}
+void Run::enter(FSM *fsm, Entity &entity) {}
 
 void Run::exit(FSM *fsm) {}
 
@@ -117,9 +119,9 @@ void Run::exit(FSM *fsm) {}
  *
  * @param fsm
  */
-void Jump::toggle(FSM* fsm)
+void Jump::toggle(FSM* fsm, Entity &entity)
 {
-    fsm->setState(Fall::getInstance());
+    fsm->setState(Fall::getInstance(),entity);
 }
 
 BaseState& Jump::getInstance()
@@ -135,7 +137,7 @@ std::string Jump::getName()
     return "Jump";
 }
 
-void Jump::enter(FSM *fsm) {}
+void Jump::enter(FSM *fsm, Entity &entity) {}
 
 void Jump::exit(FSM *fsm) {}
 
@@ -147,9 +149,9 @@ void Jump::exit(FSM *fsm) {}
  *
  * @param fsm
  */
-void Fall::toggle(FSM* fsm)
+void Fall::toggle(FSM* fsm, Entity &entity)
 {
-    fsm->setState(Idle::getInstance());
+    fsm->setState(Idle::getInstance(),entity);
 }
 
 BaseState& Fall::getInstance()
@@ -165,7 +167,7 @@ std::string Fall::getName()
     return "Fall";
 }
 
-void Fall::enter(FSM *fsm) {}
+void Fall::enter(FSM *fsm, Entity &entity) {}
 
 void Fall::exit(FSM *fsm) {}
 

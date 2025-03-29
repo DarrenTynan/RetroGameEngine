@@ -6,10 +6,10 @@
 #define RETROGAMEENGINE_BASESTATE_H
 
 #include "FSM.h"
-//#include "../../Components/include/SpriteComponent.h"
 #include <string>
+#include "../ECS/include/ECS.h"
 
-//using namespace RGE_Component;
+using namespace RGE_ECS;
 
 namespace RGE_FSM
 {
@@ -23,9 +23,9 @@ class FSM;
 class BaseState
 {
 public:
-    virtual void enter(FSM* fsm) = 0;
+    virtual void enter(FSM* fsm, Entity &entity) = 0;
     virtual void update(FSM* fsm) = 0;
-    virtual void toggle(FSM* fsm) = 0;
+    virtual void toggle(FSM* fsm, Entity &entity) = 0;
     virtual void exit(FSM* fsm) = 0;
     virtual std::string getName() = 0;
     virtual ~BaseState() = default;
