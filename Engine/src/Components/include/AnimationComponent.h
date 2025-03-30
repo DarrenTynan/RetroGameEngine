@@ -15,7 +15,7 @@ struct AnimationComponent
     int currentFrame;
     int frameSpeedRate;
     bool isLoop;
-    int startTime;
+    u_int32_t startTime = SDL_GetTicks();
 
     explicit AnimationComponent(int numFrames = 1, int frameSpeedRate = 1, bool isLoop = true)
     {
@@ -23,7 +23,6 @@ struct AnimationComponent
         this->currentFrame = 1;
         this->frameSpeedRate = frameSpeedRate;
         this->isLoop = isLoop;
-        this->startTime = SDL_GetTicks();
     }
 };
 

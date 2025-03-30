@@ -100,7 +100,9 @@ Level = {
                 camera_follow = {
                     follow = true
                 },
-                text_label = {}
+                text_label = {
+                },
+                fsm = {}
             }
         },
 

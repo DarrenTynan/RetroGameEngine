@@ -184,7 +184,7 @@ void RGE::Setup()
                 0,
                 0,
                 400,
-                400,
+                350,
                 windowFlags2
         );
 

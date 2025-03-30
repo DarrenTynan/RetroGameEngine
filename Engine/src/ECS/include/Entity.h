@@ -5,6 +5,8 @@
 #ifndef RETROGAMEENGINE_ENTITY_H
 #define RETROGAMEENGINE_ENTITY_H
 
+#include "sol.hpp"
+
 namespace RGE_ECS
 {
 

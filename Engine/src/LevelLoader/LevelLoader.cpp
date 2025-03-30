@@ -13,6 +13,7 @@
 #include "../Components/include/HealthComponent.h"
 #include "../Components/include/TextLabelComponent.h"
 #include "../Components/include/ScriptComponent.h"
+#include "../Components/include/FSMComponent.h"
 
 #include <string>
 #include <fstream>
@@ -26,7 +27,6 @@
 #include <tmxlite/Property.hpp>
 
 #include <sol/sol.hpp>
-//#include "../libs/sol/sol.hpp"
 
 using namespace RGE_Component;
 
@@ -114,6 +114,7 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
         sol::table entity = entities[i];
 
         Entity newEntity = registry->CreateEntity();
+//        newEntity.lua = lua;
 
         // Tag
         sol::optional<std::string> tag = entity["tag"];
@@ -260,6 +261,13 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
             if (textLabel != sol::nullopt)
             {
                 newEntity.AddComponent<TextLabelComponent>();
+            }
+
+            // FSM
+            sol::optional<sol::table> fsm = entity["components"]["fsm"];
+            if (textLabel != sol::nullopt)
+            {
+                newEntity.AddComponent<FSMComponent>();
             }
 
             // Script

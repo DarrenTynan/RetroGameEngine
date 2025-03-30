@@ -25,7 +25,7 @@ namespace RGE_Component
 struct RigidBodyComponent
 {
     // Pointer to the Finite State Machine
-    FSM* fsm = new FSM();
+//    FSM* fsm = new FSM();
 
     // Entity velocity subject to forces is the rate of change. DX and DY
     glm::vec2 deltaXY = glm::vec2(0.0, .0);
