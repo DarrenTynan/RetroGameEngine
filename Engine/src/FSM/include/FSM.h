@@ -23,7 +23,6 @@ class FSM
 {
 public:
     bool isGrounded;
-
     glm::vec2 direction = glm::vec2(0.0, 0.0);
 
     FSM();

@@ -41,6 +41,8 @@ namespace RGE_System
             auto &aCollider = a.GetComponent<BoxColliderComponent>();
             auto &aRB = a.GetComponent<RigidBodyComponent>();
             auto &aSprite = a.GetComponent<SpriteComponent>();
+            auto &fsmComponent = a.GetComponent<FSMComponent>();
+            auto fsm = fsmComponent.getFsm();
 
             int x1, y1, x2, y2;
 
@@ -116,7 +118,7 @@ namespace RGE_System
                     {
                         aTransform.position.y += (float)cc.h + aCollider.rayLength;
                         aRB.deltaXY.y = 0;
-                        aRB.fsm->direction.y = 0;
+                        fsm->direction.y = 0;
 
                         break;
                     }
@@ -127,7 +129,7 @@ namespace RGE_System
                         std::cout << bCollider.name << std::endl;
                         aTransform.position.x += (float)cc.w - aCollider.rayLength;
                         aRB.deltaXY.x = 0;
-                        aRB.fsm->direction.x = 0;
+                        fsm->direction.x = 0;
                         break;
                     }
 
@@ -137,9 +139,9 @@ namespace RGE_System
 
                         aTransform.position.y -= (float)cc.h + aCollider.rayLength;
                         aRB.deltaXY.y = 0;
-                        aRB.fsm->direction.y = 0;
+                        fsm->direction.y = 0;
 
-                        aRB.fsm->isGrounded = true;
+                        fsm->isGrounded = true;
                         break;
                     }
 
@@ -148,11 +150,11 @@ namespace RGE_System
                     {
                         aTransform.position.x -= (float)cc.w - aCollider.rayLength;
                         aRB.deltaXY.x = 0;
-                        aRB.fsm->direction.x = 0;
+                        fsm->direction.x = 0;
                         break;
                     }
 
-                } else aRB.fsm->isGrounded = false;
+                } else fsm->isGrounded = false;
             }
         }
 

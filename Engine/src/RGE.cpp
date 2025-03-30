@@ -375,7 +375,8 @@ void RGE::DebugWindowText()
     auto transform = player.GetComponent<TransformComponent>();
     auto rigidBody = player.GetComponent<RigidBodyComponent>();
     auto boxCollider = player.GetComponent<BoxColliderComponent>();
-    auto fsm = rigidBody.fsm;
+    auto &fsmComponent = player.GetComponent<FSMComponent>();
+    auto fsm = fsmComponent.getFsm();
 
     TTF_Font* Chariot = TTF_OpenFont("/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/fonts/arial.ttf", 18);
     SDL_Color White = {255, 255, 255};

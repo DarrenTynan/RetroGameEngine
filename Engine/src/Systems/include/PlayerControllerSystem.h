@@ -12,7 +12,8 @@
 #include "../../Components/include/SpriteComponent.h"
 #include "../../Components/include/BoxColliderComponent.h"
 #include "../../Components/include/TextLabelComponent.h"
-#include "../../FSM/include/FSM.h"
+#include "../../Components/include/FSMComponent.h"
+
 #include "RGE.h"
 
 using namespace RGE_EventBus;
@@ -99,7 +100,8 @@ class PlayerControllerSystem : public System
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &collider = player.GetComponent<BoxColliderComponent>();
             auto &sprite = player.GetComponent<SpriteComponent>();
-            auto fsm = rigidBody.fsm;
+            auto &fsmComponent = player.GetComponent<FSMComponent>();
+            auto fsm = fsmComponent.getFsm();
 
             // Apply forces to deltaXY
             rigidBody.deltaXY.x *= rigidBody.friction;
@@ -166,7 +168,8 @@ class PlayerControllerSystem : public System
         {
             auto player = registry->GetEntityByTag("player");
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
-            auto fsm = rigidBody.fsm;
+            auto &fsmComponent = player.GetComponent<FSMComponent>();
+            auto fsm = fsmComponent.getFsm();
 
             SDL_PumpEvents();
 
@@ -246,7 +249,8 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto fsm = rigidBody.fsm;
+            auto &fsmComponent = player.GetComponent<FSMComponent>();
+            auto fsm = fsmComponent.getFsm();
             sprite.flipH = true;
             fsm->direction.x = -1.0;
 
@@ -271,7 +275,8 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto fsm = rigidBody.fsm;
+            auto &fsmComponent = player.GetComponent<FSMComponent>();
+            auto fsm = fsmComponent.getFsm();
             sprite.flipH = false;
             fsm->direction.x = 1.0;
 
@@ -296,7 +301,8 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto fsm = rigidBody.fsm;
+            auto &fsmComponent = player.GetComponent<FSMComponent>();
+            auto fsm = fsmComponent.getFsm();
             fsm->direction.y = -1.0;
 
             if (fsm->getCurrentState()->getName() != "Walk")
@@ -321,7 +327,8 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto fsm = rigidBody.fsm;
+            auto &fsmComponent = player.GetComponent<FSMComponent>();
+            auto fsm = fsmComponent.getFsm();
             fsm->direction.y = 1.0;
 
             if (fsm->getCurrentState()->getName() != "Walk")
@@ -346,7 +353,8 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto fsm = rigidBody.fsm;
+            auto &fsmComponent = player.GetComponent<FSMComponent>();
+            auto fsm = fsmComponent.getFsm();
 
             // Prevent double jump.
             if (!fsm->isGrounded)
@@ -374,12 +382,12 @@ class PlayerControllerSystem : public System
             auto &sprite = player.GetComponent<SpriteComponent>();
             auto &rigidBody = player.GetComponent<RigidBodyComponent>();
             auto &transform = player.GetComponent<TransformComponent>();
-            auto fsm = rigidBody.fsm;
+            auto &fsmComponent = player.GetComponent<FSMComponent>();
+            auto fsm = fsmComponent.getFsm();
             if (!fsm->isGrounded)
             {
                 fsm->direction.y = 1.0;
                 transform.position.y += rigidBody.deltaXY.y;
-
             }
         }
 
