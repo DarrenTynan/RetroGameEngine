@@ -231,13 +231,7 @@ void RGE::Setup()
  void RGE::SetupPlayer()
 {
     Entity newEntity = registry->CreateEntity();
-    newEntity.AddTag("player1");
-
-
-    auto a = gameConfig["window_title"].GetString();
-    auto b = gameConfig["graphics"]["resolution"]["window_width"].GetInt();
-    auto c = gameConfig["player"]["transform"]["start_position_x"].GetFloat();
-
+    newEntity.AddTag(gameConfig["player"]["tag"].GetString());
 
     newEntity.AddComponent<TransformComponent>(
             glm::vec2( gameConfig["player"]["transform"]["start_position_x"].GetFloat(), gameConfig["player"]["transform"]["start_position_y"].GetFloat() ),
@@ -269,10 +263,15 @@ void RGE::Setup()
             gameConfig["player"]["sprite"]["isFixed"].GetBool(),
             gameConfig["player"]["sprite"]["flipH"].GetBool(),
             gameConfig["player"]["sprite"]["src_rect_x"].GetFloat(),
-            gameConfig["player"]["sprite"]["src_rect_y"].GetFloat(),
-            gameConfig["player"]["sprite"]["num_frames"].GetInt(),
-            gameConfig["player"]["sprite"]["fps"].GetInt()
+            gameConfig["player"]["sprite"]["src_rect_y"].GetFloat()
     );
+
+    newEntity.AddComponent<AnimationComponent>(
+            gameConfig["player"]["animation"]["num_frames"].GetInt(),
+            gameConfig["player"]["animation"]["fps"].GetInt(),
+            gameConfig["player"]["animation"]["is_loop"].GetBool()
+    );
+
 }
 
 

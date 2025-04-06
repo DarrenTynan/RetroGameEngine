@@ -18,16 +18,23 @@ struct AnimationComponent
 {
     int numFrames;
     int currentFrame;
-    int frameSpeedRate;
+    int fps;
     bool isLoop;
     u_int32_t startTime = SDL_GetTicks();
 
-    explicit AnimationComponent(int numFrames = 1, int frameSpeedRate = 1, bool isLoop = true)
+    /**
+     * @brief Holds the variables needed for the animation system to loop over the frames.
+     *
+     * @param _numFrames
+     * @param _fps
+     * @param _isLoop
+     */
+    explicit AnimationComponent(int _numFrames = 1, int _fps = 1, bool _isLoop = true)
     {
-        this->numFrames = numFrames;
+        this->numFrames = _numFrames;
         this->currentFrame = 1;
-        this->frameSpeedRate = frameSpeedRate;
-        this->isLoop = isLoop;
+        this->fps = _fps;
+        this->isLoop = _isLoop;
 
     }
 

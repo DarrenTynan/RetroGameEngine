@@ -188,9 +188,7 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
                         entity["components"]["sprite"]["fixed"].get_or(false),
                         entity["components"]["sprite"]["flipH"].get_or(false),
                         entity["components"]["sprite"]["src_rect_x"].get_or(0),
-                        entity["components"]["sprite"]["src_rect_y"].get_or(0),
-                        entity["components"]["sprite"]["num_frames"].get_or(0),
-                        entity["components"]["sprite"]["fps"].get_or(0)
+                        entity["components"]["sprite"]["src_rect_y"].get_or(0)
                 );
             }
 

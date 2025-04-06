@@ -29,7 +29,7 @@ class AnimationSystem: public System
                 auto& animation = entity.GetComponent<AnimationComponent>();
                 auto& sprite = entity.GetComponent<SpriteComponent>();
 
-                animation.currentFrame = ((SDL_GetTicks() - animation.startTime) * animation.frameSpeedRate / 1000) % animation.numFrames;
+                animation.currentFrame = ((SDL_GetTicks() - animation.startTime) * animation.fps / 1000) % animation.numFrames;
                 sprite.srcRect.x = animation.currentFrame * sprite.width;
             }
         }

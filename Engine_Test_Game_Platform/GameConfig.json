@@ -12,7 +12,7 @@
     "antialiasing": "4x"
   },
   "player": {
-    "tag": "player1",
+    "tag": "player",
     "transform": {
       "start_position_x": 320.0,
       "start_position_y": 224.0,
@@ -47,6 +47,11 @@
       "src_rect_y": 0,
       "num_frames": 0,
       "fps": 8
+    },
+    "animation": {
+      "num_frames": 6,
+      "fps": 8,
+      "is_loop": true
     },
     "player_states": {
       "idle_state": {

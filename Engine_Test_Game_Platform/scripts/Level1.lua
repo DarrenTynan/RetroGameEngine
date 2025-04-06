@@ -8,6 +8,7 @@ Level = {
         { type = "font",    id = "arial-font",                  file = "../Engine_Test_Game_Platform/assets/fonts/arial.ttf", font_size = 18 },
         { type = "texture", id = "tilemap-image",               file = "../Engine_Test_Game_Platform/assets/tile-maps/EngineTestLevel/EngineTestLevel.png" },
         { type = "texture", id = "player-idle-image",           file = "../Engine_Test_Game_Platform/assets/sprites/CharacterIdle.png" },
+        { type = "texture", id = "slime",                       file = "../Engine_Test_Game_Platform/assets/sprites/Slime.png" },
         { type = "texture", id = "player-walk-image",           file = "../Engine_Test_Game_Platform/assets/sprites/CharacterWalk.png" },
         { type = "texture", id = "player-sprite-sheet",         file = "../Engine_Test_Game_Platform/assets/spritesheet/tp.png" },
         { type = "texture", id = "tank-image",                  file = "../Engine_Test_Game_Platform/assets/images/tank-panther-right.png" },
@@ -34,8 +35,8 @@ Level = {
     entities = {
         [0] =
         {
-            -- Player
-            tag = "player",
+            -- Slime
+            tag = "slime",
             components = {
                 transform = {
                     start_position = { x = 32*10, y = 32*7 },
@@ -51,18 +52,13 @@ Level = {
                     friction = 0.85,
                 },
                 sprite = {
-                    texture_asset_id = "player-idle-image",
+                    texture_asset_id = "slime",
                     width = 32,
                     height = 32,
                     z_index = 4,
                     fixed = false,
                     src_rect_x = 0,
                     src_rect_y = 0,
-                        --animation = {
-                        --    num_frames = 6,
-                        --    speed_rate = 8, -- fps
-                        --    is_loop = true
-                        --},
                 },
                 animation = {
                     num_frames = 6,
@@ -73,7 +69,7 @@ Level = {
                     width = 32,
                     height = 32,
                     position = {x = 0, y = 0},
-                    has_ray_cast = true
+                    has_ray_cast = false
                 },
                 health = {
                     health_percentage = 100
@@ -86,7 +82,7 @@ Level = {
                     friendly = true
                 },
                 camera_follow = {
-                    follow = true
+                    follow = false
                 },
                 text_label = {
                 },

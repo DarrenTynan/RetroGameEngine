@@ -14,10 +14,8 @@ struct SpriteComponent
     int height;
     int zIndex;
     bool isFixed;
-    bool flipH;
     SDL_Rect srcRect;
-    int numberOfFrames;
-    int speedRate;
+    bool flipH;
 
     /**
      *
@@ -28,20 +26,16 @@ struct SpriteComponent
      * @param isFixed
      * @param srcRectX
      * @param srcRectY
-     * @param numberOfFrames
-     * @param speedRate
      */
-    SpriteComponent(std::string assetId = "", int width = 0, int height = 0, int zIndex = 0, bool isFixed = false,bool flipH = false, int srcRectX = 0, int srcRectY = 0, int numberOfFrames = 0, int speedRate = 0)
+    SpriteComponent(std::string _assetId = "", int _width = 0, int _height = 0, int _zIndex = 0, bool _isFixed = false,bool _flipH = false, int _srcRectX = 0, int _srcRectY = 0)
     {
-        this->assetId = assetId;
-        this->width = width;
-        this->height = height;
-        this->zIndex = zIndex;
-        this->isFixed = isFixed;
-        this->flipH = flipH;
-        this->srcRect = {srcRectX, srcRectY, width, height};
-        this->numberOfFrames = numberOfFrames;
-        this->speedRate = speedRate;
+        this->assetId = _assetId;
+        this->width = _width;
+        this->height = _height;
+        this->zIndex = _zIndex;
+        this->isFixed = _isFixed;
+        this->srcRect = {_srcRectX, _srcRectY, _width, _height};
+        this->flipH = _flipH;
     }
 };
 

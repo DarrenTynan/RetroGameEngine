@@ -23,24 +23,38 @@ namespace RGE_Component
         int width;
         int height;
         int z_index;
-        bool fixed;
+        bool isFixed;
         int srcRectX;
         int srcRectY;
         int numFrames;
-        int frameSpeedRate;
+        int fps;
         bool isLoop;
 
+
+    /**
+     *
+     * @param _textureAssetID
+     * @param _width
+     * @param _height
+     * @param _z_index
+     * @param _fixed
+     * @param _srcRectX
+     * @param _srcRectY
+     * @param _numFrames
+     * @param _fps
+     * @param _isLoop
+     */
     explicit FramePointers( std::string _textureAssetID, int _width, int _height, int _z_index, bool _fixed, int _srcRectX, int _srcRectY, int _numFrames, int _frameSpeedRate, bool _isLoop )
     {
         this->textureAssetID = _textureAssetID;
         this->width = _width;
         this->height = _height;
         this->z_index = _z_index;
-        this->fixed = _fixed;
+        this->isFixed = _fixed;
         this->srcRectX = _srcRectX;
         this->srcRectY = _srcRectY;
         this->numFrames = _numFrames;
-        this->frameSpeedRate = _frameSpeedRate;
+        this->fps = _frameSpeedRate;
         this->isLoop = _isLoop;
     }
 
