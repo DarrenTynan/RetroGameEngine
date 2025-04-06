@@ -28,6 +28,8 @@
 #include "../src/Systems/include/DamageSystem.h"
 #include "../src/Systems/include/RenderRaycastSystem.h"
 #include "FileHandler/include/FileHandler.h"
+#include <nlohmann/json.hpp>
+using namespace nlohmann;
 
 using namespace RGE_ECS;
 using namespace RGE_Component;
@@ -57,8 +59,13 @@ static SDL_Renderer* debugRenderer;
 
 uint32_t msSincePreviousFrame = 0;
 
-// Lua
+// Every Lua program runs within a Lua state, which is a container for the Lua interpreter's data,
+// including global variables, functions, and other objects
 sol::state lua;
+
+// Create a Document object to hold the JSON data of the config file
+rapidjson::Document gameConfig;
+//basic_json gameConfig;
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
@@ -78,7 +85,8 @@ void RGE::Setup()
     std::cout << "Current path is " << filePath << '\n';
 
     // Load the config file
-    std::ifstream file(filePath);
+//    std::ifstream file(filePath);
+    std::ifstream file("/Users/darren/Development/C++_Projects/RetroGameEngine/Engine_Test_Game_Platform/GameConfig.json");
 
     // Check if the file is open.
     if ( !file.is_open()) exit(1);
@@ -87,7 +95,12 @@ void RGE::Setup()
     std::string json((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
     // Create a Document object to hold the JSON data of the config file
-    rapidjson::Document gameConfig;
+//    rapidjson::Document gameConfig;
+
+
+    // Create a Document object to hold the JSON data of the config file
+//    std::ifstream file("/Users/darren/Development/C++_Projects/RetroGameEngine/Engine_Test_Game_Platform/testConfig.json");
+//    gameConfig = json::parse(file);
 
     // Parse the JSON data
     gameConfig.Parse(json.c_str());
@@ -143,11 +156,11 @@ void RGE::Setup()
     // Create window with SDL_Renderer graphics context
     auto windowFlags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
     gameWindow = SDL_CreateWindow(
-            gameConfig["configuration"]["window_title"].GetString(),
+            gameConfig["window_title"].GetString(),
             SDL_WINDOWPOS_CENTERED,
             0,          //SDL_WINDOWPOS_CENTERED,
-            gameConfig["configuration"]["window_width"].GetInt(),
-            gameConfig["configuration"]["window_height"].GetInt(),
+            gameConfig["graphics"]["resolution"]["window_width"].GetInt(),
+            gameConfig["graphics"]["resolution"]["window_height"].GetInt(),
             windowFlags
     );
 
@@ -169,7 +182,7 @@ void RGE::Setup()
     }
 
     // SetupSDL the camera view with the entire screen area
-    gameCamera = {0, 32*11, gameConfig["configuration"]["window_width"].GetInt(), gameConfig["configuration"]["window_height"].GetInt() };
+    gameCamera = {0, 32*11, gameConfig["graphics"]["resolution"]["window_width"].GetInt(), gameConfig["graphics"]["resolution"]["window_height"].GetInt() };
 
 
     /**
@@ -207,6 +220,59 @@ void RGE::Setup()
 
     }
 
+    SetupPlayer();
+
+}
+
+
+/**
+ * @brief Setup player from the game config.json file.
+ */
+ void RGE::SetupPlayer()
+{
+    Entity newEntity = registry->CreateEntity();
+    newEntity.AddTag("player1");
+
+
+    auto a = gameConfig["window_title"].GetString();
+    auto b = gameConfig["graphics"]["resolution"]["window_width"].GetInt();
+    auto c = gameConfig["player"]["transform"]["start_position_x"].GetFloat();
+
+
+    newEntity.AddComponent<TransformComponent>(
+            glm::vec2( gameConfig["player"]["transform"]["start_position_x"].GetFloat(), gameConfig["player"]["transform"]["start_position_y"].GetFloat() ),
+            glm::vec2( gameConfig["player"]["transform"]["scale_x"].GetFloat(), gameConfig["player"]["transform"]["scale_y"].GetFloat() ),
+            gameConfig["player"]["transform"]["rotation"].GetFloat()
+    );
+
+    newEntity.AddComponent<RigidBodyComponent>(
+            glm::vec2( gameConfig["player"]["rigidbody"]["deltaXY_x"].GetFloat(), gameConfig["player"]["rigidbody"]["deltaXY_y"].GetFloat() ),
+            glm::vec2( gameConfig["player"]["rigidbody"]["maxDeltaXY_x"].GetFloat(), gameConfig["player"]["rigidbody"]["maxDeltaXY_y"].GetFloat() ),
+            gameConfig["player"]["rigidbody"]["acceleration"].GetFloat(),
+            gameConfig["player"]["rigidbody"]["boost"].GetFloat(),
+            gameConfig["player"]["rigidbody"]["gravity"].GetFloat(),
+            gameConfig["player"]["rigidbody"]["friction"].GetFloat()
+    );
+
+    newEntity.AddComponent<BoxColliderComponent>(
+            gameConfig["player"]["box_collider"]["width"].GetFloat(),
+            gameConfig["player"]["box_collider"]["height"].GetFloat(),
+            glm::vec2(gameConfig["player"]["box_collider"]["position_x"].GetFloat(), gameConfig["player"]["box_collider"]["position_y"].GetFloat() ),
+            false
+    );
+
+    newEntity.AddComponent<SpriteComponent>(
+            gameConfig["player"]["sprite"]["texture_asset_id"].GetString(),
+            gameConfig["player"]["sprite"]["frame_width"].GetInt(),
+            gameConfig["player"]["sprite"]["frame_height"].GetInt(),
+            gameConfig["player"]["sprite"]["z_index"].GetInt(),
+            gameConfig["player"]["sprite"]["isFixed"].GetBool(),
+            gameConfig["player"]["sprite"]["flipH"].GetBool(),
+            gameConfig["player"]["sprite"]["src_rect_x"].GetFloat(),
+            gameConfig["player"]["sprite"]["src_rect_y"].GetFloat(),
+            gameConfig["player"]["sprite"]["num_frames"].GetInt(),
+            gameConfig["player"]["sprite"]["fps"].GetInt()
+    );
 }
 
 

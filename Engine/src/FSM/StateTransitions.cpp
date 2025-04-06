@@ -38,12 +38,6 @@ std::string Idle::getName()
 void Idle::enter(FSM *fsm, Entity &entity)
 {
     // TODO we need to get the animation setting from the lue table.
-    // Save current animation
-//    fsm->numFrames = entity.GetComponent<AnimationComponent>().numFrames;
-//    fsm->currentFrame = entity.GetComponent<AnimationComponent>().currentFrame;
-//    fsm->frameSpeedRate = entity.GetComponent<AnimationComponent>().frameSpeedRate;
-//    fsm->isLoop = entity.GetComponent<AnimationComponent>().isLoop;
-//    fsm->startTime = entity.GetComponent<AnimationComponent>().startTime;
 
     // Change animation
     entity.GetComponent<SpriteComponent>().assetId = "player-idle-image";
@@ -53,11 +47,6 @@ void Idle::exit(FSM *fsm, Entity &entity)
 {
     // TODO we need to get the animation setting from the lue table.
     // Restore current animation
-//    entity.GetComponent<AnimationComponent>().numFrames = fsm->numFrames;
-//    entity.GetComponent<AnimationComponent>().currentFrame = fsm->currentFrame;
-//    entity.GetComponent<AnimationComponent>().frameSpeedRate = fsm->frameSpeedRate;
-//    entity.GetComponent<AnimationComponent>().isLoop = fsm->isLoop;
-//    entity.GetComponent<AnimationComponent>().startTime = fsm->startTime;
 
     std::cout << "StateTransitions: idle exit" << std::endl;
 }

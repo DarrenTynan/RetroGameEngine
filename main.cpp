@@ -4,7 +4,7 @@
  */
 
 #include <iostream>
-#include "Engine_Test_Game_Platform//include/Game.h"
+#include "Engine_Test_Game_Platform/include/Game.h"
 
 int main()
 {

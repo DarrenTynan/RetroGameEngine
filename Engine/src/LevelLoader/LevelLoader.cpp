@@ -6,6 +6,7 @@
 #include "../Components/include/TransformComponent.h"
 #include "../Components/include/RigidBodyComponent.h"
 #include "../Components/include/SpriteComponent.h"
+#include "../Components/include/SpritesheetComponent.h"
 #include "../Components/include/AnimationComponent.h"
 #include "../Components/include/BoxColliderComponent.h"
 #include "../Components/include/CameraFollowComponent.h"
@@ -114,7 +115,6 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
         sol::table entity = entities[i];
 
         Entity newEntity = registry->CreateEntity();
-//        newEntity.lua = lua;
 
         // Tag
         sol::optional<std::string> tag = entity["tag"];
@@ -177,28 +177,33 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
             }
 
             // Sprite
-            sol::optional<sol::table> sprite = entity["components"]["sprite"]["idle"];
+            sol::optional<sol::table> sprite = entity["components"]["sprite"];
             if (sprite != sol::nullopt)
             {
                 newEntity.AddComponent<SpriteComponent>(
-                        entity["components"]["sprite"]["idle"]["texture_asset_id"],
-                        entity["components"]["sprite"]["idle"]["width"],
-                        entity["components"]["sprite"]["idle"]["height"],
-                        entity["components"]["sprite"]["idle"]["z_index"].get_or(1),
-                        entity["components"]["sprite"]["idle"]["fixed"].get_or(false),
-                        entity["components"]["sprite"]["idle"]["src_rect_x"].get_or(0),
-                        entity["components"]["sprite"]["idle"]["src_rect_y"].get_or(0)
+                        entity["components"]["sprite"]["texture_asset_id"],
+                        entity["components"]["sprite"]["width"],
+                        entity["components"]["sprite"]["height"],
+                        entity["components"]["sprite"]["z_index"].get_or(1),
+                        entity["components"]["sprite"]["fixed"].get_or(false),
+                        entity["components"]["sprite"]["flipH"].get_or(false),
+                        entity["components"]["sprite"]["src_rect_x"].get_or(0),
+                        entity["components"]["sprite"]["src_rect_y"].get_or(0),
+                        entity["components"]["sprite"]["num_frames"].get_or(0),
+                        entity["components"]["sprite"]["fps"].get_or(0)
                 );
             }
 
             // Animation
-            sol::optional<sol::table> animation = entity["components"]["sprite"]["idle"]["animation"];
+            sol::optional<sol::table> animation = entity["components"]["animation"];
             if (animation != sol::nullopt)
             {
                 newEntity.AddComponent<AnimationComponent>(
-                        entity["components"]["sprite"]["idle"]["animation"]["num_frames"].get_or(1),
-                        entity["components"]["sprite"]["idle"]["animation"]["speed_rate"].get_or(1)
+                        entity["components"]["animation"]["num_frames"].get_or(1),
+                        entity["components"]["animation"]["fps"].get_or(1),
+                        entity["components"]["animation"]["is_loop"].get_or(true)
                 );
+
             }
 
             // BoxCollider
@@ -265,7 +270,7 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
 
             // FSM
             sol::optional<sol::table> fsm = entity["components"]["fsm"];
-            if (textLabel != sol::nullopt)
+            if (fsm != sol::nullopt)
             {
                 newEntity.AddComponent<FSMComponent>();
             }

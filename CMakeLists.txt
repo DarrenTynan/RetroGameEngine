@@ -115,6 +115,7 @@ set(SOURCE_FILES
         Engine/src/FileHandler/include/FileHandler.h
         Engine/src/FileHandler/FileHandler.cpp
         Engine/src/Components/include/FSMComponent.h
+        Engine/src/Components/include/SpritesheetComponent.h
 
 )
 
@@ -152,10 +153,12 @@ find_package( SDL2_image REQUIRED )
 find_package( SDL2_TTF REQUIRED )
 find_package( GLM REQUIRED )
 find_package( Lua REQUIRED )
+find_package(nlohmann_json 3.11.3 REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} SDL2_image::SDL2_image)
 target_link_libraries(${PROJECT_NAME} SDL2_ttf::SDL2_ttf)
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
 
 target_link_libraries( RetroGameEngine tmxlite )
 

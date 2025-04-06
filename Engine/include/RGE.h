@@ -18,6 +18,7 @@ class RGE
 {
 public:
     static void Setup();
+    static void SetupPlayer();
     static void UpdateRenderer();
     static bool ProcessKeyboardInputs();
     static void UpdateSystems();

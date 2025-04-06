@@ -9,6 +9,7 @@ Level = {
         { type = "texture", id = "tilemap-image",               file = "../Engine_Test_Game_Platform/assets/tile-maps/EngineTestLevel/EngineTestLevel.png" },
         { type = "texture", id = "player-idle-image",           file = "../Engine_Test_Game_Platform/assets/sprites/CharacterIdle.png" },
         { type = "texture", id = "player-walk-image",           file = "../Engine_Test_Game_Platform/assets/sprites/CharacterWalk.png" },
+        { type = "texture", id = "player-sprite-sheet",         file = "../Engine_Test_Game_Platform/assets/spritesheet/tp.png" },
         { type = "texture", id = "tank-image",                  file = "../Engine_Test_Game_Platform/assets/images/tank-panther-right.png" },
         { type = "texture", id = "truck-image",                 file = "../Engine_Test_Game_Platform/assets/images/truck-ford-right.png" },
         { type = "texture", id = "chopper-image",               file = "../Engine_Test_Game_Platform/assets/images/chopper.png" },
@@ -50,37 +51,24 @@ Level = {
                     friction = 0.85,
                 },
                 sprite = {
-                    idle = {
-                        texture_asset_id = "player-idle-image",
-                        width = 32,
-                        height = 32,
-                        z_index = 4,
-                        fixed = false,
-                        src_rect_x = 0,
-                        src_rect_y = 0,
-                        animation = {
-                            num_frames = 6,
-                            speed_rate = 8 -- fps
-                        },
-                    },
-                    walk = {
-                        texture_asset_id = "player-walk-image",
-                        width = 32,
-                        height = 32,
-                        z_index = 4,
-                        fixed = false,
-                        src_rect_x = 0,
-                        src_rect_y = 0,
-                        animation = {
-                            num_frames = 8,
-                            speed_rate = 8 -- fps
-                        },
-                    }
+                    texture_asset_id = "player-idle-image",
+                    width = 32,
+                    height = 32,
+                    z_index = 4,
+                    fixed = false,
+                    src_rect_x = 0,
+                    src_rect_y = 0,
+                        --animation = {
+                        --    num_frames = 6,
+                        --    speed_rate = 8, -- fps
+                        --    is_loop = true
+                        --},
                 },
-                --animation = {
-                --    num_frames = 6,
-                --    speed_rate = 8 -- fps
-                --},
+                animation = {
+                    num_frames = 6,
+                    fps = 8, -- fps
+                    is_loop = true
+                },
                 box_collider = {
                     width = 32,
                     height = 32,

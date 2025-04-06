@@ -2,6 +2,11 @@
 #define ANIMATIONCOMPONENT_H
 
 #include <SDL2/SDL.h>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+#include <sol.hpp>
 
 namespace RGE_Component
 {
@@ -23,8 +28,11 @@ struct AnimationComponent
         this->currentFrame = 1;
         this->frameSpeedRate = frameSpeedRate;
         this->isLoop = isLoop;
+
     }
+
 };
+
 
 } // end namespace
 
