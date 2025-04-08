@@ -20,6 +20,16 @@ struct CameraFollowComponent
             200
     };
 
+    /**
+     *
+     * @brief Camera follow struct.
+     *
+     * @param _tileCountX
+     * @param _tileCountY
+     * @param _tileSize
+     * @param _cameraOffsetX
+     * @param _cameraOffsetY
+     */
     explicit CameraFollowComponent(int _tileCountX = 0, int _tileCountY = 0, int _tileSize = 0, int _cameraOffsetX = 0, int _cameraOffsetY = 0)
     {
         this->tileCountX = _tileCountX;

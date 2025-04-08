@@ -272,6 +272,13 @@ void RGE::Setup()
             gameConfig["player"]["animation"]["is_loop"].GetBool()
     );
 
+    newEntity.AddComponent<CameraFollowComponent>(40,
+                                                  22,
+                                                  32,
+                                                  gameConfig["player"]["transform"]["start_position_x"].GetFloat(),
+                                                  gameConfig["player"]["transform"]["start_position_y"].GetFloat()
+    );
+
 }
 
 

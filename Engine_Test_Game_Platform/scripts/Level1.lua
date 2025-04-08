@@ -56,7 +56,7 @@ Level = {
                     width = 32,
                     height = 32,
                     z_index = 4,
-                    fixed = false,
+                    fixed = true,
                     src_rect_x = 0,
                     src_rect_y = 0,
                 },
@@ -81,9 +81,9 @@ Level = {
                     hit_percentage_damage = 10,
                     friendly = true
                 },
-                camera_follow = {
-                    follow = false
-                },
+                --camera_follow = {
+                --    follow = false
+                --},
                 text_label = {
                 },
                 fsm = {}

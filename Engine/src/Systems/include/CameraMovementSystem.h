@@ -8,7 +8,8 @@
 
 using namespace RGE_System;
 
-class CameraMovementSystem: public System {
+class CameraMovementSystem: public System
+{
     public:
         CameraMovementSystem()
         {
@@ -16,6 +17,12 @@ class CameraMovementSystem: public System {
             RequireComponent<TransformComponent>();
         }
 
+        /**
+         * @brief Update the position of the camera based on player position.
+         *
+         * @param renderer
+         * @param _camera
+         */
         void Update(SDL_Renderer* renderer, SDL_Rect& _camera)
         {
             for (auto entity: GetSystemEntities())

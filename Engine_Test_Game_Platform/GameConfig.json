@@ -4,14 +4,15 @@
   "developer": "Grasshenge",
   "graphics": {
     "resolution": {
-      "window_width": 800,
-      "window_height": 600
+      "window_width": 640,
+      "window_height": 352
     },
     "fullscreen": false,
     "vsync": true,
     "antialiasing": "4x"
   },
   "player": {
+    "camera_follow": true,
     "tag": "player",
     "transform": {
       "start_position_x": 320.0,
