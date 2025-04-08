@@ -52,7 +52,7 @@ bool isCollider = true;
 bool isRayCast = false;
 bool isCamera = true;
 
-bool isDebugWindow = true;
+bool isDebugWindow = false;
 
 static SDL_Window* debugWindow;
 static SDL_Renderer* debugRenderer;
@@ -252,7 +252,7 @@ void RGE::Setup()
             gameConfig["player"]["box_collider"]["width"].GetFloat(),
             gameConfig["player"]["box_collider"]["height"].GetFloat(),
             glm::vec2(gameConfig["player"]["box_collider"]["position_x"].GetFloat(), gameConfig["player"]["box_collider"]["position_y"].GetFloat() ),
-            false
+            true
     );
 
     newEntity.AddComponent<SpriteComponent>(

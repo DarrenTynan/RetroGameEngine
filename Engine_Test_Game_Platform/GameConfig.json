@@ -35,7 +35,8 @@
       "width": 32,
       "height": 32,
       "position_x": 0,
-      "position_y": 0
+      "position_y": 0,
+      "has_ray_cast": true
     },
     "sprite": {
       "texture_asset_id": "player-sprite-sheet",

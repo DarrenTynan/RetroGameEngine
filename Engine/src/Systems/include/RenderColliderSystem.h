@@ -22,6 +22,12 @@ class RenderColliderSystem: public System {
             RequireComponent<BoxColliderComponent>();
         }
 
+        /**
+         * @brief Draw the collision box's and ray-cast's.
+         *
+         * @param renderer
+         * @param camera
+         */
         void Update(SDL_Renderer* renderer, const SDL_Rect& camera) {
             for (auto entity: GetSystemEntities()) {
                 const auto transform = entity.GetComponent<TransformComponent>();

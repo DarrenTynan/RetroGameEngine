@@ -33,7 +33,14 @@ namespace RGE_System
             RequireComponent<BoxColliderComponent>();
         }
 
-        // Check entity bounding box for collision.
+
+        /**
+         * @brief Check entity bounding box for collision.
+         *
+         * @param eventBus
+         * @param registry
+         * @param camera
+         */
         void Update(std::unique_ptr<EventBus>& eventBus, std::shared_ptr<Registry>& registry, SDL_Rect camera)
         {
             auto a = registry->GetEntityByTag("player");
