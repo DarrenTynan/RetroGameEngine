@@ -20,6 +20,7 @@
 #include "../src/Systems/include/RenderTextSystem.h"
 #include "../src/Systems/include/RenderColliderSystem.h"
 #include "../src/Systems/include/AnimationSystem.h"
+#include "../src/Systems/include/SpritesheetAnimationSystem.h"
 #include "../src/Systems/include/PlayerCollisionSystem.h"
 #include "../src/Systems/include/EntityCollisionSystem.h"
 #include "../src/Systems/include/ProjectileEmitSystem.h"
@@ -27,6 +28,7 @@
 #include "../src/Systems/include/DamageSystem.h"
 #include "../src/Systems/include/RenderRaycastSystem.h"
 #include "FileHandler/include/FileHandler.h"
+#include "include/SpritesheetComponent.h"
 
 using namespace RGE_ECS;
 using namespace RGE_Component;
@@ -104,6 +106,7 @@ void RGE::Setup()
     registry->AddSystem<EntityMovementSystem>();          // Move all entities
     registry->AddSystem<PlayerControllerSystem>();        // Move the player & apply forces
     registry->AddSystem<AnimationSystem>();               // Animate all entities
+    registry->AddSystem<SpritesheetAnimationSystem>();               // Animate all entities
     registry->AddSystem<PlayerCollisionSystem>();         // Check all entity collisions AABB
     registry->AddSystem<EntityCollisionSystem>();         // Check all entity collisions AABB
     registry->AddSystem<DamageSystem>();                  // Check all damage systems
@@ -268,14 +271,14 @@ void RGE::Setup()
         );
     }
 
-//    if (gameConfig["player"].HasMember("animation"))
-//    {
-//        newEntity.AddComponent<AnimationComponent>(
-//                gameConfig["player"]["animation"]["num_frames"].GetInt(),
-//                gameConfig["player"]["animation"]["fps"].GetInt(),
-//                gameConfig["player"]["animation"]["is_loop"].GetBool()
-//        );
-//    }
+    if (gameConfig["player"].HasMember("spritesheet_animation"))
+    {
+        newEntity.AddComponent<SpritesheetAnimationComponent>(
+                gameConfig["player"]["spritesheet_animation"]["num_frames"].GetInt(),
+                gameConfig["player"]["spritesheet_animation"]["fps"].GetInt(),
+                gameConfig["player"]["spritesheet_animation"]["is_loop"].GetBool()
+        );
+    }
 
     if (gameConfig["player"]["player_states"].HasMember("states"))
     {
@@ -287,15 +290,15 @@ void RGE::Setup()
             newEntity.GetComponent<SpritesheetComponent>().AddToSheet(i,
                     // TODO change the name below
                     gameConfig["player"]["player_states"]["states"][i]["name"].GetString(),
-                    gameConfig["player"]["sprite"]["frame_width"].GetInt(),
-                    gameConfig["player"]["sprite"]["frame_height"].GetInt(),
-                    gameConfig["player"]["sprite"]["z_index"].GetInt(),
-                    gameConfig["player"]["sprite"]["isFixed"].GetBool(),
+                                                                      gameConfig["player"]["sprite"]["frame_width"].GetInt(),
+                                                                      gameConfig["player"]["sprite"]["frame_height"].GetInt(),
+                                                                      gameConfig["player"]["sprite"]["z_index"].GetInt(),
+                                                                      gameConfig["player"]["sprite"]["isFixed"].GetBool(),
                     gameConfig["player"]["player_states"]["states"][i]["start_frame_x"].GetInt() * 32,
                     gameConfig["player"]["player_states"]["states"][i]["start_frame_y"].GetInt() * 32,
-                    gameConfig["player"]["player_states"]["states"][i]["num_frames"].GetInt(),
-                    gameConfig["player"]["player_states"]["states"][i]["fps"].GetInt(),
-                    gameConfig["player"]["player_states"]["states"][i]["is_loop"].GetBool()
+                                                                      gameConfig["player"]["player_states"]["states"][i]["num_frames"].GetInt(),
+                                                                      gameConfig["player"]["player_states"]["states"][i]["fps"].GetInt(),
+                                                                      gameConfig["player"]["player_states"]["states"][i]["is_loop"].GetBool()
             );
         }
     }
@@ -433,7 +436,7 @@ void RGE::UpdateSystems()
      * @brief AABB collision player to all other objects.
      */
     registry->GetSystem<PlayerCollisionSystem>().Update(eventBus, registry, gameCamera);
-//    registry->GetSystem<Ent ityCollisionSystem>().Update(eventBus);
+//    registry->GetSystem<EntityCollisionSystem>().Update(eventBus);
 
     /**
      * @brief Projectile updates.
@@ -442,6 +445,8 @@ void RGE::UpdateSystems()
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
 
     registry->GetSystem<AnimationSystem>().Update();
+    registry->GetSystem<SpritesheetAnimationSystem>().Update();
+
     registry->GetSystem<CameraFollowSystem>().Update(gameRenderer, gameCamera);
     registry->GetSystem<RenderTextSystem>().Update(gameRenderer, assetStore, gameCamera);
 

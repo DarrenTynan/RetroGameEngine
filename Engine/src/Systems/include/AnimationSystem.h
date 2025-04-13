@@ -3,7 +3,6 @@
 
 #include "../../ECS/include/ECS.h"
 #include "../../Components/include/SpriteComponent.h"
-#include "../../Components/include/SpritesheetComponent.h"
 #include "../../Components/include/AnimationComponent.h"
 #include <SDL2/SDL.h>
 

@@ -14,8 +14,6 @@
 #include <memory>
 #include <deque>
 #include <algorithm>
-//#include "../../Logger/Logger.h"
-
 // Includes MUST be in order. Entity.h, System.h and Registry.h
 #include "Pool.h"
 #include "Component.h"

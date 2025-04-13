@@ -116,9 +116,9 @@ class PlayerControllerSystem : public System
             bool wasKeyPressed = ReadKeys();
 
             // No keyboard selection, so we are at idle. But, are we falling?
-            if (!wasKeyPressed && fsm->getCurrentState()->getName() != "Fall" && fsm->getCurrentState()->getName() != "Jump")
+            if (!wasKeyPressed && fsm->getCurrentState()->getName() != "fall_state" && fsm->getCurrentState()->getName() != "jump_state")
             {
-                if (fsm->getCurrentState()->getName() != "Idle")
+                if (fsm->getCurrentState()->getName() != "idle_state")
                     fsm->setIdleState(player);
 
                 fsm->direction.x = 0;
@@ -126,7 +126,7 @@ class PlayerControllerSystem : public System
             }
 
             // It is a platform game? Are we at the top of the jump arc?(-0.5)
-            if (isPlatformer && fsm->getCurrentState()->getName() == "Jump" && rigidBody.deltaXY.y >= -0.5)
+            if (isPlatformer && fsm->getCurrentState()->getName() == "jump_state" && rigidBody.deltaXY.y >= -0.5)
             {
                 if (fsm->getCurrentState()->getName() != "Fall")
                     fsm->setFallState(player);
@@ -254,7 +254,7 @@ class PlayerControllerSystem : public System
             sprite.flipH = true;
             fsm->direction.x = -1.0;
 
-            if (fsm->getCurrentState()->getName() != "Walk")
+            if (fsm->getCurrentState()->getName() != "walk_state")
                 fsm->setWalkState(player);
 
             rigidBody.deltaXY.x -= rigidBody.acceleration;
@@ -280,7 +280,7 @@ class PlayerControllerSystem : public System
             sprite.flipH = false;
             fsm->direction.x = 1.0;
 
-            if (fsm->getCurrentState()->getName() != "Walk")
+            if (fsm->getCurrentState()->getName() != "walk_state")
                 fsm->setWalkState(player);
 
             rigidBody.deltaXY.x += rigidBody.acceleration;
@@ -305,7 +305,7 @@ class PlayerControllerSystem : public System
             auto fsm = fsmComponent.getFsm();
             fsm->direction.y = -1.0;
 
-            if (fsm->getCurrentState()->getName() != "Walk")
+            if (fsm->getCurrentState()->getName() != "walk_state")
                 fsm->setWalkState(player);
 
             fsm->isGrounded = false;
@@ -331,7 +331,7 @@ class PlayerControllerSystem : public System
             auto fsm = fsmComponent.getFsm();
             fsm->direction.y = 1.0;
 
-            if (fsm->getCurrentState()->getName() != "Walk")
+            if (fsm->getCurrentState()->getName() != "walk_state")
                 fsm->setWalkState(player);
 
             rigidBody.deltaXY.y += rigidBody.acceleration;
@@ -361,7 +361,7 @@ class PlayerControllerSystem : public System
                 return;
 
             fsm->isGrounded = false;
-            if (fsm->getCurrentState()->getName() != "Jump")
+            if (fsm->getCurrentState()->getName() != "jump_state")
             {
                 fsm->setJumpState(player);
                 fsm->direction.y = -1.0f;

@@ -1,144 +1,144 @@
 {
-  "window_title": "Window_Title from GameConfig.json file",
-  "version": "1.0",
-  "developer": "Grasshenge",
-  "graphics": {
-    "resolution": {
-      "window_width": 640,
-      "window_height": 352
-    },
-    "fullscreen": false,
-    "vsync": true,
-    "antialiasing": "4x"
-  },
-  "player": {
-    "camera_follow": true,
-    "tag": "player",
-    "transform": {
-      "start_position_x": 320.0,
-      "start_position_y": 224.0,
-      "scale_x": 1.0,
-      "scale_y": 1.0,
-      "rotation": 0.0
-    },
-    "rigidbody": {
-      "deltaXY_x": 0.0,
-      "deltaXY_y": 0.0,
-      "maxDeltaXY_x": 3.0,
-      "maxDeltaXY_y": 3.0,
-      "acceleration": 0.5,
-      "boost": 4.0,
-      "gravity": 0.12,
-      "friction": 0.85
-    },
-    "box_collider": {
-      "width": 32,
-      "height": 32,
-      "position_x": 0,
-      "position_y": 0,
-      "has_ray_cast": true
-    },
-    "sprite": {
-      "texture_asset_id": "player-sprite-sheet",
-      "frame_width": 32,
-      "frame_height": 32,
-      "z_index": 1,
-      "isFixed": false,
-      "flipH": false,
-      "src_rect_x": 0,
-      "src_rect_y": 0,
-      "num_frames": 0,
-      "fps": 8
-    },
-    "animation": {
-      "num_frames": 6,
-      "fps": 8,
-      "is_loop": true
-    },
-    "player_states": {
-      "num_of_states": 6,
-      "states": [
-        {
-          "name": "idle_state",
-          "start_frame_x": 0,
-          "start_frame_y": 0,
-          "num_frames": 6,
-          "fps": 8,
-          "is_loop": true
-      },
-        {
-          "name": "walk_state",
-          "start_frame_x": 6,
-          "start_frame_y": 0,
-          "num_frames": 8,
-          "fps": 8,
-          "is_loop": true
+    "window_title": "Window_Title from GameConfig.json file",
+    "version": "1.0",
+    "developer": "Grasshenge",
+    "graphics": {
+        "resolution": {
+            "window_width": 640,
+            "window_height": 352
         },
-        {
-          "name": "run_state",
-          "start_frame_x": 14,
-          "start_frame_y": 0,
-          "num_frames": 8,
-          "fps": 8,
-          "is_loop": true
+        "fullscreen": false,
+        "vsync": true,
+        "antialiasing": "4x"
+    },
+    "player": {
+        "camera_follow": true,
+        "tag": "player",
+        "transform": {
+            "start_position_x": 320.0,
+            "start_position_y": 224.0,
+            "scale_x": 1.0,
+            "scale_y": 1.0,
+            "rotation": 0.0
         },
-        {
-          "name": "jump_state",
-          "start_frame_x": 23,
-          "start_frame_y": 0,
-          "num_frames": 2,
-          "fps": 8,
-          "is_loop": true
+        "rigidbody": {
+            "deltaXY_x": 0.0,
+            "deltaXY_y": 0.0,
+            "maxDeltaXY_x": 3.0,
+            "maxDeltaXY_y": 3.0,
+            "acceleration": 0.5,
+            "boost": 4.0,
+            "gravity": 0.12,
+            "friction": 0.85
         },
-        {
-          "name": "fall_state",
-          "start_frame_x": 25,
-          "start_frame_y": 0,
-          "num_frames": 2,
-          "fps": 8,
-          "is_loop": true
+        "box_collider": {
+            "width": 32,
+            "height": 32,
+            "position_x": 0,
+            "position_y": 0,
+            "has_ray_cast": true
         },
-        {
-          "name": "attack_state",
-          "start_frame_x": 27,
-          "start_frame_y": 0,
-          "num_frames": 4,
-          "fps": 8,
-          "is_loop": true
+        "sprite": {
+            "texture_asset_id": "player-sprite-sheet",
+            "frame_width": 32,
+            "frame_height": 32,
+            "z_index": 1,
+            "isFixed": false,
+            "flipH": false,
+            "src_rect_x": 0,
+            "src_rect_y": 0,
+            "num_frames": 0,
+            "fps": 8
+        },
+        "spritesheet_animation": {
+            "num_frames": 6,
+            "fps": 8,
+            "is_loop": true
+        },
+        "player_states": {
+            "num_of_states": 6,
+            "states": [
+                {
+                    "name": "idle_state",
+                    "start_frame_x": 0,
+                    "start_frame_y": 0,
+                    "num_frames": 6,
+                    "fps": 8,
+                    "is_loop": true
+                },
+                {
+                    "name": "walk_state",
+                    "start_frame_x": 6,
+                    "start_frame_y": 0,
+                    "num_frames": 8,
+                    "fps": 8,
+                    "is_loop": true
+                },
+                {
+                    "name": "run_state",
+                    "start_frame_x": 14,
+                    "start_frame_y": 0,
+                    "num_frames": 8,
+                    "fps": 8,
+                    "is_loop": true
+                },
+                {
+                    "name": "jump_state",
+                    "start_frame_x": 23,
+                    "start_frame_y": 0,
+                    "num_frames": 2,
+                    "fps": 8,
+                    "is_loop": true
+                },
+                {
+                    "name": "fall_state",
+                    "start_frame_x": 25,
+                    "start_frame_y": 0,
+                    "num_frames": 2,
+                    "fps": 8,
+                    "is_loop": true
+                },
+                {
+                    "name": "attack_state",
+                    "start_frame_x": 27,
+                    "start_frame_y": 0,
+                    "num_frames": 4,
+                    "fps": 8,
+                    "is_loop": true
+                }
+            ]
         }
-      ]
-    }
-  },
-  "audio": {
-    "master_volume": 0.8,
-    "music_volume": 0.7,
-    "sfx_volume": 0.9,
-    "mute": false
-  },
-  "controls": {
-    "move_forward": "w",
-    "move_backward": "s",
-    "move_left": "a",
-    "move_right": "d",
-    "jump": "space",
-    "shoot": "mouse_left",
-    "aim": "mouse_right"
-  },
-  "difficulty": {
-    "level": "easy",
-    "enemy_spawn_rate": 1,
-    "player_health": 100,
-    "damage_multiplier": 1.0
-  },
-  "game_data": {
-    "player_stats": {
-      "health": 100,
-      "score": 0,
-      "coins": 0
     },
-    "level_data": {
-      "current_level": 1,
-      "level_completed": false
+    "audio": {
+        "master_volume": 0.8,
+        "music_volume": 0.7,
+        "sfx_volume": 0.9,
+        "mute": false
+    },
+    "controls": {
+        "move_forward": "w",
+        "move_backward": "s",
+        "move_left": "a",
+        "move_right": "d",
+        "jump": "space",
+        "shoot": "mouse_left",
+        "aim": "mouse_right"
+    },
+    "difficulty": {
+        "level": "easy",
+        "enemy_spawn_rate": 1,
+        "player_health": 100,
+        "damage_multiplier": 1.0
+    },
+    "game_data": {
+        "player_stats": {
+            "health": 100,
+            "score": 0,
+            "coins": 0
+        },
+        "level_data": {
+            "current_level": 1,
+            "level_completed": false
+        }
     }
-  }
 }
