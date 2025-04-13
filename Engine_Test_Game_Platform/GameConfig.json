@@ -56,30 +56,57 @@
       "is_loop": true
     },
     "player_states": {
-      "idle_state": {
-        "start_offset": 0,
-        "end_offset": 5
+      "num_of_states": 6,
+      "states": [
+        {
+          "name": "idle_state",
+          "start_frame_x": 0,
+          "start_frame_y": 0,
+          "num_frames": 6,
+          "fps": 8,
+          "is_loop": true
       },
-      "walk_state": {
-        "start_offset": 6,
-        "end_offset": 13
-      },
-      "run_state": {
-        "start_offset": 14,
-        "end_offset": 21
-      },
-      "jump_state": {
-        "start_offset": 15,
-        "end_offset": 16
-      },
-      "fall_state": {
-        "start_offset": 17,
-        "end_offset": 18
-      },
-      "attack_state": {
-        "start_offset": 19,
-        "end_offset": 29
-      }
+        {
+          "name": "walk_state",
+          "start_frame_x": 6,
+          "start_frame_y": 0,
+          "num_frames": 8,
+          "fps": 8,
+          "is_loop": true
+        },
+        {
+          "name": "run_state",
+          "start_frame_x": 14,
+          "start_frame_y": 0,
+          "num_frames": 8,
+          "fps": 8,
+          "is_loop": true
+        },
+        {
+          "name": "jump_state",
+          "start_frame_x": 23,
+          "start_frame_y": 0,
+          "num_frames": 2,
+          "fps": 8,
+          "is_loop": true
+        },
+        {
+          "name": "fall_state",
+          "start_frame_x": 25,
+          "start_frame_y": 0,
+          "num_frames": 2,
+          "fps": 8,
+          "is_loop": true
+        },
+        {
+          "name": "attack_state",
+          "start_frame_x": 27,
+          "start_frame_y": 0,
+          "num_frames": 4,
+          "fps": 8,
+          "is_loop": true
+        }
+      ]
     }
   },
   "audio": {

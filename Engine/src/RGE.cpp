@@ -6,7 +6,6 @@
 #include <filesystem>
 #include <thread>
 #include <unistd.h>
-
 #include "../include/RGE.h"
 #include "Systems/include/ScriptSystem.h"
 #include "LevelLoader/include/LevelLoader.h"
@@ -15,7 +14,7 @@
 #include <SDL2/SDL_mixer.h>
 #include "../src/EventBus/include/EventBus.h"
 #include "../src/Systems/include/PlayerControllerSystem.h"
-#include "../src/Systems/include/CameraMovementSystem.h"
+#include "../src/Systems/include/CameraFollowSystem.h"
 #include "../src/Systems/include/EntityMovementSystem.h"
 #include "../src/Systems/include/RenderSystem.h"
 #include "../src/Systems/include/RenderTextSystem.h"
@@ -28,8 +27,6 @@
 #include "../src/Systems/include/DamageSystem.h"
 #include "../src/Systems/include/RenderRaycastSystem.h"
 #include "FileHandler/include/FileHandler.h"
-#include <nlohmann/json.hpp>
-using namespace nlohmann;
 
 using namespace RGE_ECS;
 using namespace RGE_Component;
@@ -49,10 +46,10 @@ std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
 
 // Debug keyboard toggles
 bool isCollider = true;
+// TODO NOT to be used as not working!
 bool isRayCast = false;
 bool isCamera = true;
-
-bool isDebugWindow = false;
+bool isDebugWindow = true;
 
 static SDL_Window* debugWindow;
 static SDL_Renderer* debugRenderer;
@@ -65,7 +62,6 @@ sol::state lua;
 
 // Create a Document object to hold the JSON data of the config file
 rapidjson::Document gameConfig;
-//basic_json gameConfig;
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
@@ -94,14 +90,6 @@ void RGE::Setup()
     // Read the entire file into a string
     std::string json((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
-    // Create a Document object to hold the JSON data of the config file
-//    rapidjson::Document gameConfig;
-
-
-    // Create a Document object to hold the JSON data of the config file
-//    std::ifstream file("/Users/darren/Development/C++_Projects/RetroGameEngine/Engine_Test_Game_Platform/testConfig.json");
-//    gameConfig = json::parse(file);
-
     // Parse the JSON data
     gameConfig.Parse(json.c_str());
 
@@ -119,7 +107,7 @@ void RGE::Setup()
     registry->AddSystem<PlayerCollisionSystem>();         // Check all entity collisions AABB
     registry->AddSystem<EntityCollisionSystem>();         // Check all entity collisions AABB
     registry->AddSystem<DamageSystem>();                  // Check all damage systems
-    registry->AddSystem<CameraMovementSystem>();          // Check the camera move system
+    registry->AddSystem<CameraFollowSystem>();            // Check the camera move system
     registry->AddSystem<ProjectileEmitSystem>();          // Check entity bullets AABB
     registry->AddSystem<ProjectileLifecycleSystem>();     // Check the life cycle and kill off bullets
     registry->AddSystem<RenderColliderSystem>();          // Debug updateRender collision box's
@@ -231,53 +219,96 @@ void RGE::Setup()
  void RGE::SetupPlayer()
 {
     Entity newEntity = registry->CreateEntity();
-    newEntity.AddTag(gameConfig["player"]["tag"].GetString());
 
-    newEntity.AddComponent<TransformComponent>(
-            glm::vec2( gameConfig["player"]["transform"]["start_position_x"].GetFloat(), gameConfig["player"]["transform"]["start_position_y"].GetFloat() ),
-            glm::vec2( gameConfig["player"]["transform"]["scale_x"].GetFloat(), gameConfig["player"]["transform"]["scale_y"].GetFloat() ),
-            gameConfig["player"]["transform"]["rotation"].GetFloat()
-    );
+    if (gameConfig["player"].HasMember("tag"))
+        newEntity.AddTag(gameConfig["player"]["tag"].GetString());
 
-    newEntity.AddComponent<RigidBodyComponent>(
-            glm::vec2( gameConfig["player"]["rigidbody"]["deltaXY_x"].GetFloat(), gameConfig["player"]["rigidbody"]["deltaXY_y"].GetFloat() ),
-            glm::vec2( gameConfig["player"]["rigidbody"]["maxDeltaXY_x"].GetFloat(), gameConfig["player"]["rigidbody"]["maxDeltaXY_y"].GetFloat() ),
-            gameConfig["player"]["rigidbody"]["acceleration"].GetFloat(),
-            gameConfig["player"]["rigidbody"]["boost"].GetFloat(),
-            gameConfig["player"]["rigidbody"]["gravity"].GetFloat(),
-            gameConfig["player"]["rigidbody"]["friction"].GetFloat()
-    );
+    if (gameConfig["player"].HasMember("transform"))
+    {
+        newEntity.AddComponent<TransformComponent>(
+                glm::vec2( gameConfig["player"]["transform"]["start_position_x"].GetFloat(), gameConfig["player"]["transform"]["start_position_y"].GetFloat() ),
+                glm::vec2( gameConfig["player"]["transform"]["scale_x"].GetFloat(), gameConfig["player"]["transform"]["scale_y"].GetFloat() ),
+                gameConfig["player"]["transform"]["rotation"].GetFloat()
+        );
+    }
 
-    newEntity.AddComponent<BoxColliderComponent>(
-            gameConfig["player"]["box_collider"]["width"].GetFloat(),
-            gameConfig["player"]["box_collider"]["height"].GetFloat(),
-            glm::vec2(gameConfig["player"]["box_collider"]["position_x"].GetFloat(), gameConfig["player"]["box_collider"]["position_y"].GetFloat() ),
-            true
-    );
+    if (gameConfig["player"].HasMember("rigidbody"))
+    {
+        newEntity.AddComponent<RigidBodyComponent>(
+                glm::vec2( gameConfig["player"]["rigidbody"]["deltaXY_x"].GetFloat(), gameConfig["player"]["rigidbody"]["deltaXY_y"].GetFloat() ),
+                glm::vec2( gameConfig["player"]["rigidbody"]["maxDeltaXY_x"].GetFloat(), gameConfig["player"]["rigidbody"]["maxDeltaXY_y"].GetFloat() ),
+                gameConfig["player"]["rigidbody"]["acceleration"].GetFloat(),
+                gameConfig["player"]["rigidbody"]["boost"].GetFloat(),
+                gameConfig["player"]["rigidbody"]["gravity"].GetFloat(),
+                gameConfig["player"]["rigidbody"]["friction"].GetFloat()
+        );
+    }
 
-    newEntity.AddComponent<SpriteComponent>(
-            gameConfig["player"]["sprite"]["texture_asset_id"].GetString(),
-            gameConfig["player"]["sprite"]["frame_width"].GetInt(),
-            gameConfig["player"]["sprite"]["frame_height"].GetInt(),
-            gameConfig["player"]["sprite"]["z_index"].GetInt(),
-            gameConfig["player"]["sprite"]["isFixed"].GetBool(),
-            gameConfig["player"]["sprite"]["flipH"].GetBool(),
-            gameConfig["player"]["sprite"]["src_rect_x"].GetFloat(),
-            gameConfig["player"]["sprite"]["src_rect_y"].GetFloat()
-    );
+    if (gameConfig["player"].HasMember("box_collider"))
+    {
+        newEntity.AddComponent<BoxColliderComponent>(
+                gameConfig["player"]["box_collider"]["width"].GetFloat(),
+                gameConfig["player"]["box_collider"]["height"].GetFloat(),
+                glm::vec2(gameConfig["player"]["box_collider"]["position_x"].GetFloat(), gameConfig["player"]["box_collider"]["position_y"].GetFloat() ),
+                gameConfig["player"]["box_collider"]["has_ray_cast"].GetBool()
+        );
+    }
 
-    newEntity.AddComponent<AnimationComponent>(
-            gameConfig["player"]["animation"]["num_frames"].GetInt(),
-            gameConfig["player"]["animation"]["fps"].GetInt(),
-            gameConfig["player"]["animation"]["is_loop"].GetBool()
-    );
+    if (gameConfig["player"].HasMember("sprite"))
+    {
+        newEntity.AddComponent<SpriteComponent>(
+                gameConfig["player"]["sprite"]["texture_asset_id"].GetString(),
+                gameConfig["player"]["sprite"]["frame_width"].GetInt(),
+                gameConfig["player"]["sprite"]["frame_height"].GetInt(),
+                gameConfig["player"]["sprite"]["z_index"].GetInt(),
+                gameConfig["player"]["sprite"]["isFixed"].GetBool(),
+                gameConfig["player"]["sprite"]["flipH"].GetBool(),
+                gameConfig["player"]["sprite"]["src_rect_x"].GetFloat(),
+                gameConfig["player"]["sprite"]["src_rect_y"].GetFloat()
+        );
+    }
 
-    newEntity.AddComponent<CameraFollowComponent>(40,
-                                                  22,
-                                                  32,
-                                                  gameConfig["player"]["transform"]["start_position_x"].GetFloat(),
-                                                  gameConfig["player"]["transform"]["start_position_y"].GetFloat()
-    );
+//    if (gameConfig["player"].HasMember("animation"))
+//    {
+//        newEntity.AddComponent<AnimationComponent>(
+//                gameConfig["player"]["animation"]["num_frames"].GetInt(),
+//                gameConfig["player"]["animation"]["fps"].GetInt(),
+//                gameConfig["player"]["animation"]["is_loop"].GetBool()
+//        );
+//    }
+
+    if (gameConfig["player"]["player_states"].HasMember("states"))
+    {
+        newEntity.AddComponent<SpritesheetComponent>();
+
+        for (int i = 0; i < gameConfig["player"]["player_states"]["num_of_states"].GetInt(); ++i)
+        {
+            std::cout << gameConfig["player"]["player_states"]["states"][i]["name"].GetString() << std::endl;
+            newEntity.GetComponent<SpritesheetComponent>().AddToSheet(i,
+                    // TODO change the name below
+                    gameConfig["player"]["player_states"]["states"][i]["name"].GetString(),
+                    gameConfig["player"]["sprite"]["frame_width"].GetInt(),
+                    gameConfig["player"]["sprite"]["frame_height"].GetInt(),
+                    gameConfig["player"]["sprite"]["z_index"].GetInt(),
+                    gameConfig["player"]["sprite"]["isFixed"].GetBool(),
+                    gameConfig["player"]["player_states"]["states"][i]["start_frame_x"].GetInt() * 32,
+                    gameConfig["player"]["player_states"]["states"][i]["start_frame_y"].GetInt() * 32,
+                    gameConfig["player"]["player_states"]["states"][i]["num_frames"].GetInt(),
+                    gameConfig["player"]["player_states"]["states"][i]["fps"].GetInt(),
+                    gameConfig["player"]["player_states"]["states"][i]["is_loop"].GetBool()
+            );
+        }
+    }
+
+    if (gameConfig["player"].HasMember("camera_follow"))
+    {
+        newEntity.AddComponent<CameraFollowComponent>(40,
+                                                      22,
+                                                      32,
+                                                      gameConfig["player"]["transform"]["start_position_x"].GetFloat(),
+                                                      gameConfig["player"]["transform"]["start_position_y"].GetFloat()
+        );
+    }
 
 }
 
@@ -307,7 +338,7 @@ void RGE::UpdateRenderer()
 
     if (isCamera)
     {
-        registry->GetSystem<CameraMovementSystem>().Update(gameRenderer, gameCamera);
+        registry->GetSystem<CameraFollowSystem>().Update(gameRenderer, gameCamera);
     }
 
     if (isCollider)
@@ -411,7 +442,7 @@ void RGE::UpdateSystems()
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
 
     registry->GetSystem<AnimationSystem>().Update();
-    registry->GetSystem<CameraMovementSystem>().Update(gameRenderer, gameCamera);
+    registry->GetSystem<CameraFollowSystem>().Update(gameRenderer, gameCamera);
     registry->GetSystem<RenderTextSystem>().Update(gameRenderer, assetStore, gameCamera);
 
 }

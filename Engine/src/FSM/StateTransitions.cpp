@@ -2,9 +2,11 @@
 // Created by Darren Tynan on 14/12/2024.
 //
 
+#include <rapidjson/document.h>
 #include "include/States.h"
 #include "../Components/include/AnimationComponent.h"
 #include "../Components/include/SpriteComponent.h"
+#include "../Components/include/SpritesheetComponent.h"
 #include "include/FSM.h"
 
 using namespace RGE_Component;
@@ -40,7 +42,10 @@ void Idle::enter(FSM *fsm, Entity &entity)
     // TODO we need to get the animation setting from the lue table.
 
     // Change animation
-    entity.GetComponent<SpriteComponent>().assetId = "player-idle-image";
+//    entity.GetComponent<SpriteComponent>().assetId = "player-idle-image";
+//    entity.GetComponent<SpriteComponent>().srcRect.x = 0;
+    auto frame =entity.GetComponent<SpritesheetComponent>().states.find("idle_state");
+    entity.GetComponent<SpriteComponent>().srcRect = frame->second->srcRect;
 }
 
 void Idle::exit(FSM *fsm, Entity &entity)
@@ -79,8 +84,11 @@ std::string Walk::getName()
 
 void Walk::enter(FSM *fsm, Entity &entity)
 {
-    entity.GetComponent<SpriteComponent>().assetId = "player-walk-image";
-    std::cout << "StateTransitions: walk enter" << std::endl;
+//    entity.GetComponent<SpriteComponent>().assetId = "player-walk-image";
+//    entity.GetComponent<SpriteComponent>().srcRect.x = 32*6;
+//    std::cout << "StateTransitions: walk enter" << std::endl;
+    auto frame =entity.GetComponent<SpritesheetComponent>().states.find("walk_state");
+    entity.GetComponent<SpriteComponent>().srcRect = frame->second->srcRect;
 }
 
 void Walk::exit(FSM *fsm, Entity &entity)
@@ -144,7 +152,11 @@ std::string Jump::getName()
     return "Jump";
 }
 
-void Jump::enter(FSM *fsm, Entity &entity) {}
+void Jump::enter(FSM *fsm, Entity &entity)
+{
+    auto frame =entity.GetComponent<SpritesheetComponent>().states.find("jump_state");
+    entity.GetComponent<SpriteComponent>().srcRect = frame->second->srcRect;
+}
 
 void Jump::exit(FSM *fsm, Entity &entity) {}
 
@@ -174,7 +186,11 @@ std::string Fall::getName()
     return "Fall";
 }
 
-void Fall::enter(FSM *fsm, Entity &entity) {}
+void Fall::enter(FSM *fsm, Entity &entity)
+{
+    auto frame =entity.GetComponent<SpritesheetComponent>().states.find("fall_state");
+    entity.GetComponent<SpriteComponent>().srcRect = frame->second->srcRect;
+}
 
 void Fall::exit(FSM *fsm, Entity &entity) {}
 

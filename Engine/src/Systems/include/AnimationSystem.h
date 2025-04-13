@@ -3,6 +3,7 @@
 
 #include "../../ECS/include/ECS.h"
 #include "../../Components/include/SpriteComponent.h"
+#include "../../Components/include/SpritesheetComponent.h"
 #include "../../Components/include/AnimationComponent.h"
 #include <SDL2/SDL.h>
 
@@ -16,23 +17,27 @@ using namespace RGE_System;
 class AnimationSystem: public System
 {
     public:
-        AnimationSystem()
-        {
-            RequireComponent<SpriteComponent>();
-            RequireComponent<AnimationComponent>();
-        }
 
-        void Update()
-        {
-            for (auto entity: GetSystemEntities())
-            {
-                auto& animation = entity.GetComponent<AnimationComponent>();
-                auto& sprite = entity.GetComponent<SpriteComponent>();
+    AnimationSystem()
+    {
+        RequireComponent<SpriteComponent>();
+        RequireComponent<AnimationComponent>();
+    }
 
-                animation.currentFrame = ((SDL_GetTicks() - animation.startTime) * animation.fps / 1000) % animation.numFrames;
-                sprite.srcRect.x = animation.currentFrame * sprite.width;
-            }
+    /**
+     * @brief Iterate over all entities and update the animation frame.
+     */
+    void Update()
+    {
+        for (auto entity: GetSystemEntities())
+        {
+            auto& animation = entity.GetComponent<AnimationComponent>();
+            auto& sprite = entity.GetComponent<SpriteComponent>();
+
+            animation.currentFrame = ((SDL_GetTicks() - animation.startTime) * animation.fps / 1000) % animation.numFrames;
+            sprite.srcRect.x = animation.currentFrame * sprite.width;
         }
+    }
 };
 
 #endif

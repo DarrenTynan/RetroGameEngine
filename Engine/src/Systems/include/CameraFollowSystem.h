@@ -8,10 +8,10 @@
 
 using namespace RGE_System;
 
-class CameraMovementSystem: public System
+class CameraFollowSystem: public System
 {
     public:
-        CameraMovementSystem()
+        CameraFollowSystem()
         {
             RequireComponent<CameraFollowComponent>();
             RequireComponent<TransformComponent>();

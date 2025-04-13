@@ -15,8 +15,6 @@ namespace RGE_Component
     class FSMComponent
     {
     private:
-        // Pointer the lua state
-//        sol::state &lua;
         // Pointer to the Finite State Machine
         FSM* fsm;
     public:

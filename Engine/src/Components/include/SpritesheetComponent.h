@@ -11,11 +11,12 @@
 #include <string>
 #include <vector>
 #include <sol.hpp>
+#include <rapidjson/document.h>
 
 namespace RGE_Component
 {
     /**
-      * @brief A small struct to hold the vars for the animation frames.
+      * @brief A small struct to hold the vars for the individual animation frames.
       */
     struct FramePointers
     {
@@ -24,11 +25,15 @@ namespace RGE_Component
         int height;
         int z_index;
         bool isFixed;
-        int srcRectX;
-        int srcRectY;
+        SDL_Rect srcRect;
         int numFrames;
         int fps;
         bool isLoop;
+
+        void setSrcRect(const SDL_Rect &_srcRect)
+        {
+            FramePointers::srcRect = _srcRect;
+        }
 
 
     /**
@@ -51,8 +56,7 @@ namespace RGE_Component
         this->height = _height;
         this->z_index = _z_index;
         this->isFixed = _fixed;
-        this->srcRectX = _srcRectX;
-        this->srcRectY = _srcRectY;
+        this->srcRect = {_srcRectX, _srcRectY, _width, _height};
         this->numFrames = _numFrames;
         this->fps = _frameSpeedRate;
         this->isLoop = _isLoop;
@@ -68,14 +72,15 @@ namespace RGE_Component
         // Look-up table.
         std::map<std::string, std::shared_ptr<FramePointers>> states;
 
-        SpritesheetComponent() {}
+        SpritesheetComponent() = default;
 
-        void AddToSheet( int _index, std::string _textureAssetID, int _width, int _height, int _z_index, bool _fixed, int _srcRectX, int _srcRectY, int _numFrames, int _frameSpeedRate, bool _isLoop )
+        void AddToSheet( int _index, const std::string& _textureAssetID, int _width, int _height, int _z_index, bool _fixed, int _srcRectX, int _srcRectY, int _numFrames, int _frameSpeedRate, bool _isLoop )
         {
             m_pointers.push_back(std::make_shared<FramePointers>(_textureAssetID, _width, _height, _z_index, _fixed, _srcRectX, _srcRectY, _numFrames, _frameSpeedRate, _isLoop));
             states.insert(make_pair(_textureAssetID, m_pointers[_index]));
-
+            std::cout << "SpritesheetComponent" << std::endl;
         }
+
 
     };
 

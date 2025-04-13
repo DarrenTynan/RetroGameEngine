@@ -68,6 +68,7 @@ set(SOURCE_FILES
         Engine/src/Components/include/SpriteComponent.h
         Engine/src/Components/include/TextLabelComponent.h
         Engine/src/Components/include/TransformComponent.h
+        Engine/src/Components/include/SpritesheetComponent.h
 
         Engine/src/ECS/include/Component.h
         Engine/src/ECS/include/ECS.h
@@ -94,7 +95,7 @@ set(SOURCE_FILES
         Engine/src/LevelLoader/LevelLoader.cpp
 
         Engine/src/Systems/include/AnimationSystem.h
-        Engine/src/Systems/include/CameraMovementSystem.h
+        Engine/src/Systems/include/CameraFollowSystem.h
         Engine/src/Systems/include/PlayerCollisionSystem.h
         Engine/src/Systems/include/EntityCollisionSystem.h
         Engine/src/Systems/include/DamageSystem.h
