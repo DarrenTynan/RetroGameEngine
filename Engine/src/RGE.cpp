@@ -20,7 +20,6 @@
 #include "../src/Systems/include/RenderTextSystem.h"
 #include "../src/Systems/include/RenderColliderSystem.h"
 #include "../src/Systems/include/AnimationSystem.h"
-#include "../src/Systems/include/SpritesheetAnimationSystem.h"
 #include "../src/Systems/include/PlayerCollisionSystem.h"
 #include "../src/Systems/include/EntityCollisionSystem.h"
 #include "../src/Systems/include/ProjectileEmitSystem.h"
@@ -106,7 +105,6 @@ void RGE::Setup()
     registry->AddSystem<EntityMovementSystem>();          // Move all entities
     registry->AddSystem<PlayerControllerSystem>();        // Move the player & apply forces
     registry->AddSystem<AnimationSystem>();               // Animate all entities
-    registry->AddSystem<SpritesheetAnimationSystem>();               // Animate all entities
     registry->AddSystem<PlayerCollisionSystem>();         // Check all entity collisions AABB
     registry->AddSystem<EntityCollisionSystem>();         // Check all entity collisions AABB
     registry->AddSystem<DamageSystem>();                  // Check all damage systems
@@ -268,15 +266,6 @@ void RGE::Setup()
                 gameConfig["player"]["sprite"]["flipH"].GetBool(),
                 gameConfig["player"]["sprite"]["src_rect_x"].GetFloat(),
                 gameConfig["player"]["sprite"]["src_rect_y"].GetFloat()
-        );
-    }
-
-    if (gameConfig["player"].HasMember("spritesheet_animation"))
-    {
-        newEntity.AddComponent<SpritesheetAnimationComponent>(
-                gameConfig["player"]["spritesheet_animation"]["num_frames"].GetInt(),
-                gameConfig["player"]["spritesheet_animation"]["fps"].GetInt(),
-                gameConfig["player"]["spritesheet_animation"]["is_loop"].GetBool()
         );
     }
 

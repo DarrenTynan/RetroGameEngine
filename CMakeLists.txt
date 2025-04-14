@@ -57,7 +57,6 @@ set(SOURCE_FILES
         Engine/src/AssetStore/src/AssetStore.cpp
 
         Engine/src/Components/include/AnimationComponent.h
-        Engine/src/Components/include/SpritesheetAnimationComponent.h
         Engine/src/Components/include/BoxColliderComponent.h
         Engine/src/Components/include/CameraFollowComponent.h
         Engine/src/Components/include/HealthComponent.h
@@ -96,7 +95,6 @@ set(SOURCE_FILES
         Engine/src/LevelLoader/LevelLoader.cpp
 
         Engine/src/Systems/include/AnimationSystem.h
-        Engine/src/Systems/include/SpritesheetAnimationSystem.h
         Engine/src/Systems/include/CameraFollowSystem.h
         Engine/src/Systems/include/PlayerCollisionSystem.h
         Engine/src/Systems/include/EntityCollisionSystem.h

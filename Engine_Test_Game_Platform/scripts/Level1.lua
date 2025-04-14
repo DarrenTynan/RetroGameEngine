@@ -60,11 +60,11 @@ Level = {
                     src_rect_x = 0,
                     src_rect_y = 0,
                 },
-                --animation = {
-                --    num_frames = 6,
-                --    fps = 8, -- fps
-                --    is_loop = true
-                --},
+                animation = {
+                    num_frames = 6,
+                    fps = 8, -- fps
+                    is_loop = true
+                },
                 box_collider = {
                     width = 32,
                     height = 32,

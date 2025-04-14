@@ -389,8 +389,8 @@ class PlayerControllerSystem : public System
                 fsm->direction.y = 1.0;
                 transform.position.y += rigidBody.deltaXY.y;
             }
-            else
-                fsm->setIdleState(player);
+//            else
+//                fsm->setIdleState(player);
         }
 
 };
