@@ -27,14 +27,15 @@ class RenderSystem: public System
 
         void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, SDL_Rect& camera)
         {
-            // Create a vector with both Sprite and Transform component of all entities
             struct RenderableEntity
             {
                 TransformComponent transformComponent;
                 SpriteComponent spriteComponent;
             };
 
+            // Create a vector with both Sprite and Transform component of all entities
             std::vector<RenderableEntity> renderableEntities;
+
             for (auto entity: GetSystemEntities())
             {
                 RenderableEntity renderableEntity;

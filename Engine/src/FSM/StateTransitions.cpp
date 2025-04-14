@@ -38,20 +38,17 @@ std::string Idle::getName()
 
 void Idle::enter(FSM *fsm, Entity &entity)
 {
-    // Change animation
-//    entity.GetComponent<SpriteComponent>().assetId = "player-idle-image";
+    auto &animation = entity.GetComponent<AnimationComponent>();
     auto &sprite = entity.GetComponent<SpriteComponent>();
-    auto frame =entity.GetComponent<SpritesheetComponent>().states.find("idle_state");
+    auto frame = entity.GetComponent<SpritesheetComponent>().states.find("idle_state");
+
     sprite.srcRect = frame->second->srcRect;
+    animation.currentFrame = 0;
+    animation.numFrames = frame->second->numFrames;
+    animation.fps = frame->second->fps;
 }
 
-void Idle::exit(FSM *fsm, Entity &entity)
-{
-    // TODO we need to get the animation setting from the lue table.
-    // Restore current animation
-
-//    std::cout << "StateTransitions: idle exit" << std::endl;
-}
+void Idle::exit(FSM *fsm, Entity &entity) {}
 
 
 
@@ -74,25 +71,21 @@ BaseState& Walk::getInstance()
 
 void Walk::update(FSM *fsm) {}
 
-std::string Walk::getName()
-{
-    return "walk_state";
-}
+std::string Walk::getName() { return "walk_state"; }
 
 void Walk::enter(FSM *fsm, Entity &entity)
 {
-//    entity.GetComponent<SpriteComponent>().assetId = "player-walk-image";
-//    entity.GetComponent<SpriteComponent>().srcRect.x = 32*6;
-//    std::cout << "StateTransitions: walk enter" << std::endl;
     auto &sprite = entity.GetComponent<SpriteComponent>();
-    auto frame =entity.GetComponent<SpritesheetComponent>().states.find("walk_state");
+    auto &animation = entity.GetComponent<AnimationComponent>();
+    auto frame = entity.GetComponent<SpritesheetComponent>().states.find("walk_state");
+
     sprite.srcRect = frame->second->srcRect;
+    animation.currentFrame = 0;
+    animation.numFrames = frame->second->numFrames;
+    animation.fps = frame->second->fps;
 }
 
-void Walk::exit(FSM *fsm, Entity &entity)
-{
-//    std::cout << "StateTransitions: walk exit" << std::endl;
-}
+void Walk::exit(FSM *fsm, Entity &entity) {}
 
 
 
@@ -145,17 +138,18 @@ BaseState& Jump::getInstance()
 
 void Jump::update(FSM *fsm) {}
 
-std::string Jump::getName()
-{
-    return "jump_state";
-}
+std::string Jump::getName() { return "jump_state"; }
 
 void Jump::enter(FSM *fsm, Entity &entity)
 {
     auto &sprite = entity.GetComponent<SpriteComponent>();
     auto frame =entity.GetComponent<SpritesheetComponent>().states.find("jump_state");
+    auto &animation = entity.GetComponent<AnimationComponent>();
+
     sprite.srcRect = frame->second->srcRect;
-    std::cout << "StateTransitions: jump enter" << std::endl;
+    animation.currentFrame = 0;
+    animation.numFrames = frame->second->numFrames;
+    animation.fps = frame->second->fps;
 }
 
 void Jump::exit(FSM *fsm, Entity &entity) {}
@@ -181,17 +175,18 @@ BaseState& Fall::getInstance()
 
 void Fall::update(FSM *fsm) {}
 
-std::string Fall::getName()
-{
-    return "fall_state";
-}
+std::string Fall::getName() { return "fall_state"; }
 
 void Fall::enter(FSM *fsm, Entity &entity)
 {
-
     auto &sprite = entity.GetComponent<SpriteComponent>();
+    auto &animation = entity.GetComponent<AnimationComponent>();
     auto frame =entity.GetComponent<SpritesheetComponent>().states.find("fall_state");
+
     sprite.srcRect = frame->second->srcRect;
+    animation.currentFrame = 0;
+    animation.numFrames = frame->second->numFrames;
+    animation.fps = frame->second->fps;
 }
 
 void Fall::exit(FSM *fsm, Entity &entity) {}

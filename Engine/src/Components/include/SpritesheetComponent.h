@@ -78,7 +78,7 @@ namespace RGE_Component
         {
             m_pointers.push_back(std::make_shared<FramePointers>(_textureAssetID, _width, _height, _z_index, _fixed, _srcRectX, _srcRectY, _numFrames, _frameSpeedRate, _isLoop));
             states.insert(make_pair(_textureAssetID, m_pointers[_index]));
-            std::cout << "SpritesheetComponent" << std::endl;
+//            std::cout << "SpritesheetComponent" << std::endl;
         }
 
 
@@ -86,4 +86,4 @@ namespace RGE_Component
 
 } // end namespace
 
-#endif //RETROGAMEENGINE_SPRITESHEETCOMPONENT_H
+#endif // RETROGAMEENGINE_SPRITESHEETCOMPONENT_H

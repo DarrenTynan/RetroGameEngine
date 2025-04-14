@@ -39,6 +39,8 @@ class SpritesheetAnimationSystem: public System
 //            sprite.srcRect.x = animation.currentFrame * sprite.width;
             auto frame = entity.GetComponent<SpritesheetComponent>().states.find(fsm->getCurrentState()->getName());
             frame->second->srcRect.x = animation.currentFrame * frame->second->width;
+//            auto debug = frame->second->srcRect.x = animation.currentFrame * frame->second->width;
+//            std::cout << debug << std::endl;
         }
     }
 };

@@ -32,7 +32,7 @@ struct AnimationComponent
     explicit AnimationComponent(int _numFrames = 1, int _fps = 1, bool _isLoop = true)
     {
         this->numFrames = _numFrames;
-        this->currentFrame = 1;
+        this->currentFrame = 0;
         this->fps = _fps;
         this->isLoop = _isLoop;
 

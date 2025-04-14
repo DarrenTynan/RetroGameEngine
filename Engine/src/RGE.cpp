@@ -280,6 +280,15 @@ void RGE::Setup()
         );
     }
 
+    if (gameConfig["player"].HasMember("animation"))
+    {
+        newEntity.AddComponent<AnimationComponent>(
+                gameConfig["player"]["animation"]["num_frames"].GetInt(),
+                gameConfig["player"]["animation"]["fps"].GetInt(),
+                gameConfig["player"]["animation"]["is_loop"].GetBool()
+        );
+    }
+
     if (gameConfig["player"]["player_states"].HasMember("states"))
     {
         newEntity.AddComponent<SpritesheetComponent>();
@@ -287,18 +296,18 @@ void RGE::Setup()
         for (int i = 0; i < gameConfig["player"]["player_states"]["num_of_states"].GetInt(); ++i)
         {
             std::cout << gameConfig["player"]["player_states"]["states"][i]["name"].GetString() << std::endl;
-            newEntity.GetComponent<SpritesheetComponent>().AddToSheet(i,
-                    // TODO change the name below
+            newEntity.GetComponent<SpritesheetComponent>().AddToSheet(
+                    i,
                     gameConfig["player"]["player_states"]["states"][i]["name"].GetString(),
-                                                                      gameConfig["player"]["sprite"]["frame_width"].GetInt(),
-                                                                      gameConfig["player"]["sprite"]["frame_height"].GetInt(),
-                                                                      gameConfig["player"]["sprite"]["z_index"].GetInt(),
-                                                                      gameConfig["player"]["sprite"]["isFixed"].GetBool(),
+                    gameConfig["player"]["sprite"]["frame_width"].GetInt(),
+                    gameConfig["player"]["sprite"]["frame_height"].GetInt(),
+                    gameConfig["player"]["sprite"]["z_index"].GetInt(),
+                    gameConfig["player"]["sprite"]["isFixed"].GetBool(),
                     gameConfig["player"]["player_states"]["states"][i]["start_frame_x"].GetInt() * 32,
                     gameConfig["player"]["player_states"]["states"][i]["start_frame_y"].GetInt() * 32,
-                                                                      gameConfig["player"]["player_states"]["states"][i]["num_frames"].GetInt(),
-                                                                      gameConfig["player"]["player_states"]["states"][i]["fps"].GetInt(),
-                                                                      gameConfig["player"]["player_states"]["states"][i]["is_loop"].GetBool()
+                    gameConfig["player"]["player_states"]["states"][i]["num_frames"].GetInt(),
+                    gameConfig["player"]["player_states"]["states"][i]["fps"].GetInt(),
+                    gameConfig["player"]["player_states"]["states"][i]["is_loop"].GetBool()
             );
         }
     }
@@ -445,7 +454,7 @@ void RGE::UpdateSystems()
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
 
     registry->GetSystem<AnimationSystem>().Update();
-    registry->GetSystem<SpritesheetAnimationSystem>().Update();
+//    registry->GetSystem<SpritesheetAnimationSystem>().Update();
 
     registry->GetSystem<CameraFollowSystem>().Update(gameRenderer, gameCamera);
     registry->GetSystem<RenderTextSystem>().Update(gameRenderer, assetStore, gameCamera);

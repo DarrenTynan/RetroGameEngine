@@ -50,6 +50,11 @@
             "num_frames": 0,
             "fps": 8
         },
+        "animation": {
+            "num_frames": 6,
+            "fps": 8,
+            "is_loop": true
+        },
         "spritesheet_animation": {
             "num_frames": 6,
             "fps": 8,
@@ -84,19 +89,19 @@
                 },
                 {
                     "name": "jump_state",
-                    "start_frame_x": 23,
+                    "start_frame_x": 22,
                     "start_frame_y": 0,
                     "num_frames": 2,
-                    "fps": 8,
-                    "is_loop": true
+                    "fps": 2,
+                    "is_loop": false
                 },
                 {
                     "name": "fall_state",
-                    "start_frame_x": 25,
+                    "start_frame_x": 24,
                     "start_frame_y": 0,
                     "num_frames": 2,
-                    "fps": 8,
-                    "is_loop": true
+                    "fps": 2,
+                    "is_loop": false
                 },
                 {
                     "name": "attack_state",

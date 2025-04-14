@@ -3,6 +3,7 @@
 
 #include "../../ECS/include/ECS.h"
 #include "../../Components/include/SpriteComponent.h"
+#include "../../Components/include/SpritesheetComponent.h"
 #include "../../Components/include/AnimationComponent.h"
 #include <SDL2/SDL.h>
 
@@ -34,7 +35,17 @@ class AnimationSystem: public System
             auto& sprite = entity.GetComponent<SpriteComponent>();
 
             animation.currentFrame = ((SDL_GetTicks() - animation.startTime) * animation.fps / 1000) % animation.numFrames;
-            sprite.srcRect.x = animation.currentFrame * sprite.width;
+            if (entity.HasComponent<SpritesheetComponent>())
+            {
+                auto &fsmComponent = entity.GetComponent<FSMComponent>();
+                auto fsm = fsmComponent.getFsm();
+                auto frame = entity.GetComponent<SpritesheetComponent>().states.find(fsm->getCurrentState()->getName());
+                sprite.srcRect = frame->second->srcRect;
+                sprite.srcRect.x += animation.currentFrame * sprite.width;
+
+            }
+            else
+                sprite.srcRect.x = animation.currentFrame * sprite.width;
         }
     }
 };
