@@ -143,6 +143,8 @@ namespace RGE_System
                     // Down
                     if (isDownRayCast)
                     {
+                        if (fsm->getCurrentState()->getName() == "fall_state")
+                            fsm->setIdleState(a);
 
                         aTransform.position.y -= (float)cc.h + aCollider.rayLength;
                         aRB.deltaXY.y = 0;

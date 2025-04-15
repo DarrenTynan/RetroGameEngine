@@ -254,8 +254,11 @@ class PlayerControllerSystem : public System
             sprite.flipH = true;
             fsm->direction.x = -1.0;
 
-            if (fsm->getCurrentState()->getName() != "walk_state")
-                fsm->setWalkState(player);
+            if (fsm->getCurrentState()->getName() != "fall_state")
+            {
+                if (fsm->getCurrentState()->getName() != "walk_state")
+                    fsm->setWalkState(player);
+            }
 
             rigidBody.deltaXY.x -= rigidBody.acceleration;
             rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);
@@ -280,8 +283,11 @@ class PlayerControllerSystem : public System
             sprite.flipH = false;
             fsm->direction.x = 1.0;
 
-            if (fsm->getCurrentState()->getName() != "walk_state")
-                fsm->setWalkState(player);
+//            if (fsm->getCurrentState()->getName() != "jump_state" || fsm->getCurrentState()->getName() != "fall_state")
+//            {
+                if (fsm->getCurrentState()->getName() != "walk_state" || fsm->getCurrentState()->getName() != "jump_state" || fsm->getCurrentState()->getName() != "fall_state")
+                    fsm->setWalkState(player);
+//            }
 
             rigidBody.deltaXY.x += rigidBody.acceleration;
             rigidBody.deltaXY.x = MiddleOfThree(-rigidBody.maxDeltaXY.x, rigidBody.deltaXY.x, rigidBody.maxDeltaXY.x);

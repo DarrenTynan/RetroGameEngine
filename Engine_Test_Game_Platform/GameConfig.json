@@ -1,4 +1,6 @@
 {
+    "project_name": "Editor Test Project",
+    "file_path": "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine_Test_Game_Platform/",
     "window_title": "Window_Title from GameConfig.json file",
     "version": "1.0",
     "developer": "Grasshenge",

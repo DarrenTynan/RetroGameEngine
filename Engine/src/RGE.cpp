@@ -28,7 +28,9 @@
 #include "../src/Systems/include/RenderRaycastSystem.h"
 #include "FileHandler/include/FileHandler.h"
 #include "include/SpritesheetComponent.h"
+#include "../../Editor/include/Editor.h"
 
+using namespace EDITOR;
 using namespace RGE_ECS;
 using namespace RGE_Component;
 using namespace RGE_AssetStore;
@@ -41,6 +43,12 @@ SDL_Window* gameWindow;
 SDL_Rect gameCamera;
 SDL_Renderer* gameRenderer;
 
+SDL_Window *editorWindow;
+SDL_Renderer *editorRenderer;
+ImGuiIO io;
+ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+auto pDisplayHolder = std::make_shared<DisplayHolder>();
+
 std::shared_ptr<Registry> registry = std::make_shared<Registry>();
 std::unique_ptr<AssetStore> assetStore = std::make_unique<AssetStore>();
 std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
@@ -50,7 +58,7 @@ bool isCollider = true;
 // TODO NOT to be used as not working!
 bool isRayCast = false;
 bool isCamera = true;
-bool isDebugWindow = true;
+bool isDebugWindow = false;
 
 static SDL_Window* debugWindow;
 static SDL_Renderer* debugRenderer;
@@ -147,7 +155,7 @@ void RGE::Setup()
     gameWindow = SDL_CreateWindow(
             gameConfig["window_title"].GetString(),
             SDL_WINDOWPOS_CENTERED,
-            0,          //SDL_WINDOWPOS_CENTERED,
+            110,          //SDL_WINDOWPOS_CENTERED,
             gameConfig["graphics"]["resolution"]["window_width"].GetInt(),
             gameConfig["graphics"]["resolution"]["window_height"].GetInt(),
             windowFlags
@@ -208,6 +216,137 @@ void RGE::Setup()
         }
 
     }
+
+    SDL_DisplayMode displayMode;
+    SDL_GetCurrentDisplayMode(0, &displayMode);
+
+    // Create window with SDL_Renderer graphics context
+    auto windowFlags3 = (SDL_WindowFlags)( SDL_WINDOW_RESIZABLE | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_ALLOW_HIGHDPI );
+    auto windowFlags4 = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_SHOWN );
+    editorWindow = SDL_CreateWindow(
+            "Retro Game_Engine Engine v1",
+            0,
+            0,
+            displayMode.w,
+            displayMode.h,
+            windowFlags4
+    );
+
+    if (!editorWindow)
+    {
+        LOGGER::TerminalLogger::Error("Window init failed", 0);
+        SDL_Quit();
+        exit(1);
+    }
+
+    editorRenderer = SDL_CreateRenderer(editorWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    if (!editorRenderer)
+    {
+        LOGGER::TerminalLogger::Error("Window renderer init failed", 0);
+        SDL_DestroyRenderer(editorRenderer);
+        SDL_Quit();
+        exit(1);
+    }
+
+//    Editor::OpenEditorWindow();
+//    Editor::SetupImGui();
+
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    io = ImGui::GetIO();
+    (void) io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;        // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // enable docking
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+
+    ImGuiStyle &style = ImGui::GetStyle();
+    style.WindowRounding = 5.3f;
+    style.FrameRounding = 2.3f;
+    style.ScrollbarRounding = 0;
+
+    style.Colors[ImGuiCol_Tab] = ImVec4(0.30f, 0.69f, 1.00f, 0.53f);
+    style.Colors[ImGuiCol_TabHovered] = ImVec4(0.44f, 0.61f, 0.86f, 1.00f);
+    style.Colors[ImGuiCol_TabActive] = ImVec4(0.38f, 0.62f, 0.83f, 1.00f);
+
+    style.Colors[ImGuiCol_Text] = ImVec4(0.90f, 0.90f, 0.90f, 0.90f);
+    style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
+    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.09f, 0.09f, 0.15f, 0.50f);
+    style.Colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    style.Colors[ImGuiCol_PopupBg] = ImVec4(0.05f, 0.05f, 0.10f, 0.85f);
+    style.Colors[ImGuiCol_Border] = ImVec4(0.70f, 0.70f, 0.70f, 0.65f);
+    style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    style.Colors[ImGuiCol_FrameBg] = ImVec4(0.00f, 0.00f, 0.01f, 1.00f);
+    style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.90f, 0.80f, 0.80f, 0.40f);
+    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.90f, 0.65f, 0.65f, 0.45f);
+    style.Colors[ImGuiCol_TitleBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.83f);
+    style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.40f, 0.40f, 0.80f, 0.20f);
+    style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.00f, 0.00f, 0.00f, 0.87f);
+    style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.01f, 0.01f, 0.02f, 0.80f);
+    style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.20f, 0.25f, 0.30f, 0.60f);
+    style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.55f, 0.53f, 0.55f, 0.51f);
+    style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.56f, 1.00f);
+    style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.56f, 0.56f, 0.56f, 0.91f);
+    style.Colors[ImGuiCol_CheckMark] = ImVec4(0.90f, 0.90f, 0.90f, 0.83f);
+    style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.70f, 0.70f, 0.70f, 0.62f);
+    style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.30f, 0.30f, 0.30f, 0.84f);
+    style.Colors[ImGuiCol_Button] = ImVec4(0.48f, 0.72f, 0.89f, 0.49f);
+    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.50f, 0.69f, 0.99f, 0.68f);
+    style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.80f, 0.50f, 0.50f, 1.00f);
+    style.Colors[ImGuiCol_Header] = ImVec4(0.30f, 0.69f, 1.00f, 0.53f);
+    style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.44f, 0.61f, 0.86f, 1.00f);
+    style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.38f, 0.62f, 0.83f, 1.00f);
+    style.Colors[ImGuiCol_Separator] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
+    style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.70f, 0.60f, 0.60f, 1.00f);
+    style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.90f, 0.70f, 0.70f, 1.00f);
+    style.Colors[ImGuiCol_ResizeGrip] = ImVec4(1.00f, 1.00f, 1.00f, 0.85f);
+    style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(1.00f, 1.00f, 1.00f, 0.60f);
+    style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(1.00f, 1.00f, 1.00f, 0.90f);
+    style.Colors[ImGuiCol_PlotLines] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+    style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
+    style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
+    style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
+    style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.00f, 0.00f, 1.00f, 0.35f);
+    style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplSDL2_InitForSDLRenderer(editorWindow, editorRenderer);
+    ImGui_ImplSDLRenderer2_Init(editorRenderer);
+
+    io.Fonts->AddFontFromFileTTF("../Editor/fonts/Pixellettersfull.ttf", 18.f);
+
+//    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    // DisplayHolder is a struct in IDisplay.
+    // std::vector< std::unique_ptr<IDisplay> > Displays;
+//    auto pDisplayHolder = std::make_shared<DisplayHolder>();
+
+    // Instantiate the display windows via magic pointers
+    auto pMainMenuBar = std::make_unique<MainMenuBar>();
+    auto pTestDisplayA = std::make_unique<TestDisplayA>();
+    auto pTestDisplayB = std::make_unique<TestDisplayB>();
+    auto pSceneDisplay = std::make_unique<SceneDisplay>();
+    auto pLogDisplay = std::make_unique<LogDisplay>();
+    auto pFileDisplay = std::make_unique<FileDisplay>();
+//        auto pProjectMenuDisplay = std::make_unique<ProjectMenuDisplay>();
+
+    // Add display class's to the vector array in IDisplay
+    pDisplayHolder->displays.push_back( std::move(pMainMenuBar) );
+    pDisplayHolder->displays.push_back( std::move(pTestDisplayA) );
+    pDisplayHolder->displays.push_back( std::move(pTestDisplayB) );
+    pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
+    pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
+    pDisplayHolder->displays.push_back( std::move(pFileDisplay) );
+//        pDisplayHolder->displays.push_back( std::move(pProjectMenuDisplay) );
+
+    auto logger = EDITOR_LOGGER::Logger::GetInstance();
+    logger->Clear();
+    logger->AddLog("All systems should be up and running...\n");
+
 
     SetupPlayer();
 
@@ -373,6 +512,34 @@ bool RGE::ProcessKeyboardInputs()
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
     {
+        ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
+        
+        // Start the Dear ImGui frame
+        ImGui_ImplSDLRenderer2_NewFrame();
+        ImGui_ImplSDL2_NewFrame();
+        ImGui::NewFrame();
+
+        // Set docking to main viewport
+        ImGui::DockSpaceOverViewport();
+
+        // Render the editor display panels.
+        for ( const auto& pDisplay : pDisplayHolder->displays )
+        {
+            pDisplay->Render();
+        }
+
+//            ImGui::ShowDemoWindow();
+
+        // Rendering
+        ImGui::Render();
+        SDL_RenderSetScale(editorRenderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
+        SDL_SetRenderDrawColor(editorRenderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255),
+                               (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+        SDL_RenderClear(editorRenderer);
+        ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), editorRenderer);
+        SDL_RenderPresent(editorRenderer);
+
+        /////////////////////
         // Core sdl events.
         switch (sdlEvent.type)
         {
@@ -443,7 +610,6 @@ void RGE::UpdateSystems()
     registry->GetSystem<ProjectileLifecycleSystem>().Update();
 
     registry->GetSystem<AnimationSystem>().Update();
-//    registry->GetSystem<SpritesheetAnimationSystem>().Update();
 
     registry->GetSystem<CameraFollowSystem>().Update(gameRenderer, gameCamera);
     registry->GetSystem<RenderTextSystem>().Update(gameRenderer, assetStore, gameCamera);

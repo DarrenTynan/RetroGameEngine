@@ -15,7 +15,7 @@ namespace RGE_FSM
  */
     FSM::FSM()
     {
-        currentState = &Idle::getInstance();
+        currentState = &Fall::getInstance();
         isGrounded = false;
         currentState->update(nullptr);
     }

@@ -118,6 +118,43 @@ set(SOURCE_FILES
         Engine/src/Components/include/FSMComponent.h
         Engine/src/Components/include/SpritesheetComponent.h
 
+
+
+
+        Editor/src/Editor.cpp
+        Editor/libs/imgui_docking/imgui.cpp
+        Editor/libs/imgui_docking/imgui_demo.cpp
+        Editor/libs/imgui_docking/imgui_draw.cpp
+        Editor/libs/imgui_docking/imgui_tables.cpp
+        Editor/libs/imgui_docking/imgui_widgets.cpp
+        Editor/libs/imgui_docking/backends/imgui_impl_sdl2.cpp
+        Editor/libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
+        Editor/libs/imgui_docking/misc/cpp/imgui_stdlib.h
+        Editor/libs/imgui_docking/misc/cpp/imgui_stdlib.cpp
+        Editor/src/Displays/TestDisplayA.cpp
+        Editor/src/Displays/TestDisplayB.cpp
+        Editor/src/Displays/SceneDisplay.cpp
+        Editor/src/Displays/MainMenuBar.cpp
+        Editor/src/Displays/MainMenuBar.h
+        Editor/src/Displays/LogDisplay.cpp
+        Editor/src/Displays/LogDisplay.h
+        Editor/src/Displays/TestDisplayB.h
+        Editor/src/Displays/FileDisplay.cpp
+        Editor/src/Displays/FileDisplay.h
+        Editor/src/Displays/DebugDisplay.cpp
+        Editor/src/Displays/DebugDisplay.h
+        Editor/src/Displays/ProjectMenuDisplay.h
+        Editor/src/Displays/ProjectMenuDisplay.cpp
+        Editor/src/Logger/include/Logger.h
+        Editor/src/Logger/src/Logger.cpp
+        Editor/src/Logger/include/TerminalLogger.h
+        Editor/src/Logger/src/TerminalLogger.cpp
+        #        src/FileSystem/src/FileDialogs.cpp
+        #        src/FileSystem/include/FileDialogs.h
+        Editor/src/FileSystem/include/FileHandler.h
+        Editor/src/FileSystem/src/FileHandler.cpp
+        Editor/src/FileSystem/src/NativeFileDialogExt.cpp
+        Editor/src/FileSystem/src/NativeFileDialogExt.cpp
 )
 
 link_directories( /usr/local/lib )
@@ -126,11 +163,6 @@ link_directories( /usr/local/lib )
 add_executable( ${PROJECT_NAME} ${SOURCE_FILES} )
 
 include_directories(
-        Engine_Test_Game_Platform/assets/
-        Engine_Test_Game_Platform/include/
-        Engine_Test_Game_Platform/scripts/
-        Engine_Test_Game_Platform/src/
-
         Engine/include/
         Engine/libs/lua/
         Engine/libs/sol/
@@ -143,7 +175,17 @@ include_directories(
         Engine/src/FSM/
         Engine/src/LevelLoader/
         Engine/src/Systems/
+
+        Editor/libs/imgui_docking/
+        Editor/libs/imgui_docking/backends/
+        Editor/libs/nativefiledialog-extended/
+        Editor/src/Displays/
+        Editor/src/Logger/
+
 )
+
+add_subdirectory(Editor/libs/nativefiledialog-extended)
+target_link_libraries(${PROJECT_NAME} nfd)
 
 include_directories( /usr/local/include ${LUA_INCLUDE_DIR} )
 
