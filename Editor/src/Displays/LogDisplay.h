@@ -9,6 +9,9 @@
 #include <imgui.h>
 #include <iostream>
 #include "../../Editor/src/Logger/include/Logger.h"
+#include "../../Engine/src/ECS/include/ECS.h"
+
+using namespace RGE_ECS;
 
 namespace EDITOR
 {
@@ -17,7 +20,7 @@ namespace EDITOR
     public:
         ~LogDisplay() override = default;
 
-        void Render() override;
+        void Render(std::shared_ptr<Registry>& registry) override;
     };
 
 } // end namespace

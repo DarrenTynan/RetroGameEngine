@@ -9,7 +9,7 @@ EDITOR::FileDisplay::FileDisplay()
 //    nodes = EDITOR_FILEDIALOG::FileDialogs::GetInstance()->GetFolderTree();
 }
 
-void EDITOR::FileDisplay::Render()
+void EDITOR::FileDisplay::Render(std::shared_ptr<Registry>& registry)
 {
 //    if ( ImGui::Begin( "File System" ) )
 //    {

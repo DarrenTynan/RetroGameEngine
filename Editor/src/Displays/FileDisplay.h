@@ -8,6 +8,9 @@
 #include "IDisplay.h"
 #include <imgui.h>
 #include "../../Editor/src/FileSystem/include/FileDialogs.h"
+#include "../../Engine/src/ECS/include/ECS.h"
+
+using namespace RGE_ECS;
 
 namespace EDITOR
 {
@@ -15,9 +18,9 @@ namespace EDITOR
     {
     public:
         FileDisplay();
-        ~FileDisplay() = default;
+        ~FileDisplay() override = default;
 
-        virtual void Render() override;
+        void Render(std::shared_ptr<Registry>& registry) override;
 
         std::vector<std::string> nodes;
 

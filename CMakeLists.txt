@@ -110,6 +110,7 @@ set(SOURCE_FILES
         Engine/src/Systems/include/RenderRaycastSystem.h
         Engine/src/Systems/include/RenderSystem.h
         Engine/src/Systems/include/RenderTextSystem.h
+        Engine/src/Systems/include/EditorSystem.h
 
         Engine_Test_Game_Platform/src/Game.cpp
 
@@ -121,7 +122,7 @@ set(SOURCE_FILES
 
 
 
-        Editor/src/Editor.cpp
+#        Editor/src/Editor.cpp
         Editor/libs/imgui_docking/imgui.cpp
         Editor/libs/imgui_docking/imgui_demo.cpp
         Editor/libs/imgui_docking/imgui_draw.cpp
@@ -132,19 +133,20 @@ set(SOURCE_FILES
         Editor/libs/imgui_docking/misc/cpp/imgui_stdlib.h
         Editor/libs/imgui_docking/misc/cpp/imgui_stdlib.cpp
         Editor/src/Displays/TestDisplayA.cpp
-        Editor/src/Displays/TestDisplayB.cpp
+        Editor/src/Displays/EntityDisplay.cpp
         Editor/src/Displays/SceneDisplay.cpp
         Editor/src/Displays/MainMenuBar.cpp
         Editor/src/Displays/MainMenuBar.h
         Editor/src/Displays/LogDisplay.cpp
         Editor/src/Displays/LogDisplay.h
-        Editor/src/Displays/TestDisplayB.h
+        Editor/src/Displays/EntityDisplay.h
         Editor/src/Displays/FileDisplay.cpp
         Editor/src/Displays/FileDisplay.h
         Editor/src/Displays/DebugDisplay.cpp
         Editor/src/Displays/DebugDisplay.h
         Editor/src/Displays/ProjectMenuDisplay.h
         Editor/src/Displays/ProjectMenuDisplay.cpp
+        Editor/src/Displays/MouseDisplay.cpp
         Editor/src/Logger/include/Logger.h
         Editor/src/Logger/src/Logger.cpp
         Editor/src/Logger/include/TerminalLogger.h

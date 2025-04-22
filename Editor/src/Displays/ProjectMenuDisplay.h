@@ -9,6 +9,9 @@
 #include <imgui.h>
 #include "../../Editor/libs/imgui_docking/misc/cpp/imgui_stdlib.h"
 #include "../../Editor/libs/nativefiledialog-extended/src/include/nfd.h"
+#include "../../Engine/src/ECS/include/ECS.h"
+
+using namespace RGE_ECS;
 
 namespace EDITOR
 {
@@ -24,7 +27,7 @@ namespace EDITOR
         ProjectMenuDisplay();
         ~ProjectMenuDisplay() override = default;
 
-        void Render() override;
+        void Render(std::shared_ptr<Registry>& registry) override;
     };
 } // namespace EDITOR
 

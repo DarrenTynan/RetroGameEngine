@@ -20,12 +20,13 @@
 //#include "../src/Logger/include/Logger.h" // NOT working yet
 
 #include "../src/Displays/TestDisplayA.h"
-#include "../src/Displays/TestDisplayB.h"
+#include "../src/Displays/EntityDisplay.h"
 #include "../src/Displays/SceneDisplay.h"
 #include "../src/Displays/MainMenuBar.h"
 #include "../src/Displays/LogDisplay.h"
 #include "../src/Displays/DebugDisplay.h"
 #include "../src/Displays/FileDisplay.h"
+#include "../src/Displays/MouseDisplay.h"
 //#include "../src/Displays/ProjectMenuDisplay.h"
 
 //#include "../FileSystem/include/FileHandler.h"

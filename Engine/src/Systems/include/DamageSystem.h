@@ -1,5 +1,9 @@
-#ifndef DAMAGESYSTEM_H
-#define DAMAGESYSTEM_H
+//
+// Created by Darren Tynan on 21/04/2025.
+//
+
+#ifndef RETROGAMEENGINE_DAMAGESYSTEM_H
+#define RETROGAMEENGINE_DAMAGESYSTEM_H
 
 #include "../../ECS/include/ECS.h"
 #include "../../Components/include/BoxColliderComponent.h"
@@ -16,12 +20,17 @@ namespace RGE_System
 class DamageSystem: public System
 {
     public:
-        DamageSystem() { RequireComponent<BoxColliderComponent>(); }
+        DamageSystem()
+        {
+            RequireComponent<BoxColliderComponent>();
+        }
+
 
         void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
         {
             eventBus->SubscribeToEvent<CollisionEvent>(this, &DamageSystem::OnCollision);
         }
+
 
         void OnCollision(CollisionEvent& event)
         {
@@ -49,6 +58,7 @@ class DamageSystem: public System
             }
         }
 
+
         static void OnProjectileHitsPlayer(Entity projectile, Entity player)
         {
             const auto projectileComponent = projectile.GetComponent<ProjectileComponent>();
@@ -71,6 +81,7 @@ class DamageSystem: public System
                 projectile.Kill();
             }
         }
+
 
         static void OnProjectileHitsEnemy(Entity projectile, Entity enemy)
         {
@@ -97,4 +108,4 @@ class DamageSystem: public System
 };
 
 } // end namespace
-#endif
+#endif //RETROGAMEENGINE_DAMAGESYSTEM_H

@@ -7,6 +7,9 @@
 
 #include "IDisplay.h"
 #include <imgui.h>
+#include "../../Engine/src/ECS/include/ECS.h"
+
+using namespace RGE_ECS;
 
 namespace EDITOR
 {
@@ -14,10 +17,10 @@ namespace EDITOR
     {
     public:
         TestDisplayA();
-        ~TestDisplayA() = default;
+        ~TestDisplayA() override = default;
 
-        virtual void Render() override;
+        void Render(std::shared_ptr<Registry>& registry) override;
     };
-} // namespace EDITOR
+} // end namespace
 
 #endif //EDITOR_TESTDISPLAYA_H

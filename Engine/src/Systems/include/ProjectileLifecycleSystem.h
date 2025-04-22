@@ -7,13 +7,16 @@
 namespace RGE_System
 {
 
-class ProjectileLifecycleSystem: public System {
+class ProjectileLifecycleSystem: public System
+{
     public:
-        ProjectileLifecycleSystem() {
+        ProjectileLifecycleSystem()
+        {
             RequireComponent<ProjectileComponent>();
         }
 
-        void Update() {
+        void Update()
+        {
             for (auto entity: GetSystemEntities()) {
                 auto projectile = entity.GetComponent<ProjectileComponent>();
 

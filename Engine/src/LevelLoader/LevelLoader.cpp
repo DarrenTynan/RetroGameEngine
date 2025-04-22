@@ -91,13 +91,12 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
         i++;
     }
 
+
     /**
      * @brief Read the level tilemap information
      */
     sol::table map = level["tilemap"];
     std::string mapFilePath = map["map_file"];
-
-    LoadTMX(registry, mapFilePath.c_str());
 
 
     /**
@@ -283,6 +282,12 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::shared_ptr<Registry>& re
         }
         i++;
     }
+
+
+    /**
+     * @brief Load up the tile map.
+     */
+    LoadTMX(registry, mapFilePath.c_str());
 }
 
 /**

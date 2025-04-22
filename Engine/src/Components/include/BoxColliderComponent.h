@@ -10,8 +10,8 @@ namespace RGE_Component
 /**
  * @brief A small struct to hold the box collider vars
  *
- * @param int width
- * @param int height
+ * @param float width
+ * @param float height
  * @param vec2 position
  */
 struct BoxColliderComponent

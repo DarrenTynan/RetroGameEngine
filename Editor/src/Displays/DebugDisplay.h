@@ -9,6 +9,9 @@
 #include <imgui.h>
 #include <iostream>
 #include <mutex>
+#include "../../Engine/src/ECS/include/ECS.h"
+
+using namespace RGE_ECS;
 
 namespace EDITOR
 {
@@ -39,7 +42,7 @@ namespace EDITOR
 
         void TestLog();
 
-        void Render() override {};
+        void Render(std::shared_ptr<Registry>& registry) override;
         void Update() override {}
 
     };

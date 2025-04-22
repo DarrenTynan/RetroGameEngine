@@ -17,17 +17,17 @@ Level = {
         { type = "texture", id = "bullet-image",                file = "../Engine_Test_Game_Platform/assets/images/bullet.png" },
     },
 
-    ----------------------------------------------------
-    -- table to define the map config variables
-    ----------------------------------------------------
-    tilemap = {
-       map_file = "../Engine_Test_Game_Platform/assets/tile-maps/EngineTestLevel/EngineTestLevel.tmx",
---        texture_asset_id = tilemap-image,
-       tile_count_x = 40,
-       tile_count_y = 22,
-       tile_size = 32,
-       scale = 1.0
-    },
+--    ----------------------------------------------------
+--    -- table to define the map config variables
+--    ----------------------------------------------------
+--    tilemap = {
+--       map_file = "../Engine_Test_Game_Platform/assets/tile-maps/EngineTestLevel/EngineTestLevel.tmx",
+----        texture_asset_id = tilemap-image,
+--       tile_count_x = 40,
+--       tile_count_y = 22,
+--       tile_size = 32,
+--       scale = 1.0
+--    },
 
     ----------------------------------------------------
     -- table to define entities and their components
@@ -40,6 +40,62 @@ Level = {
             components = {
                 transform = {
                     start_position = { x = 32*10, y = 32*7 },
+                    scale = { x = 1.0, y = 1.0 },
+                    rotation = 0.0, -- degrees
+                },
+                rigidbody = {
+                    deltaXY = { x = 0.0, y = 0.0 },
+                    maxDeltaXY = { x = 3.0, y = 3.0 },
+                    acceleration = 0.5,
+                    boost = 4.0,
+                    gravity = 0.12, -- 0.3
+                    friction = 0.85,
+                },
+                sprite = {
+                    texture_asset_id = "slime",
+                    width = 32,
+                    height = 32,
+                    z_index = 4,
+                    fixed = true,
+                    src_rect_x = 0,
+                    src_rect_y = 0,
+                },
+                animation = {
+                    num_frames = 6,
+                    fps = 8, -- fps
+                    is_loop = true
+                },
+                box_collider = {
+                    width = 32,
+                    height = 32,
+                    position = {x = 0, y = 0},
+                    has_ray_cast = true
+                },
+                health = {
+                    health_percentage = 100
+                },
+                projectile_emitter = {
+                    projectile_velocity = { x = 200, y = 200 },
+                    projectile_duration = 10, -- seconds
+                    repeat_frequency = 0, -- seconds
+                    hit_percentage_damage = 10,
+                    friendly = true
+                },
+                --camera_follow = {
+                --    follow = false
+                --},
+                text_label = {
+                },
+                fsm = {}
+            }
+        },
+        [1] =
+        {
+            -- Slime
+            tag = "slime_2",
+            components = {
+                transform = {
+                    start_position = { x = 0, y = 0 },
                     scale = { x = 1.0, y = 1.0 },
                     rotation = 0.0, -- degrees
                 },
@@ -115,7 +171,18 @@ Level = {
             --    end
             --end
         }
-    }
+    },
+    ----------------------------------------------------
+    -- table to define the map config variables
+    ----------------------------------------------------
+    tilemap = {
+       map_file = "../Engine_Test_Game_Platform/assets/tile-maps/EngineTestLevel/EngineTestLevel.tmx",
+--        texture_asset_id = tilemap-image,
+       tile_count_x = 40,
+       tile_count_y = 22,
+       tile_size = 32,
+       scale = 1.0
+    },
 }
 
 -- Define some useful global variables

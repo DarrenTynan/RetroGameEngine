@@ -1,9 +1,9 @@
 //
-// Created by Darren Tynan on 14/01/2025.
+// Created by Darren Tynan on 11/01/2025.
 //
 
-#ifndef EDITOR_SCENEDISPLAY_H
-#define EDITOR_SCENEDISPLAY_H
+#ifndef EDITOR_TESTDISPLAYB_H
+#define EDITOR_TESTDISPLAYB_H
 
 #include "IDisplay.h"
 #include <imgui.h>
@@ -13,14 +13,14 @@ using namespace RGE_ECS;
 
 namespace EDITOR
 {
-    class SceneDisplay : public IDisplay
+    class EntityDisplay : public IDisplay
     {
     public:
-        SceneDisplay();
-        ~SceneDisplay() override = default;
+        EntityDisplay();
+        ~EntityDisplay() override = default;
 
         void Render(std::shared_ptr<Registry>& registry) override;
     };
 } // namespace EDITOR
 
-#endif //EDITOR_SCENEDISPLAY_H
+#endif //EDITOR_TESTDISPLAYB_H

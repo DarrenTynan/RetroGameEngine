@@ -8,24 +8,28 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
-EDITOR::SceneDisplay::SceneDisplay() {}
-
-void EDITOR::SceneDisplay::Render()
+namespace EDITOR
 {
-    SDL_DisplayMode displayMode;
-    SDL_GetCurrentDisplayMode(0, &displayMode);
 
-    ImGui::SetNextWindowSize(ImVec2(800, 600));
-    ImGui::SetNextWindowPos(ImVec2((displayMode.w - 800) / 2, 0)); // Set the position of the new window
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse;
+    EDITOR::SceneDisplay::SceneDisplay() = default;
 
-    if (ImGui::Begin("Scene"))
+    void EDITOR::SceneDisplay::Render(std::shared_ptr<Registry>& registry)
     {
-        ImGui::Button("Play");
-        ImGui::SameLine();
-        ImGui::Button("Stop");
+        SDL_DisplayMode displayMode;
+        SDL_GetCurrentDisplayMode(0, &displayMode);
+
+        ImGui::SetNextWindowSize(ImVec2(800, 600));
+        ImGui::SetNextWindowPos(ImVec2((displayMode.w - 800) / 2, 0)); // Set the position of the new window
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse;
+
+        if (ImGui::Begin("Scene"))
+        {
+            ImGui::Button("Play");
+            ImGui::SameLine();
+            ImGui::Button("Stop");
+
+        }
+        ImGui::End();
 
     }
-    ImGui::End();
-
-}
+} // end namespace

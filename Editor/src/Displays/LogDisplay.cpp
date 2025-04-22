@@ -10,7 +10,7 @@ namespace EDITOR
 /**
  * @brief Update the debug log window
  */
-void EDITOR::LogDisplay::Render()
+void EDITOR::LogDisplay::Render(std::shared_ptr<Registry>& registry)
 {
     auto logger = EDITOR_LOGGER::Logger::GetInstance();
     auto textBuffer = logger->getTextBuffer();

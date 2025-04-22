@@ -26,6 +26,7 @@
 #include "../src/Systems/include/ProjectileLifecycleSystem.h"
 #include "../src/Systems/include/DamageSystem.h"
 #include "../src/Systems/include/RenderRaycastSystem.h"
+#include "../src/Systems/include/EditorSystem.h"
 #include "FileHandler/include/FileHandler.h"
 #include "include/SpritesheetComponent.h"
 #include "../../Editor/include/Editor.h"
@@ -47,8 +48,8 @@ SDL_Window *editorWindow;
 SDL_Renderer *editorRenderer;
 ImGuiIO io;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-auto pDisplayHolder = std::make_shared<DisplayHolder>();
 
+std::shared_ptr<DisplayHolder> pDisplayHolder = std::make_shared<DisplayHolder>();
 std::shared_ptr<Registry> registry = std::make_shared<Registry>();
 std::unique_ptr<AssetStore> assetStore = std::make_unique<AssetStore>();
 std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
@@ -125,8 +126,11 @@ void RGE::Setup()
 //    registry->AddSystem<RenderRaycastSystem>();           // Debug updateRender the ray cast's
     registry->AddSystem<ScriptSystem>();                  // Lua scripting system
 
+    registry->AddSystem<EditorSystem>();         // Link system to the ImGui editor
+
     // Create the bindings between C++ and Lua
     registry->GetSystem<ScriptSystem>().CreateLuaBindings(lua);
+
 
     // Use all the libraries
     lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
@@ -222,7 +226,7 @@ void RGE::Setup()
 
     // Create window with SDL_Renderer graphics context
     auto windowFlags3 = (SDL_WindowFlags)( SDL_WINDOW_RESIZABLE | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_ALLOW_HIGHDPI );
-    auto windowFlags4 = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_SHOWN );
+    auto windowFlags4 = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED);
     editorWindow = SDL_CreateWindow(
             "Retro Game_Engine Engine v1",
             0,
@@ -249,8 +253,6 @@ void RGE::Setup()
         exit(1);
     }
 
-//    Editor::OpenEditorWindow();
-//    Editor::SetupImGui();
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -319,17 +321,11 @@ void RGE::Setup()
 
     io.Fonts->AddFontFromFileTTF("../Editor/fonts/Pixellettersfull.ttf", 18.f);
 
-//    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-    // DisplayHolder is a struct in IDisplay.
-    // std::vector< std::unique_ptr<IDisplay> > Displays;
-//    auto pDisplayHolder = std::make_shared<DisplayHolder>();
-
     // Instantiate the display windows via magic pointers
     auto pMainMenuBar = std::make_unique<MainMenuBar>();
     auto pTestDisplayA = std::make_unique<TestDisplayA>();
-    auto pTestDisplayB = std::make_unique<TestDisplayB>();
-    auto pSceneDisplay = std::make_unique<SceneDisplay>();
+    auto pTestDisplayB = std::make_unique<EntityDisplay>();
+    auto pMouseDisplay = std::make_unique<MouseDisplay>();
     auto pLogDisplay = std::make_unique<LogDisplay>();
     auto pFileDisplay = std::make_unique<FileDisplay>();
 //        auto pProjectMenuDisplay = std::make_unique<ProjectMenuDisplay>();
@@ -338,7 +334,7 @@ void RGE::Setup()
     pDisplayHolder->displays.push_back( std::move(pMainMenuBar) );
     pDisplayHolder->displays.push_back( std::move(pTestDisplayA) );
     pDisplayHolder->displays.push_back( std::move(pTestDisplayB) );
-    pDisplayHolder->displays.push_back( std::move(pSceneDisplay) );
+    pDisplayHolder->displays.push_back( std::move(pMouseDisplay) );
     pDisplayHolder->displays.push_back( std::move(pLogDisplay) );
     pDisplayHolder->displays.push_back( std::move(pFileDisplay) );
 //        pDisplayHolder->displays.push_back( std::move(pProjectMenuDisplay) );
@@ -346,7 +342,6 @@ void RGE::Setup()
     auto logger = EDITOR_LOGGER::Logger::GetInstance();
     logger->Clear();
     logger->AddLog("All systems should be up and running...\n");
-
 
     SetupPlayer();
 
@@ -460,7 +455,6 @@ void RGE::LoadLevel()
 {
     // Load the entity data for level 1
     LevelLoader::LoadLevel(lua, registry, assetStore, gameRenderer, 1);
-
 }
 
 
@@ -513,7 +507,7 @@ bool RGE::ProcessKeyboardInputs()
     while (SDL_PollEvent(&sdlEvent))
     {
         ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
-        
+
         // Start the Dear ImGui frame
         ImGui_ImplSDLRenderer2_NewFrame();
         ImGui_ImplSDL2_NewFrame();
@@ -525,10 +519,10 @@ bool RGE::ProcessKeyboardInputs()
         // Render the editor display panels.
         for ( const auto& pDisplay : pDisplayHolder->displays )
         {
-            pDisplay->Render();
+            pDisplay->Render(registry);
         }
 
-//            ImGui::ShowDemoWindow();
+        ImGui::ShowDemoWindow();
 
         // Rendering
         ImGui::Render();
@@ -539,7 +533,6 @@ bool RGE::ProcessKeyboardInputs()
         ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), editorRenderer);
         SDL_RenderPresent(editorRenderer);
 
-        /////////////////////
         // Core sdl events.
         switch (sdlEvent.type)
         {
@@ -561,6 +554,15 @@ bool RGE::ProcessKeyboardInputs()
                 if (sdlEvent.key.keysym.sym == SDLK_p) { sleep(10); }
 
                 break;
+        }
+
+        if (sdlEvent.type == SDL_MOUSEBUTTONDOWN)
+        {
+            auto logger = EDITOR_LOGGER::Logger::GetInstance();
+            logger->AddLog("RGE Mouse Pressed...\n");
+
+            registry->GetSystem<EditorSystem>().MousePressed(registry);
+
         }
     }
     return isQuit;

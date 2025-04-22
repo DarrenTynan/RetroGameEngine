@@ -5,25 +5,29 @@
 #include "TestDisplayA.h"
 #include "../../Editor/libs/nativefiledialog-extended/src/include/nfd.h"
 
-EDITOR::TestDisplayA::TestDisplayA() {}
-
-void EDITOR::TestDisplayA::Render()
+namespace EDITOR
 {
-    if ( ImGui::Begin( "Test Window A" ) )
+
+    EDITOR::TestDisplayA::TestDisplayA() = default;
+
+    void EDITOR::TestDisplayA::Render(std::shared_ptr<Registry>& registry)
     {
-        if ( ImGui::Button( "Button 1" ) )
+        if (ImGui::Begin("Test Window A"))
         {
-            ImGui::Text("Button 1");
-        }
+            if (ImGui::Button("Button 1"))
+            {
+                ImGui::Text("Button 1");
+            }
 
-        ImGui::SameLine();
+            ImGui::SameLine();
 
-        if ( ImGui::Button( "Button 2" ) )
-        {
-            ImGui::Text("Button 2");
+            if (ImGui::Button("Button 2"))
+            {
+                ImGui::Text("Button 2");
+            }
+
         }
+        ImGui::End();
 
     }
-    ImGui::End();
-
-}
+} // end namespace
