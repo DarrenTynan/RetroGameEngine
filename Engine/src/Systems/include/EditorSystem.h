@@ -29,7 +29,7 @@ namespace RGE_System
 
         EditorSystem() {};
 
-        void MousePressed(std::shared_ptr<Registry>& registry)
+        void MousePressed(std::shared_ptr<Registry>& registry, SDL_Rect& camera)
         {
             SDL_GetMouseState(&mouseX, &mouseY);
 
@@ -37,8 +37,8 @@ namespace RGE_System
             auto editorSystem = registry->GetSystem<EditorSystem>();
             for (auto entity: editorSystem.GetSystemEntities())
             {
-                int x = entity.GetComponent<TransformComponent>().position.x;
-                int y = entity.GetComponent<TransformComponent>().position.y;
+                int x = entity.GetComponent<TransformComponent>().position.x - camera.x;
+                int y = entity.GetComponent<TransformComponent>().position.y - camera.y;
                 int w = entity.GetComponent<BoxColliderComponent>().width;
                 int h = entity.GetComponent<BoxColliderComponent>().height;
 

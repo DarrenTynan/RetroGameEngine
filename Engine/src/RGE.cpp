@@ -561,7 +561,7 @@ bool RGE::ProcessKeyboardInputs()
             auto logger = EDITOR_LOGGER::Logger::GetInstance();
             logger->AddLog("RGE Mouse Pressed...\n");
 
-            registry->GetSystem<EditorSystem>().MousePressed(registry);
+            registry->GetSystem<EditorSystem>().MousePressed(registry, gameCamera);
 
         }
     }
