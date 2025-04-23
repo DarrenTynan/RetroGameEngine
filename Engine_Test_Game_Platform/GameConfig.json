@@ -18,7 +18,7 @@
         "tag": "player",
         "transform": {
             "start_position_x": 320.0,
-            "start_position_y": 64.0,
+            "start_position_y": 224.0,
             "scale_x": 1.0,
             "scale_y": 1.0,
             "rotation": 0.0

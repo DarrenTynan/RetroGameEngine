@@ -26,6 +26,8 @@ namespace RGE_System
         int mouseX, mouseY, entityID;
         SDL_Event sdlEvent;
         std::string entityTag = "null";
+        bool showBoxCollider = false;
+        bool showGrid = false;
 
         EditorSystem() {};
 

@@ -25,7 +25,7 @@ public:
     static void LoadLevel();
     static void Destroy();
     static void DebugWindowText();
-
+    static bool HasWindowFocus(SDL_Window* window);
 };
 
 #endif //RETROGAMEENGINE_RGE_H

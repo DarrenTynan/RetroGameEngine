@@ -489,6 +489,37 @@ void RGE::UpdateRenderer()
     if (isDebugWindow)
         DebugWindowText();
 
+    int windowWidth = gameConfig["graphics"]["resolution"]["window_width"].GetInt();
+    int windowHeight = gameConfig["graphics"]["resolution"]["window_height"].GetInt();
+
+    int x1 = 0;
+    int y1 = 0;
+    int x2 = windowWidth;
+    int y2 = 0;
+    SDL_SetRenderDrawColor( gameRenderer, 0xFF, 0x00, 0x00, 0xFF );
+
+    // Horizontal
+    for (int i = 0; i <= windowHeight / 32; ++i)
+    {
+        SDL_RenderDrawLine(gameRenderer, x1, y1, x2, y2);
+        y1 = y1 + 32;
+        y2 = y2 + 32;
+    }
+
+    x1 = 0;
+    y1 = 0;
+    x2 = 0;
+    y2 = windowHeight;
+    SDL_SetRenderDrawColor( gameRenderer, 0xFF, 0x00, 0x00, 0xFF );
+
+    // Vertical
+    for (int i = 0; i <= windowWidth / 32; ++i)
+    {
+        SDL_RenderDrawLine(gameRenderer, x1, y1, x2, y2);
+        x1 = x1 + 32;
+        x2 = x2 + 32;
+    }
+
     // Render all graphics onto screen.
     SDL_RenderPresent(gameRenderer);
 
@@ -556,16 +587,39 @@ bool RGE::ProcessKeyboardInputs()
                 break;
         }
 
+
+//        void HandleButtonEvent(SDL_MouseButtonEvent& E) {
+//            if (E.button == SDL_BUTTON_LEFT) {
+//                 The left button was pressed or released
+//            } else if (E.button == SDL_BUTTON_RIGHT) {
+//                 The right button was pressed or released
+//            }
+
+
+
+
         if (sdlEvent.type == SDL_MOUSEBUTTONDOWN)
         {
-            auto logger = EDITOR_LOGGER::Logger::GetInstance();
-            logger->AddLog("RGE Mouse Pressed...\n");
-
-            registry->GetSystem<EditorSystem>().MousePressed(registry, gameCamera);
+            if (HasWindowFocus(gameWindow))
+            {
+                auto logger = EDITOR_LOGGER::Logger::GetInstance();
+                logger->AddLog("RGE Mouse Pressed...\n");
+                registry->GetSystem<EditorSystem>().MousePressed(registry, gameCamera);
+            }
 
         }
     }
     return isQuit;
+}
+
+
+bool RGE::HasWindowFocus(SDL_Window* window)
+{
+    uint32_t flags = SDL_GetWindowFlags(window);
+    // We *don't* want to check mouse focus:
+    // SDL_WINDOW_INPUT_FOCUS - input is going to the window
+    // SDL_WINDOW_MOUSE_FOCUS - mouse is hovered over the window, regardless of window focus
+    return (flags & SDL_WINDOW_INPUT_FOCUS) != 0;
 }
 
 

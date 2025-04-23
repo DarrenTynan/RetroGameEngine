@@ -27,10 +27,8 @@ namespace EDITOR
 
     };
 
-//    bool hitBox = false;
     int mouseX, mouseY;
     SDL_Event sdlEvent;
-//    std::string entityTag = "null";
 
     void EDITOR::MouseDisplay::Render(std::shared_ptr<Registry>& registry)
     {
@@ -38,9 +36,21 @@ namespace EDITOR
         {
             auto editorSystem = registry->GetSystem<EditorSystem>();
             bool hb = static_cast<bool>(editorSystem.hitBox);
+            bool bc = static_cast<bool>(editorSystem.showBoxCollider);
+            bool grid = static_cast<bool>(editorSystem.showGrid);
+
             SDL_GetMouseState(&mouseX, &mouseY);
             ImGui::Text("mouse x: %i, y: %i", mouseX, mouseY);
+            ImGui::SameLine(180.0f);
+            ImGui::SetNextItemWidth(130);
             ImGui::Checkbox("Hit Box", &hb);
+            ImGui::Separator();
+
+            ImGui::Checkbox("Box Collider", &bc);
+            ImGui::SameLine(180.0f);
+            ImGui::SetNextItemWidth(130);
+            ImGui::Checkbox("Show Grid", &grid);
+            ImGui::Separator();
 
             std::string entityTag = editorSystem.entityTag;
 
@@ -51,28 +61,5 @@ namespace EDITOR
         ImGui::End();
 
     }
-
-//    void EDITOR::MouseDisplay::MousePressed(std::shared_ptr<Registry>& registry)
-//    {
-//        auto editorSystem = registry->GetSystem<EditorSystem>();
-//        for (auto entity: editorSystem.GetSystemEntities())
-//        {
-//            // Works!
-////                std::cout << entity.GetId() << std::endl;
-//            int x = entity.GetComponent<TransformComponent>().position.x;
-//            int y = entity.GetComponent<TransformComponent>().position.y;
-//            int w = entity.GetComponent<BoxColliderComponent>().width;
-//            int h = entity.GetComponent<BoxColliderComponent>().height;
-//
-//            if (mouseX > x && mouseX < (x + w) && mouseY > y && mouseY < (y + h))
-//            {
-//                hitBox = true;
-//            }
-//            else
-//                hitBox = false;
-//
-//        }
-//
-//    }
 
 } // end namespace
