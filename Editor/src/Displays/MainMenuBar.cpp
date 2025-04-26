@@ -5,12 +5,12 @@
 #include "MainMenuBar.h"
 #include <SDL2/SDL.h>
 
-namespace EDITOR
+namespace EDITOR_DISPLAY
 {
 
-EDITOR::MainMenuBar::MainMenuBar() = default;
+MainMenuBar::MainMenuBar() = default;
 
-void EDITOR::MainMenuBar::Render(std::shared_ptr<Registry>& registry)
+void MainMenuBar::Render(std::shared_ptr<Registry>& registry)
 {
     auto logger = EDITOR_LOGGER::Logger::GetInstance();
 //    auto fileDialogs = EDITOR_FILEDIALOG::FileDialogs::GetInstance();

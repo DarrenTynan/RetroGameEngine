@@ -4,12 +4,15 @@
 
 #include "FileDisplay.h"
 
-EDITOR::FileDisplay::FileDisplay()
+namespace EDITOR_DISPLAY
+{
+
+FileDisplay::FileDisplay()
 {
 //    nodes = EDITOR_FILEDIALOG::FileDialogs::GetInstance()->GetFolderTree();
 }
 
-void EDITOR::FileDisplay::Render(std::shared_ptr<Registry>& registry)
+void FileDisplay::Render(std::shared_ptr<Registry>& registry)
 {
 //    if ( ImGui::Begin( "File System" ) )
 //    {
@@ -36,7 +39,7 @@ void EDITOR::FileDisplay::Render(std::shared_ptr<Registry>& registry)
 //
 }
 
-void EDITOR::FileDisplay::GetFolderTree()
+void FileDisplay::GetFolderTree()
 {
     ImGuiTreeNodeFlags flag = ImGuiTreeNodeFlags_DefaultOpen;
 
@@ -74,7 +77,7 @@ static void HelpMarker(const char* desc)
     }
 }
 
-void EDITOR::FileDisplay::NodeTree()
+void FileDisplay::NodeTree()
 {
     const float TEXT_BASE_WIDTH = 11.0f;
     if (ImGui::TreeNode("Tree view"))
@@ -152,5 +155,6 @@ void EDITOR::FileDisplay::NodeTree()
         ImGui::TreePop();
     }
 
-}
+    }
+} // end namespace
 

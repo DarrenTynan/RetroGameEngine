@@ -4,13 +4,18 @@
 
 #include "DebugDisplay.h"
 
-namespace EDITOR
+namespace EDITOR_DISPLAY
 {
     std::shared_ptr<DebugDisplay> DebugDisplay::instancePtr = nullptr;
 
     void DebugDisplay::TestLog()
     {
         std::cout << "TestLog from DebugDisplay instance" << std::endl;
+    }
+
+    void DebugDisplay::Render(std::shared_ptr<Registry> &registry)
+    {
+
     }
 
     void Draw() {};

@@ -8,12 +8,12 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
-namespace EDITOR
+namespace EDITOR_DISPLAY
 {
 
-    EDITOR::SceneDisplay::SceneDisplay() = default;
+    SceneDisplay::SceneDisplay() = default;
 
-    void EDITOR::SceneDisplay::Render(std::shared_ptr<Registry>& registry)
+    void SceneDisplay::Render(std::shared_ptr<Registry>& registry)
     {
         SDL_DisplayMode displayMode;
         SDL_GetCurrentDisplayMode(0, &displayMode);

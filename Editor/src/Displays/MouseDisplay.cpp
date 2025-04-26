@@ -16,10 +16,10 @@ using namespace EDITOR_LOGGER;
 using namespace RGE_System;
 using namespace RGE_Component;
 
-namespace EDITOR
+namespace EDITOR_DISPLAY
 {
 
-    EDITOR::MouseDisplay::MouseDisplay()
+    MouseDisplay::MouseDisplay()
     {
         name = "MouseDisplay";
         RequireComponent<TransformComponent>();
@@ -29,7 +29,7 @@ namespace EDITOR
 
     int mouseX, mouseY, gridX, gridY;
 
-    void EDITOR::MouseDisplay::Render(std::shared_ptr<Registry>& registry)
+    void MouseDisplay::Render(std::shared_ptr<Registry>& registry)
     {
         auto &editorSystem = registry->GetSystem<EditorSystem>();
         bool hb = static_cast<bool>(editorSystem.hitBox);
@@ -42,9 +42,8 @@ namespace EDITOR
             ImGui::SetNextItemWidth(130);
             ImGui::Checkbox("Entity Hit Box", &hb);
 
-            // TODO add camera x/y
-            gridX = mouseX / 32;
-            gridY = mouseY / 32;
+            gridX = (mouseX + registry->GetSystem<EditorSystem>().camera.x) / 32;
+            gridY = (mouseY + registry->GetSystem<EditorSystem>().camera.y) / 32;
             ImGui::Text("Grid x: %i, y: %i", gridX, gridY);
             ImGui::Separator();
 

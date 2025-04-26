@@ -5,12 +5,12 @@
 #include "TestDisplayA.h"
 #include "../../Editor/libs/nativefiledialog-extended/src/include/nfd.h"
 
-namespace EDITOR
+namespace EDITOR_DISPLAY
 {
 
-    EDITOR::TestDisplayA::TestDisplayA() = default;
+    TestDisplayA::TestDisplayA() = default;
 
-    void EDITOR::TestDisplayA::Render(std::shared_ptr<Registry>& registry)
+    void TestDisplayA::Render(std::shared_ptr<Registry>& registry)
     {
         if (ImGui::Begin("Test Window A"))
         {

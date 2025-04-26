@@ -7,11 +7,12 @@
 
 #include "IDisplay.h"
 #include <imgui.h>
+#include <SDL_rect.h>
 #include "../../Engine/src/ECS/include/ECS.h"
 
 using namespace RGE_ECS;
 
-namespace EDITOR
+namespace EDITOR_DISPLAY
 {
     class MouseDisplay : public IDisplay
     {
@@ -20,6 +21,7 @@ namespace EDITOR
         ~MouseDisplay() override = default;
 
         void Render(std::shared_ptr<Registry>& registry) override;
+        void Render(std::shared_ptr<Registry>& registry, SDL_Rect& camera);
     };
 } // namespace EDITOR
 

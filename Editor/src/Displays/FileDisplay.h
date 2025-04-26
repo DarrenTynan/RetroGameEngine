@@ -12,7 +12,7 @@
 
 using namespace RGE_ECS;
 
-namespace EDITOR
+namespace EDITOR_DISPLAY
 {
     class FileDisplay : public IDisplay
     {

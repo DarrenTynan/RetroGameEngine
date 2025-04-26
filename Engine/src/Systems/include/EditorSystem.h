@@ -29,11 +29,14 @@ namespace RGE_System
         std::string entityTag = "null";
         bool showBoxCollider = false;
         bool showGrid;
+        SDL_Rect camera;
 
         EditorSystem() {};
 
-        void lmbInFocus(std::shared_ptr<Registry> &registry, SDL_Renderer* renderer, SDL_Rect camera)
+        void lmbInFocus(std::shared_ptr<Registry> &registry, SDL_Renderer* renderer, SDL_Rect& _camera)
         {
+            this->camera = _camera;
+
             SDL_GetMouseState(&mouseX, &mouseY);
 
             hitBox = false;

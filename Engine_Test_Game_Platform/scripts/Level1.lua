@@ -39,7 +39,7 @@ Level = {
             tag = "slime",
             components = {
                 transform = {
-                    start_position = { x = 32*10, y = 32*7 },
+                    start_position = { x = 32*9, y = 32*7 },
                     scale = { x = 1.0, y = 1.0 },
                     rotation = 0.0, -- degrees
                 },

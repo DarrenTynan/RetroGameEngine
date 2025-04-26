@@ -5,10 +5,10 @@
 #include "ProjectMenuDisplay.h"
 #include "../FileSystem/include/FileHandler.h"
 
-namespace EDITOR
+namespace EDITOR_DISPLAY
 {
 
-    EDITOR::ProjectMenuDisplay::ProjectMenuDisplay()
+    ProjectMenuDisplay::ProjectMenuDisplay()
     {
         auto fh = EDITOR_FILEHANDLER::FileHandler::GetInstance();
         fh->LoadConfigFile();
@@ -19,7 +19,7 @@ namespace EDITOR
 //    this->window_title = fh->doc["configuration"]["window_title"].GetString();
     }
 
-    void EDITOR::ProjectMenuDisplay::Render(std::shared_ptr<Registry>& registry)
+    void ProjectMenuDisplay::Render(std::shared_ptr<Registry>& registry)
     {
         if (ImGui::Begin("Retro Game_Engine Engine"))
         {

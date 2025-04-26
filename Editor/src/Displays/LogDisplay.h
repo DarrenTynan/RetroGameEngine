@@ -12,6 +12,7 @@
 #include "../../Engine/src/ECS/include/ECS.h"
 
 using namespace RGE_ECS;
+using namespace EDITOR_DISPLAY;
 
 namespace EDITOR
 {

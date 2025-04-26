@@ -8,17 +8,17 @@
 #include <vector>
 #include <memory>
 #include <typeindex>
+#include <SDL_rect.h>
 #include "../../Engine/src/ECS/include/ECS.h"
 
 using namespace RGE_ECS;
 
-namespace EDITOR
+namespace EDITOR_DISPLAY
 {
     class IDisplay : public System
     {
     public:
         std::string name = "null";
-//        Entity entity;
         virtual ~IDisplay() = default;
         virtual void Render(std::shared_ptr<Registry>& registry) = 0;
         virtual void Update() {}
