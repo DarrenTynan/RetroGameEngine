@@ -55,9 +55,6 @@ std::unique_ptr<AssetStore> assetStore = std::make_unique<AssetStore>();
 std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
 
 // Debug keyboard toggles
-bool isCollider = true;
-// TODO NOT to be used as not working!
-bool isRayCast = false;
 bool isCamera = true;
 bool isDebugWindow = false;
 
@@ -475,50 +472,21 @@ void RGE::UpdateRenderer()
         registry->GetSystem<CameraFollowSystem>().Update(gameRenderer, gameCamera);
     }
 
-    if (isCollider)
+    if (isDebugWindow)
+        DebugWindowText();
+
+
+    if (registry->GetSystem<EditorSystem>().showBoxCollider)
     {
         registry->GetSystem<RenderColliderSystem>().Update(gameRenderer, gameCamera);
     }
 
-    if (isRayCast)
-    {
-        auto player = registry->GetEntityByTag("player");
-        registry->GetSystem<RenderRaycastSystem>().Update(gameRenderer, player);
-    }
 
-    if (isDebugWindow)
-        DebugWindowText();
-
-    int windowWidth = gameConfig["graphics"]["resolution"]["window_width"].GetInt();
-    int windowHeight = gameConfig["graphics"]["resolution"]["window_height"].GetInt();
-
-    int x1 = 0;
-    int y1 = 0;
-    int x2 = windowWidth;
-    int y2 = 0;
-    SDL_SetRenderDrawColor( gameRenderer, 0xFF, 0x00, 0x00, 0xFF );
-
-    // Horizontal
-    for (int i = 0; i <= windowHeight / 32; ++i)
-    {
-        SDL_RenderDrawLine(gameRenderer, x1, y1, x2, y2);
-        y1 = y1 + 32;
-        y2 = y2 + 32;
-    }
-
-    x1 = 0;
-    y1 = 0;
-    x2 = 0;
-    y2 = windowHeight;
-    SDL_SetRenderDrawColor( gameRenderer, 0xFF, 0x00, 0x00, 0xFF );
-
-    // Vertical
-    for (int i = 0; i <= windowWidth / 32; ++i)
-    {
-        SDL_RenderDrawLine(gameRenderer, x1, y1, x2, y2);
-        x1 = x1 + 32;
-        x2 = x2 + 32;
-    }
+    if (registry->GetSystem<EditorSystem>().showGrid)
+        registry->GetSystem<EditorSystem>().DrawGrid(gameRenderer,
+                                                     gameConfig["graphics"]["resolution"]["window_width"].GetInt(),
+                                                     gameConfig["graphics"]["resolution"]["window_height"].GetInt()
+        );
 
     // Render all graphics onto screen.
     SDL_RenderPresent(gameRenderer);
@@ -574,8 +542,6 @@ bool RGE::ProcessKeyboardInputs()
 
             case SDL_KEYDOWN:
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isQuit = false; }
-                if (sdlEvent.key.keysym.sym == SDLK_c) { isCollider = !isCollider; }
-                if (sdlEvent.key.keysym.sym == SDLK_r) { isRayCast = !isRayCast; }
 
                 if (sdlEvent.key.keysym.sym == SDLK_SPACE)
                 {
@@ -587,16 +553,20 @@ bool RGE::ProcessKeyboardInputs()
                 break;
         }
 
-
-//        void HandleButtonEvent(SDL_MouseButtonEvent& E) {
-//            if (E.button == SDL_BUTTON_LEFT) {
-//                 The left button was pressed or released
-//            } else if (E.button == SDL_BUTTON_RIGHT) {
-//                 The right button was pressed or released
-//            }
-
-
-
+        //TODO mouse button events not working. One press = L & R.
+//        if (sdlEvent.type == SDL_MOUSEBUTTONDOWN && SDL_BUTTON_LEFT)
+//        {
+//            auto logger = EDITOR_LOGGER::Logger::GetInstance();
+//            logger->AddLog("RGE LMB Pressed...\n");
+//
+//        }
+//
+//        if (sdlEvent.type == SDL_MOUSEBUTTONDOWN && SDL_BUTTON_RIGHT)
+//        {
+//            auto logger = EDITOR_LOGGER::Logger::GetInstance();
+//            logger->AddLog("RGE RMB Pressed...\n");
+//
+//        }
 
         if (sdlEvent.type == SDL_MOUSEBUTTONDOWN)
         {
@@ -604,7 +574,7 @@ bool RGE::ProcessKeyboardInputs()
             {
                 auto logger = EDITOR_LOGGER::Logger::GetInstance();
                 logger->AddLog("RGE Mouse Pressed...\n");
-                registry->GetSystem<EditorSystem>().MousePressed(registry, gameCamera);
+                registry->GetSystem<EditorSystem>().MousePressed(registry, gameRenderer, gameCamera);
             }
 
         }

@@ -156,7 +156,6 @@ set(SOURCE_FILES
         Editor/src/FileSystem/include/FileHandler.h
         Editor/src/FileSystem/src/FileHandler.cpp
         Editor/src/FileSystem/src/NativeFileDialogExt.cpp
-        Editor/src/FileSystem/src/NativeFileDialogExt.cpp
 )
 
 link_directories( /usr/local/lib )

@@ -20,7 +20,6 @@ namespace EDITOR
         ~MouseDisplay() override = default;
 
         void Render(std::shared_ptr<Registry>& registry) override;
-        void MousePressed(std::shared_ptr<Registry>& registry);
     };
 } // namespace EDITOR
 

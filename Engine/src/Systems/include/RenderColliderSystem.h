@@ -28,12 +28,14 @@ class RenderColliderSystem: public System {
          * @param renderer
          * @param camera
          */
-        void Update(SDL_Renderer* renderer, const SDL_Rect& camera) {
-            for (auto entity: GetSystemEntities()) {
+        void Update(SDL_Renderer* renderer, const SDL_Rect& camera)
+        {
+            for (auto entity: GetSystemEntities())
+            {
                 const auto transform = entity.GetComponent<TransformComponent>();
                 const auto collider = entity.GetComponent<BoxColliderComponent>();
 
-                SDL_Rect colliderRect = {
+                SDL_Rect colliderRect ={
                     static_cast<int>(transform.position.x + collider.center.x - (float)camera.x),
                     static_cast<int>(transform.position.y + collider.center.y - (float)camera.y),
                     static_cast<int>(collider.width * transform.scale.x),
