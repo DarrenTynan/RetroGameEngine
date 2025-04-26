@@ -516,7 +516,7 @@ bool RGE::ProcessKeyboardInputs()
         ImGui::DockSpaceOverViewport();
 
         // Render the editor display panels.
-        for ( const auto& pDisplay : pDisplayHolder->displays )
+        for (const auto &pDisplay: pDisplayHolder->displays)
         {
             pDisplay->Render(registry);
         }
@@ -526,8 +526,8 @@ bool RGE::ProcessKeyboardInputs()
         // Rendering
         ImGui::Render();
         SDL_RenderSetScale(editorRenderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
-        SDL_SetRenderDrawColor(editorRenderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255),
-                               (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+        SDL_SetRenderDrawColor(editorRenderer, (Uint8) (clear_color.x * 255), (Uint8) (clear_color.y * 255),
+                               (Uint8) (clear_color.z * 255), (Uint8) (clear_color.w * 255));
         SDL_RenderClear(editorRenderer);
         ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), editorRenderer);
         SDL_RenderPresent(editorRenderer);
@@ -541,43 +541,54 @@ bool RGE::ProcessKeyboardInputs()
                 break;
 
             case SDL_KEYDOWN:
-                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isQuit = false; }
+                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
+                { isQuit = false; }
 
                 if (sdlEvent.key.keysym.sym == SDLK_SPACE)
                 {
                     eventBus->EmitEvent<JumpEvent>(sdlEvent.key.keysym.sym);
                 }
 
-                if (sdlEvent.key.keysym.sym == SDLK_p) { sleep(10); }
+                if (sdlEvent.key.keysym.sym == SDLK_p)
+                { sleep(10); }
 
                 break;
         }
 
         //TODO mouse button events not working. One press = L & R.
-//        if (sdlEvent.type == SDL_MOUSEBUTTONDOWN && SDL_BUTTON_LEFT)
-//        {
-//            auto logger = EDITOR_LOGGER::Logger::GetInstance();
-//            logger->AddLog("RGE LMB Pressed...\n");
-//
-//        }
-//
-//        if (sdlEvent.type == SDL_MOUSEBUTTONDOWN && SDL_BUTTON_RIGHT)
-//        {
-//            auto logger = EDITOR_LOGGER::Logger::GetInstance();
-//            logger->AddLog("RGE RMB Pressed...\n");
-//
-//        }
-
         if (sdlEvent.type == SDL_MOUSEBUTTONDOWN)
         {
             if (HasWindowFocus(gameWindow))
             {
                 auto logger = EDITOR_LOGGER::Logger::GetInstance();
-                logger->AddLog("RGE Mouse Pressed...\n");
+                logger->AddLog("RGE Mouse Pressed in Focus...\n");
                 registry->GetSystem<EditorSystem>().MousePressed(registry, gameRenderer, gameCamera);
             }
 
+            else if (sdlEvent.button.button == SDL_BUTTON_LEFT)
+            {
+                auto logger = EDITOR_LOGGER::Logger::GetInstance();
+                logger->AddLog("RGE LMB Pressed...\n");
+
+            }
+            else if (sdlEvent.type == SDL_MOUSEBUTTONDOWN && sdlEvent.button.button == SDL_BUTTON_RIGHT)
+            {
+                auto logger = EDITOR_LOGGER::Logger::GetInstance();
+                logger->AddLog("RGE RMB Pressed...\n");
+
+            }
         }
+
+//        if (sdlEvent.type == SDL_MOUSEBUTTONDOWN)
+//        {
+//            if (HasWindowFocus(gameWindow))
+//            {
+//                auto logger = EDITOR_LOGGER::Logger::GetInstance();
+//                logger->AddLog("RGE Mouse Pressed in Focus...\n");
+//                registry->GetSystem<EditorSystem>().MousePressed(registry, gameRenderer, gameCamera);
+//            }
+//
+//        }
     }
     return isQuit;
 }
