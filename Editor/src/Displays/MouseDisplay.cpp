@@ -42,6 +42,7 @@ namespace EDITOR
             ImGui::SetNextItemWidth(130);
             ImGui::Checkbox("Entity Hit Box", &hb);
 
+            // TODO add camera x/y
             gridX = mouseX / 32;
             gridY = mouseY / 32;
             ImGui::Text("Grid x: %i, y: %i", gridX, gridY);

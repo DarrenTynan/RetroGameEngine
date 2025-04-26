@@ -32,7 +32,7 @@ namespace RGE_System
 
         EditorSystem() {};
 
-        void MousePressed(std::shared_ptr<Registry> &registry, SDL_Renderer* renderer, SDL_Rect camera)
+        void lmbInFocus(std::shared_ptr<Registry> &registry, SDL_Renderer* renderer, SDL_Rect camera)
         {
             SDL_GetMouseState(&mouseX, &mouseY);
 

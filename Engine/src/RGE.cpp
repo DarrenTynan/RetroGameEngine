@@ -558,11 +558,18 @@ bool RGE::ProcessKeyboardInputs()
         //TODO mouse button events not working. One press = L & R.
         if (sdlEvent.type == SDL_MOUSEBUTTONDOWN)
         {
-            if (HasWindowFocus(gameWindow))
+            if (HasWindowFocus(gameWindow) && sdlEvent.button.button == SDL_BUTTON_LEFT)
             {
                 auto logger = EDITOR_LOGGER::Logger::GetInstance();
-                logger->AddLog("RGE Mouse Pressed in Focus...\n");
-                registry->GetSystem<EditorSystem>().MousePressed(registry, gameRenderer, gameCamera);
+                logger->AddLog("RGE LMB Pressed in Focus...\n");
+                registry->GetSystem<EditorSystem>().lmbInFocus(registry, gameRenderer, gameCamera);
+            }
+
+            else if (HasWindowFocus(gameWindow) && sdlEvent.button.button == SDL_BUTTON_RIGHT)
+            {
+                auto logger = EDITOR_LOGGER::Logger::GetInstance();
+                logger->AddLog("RGE RMB Pressed in Focus...\n");
+//                registry->GetSystem<EditorSystem>().lmbInFocus(registry, gameRenderer, gameCamera);
             }
 
             else if (sdlEvent.button.button == SDL_BUTTON_LEFT)
@@ -585,7 +592,7 @@ bool RGE::ProcessKeyboardInputs()
 //            {
 //                auto logger = EDITOR_LOGGER::Logger::GetInstance();
 //                logger->AddLog("RGE Mouse Pressed in Focus...\n");
-//                registry->GetSystem<EditorSystem>().MousePressed(registry, gameRenderer, gameCamera);
+//                registry->GetSystem<EditorSystem>().lmbInFocus(registry, gameRenderer, gameCamera);
 //            }
 //
 //        }
