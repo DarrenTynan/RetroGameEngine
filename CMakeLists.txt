@@ -151,11 +151,16 @@ set(SOURCE_FILES
         Editor/src/Logger/src/Logger.cpp
         Editor/src/Logger/include/TerminalLogger.h
         Editor/src/Logger/src/TerminalLogger.cpp
-        #        src/FileSystem/src/FileDialogs.cpp
-        #        src/FileSystem/include/FileDialogs.h
+
+#        Editor/src/FileSystem/src/FileDialogs.cpp
+#        Editor/src/FileSystem/include/FileDialogs.h
+
         Editor/src/FileSystem/include/FileHandler.h
         Editor/src/FileSystem/src/FileHandler.cpp
         Editor/src/FileSystem/src/NativeFileDialogExt.cpp
+
+        Editor/libs/ImGuiFileDialog/ImGuiFileDialog.h
+        Editor/libs/ImGuiFileDialog/ImGuiFileDialog.cpp
 )
 
 link_directories( /usr/local/lib )

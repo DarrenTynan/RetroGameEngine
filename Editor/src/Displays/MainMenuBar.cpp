@@ -5,6 +5,8 @@
 #include "MainMenuBar.h"
 #include <SDL2/SDL.h>
 
+#include "../../libs/ImGuiFileDialog/ImGuiFileDialog.h"
+
 namespace EDITOR_DISPLAY
 {
 
@@ -21,6 +23,10 @@ void MainMenuBar::Render(std::shared_ptr<Registry>& registry)
         {
             if (ImGui::MenuItem("New"))
             {
+                IGFD::FileDialogConfig config;
+                config.path = ".";
+                ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".cpp,.h,.hpp", config);
+
                 // TinyFileDialog
 //                auto folderPtr = fileDialogs->SelectFolderDialog2( "New Project", SDL_GetBasePath() );
                 // /users/darren/desktop
@@ -28,6 +34,8 @@ void MainMenuBar::Render(std::shared_ptr<Registry>& registry)
 //                std::cout << folderPtr.c_str() << std::endl;
 
             }
+
+
             if (ImGui::MenuItem("Open", "Ctrl+O"))
             {
                 logger->AddLog("File open...");

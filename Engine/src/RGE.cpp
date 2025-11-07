@@ -2,6 +2,7 @@
 // Created by Darren Tynan on 17/11/2024.
 //
 
+#include  "../ImGuiFileDialog/ImGuiFileDialog.h"
 #include <string>
 #include <filesystem>
 #include <thread>
@@ -524,6 +525,16 @@ bool RGE::ProcessKeyboardInputs()
         ImGui::ShowDemoWindow();
 
         // Rendering
+        if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+            if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
+                std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+                std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+                // action
+            }
+
+            // close
+            ImGuiFileDialog::Instance()->Close();
+        }
         ImGui::Render();
         SDL_RenderSetScale(editorRenderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
         SDL_SetRenderDrawColor(editorRenderer, (Uint8) (clear_color.x * 255), (Uint8) (clear_color.y * 255),
