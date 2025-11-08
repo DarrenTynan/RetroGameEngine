@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 set(CMAKE_CXX_STANDARD 17)
 
-project(RetroGameEngine)
+project(RetroGameEngine VERSION 1)
 
 SET( LIBS_DIR       "${PROJECT_SOURCE_DIR}/Engine/libs")
 SET( LUA_DIR        "${LIBS_DIR}/lua" )
