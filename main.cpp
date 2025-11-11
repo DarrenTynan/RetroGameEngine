@@ -4,13 +4,13 @@
  */
 
 #include <iostream>
-#include "Engine_Test_Game_Platform/include/Game.h"
+#include "Engine_Test_Game_Platform/include/GameHook.h"
 
 int main()
 {
-    Game::Setup();
-    Game::Run();
-    Game::Destroy();
+    GameHook::Setup();
+    GameHook::Run();
+    GameHook::Destroy();
 
     std::cout << "main.cpp exit" << std::endl;
     return 0;

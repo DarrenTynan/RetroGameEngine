@@ -46,7 +46,7 @@ SET( SOL2_DIR       "${LIBS_DIR}/sol" )
 #)
 
 # Engine
-set(SOURCE_FILES
+set(ENGINE_SOURCE_FILES
         main.cpp
 
         Engine/include/RGE.h
@@ -82,8 +82,6 @@ set(SOURCE_FILES
         Engine/src/EventBus/include/EventBus.h
 
         Engine/src/Events/include/CollisionEvent.h
-#        Engine/src/Events/include/KeyPressedEvent.h
-#        Engine/src/Events/include/KeyReleasedEvent.h
 
         Engine/src/FSM/include/BaseState.h
         Engine/src/FSM/include/FSM.h
@@ -107,20 +105,17 @@ set(SOURCE_FILES
         Engine/src/Systems/include/RenderColliderSystem.h
         Engine/src/Systems/include/RenderHealthBarSystem.h
         Engine/src/Systems/include/RenderRaycastSystem.h
-        Engine/src/Systems/include/RenderRaycastSystem.h
         Engine/src/Systems/include/RenderSystem.h
         Engine/src/Systems/include/RenderTextSystem.h
         Engine/src/Systems/include/EditorSystem.h
-
-        Engine_Test_Game_Platform/src/Game.cpp
-
         Engine/src/FileHandler/include/FileHandler.h
         Engine/src/FileHandler/FileHandler.cpp
         Engine/src/Components/include/FSMComponent.h
         Engine/src/Components/include/SpritesheetComponent.h
+)
 
 
-
+SET(EDITOR_SOURCE_FILES
 
 #        Editor/src/Editor.cpp
         Editor/libs/imgui_docking/imgui.cpp
@@ -163,15 +158,20 @@ set(SOURCE_FILES
         Editor/libs/ImGuiFileDialog/ImGuiFileDialog.cpp
 )
 
+SET(GAME_SOURCE_FILES
+        Engine_Test_Game_Platform/src/GameHook.cpp
+)
+
 link_directories( /usr/local/lib )
 
 # Add executable target with source files listed in SOURCE_FILES variable
-add_executable( ${PROJECT_NAME} ${SOURCE_FILES} )
+add_executable( ${PROJECT_NAME} ${ENGINE_SOURCE_FILES} ${EDITOR_SOURCE_FILES} ${GAME_SOURCE_FILES})
 
 include_directories(
         Engine/include/
         Engine/libs/lua/
         Engine/libs/sol/
+
         Engine/src/AssetStore/
         Engine/src/Components/
         Engine/src/ECS/
@@ -187,7 +187,6 @@ include_directories(
         Editor/libs/nativefiledialog-extended/
         Editor/src/Displays/
         Editor/src/Logger/
-
 )
 
 add_subdirectory(Editor/libs/nativefiledialog-extended)

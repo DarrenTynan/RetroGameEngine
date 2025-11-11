@@ -1,14 +1,24 @@
+#
+# Retro Game Engine: Engine static library
+#
 cmake_minimum_required(VERSION 3.24)
 set(CMAKE_CXX_STANDARD 17)
 
-project(RGE)
+project(RGE VERSION 1)
 
 SET( SRC_DIR        "${PROJECT_SOURCE_DIR}/src" )
 SET( LIBS_DIR       "${PROJECT_SOURCE_DIR}/libs" )
 SET( LUA_DIR        "${LIBS_DIR}/lua" )
 SET( SOL2_DIR       "${LIBS_DIR}/sol" )
 
+message("My SRC_DIR directory: ${SRC_DIR}")
+message("My LIBS_DIR directory: ${LIBS_DIR}")
+message("My LUA_DIR directory: ${LUA_DIR}")
+message("My SOL2_DIR directory: ${SOL2_DIR}")
+
+#
 # Build lua library
+#
 add_library(
         lua STATIC
         ${LUA_DIR}/lapi.c
@@ -46,6 +56,9 @@ add_library(
         ${LUA_DIR}/lzio.c
 )
 
+#
+# Build the RGE static library
+#
 add_library(RGE STATIC
         ${SRC_DIR}/AssetStore/include/AssetStore.h
         ${SRC_DIR}/AssetStore/src/AssetStore.cpp
@@ -59,22 +72,23 @@ add_library(RGE STATIC
         ${SRC_DIR}/Components/include/RayCastComponent.h
         ${SRC_DIR}/Components/include/RigidBodyComponent.h
         ${SRC_DIR}/Components/include/ScriptComponent.h
+        ${SRC_DIR}/Components/include/SpriteComponent.h
         ${SRC_DIR}/Components/include/TextLabelComponent.h
         ${SRC_DIR}/Components/include/TransformComponent.h
+        ${SRC_DIR}/Components/include/SpritesheetComponent.h
 
-        ${SRC_DIR}/ECS/include/ECS.h
         ${SRC_DIR}/ECS/include/Component.h
+        ${SRC_DIR}/ECS/include/ECS.h
         ${SRC_DIR}/ECS/include/Entity.h
         ${SRC_DIR}/ECS/include/Pool.h
         ${SRC_DIR}/ECS/include/Registry.h
+        ${SRC_DIR}/ECS/include/System.h
         ${SRC_DIR}/ECS/ECS.cpp
 
         ${SRC_DIR}/EventBus/include/Event.h
         ${SRC_DIR}/EventBus/include/EventBus.h
 
         ${SRC_DIR}/Events/include/CollisionEvent.h
-        ${SRC_DIR}/Events/include/KeyPressedEvent.h
-        ${SRC_DIR}/Events/include/KeyReleasedEvent.h
 
         ${SRC_DIR}/FSM/include/BaseState.h
         ${SRC_DIR}/FSM/include/FSM.h
@@ -84,14 +98,13 @@ add_library(RGE STATIC
 
         ${SRC_DIR}/LevelLoader/include/LevelLoader.h
         ${SRC_DIR}/LevelLoader/LevelLoader.cpp
-        ${SRC_DIR}/GlobalConfig/GlobalConfig.h
-        ${SRC_DIR}/GlobalConfig/GlobalConfig.cpp
 
         ${SRC_DIR}/Systems/include/AnimationSystem.h
-        ${SRC_DIR}/Systems/include/CameraMovementSystem.h
-        ${SRC_DIR}/Systems/include/CollisionSystem.h
+        ${SRC_DIR}/Systems/include/CameraFollowSystem.h
+        ${SRC_DIR}/Systems/include/PlayerCollisionSystem.h
+        ${SRC_DIR}/Systems/include/EntityCollisionSystem.h
         ${SRC_DIR}/Systems/include/DamageSystem.h
-        ${SRC_DIR}/Systems/include/MovementSystem.h
+        ${SRC_DIR}/Systems/include/EntityMovementSystem.h
         ${SRC_DIR}/Systems/include/PlayerControllerSystem.h
         ${SRC_DIR}/Systems/include/ProjectileEmitSystem.h
         ${SRC_DIR}/Systems/include/ProjectileLifecycleSystem.h
@@ -100,7 +113,12 @@ add_library(RGE STATIC
         ${SRC_DIR}/Systems/include/RenderRayCastSystem.h
         ${SRC_DIR}/Systems/include/RenderSystem.h
         ${SRC_DIR}/Systems/include/RenderTextSystem.h
-        ${SRC_DIR}/Systems/include/ScriptSystem.h
+        ${SRC_DIR}/Systems/include/EditorSystem.h
+
+        ${SRC_DIR}/FileHandler/include/FileHandler.h
+        ${SRC_DIR}/FileHandler/FileHandler.cpp
+        ${SRC_DIR}/Components/include/FSMComponent.h
+        ${SRC_DIR}/Components/include/SpritesheetComponent.h
 
         ${SOL2_DIR}/sol.hpp
 
@@ -109,7 +127,6 @@ add_library(RGE STATIC
         ${SOL2_DIR}/config.hpp
         ${SOL2_DIR}/forward.hpp
         ${SOL2_DIR}/sol.hpp
-
 )
 
 link_directories( /usr/local/lib )
@@ -123,6 +140,15 @@ include_directories(
         ${PROJECT_SOURCE_DIR}/include/
         ${PROJECT_SOURCE_DIR}/libs/lua/
         ${PROJECT_SOURCE_DIR}/libs/sol/
+        ${PROJECT_SOURCE_DIR}/AssetStore/
+        ${PROJECT_SOURCE_DIR}/Components/
+        ${PROJECT_SOURCE_DIR}/ECS/
+        ${PROJECT_SOURCE_DIR}/EventBus/
+        ${PROJECT_SOURCE_DIR}/Events/
+        ${PROJECT_SOURCE_DIR}/FileHandler/
+        ${PROJECT_SOURCE_DIR}/FSM/
+        ${PROJECT_SOURCE_DIR}/LevelLoader/
+        ${PROJECT_SOURCE_DIR}/Systems/
 )
 
 find_package( SDL2 REQUIRED )

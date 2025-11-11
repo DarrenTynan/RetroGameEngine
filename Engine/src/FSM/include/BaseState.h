@@ -8,7 +8,7 @@
 #include "FSM.h"
 #include <string>
 #include <rapidjson/document.h>
-#include "../ECS/include/ECS.h"
+#include "ECS/include/ECS.h"
 
 using namespace RGE_ECS;
 

@@ -26,6 +26,7 @@ public:
     static void Destroy();
     static void DebugWindowText();
     static bool HasWindowFocus(SDL_Window* window);
+    static void ShowVersion();
 };
 
 #endif //RETROGAMEENGINE_RGE_H

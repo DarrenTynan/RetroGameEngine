@@ -29,7 +29,7 @@
 #include "../src/Systems/include/RenderRaycastSystem.h"
 #include "../src/Systems/include/EditorSystem.h"
 #include "FileHandler/include/FileHandler.h"
-#include "include/SpritesheetComponent.h"
+#include "Components/include/SpritesheetComponent.h"
 #include "../../Editor/include/Editor.h"
 
 using namespace EDITOR;
@@ -222,7 +222,7 @@ void RGE::Setup()
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
 
-    // Create window with SDL_Renderer graphics context
+    // Create the game window with SDL_Renderer graphics context
     auto windowFlags3 = (SDL_WindowFlags)( SDL_WINDOW_RESIZABLE | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_ALLOW_HIGHDPI );
     auto windowFlags4 = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED);
     editorWindow = SDL_CreateWindow(
@@ -619,6 +619,15 @@ bool RGE::HasWindowFocus(SDL_Window* window)
     // SDL_WINDOW_INPUT_FOCUS - input is going to the window
     // SDL_WINDOW_MOUSE_FOCUS - mouse is hovered over the window, regardless of window focus
     return (flags & SDL_WINDOW_INPUT_FOCUS) != 0;
+}
+
+
+/**
+ * @brief Used as a test that the library is working.
+ */
+void RGE::ShowVersion()
+{
+    std::cout << "Retro Game Engine v1.0";
 }
 
 
