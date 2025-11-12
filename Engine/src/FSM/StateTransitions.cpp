@@ -17,6 +17,7 @@ namespace RGE_FSM
  * @brief Idle -> Walk transitions.
  *
  * @param fsm
+ * @param entity
  */
 void Idle::toggle(FSM* fsm, Entity &entity)
 {
@@ -57,6 +58,7 @@ void Idle::exit(FSM *fsm, Entity &entity) {}
  * @brief Walk -> Idle transitions
  *
  * @param fsm
+ * @param entity
  */
 void Walk::toggle(FSM* fsm, Entity &entity)
 {
@@ -94,6 +96,7 @@ void Walk::exit(FSM *fsm, Entity &entity) {}
  * @brief Run -> Walk transitions
  *
  * @param fsm
+ * @param entity
  */
 void Run::toggle(FSM *fsm, Entity &entity)
 {
@@ -124,6 +127,7 @@ void Run::exit(FSM *fsm, Entity &entity) {}
  * @brief Jump -> Fall transitions
  *
  * @param fsm
+ * @param entity
  */
 void Jump::toggle(FSM* fsm, Entity &entity)
 {
@@ -161,6 +165,7 @@ void Jump::exit(FSM *fsm, Entity &entity) {}
  * @brief Fall -> Idle transitions
  *
  * @param fsm
+ * @param entity
  */
 void Fall::toggle(FSM* fsm, Entity &entity)
 {

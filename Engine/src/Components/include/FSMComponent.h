@@ -5,7 +5,8 @@
 #ifndef RETROGAMEENGINE_FSMCOMPONENT_H
 #define RETROGAMEENGINE_FSMCOMPONENT_H
 
-#include <sol/sol.hpp>
+// #include <sol/sol.hpp>
+#include "sol.hpp"
 #include "../../Engine/src/FSM/include/FSM.h"
 
 using namespace RGE_FSM;

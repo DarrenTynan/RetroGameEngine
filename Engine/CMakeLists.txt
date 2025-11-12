@@ -1,10 +1,10 @@
 #
 # Retro Game Engine: Engine static library
 #
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 4.0)
 set(CMAKE_CXX_STANDARD 17)
 
-project(RGE VERSION 1)
+project(RGE_Engine VERSION 1)
 
 SET( SRC_DIR        "${PROJECT_SOURCE_DIR}/src" )
 SET( LIBS_DIR       "${PROJECT_SOURCE_DIR}/libs" )
@@ -19,8 +19,7 @@ message("My SOL2_DIR directory: ${SOL2_DIR}")
 #
 # Build lua library
 #
-add_library(
-        lua STATIC
+add_library(lua STATIC
         ${LUA_DIR}/lapi.c
         ${LUA_DIR}/lauxlib.c
         ${LUA_DIR}/lbaselib.c
@@ -59,7 +58,7 @@ add_library(
 #
 # Build the RGE static library
 #
-add_library(RGE STATIC
+add_library(RGE_Engine STATIC
         ${SRC_DIR}/AssetStore/include/AssetStore.h
         ${SRC_DIR}/AssetStore/src/AssetStore.cpp
 
@@ -77,12 +76,12 @@ add_library(RGE STATIC
         ${SRC_DIR}/Components/include/TransformComponent.h
         ${SRC_DIR}/Components/include/SpritesheetComponent.h
 
-        ${SRC_DIR}/ECS/include/Component.h
-        ${SRC_DIR}/ECS/include/ECS.h
-        ${SRC_DIR}/ECS/include/Entity.h
         ${SRC_DIR}/ECS/include/Pool.h
-        ${SRC_DIR}/ECS/include/Registry.h
+        ${SRC_DIR}/ECS/include/Component.h
+        ${SRC_DIR}/ECS/include/Entity.h
+        ${SRC_DIR}/ECS/include/ECS.h
         ${SRC_DIR}/ECS/include/System.h
+        ${SRC_DIR}/ECS/include/Registry.h
         ${SRC_DIR}/ECS/ECS.cpp
 
         ${SRC_DIR}/EventBus/include/Event.h
@@ -160,6 +159,7 @@ find_package( Lua REQUIRED )
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} SDL2_image::SDL2_image)
 target_link_libraries(${PROJECT_NAME} SDL2_ttf::SDL2_ttf)
-target_link_libraries( RGE tmxlite )
-target_link_libraries( RGE lua )
+target_link_libraries( RGE_Engine tmxlite )
+target_link_libraries( RGE_Engine lua )
 
+#target_include_directories( RGE_Engine INTERFACE $(CMAKE_CURRENT_SOURCE_DIR))

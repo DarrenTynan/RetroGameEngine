@@ -25,12 +25,13 @@ namespace RGE_FSM
  * @brief Logic code for setState, Exit the current, set a new current and enter the new current.
  *
  * @param newState
+ * @param entity
  */
     void FSM::setState(BaseState &newState, Entity &entity)
     {
-        currentState->exit(this, entity);                   // Do something before we chane state.
+        currentState->exit(this, entity);            // Do something before we chane state.
         currentState = &newState;                           // Change state.
-        currentState->enter(this, entity);                  // Do something after we change state.
+        currentState->enter(this, entity);           // Do something after we change state.
     }
 
 

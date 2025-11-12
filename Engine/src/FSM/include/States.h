@@ -8,6 +8,8 @@
 #include <iostream>
 #include "BaseState.h"
 
+using namespace RGE_ECS;
+
 namespace RGE_FSM
 {
 
