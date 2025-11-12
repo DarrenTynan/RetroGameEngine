@@ -15,6 +15,7 @@ message("My SRC_DIR directory: ${SRC_DIR}")
 message("My LIBS_DIR directory: ${LIBS_DIR}")
 message("My LUA_DIR directory: ${LUA_DIR}")
 message("My SOL2_DIR directory: ${SOL2_DIR}")
+message("My project name: ${PROJECT_NAME}")
 
 #
 # Build lua library
@@ -155,11 +156,16 @@ find_package( SDL2_image REQUIRED )
 find_package( SDL2_TTF REQUIRED )
 find_package( GLM REQUIRED )
 find_package( Lua REQUIRED )
+find_package(nlohmann_json 3.11.3 REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} SDL2_image::SDL2_image)
 target_link_libraries(${PROJECT_NAME} SDL2_ttf::SDL2_ttf)
+
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
+
 target_link_libraries( RGE_Engine tmxlite )
+
 target_link_libraries( RGE_Engine lua )
 
 #target_include_directories( RGE_Engine INTERFACE $(CMAKE_CURRENT_SOURCE_DIR))

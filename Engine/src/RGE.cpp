@@ -2,7 +2,7 @@
 // Created by Darren Tynan on 17/11/2024.
 //
 
-// #include  "../ImGuiFileDialog/ImGuiFileDialog.h"
+#include  "../ImGuiFileDialog/ImGuiFileDialog.h"
 #include <string>
 #include <filesystem>
 #include <thread>
@@ -51,6 +51,7 @@ ImGuiIO io;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 std::shared_ptr<DisplayHolder> pDisplayHolder = std::make_shared<DisplayHolder>();
+
 std::shared_ptr<Registry> registry = std::make_shared<Registry>();
 std::unique_ptr<AssetStore> assetStore = std::make_unique<AssetStore>();
 std::unique_ptr<EventBus> eventBus = std::make_unique<EventBus>();
@@ -89,7 +90,7 @@ void RGE::Setup()
     std::cout << "Current path is " << filePath << '\n';
 
     // Load the config file
-//    std::ifstream file(filePath);
+    // std::ifstream file(filePath);
     std::ifstream file("/Users/darren/Development/C++_Projects/RetroGameEngine/Engine_Test_Game_Platform/GameConfig.json");
 
     // Check if the file is open.
@@ -189,33 +190,33 @@ void RGE::Setup()
      */
     if (isDebugWindow)
     {
-        // Create window with SDL_Renderer graphics context
-        auto windowFlags2 = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
-        debugWindow = SDL_CreateWindow(
-                "Debug Window",
-                0,
-                0,
-                400,
-                350,
-                windowFlags2
-        );
+    // Create window with SDL_Renderer graphics context
+    auto windowFlags2 = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP);
+    debugWindow = SDL_CreateWindow(
+    "Debug Window",
+    0,
+    0,
+    400,
+    350,
+    windowFlags2
+    );
 
-        if (!debugWindow)
-        {
-            std::cout << "Window game init failed" << std::endl;
-            SDL_Quit();
-            exit(1);
-        }
+    if (!debugWindow)
+    {
+    std::cout << "Window game init failed" << std::endl;
+    SDL_Quit();
+    exit(1);
+    }
 
-        debugRenderer = SDL_CreateRenderer(debugWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    debugRenderer = SDL_CreateRenderer(debugWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-        if (!debugRenderer)
-        {
-            std::cout << "Window renderer init failed" << std::endl;
-            SDL_DestroyRenderer(debugRenderer);
-            SDL_Quit();
-            exit(1);
-        }
+    if (!debugRenderer)
+    {
+    std::cout << "Window renderer init failed" << std::endl;
+    SDL_DestroyRenderer(debugRenderer);
+    SDL_Quit();
+    exit(1);
+    }
 
     }
 
@@ -226,29 +227,29 @@ void RGE::Setup()
     auto windowFlags3 = (SDL_WindowFlags)( SDL_WINDOW_RESIZABLE | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_ALLOW_HIGHDPI );
     auto windowFlags4 = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED);
     editorWindow = SDL_CreateWindow(
-            "Retro Game_Engine Engine v1",
-            0,
-            0,
-            displayMode.w,
-            displayMode.h,
-            windowFlags4
+    "Retro Game_Engine Engine v1",
+    0,
+    0,
+    displayMode.w,
+    displayMode.h,
+    windowFlags4
     );
 
     if (!editorWindow)
     {
-        LOGGER::TerminalLogger::Error("Window init failed", 0);
-        SDL_Quit();
-        exit(1);
+    LOGGER::TerminalLogger::Error("Window init failed", 0);
+    SDL_Quit();
+    exit(1);
     }
 
     editorRenderer = SDL_CreateRenderer(editorWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     if (!editorRenderer)
     {
-        LOGGER::TerminalLogger::Error("Window renderer init failed", 0);
-        SDL_DestroyRenderer(editorRenderer);
-        SDL_Quit();
-        exit(1);
+    LOGGER::TerminalLogger::Error("Window renderer init failed", 0);
+    SDL_DestroyRenderer(editorRenderer);
+    SDL_Quit();
+    exit(1);
     }
 
 
@@ -326,7 +327,7 @@ void RGE::Setup()
     auto pMouseDisplay = std::make_unique<MouseDisplay>();
     auto pLogDisplay = std::make_unique<LogDisplay>();
     auto pFileDisplay = std::make_unique<FileDisplay>();
-//        auto pProjectMenuDisplay = std::make_unique<ProjectMenuDisplay>();
+        // auto pProjectMenuDisplay = std::make_unique<ProjectMenuDisplay>();
 
     // Add display class's to the vector array in IDisplay
     pDisplayHolder->displays.push_back( std::move(pMainMenuBar) );
@@ -497,7 +498,7 @@ void RGE::UpdateRenderer()
 
 /**
  * @brief Poll window and keyboard events
- * @details If the cursor key's are pressed then emit a Walk<XX>Event
+ * @details If the cursor keys are pressed then emit a Walk<XX>Event
  */
 bool RGE::ProcessKeyboardInputs()
 {
@@ -519,26 +520,26 @@ bool RGE::ProcessKeyboardInputs()
         // Render the editor display panels.
         for (const auto &pDisplay: pDisplayHolder->displays)
         {
-            pDisplay->Render(registry);
+        pDisplay->Render(registry);
         }
 
         ImGui::ShowDemoWindow();
 
         // Rendering
         if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
-            if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
-                std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-                std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-                // action
-            }
+        if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
+        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+        // action
+        }
 
-            // close
-            ImGuiFileDialog::Instance()->Close();
+        // close
+        ImGuiFileDialog::Instance()->Close();
         }
         ImGui::Render();
         SDL_RenderSetScale(editorRenderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
         SDL_SetRenderDrawColor(editorRenderer, (Uint8) (clear_color.x * 255), (Uint8) (clear_color.y * 255),
-                               (Uint8) (clear_color.z * 255), (Uint8) (clear_color.w * 255));
+        (Uint8) (clear_color.z * 255), (Uint8) (clear_color.w * 255));
         SDL_RenderClear(editorRenderer);
         ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), editorRenderer);
         SDL_RenderPresent(editorRenderer);
@@ -597,16 +598,16 @@ bool RGE::ProcessKeyboardInputs()
             }
         }
 
-//        if (sdlEvent.type == SDL_MOUSEBUTTONDOWN)
-//        {
-//            if (HasWindowFocus(gameWindow))
-//            {
-//                auto logger = EDITOR_LOGGER::Logger::GetInstance();
-//                logger->AddLog("RGE Mouse Pressed in Focus...\n");
-//                registry->GetSystem<EditorSystem>().lmbInFocus(registry, gameRenderer, gameCamera);
-//            }
-//
-//        }
+        if (sdlEvent.type == SDL_MOUSEBUTTONDOWN)
+        {
+            if (HasWindowFocus(gameWindow))
+            {
+                auto logger = EDITOR_LOGGER::Logger::GetInstance();
+                logger->AddLog("RGE Mouse Pressed in Focus...\n");
+                registry->GetSystem<EditorSystem>().lmbInFocus(registry, gameRenderer, gameCamera);
+            }
+
+        }
     }
     return isQuit;
 }
@@ -691,8 +692,8 @@ void RGE::Destroy()
 
     if (isDebugWindow)
     {
-        SDL_DestroyRenderer(debugRenderer);
-        SDL_DestroyWindow(debugWindow);
+    SDL_DestroyRenderer(debugRenderer);
+    SDL_DestroyWindow(debugWindow);
     }
 
     SDL_Quit();
@@ -719,16 +720,16 @@ void RGE::DebugWindowText()
 
     std::string text;
     text = "pos.x: " + std::to_string(transform.position.x) + " pos.y: " + std::to_string(transform.position.y)
-           + "\nrb->dx: " + std::to_string(rigidBody.deltaXY.x) + " rb->dy: " + std::to_string(rigidBody.deltaXY.y)
-           + "\nrb->mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " rb->mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
-           + "\nfsm->dir.x: " + std::to_string(fsm->direction.x) + " fsm->dir.y: " + std::to_string(fsm->direction.y)
-           + "\nfsm->current state: " + fsm->getCurrentState()->getName()
-           + "\ncamera.x: " + std::to_string(gameCamera.x) + " camera.y: " + std::to_string(gameCamera.y)
-           + "\ncamera.w: " + std::to_string(gameCamera.w) + " camera.h: " + std::to_string(gameCamera.h)
-           + "\nfsm->isGrounded: " + std::to_string(fsm->isGrounded)
-           + "\nbox.x: " + std::to_string(boxCollider.center.x) + " box.y: " + std::to_string(boxCollider.center.y)
-           + "\nbox.w: " + std::to_string(boxCollider.width) + " box.h: " +std::to_string(boxCollider.height)
-           ;
+    + "\nrb->dx: " + std::to_string(rigidBody.deltaXY.x) + " rb->dy: " + std::to_string(rigidBody.deltaXY.y)
+    + "\nrb->mdx: " + std::to_string(rigidBody.maxDeltaXY.x) + " rb->mdy: " + std::to_string(rigidBody.maxDeltaXY.y)
+    + "\nfsm->dir.x: " + std::to_string(fsm->direction.x) + " fsm->dir.y: " + std::to_string(fsm->direction.y)
+    + "\nfsm->current state: " + fsm->getCurrentState()->getName()
+    + "\ncamera.x: " + std::to_string(gameCamera.x) + " camera.y: " + std::to_string(gameCamera.y)
+    + "\ncamera.w: " + std::to_string(gameCamera.w) + " camera.h: " + std::to_string(gameCamera.h)
+    + "\nfsm->isGrounded: " + std::to_string(fsm->isGrounded)
+    + "\nbox.x: " + std::to_string(boxCollider.center.x) + " box.y: " + std::to_string(boxCollider.center.y)
+    + "\nbox.w: " + std::to_string(boxCollider.width) + " box.h: " +std::to_string(boxCollider.height)
+    ;
 
     SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped(Chariot, text.c_str(), White, 400);
 
@@ -740,10 +741,10 @@ void RGE::DebugWindowText()
 
     SDL_QueryTexture(texture, nullptr, nullptr, &labelWidth, &labelHeight);
     SDL_Rect dstRect = {
-            8,
-            0,
-            labelWidth,
-            labelHeight
+    8,
+    0,
+    labelWidth,
+    labelHeight
     };
 
     SDL_RenderCopy(debugRenderer, texture, nullptr, &dstRect);

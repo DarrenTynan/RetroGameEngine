@@ -15,7 +15,7 @@
 #include "../../src/Components/include/RigidBodyComponent.h"
 
 using namespace RGE_ECS;
-using namespace EDITOR_LOGGER;
+// using namespace EDITOR_LOGGER;
 using namespace RGE_Component;
 
 namespace RGE_System
