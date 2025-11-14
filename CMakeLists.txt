@@ -127,6 +127,7 @@ SET(EDITOR_SOURCE_FILES
         Editor/libs/imgui_docking/backends/imgui_impl_sdlrenderer2.cpp
         Editor/libs/imgui_docking/misc/cpp/imgui_stdlib.h
         Editor/libs/imgui_docking/misc/cpp/imgui_stdlib.cpp
+
         Editor/src/Displays/TestDisplayA.cpp
         Editor/src/Displays/EntityDisplay.cpp
         Editor/src/Displays/SceneDisplay.cpp

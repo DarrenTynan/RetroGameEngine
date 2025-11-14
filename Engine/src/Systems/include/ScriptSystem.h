@@ -2,12 +2,12 @@
 #define SCRIPTSYSTEM_H
 
 //#include "ECS/include/ECS.h"
-#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/ECS/include/ECS.h"
-#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/TransformComponent.h"
-#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/RigidBodyComponent.h"
-#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/AnimationComponent.h"
-#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/ProjectileEmitterComponent.h"
-#include "/Users/darren/Development/C++_Projects/RetroGameEngine/Engine/src/Components/include/ScriptComponent.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine_Old/Engine/src/ECS/include/ECS.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine_Old/Engine/src/Components/include/TransformComponent.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine_Old/Engine/src/Components/include/RigidBodyComponent.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine_Old/Engine/src/Components/include/AnimationComponent.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine_Old/Engine/src/Components/include/ProjectileEmitterComponent.h"
+#include "/Users/darren/Development/C++_Projects/RetroGameEngine_Old/Engine/src/Components/include/ScriptComponent.h"
 #include <tuple>
 
 using namespace RGE_ECS;

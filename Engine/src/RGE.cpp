@@ -520,7 +520,7 @@ bool RGE::ProcessKeyboardInputs()
         // Render the editor display panels.
         for (const auto &pDisplay: pDisplayHolder->displays)
         {
-        pDisplay->Render(registry);
+            pDisplay->Render(registry);
         }
 
         ImGui::ShowDemoWindow();
@@ -528,8 +528,8 @@ bool RGE::ProcessKeyboardInputs()
         // Rendering
         if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
         if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
-        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+            std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+            std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
         // action
         }
 
