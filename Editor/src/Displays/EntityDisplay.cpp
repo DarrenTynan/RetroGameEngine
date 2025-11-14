@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 
 #include "../../Engine/src/Components/include/TransformComponent.h"
-#include "../../Engine/src/Components/include/RigidbodyComponent.h"
+#include "../../Engine/src/Components/include/RigidBodyComponent.h"
 #include "../../Engine/src/Components/include/BoxColliderComponent.h"
 #include "../../Engine/src/Components/include/SpriteComponent.h"
 #include "../src/Systems/include/EditorSystem.h"

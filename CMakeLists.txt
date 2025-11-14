@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 set(CMAKE_CXX_STANDARD 17)
 
-project(RetroGameEngine VERSION 1)
+project(RetroGameEngine_Old VERSION 1)
 
 SET( LIBS_DIR       "${PROJECT_SOURCE_DIR}/Engine/libs")
 SET( LUA_DIR        "${LIBS_DIR}/lua" )
@@ -209,6 +209,6 @@ target_link_libraries(${PROJECT_NAME} SDL2_image::SDL2_image)
 target_link_libraries(${PROJECT_NAME} SDL2_ttf::SDL2_ttf)
 target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
 
-target_link_libraries( RetroGameEngine tmxlite )
+target_link_libraries( RetroGameEngine_Old tmxlite )
 
-target_link_libraries( RetroGameEngine lua )
+target_link_libraries( RetroGameEngine_Old lua )

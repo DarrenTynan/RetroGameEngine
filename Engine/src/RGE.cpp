@@ -87,11 +87,11 @@ void RGE::Setup()
     // Get the current working dir and concatenate the config filename.
     std::string rootDir = std::filesystem::current_path();
     std::string filePath = rootDir  + "/GameConfig.json";
-    std::cout << "Current path is " << filePath << '\n';
+    std::cout << "RGA.cpp Current path is " << filePath << '\n';
 
     // Load the config file
     // std::ifstream file(filePath);
-    std::ifstream file("/Users/darren/Development/C++_Projects/RetroGameEngine/Engine_Test_Game_Platform/GameConfig.json");
+    std::ifstream file("/Users/darren/Development/C++_Projects/RetroGameEngine_Old/Engine_Test_Game_Platform/GameConfig.json");
 
     // Check if the file is open.
     if ( !file.is_open()) exit(1);
@@ -628,7 +628,7 @@ bool RGE::HasWindowFocus(SDL_Window* window)
  */
 void RGE::ShowVersion()
 {
-    std::cout << "Retro Game Engine v1.0";
+    std::cout << "RGE.cpp Retro Game Engine v1.0\n";
 }
 
 
